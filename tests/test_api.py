@@ -184,3 +184,61 @@ def test_openapi_errors_match_redacted_runtime_payload(client):
     assert response.status_code == 422
     Draft202012Validator({"$ref": "#/components/schemas/ErrorEnvelope", "components": document["components"]}).validate(response.json())
     assert "HTTPValidationError" not in document["components"]["schemas"]
+
+
+def test_looks_are_earned_from_the_ledger_and_never_go_negative(client):
+    claim = "/v1/cosmetics/claim"
+    # Nothing is owned on credit: the catalogue price is checked against the
+    # ledger this process owns, not against anything the client sends.
+    assert write(client, "POST", claim, {"cosmeticId": "sunset"}).status_code == 403
+    assert write(client, "POST", claim, {"cosmeticId": "not-a-look"}).status_code == 404
+
+    write(client, "POST", "/v1/lessons/demo-learning/complete", {})
+    assert client.get("/v1/rewards").json()["balance"] == 5
+
+    earned = write(client, "POST", claim, {"cosmeticId": "sunset"}).json()
+    assert earned == {"cosmeticId": "sunset", "owned": True, "spent": 5, "balance": 0}
+    # A second claim under a fresh key must not charge twice.
+    assert write(client, "POST", claim, {"cosmeticId": "sunset"}).json()["spent"] == 0
+    assert client.get("/v1/rewards").json()["balance"] == 0
+
+    # Spending wrote to the ledger; completing the lesson again still earns
+    # nothing, and a look that costs more than the balance stays locked.
+    assert write(client, "POST", "/v1/lessons/demo-learning/complete", {}).json()["earned"] == 0
+    assert write(client, "POST", claim, {"cosmeticId": "dune"}).status_code == 403
+    assert client.get("/v1/rewards").json()["balance"] == 0
+
+
+def test_equipment_follows_ownership(client):
+    path = "/v1/equipped-cosmetics"
+    assert write(client, "PUT", path, {"cosmeticId": "sunset"}).status_code == 403
+
+    write(client, "POST", "/v1/lessons/demo-learning/complete", {})
+    write(client, "POST", "/v1/cosmetics/claim", {"cosmeticId": "sunset"})
+    assert write(client, "PUT", path, {"cosmeticId": "sunset"}).json() == {
+        "cosmeticId": "sunset", "characterId": "robert"}
+
+    items = {item["id"]: item for item in client.get("/v1/inventory").json()["items"]}
+    assert items["sunset"] == {"id": "sunset", "characterId": "robert", "name": "Sunset Copper",
+                               "description": "Warm copper, the colour of the room at dusk.",
+                               "cost": 5, "owned": True, "equipped": True}
+    assert items["default"]["equipped"] is False
+    assert items["dune"]["owned"] is False
+
+
+def test_published_contract_matches_the_routes_the_app_serves():
+    # The app serves no /openapi.json, so contracts/openapi-v1.json is what
+    # consumers build against. Hand-editing is how it drifts from the routes;
+    # regenerate it with tools/export_contracts.py.
+    from pathlib import Path
+    import json
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
+    from export_contracts import contract  # noqa: E402
+
+    published = Path(__file__).resolve().parent.parent / "contracts" / "openapi-v1.json"
+    assert json.loads(published.read_text(encoding="utf-8")) == json.loads(contract()), (
+        "contracts/openapi-v1.json is stale; run python tools/export_contracts.py "
+        "../comp-mobile/contracts/openapi-v1.json"
+    )

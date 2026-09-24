@@ -84,6 +84,8 @@ class Cosmetic(BaseModel):
     id: str
     characterId: str
     name: str
+    description: str
+    cost: int
     owned: bool
     equipped: bool
 
@@ -95,6 +97,13 @@ class Inventory(BaseModel):
 class Equipped(BaseModel):
     cosmeticId: str
     characterId: str
+
+
+class Claimed(BaseModel):
+    cosmeticId: str
+    owned: bool
+    spent: int
+    balance: int
 
 
 class ConversationCreated(BaseModel):

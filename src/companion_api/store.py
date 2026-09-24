@@ -8,6 +8,7 @@ import secrets
 from threading import RLock
 from uuid import uuid4
 
+from .content import CATALOGUE
 from .safety import route_input
 
 
@@ -40,6 +41,11 @@ class DemoStore:
         self.turns: dict[str, dict] = {}
         self.replays: dict[bytes, Replay] = {}
         self._ledger: list[Grant] = []
+        # Ownership and equipment live here, not on the device: a look is worn
+        # only after this process has recorded that it was earned.
+        self._owned: set[str] = {"default"}
+        self._equipped = "default"
+        self._completed_lessons: set[str] = set()
         self._fingerprint_secret = secrets.token_bytes(32)
 
     @property
@@ -79,15 +85,52 @@ class DemoStore:
     def complete_lesson(self):
         with self.lock:
             earned = 0
-            if not self._ledger:
+            # Completion, not ledger emptiness, decides whether this grants:
+            # spending stars on a look also writes to the ledger.
+            if "demo-learning" not in self._completed_lessons:
+                self._completed_lessons.add("demo-learning")
                 self._ledger.append(Grant("demo-learning", 5))
                 earned = 5
             return {"lessonId": "demo-learning", "completed": True, "earned": earned, "balance": self.balance}
 
+    @property
+    def completed_any_lesson(self):
+        with self.lock:
+            return bool(self._completed_lessons)
+
+    def inventory(self):
+        with self.lock:
+            return {"items": [{"id": item["id"], "characterId": "robert", "name": item["name"],
+                               "description": item["description"], "cost": item["cost"],
+                               "owned": item["id"] in self._owned,
+                               "equipped": item["id"] == self._equipped}
+                              for item in CATALOGUE.values()]}
+
+    def claim(self, cosmetic_id):
+        """Spends earned stars on a look. The balance is the ledger, never a client claim."""
+        item = CATALOGUE.get(cosmetic_id)
+        if item is None:
+            raise DomainError(404, "not_found")
+        with self.lock:
+            if cosmetic_id in self._owned:
+                # Already earned. Idempotent by nature, so a lost response or a
+                # second key both settle on the same answer instead of charging
+                # twice.
+                return {"cosmeticId": cosmetic_id, "owned": True, "spent": 0, "balance": self.balance}
+            cost = item["cost"]
+            if cost > self.balance:
+                raise DomainError(403, "insufficient_stars")
+            if cost:
+                self._ledger.append(Grant("cosmetic:" + cosmetic_id, -cost))
+            self._owned.add(cosmetic_id)
+            return {"cosmeticId": cosmetic_id, "owned": True, "spent": cost, "balance": self.balance}
+
     def equip(self, cosmetic_id):
-        if cosmetic_id != "default":
-            raise DomainError(403, "cosmetic_not_owned")
-        return {"cosmeticId": "default", "characterId": "robert"}
+        with self.lock:
+            if cosmetic_id not in CATALOGUE or cosmetic_id not in self._owned:
+                raise DomainError(403, "cosmetic_not_owned")
+            self._equipped = cosmetic_id
+            return {"cosmeticId": cosmetic_id, "characterId": "robert"}
 
     def create_conversation(self):
         with self.lock:

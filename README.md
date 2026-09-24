@@ -11,6 +11,9 @@ It is not ready for children, a pilot, or deployment. No guardian authentication
 consent service, approved religious corpus, reviewed safeguarding playbook,
 generative model, retrieval, voice provider, or analytics are enabled.
 
+[`CHANGELOG.md`](CHANGELOG.md) records what each development increment changed
+and what it verified.
+
 Run commands from this server repository's root (`comp-server`). Python 3.10+
 is required. The current source implements the versioned API in the development
 plan; Flutter is a separate repository and is its only intended client.
@@ -58,11 +61,23 @@ entrypoint can be run as follows. It deliberately has no jobs or outbound calls:
 - `GET /health/live` is the only unauthenticated endpoint.
 - `GET /v1/bootstrap`, `/v1/lessons`, `/v1/challenges/today`, `/v1/rewards`, and
   `/v1/inventory` expose one synthetic profile, one orientation activity, an
-  earn-only learning reward, and Robert's original cosmetic.
+  earn-only learning reward, and the four-look cosmetic catalogue.
 - `POST /v1/lessons/demo-learning/complete` with `{}` grants five learning stars
   once per process/profile, even across concurrent calls or different retry keys.
-- `PUT /v1/equipped-cosmetics` with `{"cosmeticId":"default"}` accepts only the
-  owned, allowlisted original skin.
+- `POST /v1/cosmetics/claim` with `{"cosmeticId":"sunset"}` spends the catalogue
+  price against the ledger. The price and the balance are read here, never sent
+  by the client, so a look cannot be unlocked by a tampered app. A look that
+  costs more than the balance returns 403 `insufficient_stars` and an unknown id
+  returns 404; the balance can never go negative. Claiming an already-owned look
+  is a no-op that reports `"spent": 0`, so a lost response or a second key
+  cannot charge twice.
+- `PUT /v1/equipped-cosmetics` with `{"cosmeticId":"sunset"}` accepts only a
+  look this process records as owned; anything else is 403 `cosmetic_not_owned`.
+
+Spending appends a negative entry to the same append-only ledger that grants
+write to, so the balance stays a sum over that ledger and is never stored as a
+mutable number. Lesson completion is tracked separately from ledger emptiness,
+because after a purchase the ledger is no longer empty.
 - `POST /v1/conversations` with `{}` creates a synthetic conversation.
 - `POST /v1/conversations/{id}/turns` accepts `{"text":"synthetic test input"}`.
   All input takes a fixed unavailable response route; this is not a high-risk
@@ -121,9 +136,21 @@ safety evaluation suite remain prerequisites, not completed checks.
 ```
 
 Tests exercise startup restrictions, token checks, atomic reward grants,
-idempotency conflicts, inventory ownership, input bounds/redacted errors,
-non-retention, SSE resume, deletion/stale replay cleanup, bounded capacity, and
-isolated restarts. They do not establish child safety or content review approval.
+idempotency conflicts, inventory ownership, earning and wearing a look against
+the ledger, input bounds/redacted errors, non-retention, SSE resume,
+deletion/stale replay cleanup, bounded capacity, and isolated restarts. They do
+not establish child safety or content review approval.
+
+`contracts/openapi-v1.json` is the published contract, because the app serves no
+`/openapi.json`. It is generated, not hand-edited, and a test fails when the
+checked-in copy no longer matches the routes the app serves:
+
+```powershell
+.venv/Scripts/python.exe tools/export_contracts.py ../comp-mobile/contracts/openapi-v1.json
+```
+
+The Flutter repository keeps a byte-identical copy, so pass its path whenever the
+API changes.
 
 The suite runs from a fresh checkout without an editable install: the worker
 check passes `src/` to its subprocess explicitly rather than relying on one. If

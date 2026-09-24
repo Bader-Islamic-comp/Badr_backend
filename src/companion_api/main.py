@@ -103,7 +103,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @router.get("/challenges/today", response_model=s.ChallengeList)
     def challenge_list():
-        return content.challenges(bool(store.ledger))
+        return content.challenges(store.completed_any_lesson)
 
     @router.get("/rewards", response_model=s.Rewards)
     def rewards():
@@ -111,7 +111,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @router.get("/inventory", response_model=s.Inventory)
     def inventory():
-        return {"items": [{"id": "default", "characterId": "robert", "name": "Robert Original", "owned": True, "equipped": True}]}
+        return store.inventory()
+
+    @router.post("/cosmetics/claim", response_model=s.Claimed)
+    def claim(body: s.CosmeticRequest, key: WriteKey):
+        return store.execute(key, "claim", body.model_dump(), lambda: store.claim(body.cosmeticId))
 
     @router.put("/equipped-cosmetics", response_model=s.Equipped)
     def equip(body: s.CosmeticRequest, key: WriteKey):
