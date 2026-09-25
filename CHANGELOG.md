@@ -12,7 +12,8 @@ Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 
 ## Unreleased — 2026-09-25 (outfits)
 
-The catalogue gains six modelled outfits the Unity room can now show: **Casual
+Commit `6076c7e` ("Sell the six modelled outfits in the catalogue") on branch
+`feature/rag-system-and-data-pipeline`. The catalogue gains six modelled outfits the Unity room can now show: **Casual
 (10 stars), Gardener (20), Arab Thobe (20), Explorer (25), Cowboy (25) and
 Astronaut (35)**, alongside the colourways Robert Original (0), Sunset Copper
 (5), Dune Walker (15) and Midnight Teal (30). Paired client and room changes
@@ -43,6 +44,10 @@ are in `comp-mobile/CHANGELOG.md`.
 
 ### Verification
 
+- Docs: `README.md` (the ten-look catalogue), `doc/conversation-policy.md`,
+  `doc/robert-persona.md` and `doc/rag-system.md` (`chat-v2`), and the shared
+  roadmap's §9 status note (byte-identical with comp-mobile). ADR 0004 and older
+  changelog entries still say `chat-v1`: they record what was decided then.
 - `pytest`: **539 passed** (537 + 2). The corpus validates with 0 errors and 0
   warnings.
 - The persona prompt change (`chat-v2`) was not re-run against the real

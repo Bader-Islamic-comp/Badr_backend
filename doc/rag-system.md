@@ -313,7 +313,7 @@ instructions, and requires every sentence to end with a citation like `[1]`, or
 the exact reply `NOT_IN_SOURCES`. v2 makes Robert speak in the first person
 (only words about Robert change; "you" stays "you"), gently and without jokes
 on faith topics, and tells the model to reply `NOT_IN_SOURCES` rather than
-explain that it cannot answer. The persona call (`chat-v1`) adds JSON mode and
+explain that it cannot answer. The persona call (`chat-v2`) adds JSON mode and
 temperature 0.7 per call. Passages and the question sit in delimited
 blocks, and anything in them that looks like a delimiter, a chat-template
 token, a citation marker or the sentinel is neutralized first.
@@ -367,7 +367,7 @@ worker thread until the model call returns or reaches
 Each answer logs one line on `companion_api.rag`, fixed replies included:
 
 ```
-INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v1", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
+INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v2", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
 ```
 
 The fields are answer type, release id, model, prompt version, retriever,
