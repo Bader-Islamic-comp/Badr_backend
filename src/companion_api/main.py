@@ -1,8 +1,10 @@
 """Local demo API factory. Run with one Uvicorn worker and access logs disabled."""
+from contextlib import asynccontextmanager
 from typing import Annotated
 from uuid import UUID, uuid4
 import hmac
 import json
+import re
 
 from fastapi import APIRouter, Depends, FastAPI, Header, Request, Response
 from fastapi.exceptions import RequestValidationError
@@ -11,9 +13,11 @@ from starlette.exceptions import HTTPException
 
 from . import content, schemas as s
 from .config import Settings
+from .rag.service import AnswerService, build_answer_service
 from .store import DemoStore, DomainError
 
 WriteKey = Annotated[str, Header(alias="Idempotency-Key", min_length=8, max_length=128, pattern=r"^[\x21-\x7e]+$")]
+EVENT_CURSOR = re.compile(r"^(0|[1-9][0-9]{0,3})$")
 
 
 def error(status, code):
@@ -55,12 +59,29 @@ class RequestBoundary:
         await self.app(scope, buffered_receive, guarded_send)
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, answer_service: AnswerService | None = None) -> FastAPI:
+    """The API. Grounded answers run only with an injected service or `COMPANION_RAG_ENABLED=true`.
+
+    Enabled answers fail closed at startup: a missing or altered release, a
+    public endpoint, an unlisted model or a mismatched embedder stops the app
+    here rather than degrading at request time.
+    """
     settings = settings or Settings.from_environment()
     settings.require_demo()
-    app = FastAPI(title="Companion synthetic development API", version="0.1.0", docs_url=None, redoc_url=None, openapi_url=None)
+    if answer_service is None and settings.rag_enabled:
+        answer_service = build_answer_service(settings)
+    store = DemoStore(answer_service)
+
+    @asynccontextmanager
+    async def lifespan(_app):
+        try:
+            yield
+        finally:
+            store.close()
+
+    app = FastAPI(title="Companion synthetic development API", version="0.1.0", docs_url=None, redoc_url=None,
+                  openapi_url=None, lifespan=lifespan)
     app.add_middleware(RequestBoundary)
-    store = DemoStore()
     app.state.store = store
 
     @app.exception_handler(RequestValidationError)
@@ -91,7 +112,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @router.get("/bootstrap", response_model=s.Bootstrap)
     def bootstrap():
-        return s.Bootstrap()
+        return s.Bootstrap(features=s.Features(generativeAnswers=answer_service is not None))
 
     @router.get("/lessons", response_model=s.LessonList)
     def lesson_list():
@@ -137,15 +158,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @router.get("/turns/{turn_id}/events", response_class=Response,
                 responses={200: {"content": {"text/event-stream": {"schema": {"type": "string"}}}}})
     def turn_events(turn_id: UUID, last_event_id: Annotated[str, Header(alias="Last-Event-ID")] = "0"):
-        if last_event_id not in {"0", "1", "2"}:
+        if not EVENT_CURSOR.match(last_event_id):
             raise DomainError(422, "invalid_request")
-        turn = store.get_turn(str(turn_id))
-        # Complete fixed semantic response only; never token-by-token generation.
-        events = [(1, "segment", {"text": turn["text"], "citations": []}),
-                  (2, "completed", {"turnId": str(turn_id)})]
+        cursor = int(last_event_id)
+        turn = store.turn_events(str(turn_id))
+        headers = {"X-Accel-Buffering": "no"}
+        if turn["status"] == "pending":
+            # Nothing has been sent yet, so the only valid cursor is 0; the
+            # client reconnects after the retry interval and asks again.
+            if cursor != 0:
+                raise DomainError(422, "invalid_request")
+            return Response("retry: 1000\n\n", media_type="text/event-stream", headers=headers)
+        # Verified complete sentences only; never token-by-token generation.
+        segments = turn["segments"]
+        if cursor > len(segments) + 1:
+            raise DomainError(422, "invalid_request")
+        events = [(number, "segment", segment) for number, segment in enumerate(segments, start=1)]
+        events.append((len(segments) + 1, "completed", {"turnId": str(turn_id), "answerType": turn["answerType"]}))
         data = "".join(f"id: {identifier}\nevent: {name}\ndata: {json.dumps(payload)}\n\n"
-                       for identifier, name, payload in events if identifier > int(last_event_id))
-        return Response(data, media_type="text/event-stream", headers={"X-Accel-Buffering": "no"})
+                       for identifier, name, payload in events if identifier > cursor)
+        return Response(data, media_type="text/event-stream", headers=headers)
 
     @router.delete("/conversations/{conversation_id}", status_code=204)
     def delete_conversation(conversation_id: UUID, key: WriteKey):

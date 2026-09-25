@@ -76,7 +76,8 @@ def test_turn_idempotency_does_not_retain_input(client):
     assert write(client, "POST", f"/v1/conversations/{cid}/turns", {"text": text}, "turn-key-1").json() == first.json()
     assert write(client, "POST", f"/v1/conversations/{cid}/turns", {"text": "changed"}, "turn-key-1").status_code == 409
     turn = client.get("/v1/turns/" + first.json()["turnId"]).json()
-    assert turn["citations"] == []
+    assert turn["citations"] == [] and turn["sources"] == []
+    assert (turn["status"], turn["answerType"]) == ("completed", "unavailable")
     assert text not in turn["text"]
     assert text not in repr(vars(client.app.state.store))
 
@@ -88,7 +89,7 @@ def test_sse_resume_and_invalid_cursor(client):
     events = client.get(path)
     assert events.headers["content-type"].startswith("text/event-stream")
     assert "id: 1\nevent: segment" in events.text
-    assert "id: 2\nevent: completed" in events.text
+    assert "id: 2\nevent: completed" in events.text and '"answerType": "unavailable"' in events.text
     resumed = client.get(path, headers={"Last-Event-ID": "1"}).text
     assert "event: segment" not in resumed and "event: completed" in resumed
     assert client.get(path, headers={"Last-Event-ID": "2"}).text == ""
