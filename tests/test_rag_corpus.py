@@ -334,3 +334,13 @@ def test_eval_cases_reference_existing_documents(tmp_path):
     parsed, issues = parse_eval({"schemaVersion": 1, "cases": cases[:1]}, {"app-help-stars"})
     assert not issues and parsed[0].answer_types == ("grounded", "reviewed_answer")
     assert parsed[0].documents == ("app-help-stars",)
+
+
+def test_source_display_limits_match_what_the_app_shows():
+    _, fields, _ = check(passage(title="T" * 121))
+    assert ("error", "title") in fields
+    long_reference = [{"id": "u1", "text": "You earn stars by finishing lessons.", "reference": "r" * 75}]
+    _, fields, _ = check(passage(units=long_reference))
+    assert ("error", "source.work") in fields
+    document, fields, _ = check(passage(title="T" * 120, units=[dict(long_reference[0], reference="r" * 60)]))
+    assert document is not None and not {field for severity, field in fields if severity == "error"}

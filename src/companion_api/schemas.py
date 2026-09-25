@@ -122,8 +122,9 @@ class TurnCreated(BaseModel):
 class Source(BaseModel):
     """A cited reviewed passage: `id` resolves to one chunk of the serving release."""
     id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{1,63}#[1-9][0-9]{0,3}$")
-    title: str = Field(min_length=1, max_length=500)
-    reference: str = Field(max_length=500)
+    # The Flutter client refuses a whole reply outside these bounds; the pipeline enforces them at build.
+    title: str = Field(min_length=1, max_length=120)
+    reference: str = Field(min_length=1, max_length=160)
 
 
 class Turn(TurnCreated):

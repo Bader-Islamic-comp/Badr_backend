@@ -32,6 +32,8 @@ ANSWER_TYPES = ("unavailable", "grounded", "reviewed_answer", "abstained", "redi
 MAX_QUESTIONS = 12
 MAX_ANSWER_CHARACTERS = 1200  # a reviewed answer is returned verbatim as the turn text (§7)
 MAX_QUESTION_CHARACTERS = 2000  # the API's own bound on a child's question
+MAX_TITLE_CHARACTERS = 120  # a source's title as the app shows it under an answer (§7)
+MAX_REFERENCE_CHARACTERS = 160  # a source's citation label, "<work> · <first>–<last>" (§4, §7)
 NEAR_DUPLICATE_JACCARD = 0.9
 DEFAULT_MAX_CHUNK_WORDS = 180
 
@@ -470,6 +472,17 @@ def parse_document(data, file: str, lines: dict | None = None) -> tuple[Document
                 check.error(f"units[{unit.id}].reference", "is required for quran: every verse needs its reference")
     if synthetic is True and source is not None and not source.work:
         check.warning("source.work", "is empty, so citations will show the document title instead of a source name")
+    # §7: the app refuses a whole reply whose source title or reference is too long to show,
+    # so a document that could produce one is stopped here rather than at answer time.
+    if title and len(title) > MAX_TITLE_CHARACTERS:
+        check.error("title", f"has {len(title)} characters; a source title shows at most {MAX_TITLE_CHARACTERS}")
+    if title and source is not None:
+        longest = max((len(unit.reference) for unit in units if unit.reference), default=0)
+        label = len(source.work or title) + (len(" · –") + 2 * longest if longest else 0)
+        if label > MAX_REFERENCE_CHARACTERS:
+            check.error("source.work", f"with the longest unit reference, a citation label could reach {label} "
+                                       f"characters; the app shows at most {MAX_REFERENCE_CHARACTERS}. Shorten the "
+                                       "work name or the references")
 
     if check.failed:
         return None, check.issues
