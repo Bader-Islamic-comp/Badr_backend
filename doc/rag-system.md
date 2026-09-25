@@ -366,9 +366,9 @@ from its settings it attaches a stream handler at INFO to `companion_api.rag`
 | Passages to the prompt | 4 | `retriever.FINAL_K` |
 | Weak evidence, `hashing` | no BM25 hit and best cosine < 0.2 | `retriever.THRESHOLDS` |
 | Reviewed answer by cosine, `hashing` | top candidate ≥ 0.75 | `retriever.THRESHOLDS` |
-| Weak evidence, `openai-compatible` | no BM25 hit and best cosine < 0.45 (provisional) | `retriever.THRESHOLDS` |
-| Reviewed answer by cosine, `openai-compatible` | top candidate ≥ 0.85 (provisional) | `retriever.THRESHOLDS` |
-| Any other embedder | the strictest pair: 0.45 and 0.85 | `retriever.STRICT_THRESHOLDS` |
+| Weak evidence, `openai-compatible` | no BM25 hit and best cosine < 0.55 (measured) | `retriever.THRESHOLDS` |
+| Reviewed answer by cosine, `openai-compatible` | top candidate ≥ 0.85 | `retriever.THRESHOLDS` |
+| Any other embedder | the strictest pair: 0.55 and 0.85 | `retriever.STRICT_THRESHOLDS` |
 | Reviewed answer by phrasing | token Jaccard ≥ 0.6, any answer chunk in the top 4 | `retriever.REVIEWED_JACCARD` |
 | Grounding support | ≥ 0.5 of each sentence's content words | `grounding.MIN_SUPPORT` |
 | Answer length | released text ≤ 1200 characters; raw output over 4800 refused | `grounding.MAX_CHARS` |
@@ -382,12 +382,17 @@ embedder (`EmbedderIdentity.name`) and can be overridden when a
 unrelated questions score about −0.15 to 0.13 (random hash collisions) and
 related ones 0.27 and up; a reviewed phrasing asked verbatim scores about 0.84
 against its answer chunk, and a different question on the same subject 0.5 to
-0.65. The `openai-compatible` values for `qwen3-embedding:0.6b` are
-**provisional and unmeasured**: they come from the model's usual
-query-to-document range, not from a run. Recalibrate them with
-`python -m companion_api.rag.evaluate` on a release built with the real
-embedder (offline for retrieval, `--generate` for grounding and abstention)
-before trusting them, and again after any model, prompt, embedder or corpus
+0.65. The `openai-compatible` values for `qwen3-embedding:0.6b` were measured
+on 2026-09-25 against release `dev-app-help-qwen-1`: questions the corpus
+answers score 0.685 to 0.856 against their best chunk, unrelated ones 0.245 to
+0.462 ("What is the weather today?" is the 0.462), so weak evidence is < 0.55
+with margin on both sides. The provisional 0.45 would have let that weather
+question through. Questions that name Robert but that the corpus cannot answer
+("Can Robert fly?") score about 0.63; declining those is the model's and the
+verifier's job, not the threshold's. A near-verbatim reviewed phrasing scores
+about 0.85, which stays the reviewed-answer cutoff. Recalibrate with
+`python -m companion_api.rag.evaluate` (offline for retrieval, `--generate` for
+grounding and abstention) after any model, prompt, embedder or material corpus
 change.
 
 ## 7. API (v1 additions)
@@ -512,11 +517,18 @@ separate task behind the same interfaces.
 
 Known limitations of this increment:
 
-- **Not yet run against the real model.** Every path has been exercised through
-  the real API with a hashing release and a stand-in OpenAI-compatible server on
-  localhost, but not with Qwen3.5-9B itself, and no release has been built with
-  the real embedder. The `openai-compatible` thresholds (§6.7) are unmeasured
-  until both are done.
+- **Both models together exceed this development machine's commit limit.**
+  Run against the real Qwen3.5-9B on 2026-09-25 (RTX 3060 12 GB, 16 GB RAM,
+  3.5 GB fixed page file): each Ollama model runs in its own process with its
+  own CUDA context, the embedder's alone commits about 3.4 GB of host memory,
+  and loading Qwen3.5 (with the vision projector Ollama bundles) needs about
+  5 GB more. With other applications open, the two did not fit together:
+  loads failed with `std::bad_alloc` and PTX JIT "Memory allocation failure".
+  Both fit in VRAM; the limit is Windows' commit charge. A larger page file (or
+  more RAM) lets them co-reside; until then, the `hashing` embedder with Qwen
+  generating works (§11). Ollama also needed `OLLAMA_FLASH_ATTENTION=0` on this
+  GPU, because its CUDA 13 build JIT-compiles the flash-attention kernel for
+  sm_86 and that compile ran out of memory.
 - **Embedding dimensions are assumed.** `embeddings.embedder_for` takes no
   dimensions parameter, so every non-`hashing` model is expected to return 1024
   dimensions (`qwen3-embedding:0.6b`), at build time and at query time. Another

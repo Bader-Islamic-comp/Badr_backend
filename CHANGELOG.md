@@ -243,14 +243,37 @@ scripted generators. The paired Flutter suite passes 81 tests.
   - The real Flutter client parsed all five reply types from that live server.
   - No question text appeared in the server logs.
 
+**Run against the real Qwen3.5-9B** (Ollama 0.34.4, RTX 3060 12 GB, 16 GB RAM):
+
+- Built `dev-app-help-qwen-1` with `qwen3-embedding:0.6b` (29 chunks, 1024
+  dimensions); `ask --check` passed every check. Offline `evaluate`: 24/24
+  routing, 14/14 recall@4.
+- Measured the real embedder's scores and set its weak-evidence threshold from
+  the provisional 0.45 to **0.55** (answerable questions 0.685–0.856, unrelated
+  0.245–0.462). Details in `doc/rag-system.md` §6.7.
+- Raised the embedding client's timeout from 30 s to 120 s: the first request
+  after a start loads the model onto the GPU, and that took over 30 s here.
+- Ollama needed `OLLAMA_FLASH_ATTENTION=0` (its flash-attention kernel is JIT
+  compiled for this GPU and the compile ran out of memory), and the embedder
+  and Qwen could not both be loaded under the machine's commit limit.
+- With the `hashing` embedder and Qwen3.5-9B generating
+  (`dev-app-help-hashing-1`), `evaluate --generate` matched **23 of 24** answer
+  types; **5 of 6** generated answers passed grounding. The sixth ("What is the
+  parent area for?") added a sentence the source does not support, and the
+  verifier refused it. For "Can Robert fly?" Qwen wrote "The sources do not
+  say…" instead of `NOT_IN_SOURCES`; the verifier refused that too, so the
+  child gets the abstention.
+- The Flutter client, against the live API on real Qwen: grounded answers in
+  about 2 s (including the 1 s poll), reviewed answers in 1 s, rulings in 4 ms.
+- Every model failure along the way (CUDA errors, empty replies) ended as an
+  abstention, never as an unverified answer.
+
 ### Known gaps
 
-- **Not yet run against the real Qwen3.5-9B**, because the model is not
-  downloaded. No release has been built with the real embedder either.
-- **Thresholds for the real embedder are provisional and unmeasured.** Weak
-  evidence is below 0.45 and a reviewed answer at or above 0.85 for
-  `openai-compatible`, against 0.2 and 0.75 measured for `hashing`. They must be
-  recalibrated with `evaluate` on a real release.
+- **The two models do not fit this machine's memory commit limit together.**
+  See "Run against the real Qwen3.5-9B" below. With the real embedder and Qwen
+  both loaded, loads fail with `std::bad_alloc`; a larger page file or more RAM
+  is needed to use `qwen3-embedding:0.6b` at query time.
 - `embedder_for` has no dimensions parameter, so the build, the server and the
   operator tools assume 1024 dimensions for every non-hashing model.
 - On shutdown, a generation already running keeps its worker thread until the

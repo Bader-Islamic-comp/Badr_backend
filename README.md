@@ -102,6 +102,22 @@ llama.cpp or vLLM serving the same models through an OpenAI-compatible API also
 work; point `COMPANION_LLM_BASE_URL` (and, if different,
 `COMPANION_EMBEDDING_BASE_URL`) at them. Thinking is disabled on every request.
 
+On the RTX 3060 / 16 GB development machine (Ollama 0.34.4), start the server
+with flash attention off and a longer keep-alive. Ollama's CUDA 13 build
+compiles the flash-attention kernel for this GPU on first use, and that compile
+ran out of memory; the keep-alive stops the model reloading between questions:
+
+```powershell
+$env:OLLAMA_FLASH_ATTENTION = '0'; $env:OLLAMA_KEEP_ALIVE = '30m'; ollama serve
+```
+
+The first request after a start loads the model onto the GPU (over 30 s the
+first time). Qwen3.5-9B and the embedder each commit several GB of host memory
+in their own process; with a 3.5 GB page file they did not fit together, and
+loads failed with `std::bad_alloc`. Either enlarge the page file, or run with
+`COMPANION_EMBEDDING_MODEL=hashing` and a `hashing` release so only Qwen loads
+(see `doc/rag-system.md` §10).
+
 **2. Build a release.** Choose the release id, so the later commands can name
 it. Releases are immutable: rebuilding needs a new `--release-id`. `releases/`
 is ignored by git.
@@ -147,8 +163,9 @@ $env:COMPANION_EMBEDDING_MODEL = 'hashing'
   only.
 - `--include-drafts` (both tools) also retrieves draft content, which the API
   never serves. It is for adult operators evaluating content.
-- The retrieval thresholds for the real embedder are provisional until measured
-  this way on a real release (`doc/rag-system.md` §6.7).
+- The retrieval thresholds for the real embedder were measured this way on
+  2026-09-25 (`doc/rag-system.md` §6.7); rerun `evaluate` after material corpus
+  changes.
 
 **4. Run the API with grounded answers.** In the terminal that has the demo
 settings from [Setup and run](#setup-and-run-powershell), add the variables from

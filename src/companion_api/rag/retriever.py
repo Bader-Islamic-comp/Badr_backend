@@ -22,10 +22,15 @@ thresholds are per embedder and can be overridden at construction:
   verbatim scores about 0.84 against its answer chunk (questions plus answer
   are embedded together) and a different question about the same subject
   0.5..0.65, so the reviewed-answer threshold is 0.75.
-* `openai-compatible` (qwen3-embedding:0.6b): provisional 0.45 and 0.85, from
-  the model's usual query-to-document range (unrelated text in the same domain
-  scores roughly 0.2..0.4). Re-run `python -m companion_api.rag.evaluate` on a
-  real release before trusting them.
+* `openai-compatible` (qwen3-embedding:0.6b): measured on the development
+  corpus (2026-09-25, release dev-app-help-qwen-1). Questions it answers score
+  0.685..0.856 against their best chunk; unrelated ones 0.245..0.462 ("What is
+  the weather today?" is the 0.462). So weak evidence is < 0.55, with margin on
+  both sides. Questions naming Robert but unanswerable from the corpus ("Can
+  Robert fly?") score about 0.63: those are the model's to decline with
+  NOT_IN_SOURCES, not the threshold's. A reviewed answer by cosine needs 0.85,
+  about what a near-verbatim reviewed phrasing scores. Recalibrate with
+  `python -m companion_api.rag.evaluate` whenever the corpus changes materially.
 
 Unknown embedders get the stricter values, which abstain more and match
 reviewed answers less.
@@ -48,7 +53,7 @@ REVIEWED_JACCARD = 0.6
 # (weak-evidence cosine, reviewed-answer cosine) by EmbedderIdentity.name.
 THRESHOLDS = {
     "hashing": (0.2, 0.75),
-    "openai-compatible": (0.45, 0.85),
+    "openai-compatible": (0.55, 0.85),
 }
 STRICT_THRESHOLDS = (max(t[0] for t in THRESHOLDS.values()), max(t[1] for t in THRESHOLDS.values()))
 

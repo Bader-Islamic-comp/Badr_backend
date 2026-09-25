@@ -80,7 +80,9 @@ class OpenAICompatibleEmbedder:
     def __init__(self, base_url: str, model: str = DEFAULT_EMBEDDING_MODEL, *,
                  dimensions: int = DEFAULT_EMBEDDING_DIMENSIONS,
                  query_instruction: str = QWEN_QUERY_INSTRUCTION,
-                 timeout: float = 30.0, batch_size: int = 16, client: httpx.Client | None = None):
+                 timeout: float = 120.0, batch_size: int = 16, client: httpx.Client | None = None):
+        # Generous on purpose: the first request after a server start loads the
+        # model onto the GPU, which took over 30 s on an RTX 3060 (measured).
         self.base_url = require_private_endpoint(base_url)
         self.batch_size = batch_size
         self._identity = EmbedderIdentity("openai-compatible", model, dimensions, query_instruction)

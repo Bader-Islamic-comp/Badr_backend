@@ -102,9 +102,11 @@ use, including a pilot:
   embedder lets the pipeline, the tests and the evaluator run offline.
 - Answers run on one thread inside the API process, one GPU's worth of work at a
   time. Production moves this to the worker process.
-- The retrieval thresholds for the real embedder are provisional until measured
-  with the evaluator on a real release, and the path has not yet been run
-  against Qwen3.5-9B itself.
+- The retrieval thresholds for the real embedder were measured on the
+  development corpus (2026-09-25) and must be re-measured on any real corpus.
+  On a 16 GB development machine the embedder and Qwen3.5-9B could not both be
+  loaded (Windows commit limit), so the evaluated configuration used the
+  offline `hashing` embedder with Qwen3.5-9B generating.
 - The model is called through a direct OpenAI-compatible HTTP client behind the
   application-owned `Generator` and `Embedder` interfaces, not through LiteLLM,
   which the roadmap names as the provider adapter. With one self-hosted
