@@ -227,7 +227,7 @@ runtime meet only here, so either half can change without the other.
 
 ### Verification
 
-28 → **330 tests** (18 foundation, 142 pipeline, 142 runtime and API). None needs
+28 → **333 tests** (18 foundation, 142 pipeline, 145 runtime and API). None needs
 a model server: they use the hashing embedder, mocked HTTP transports and
 scripted generators. The paired Flutter suite passes 81 tests.
 
@@ -265,6 +265,18 @@ scripted generators. The paired Flutter suite passes 81 tests.
   child gets the abstention.
 - The Flutter client, against the live API on real Qwen: grounded answers in
   about 2 s (including the 1 s poll), reviewed answers in 1 s, rulings in 4 ms.
+- **Verifier `grounding-v2`.** In the app, "What do the tabs at the bottom do?"
+  first came back as "Robert isn't sure": Qwen had written two sentences and
+  one `[1]` after both, and `grounding-v1` required a marker per sentence.
+  Sampling showed that shape in two answers of five. A marker now also covers
+  up to two uncited sentences directly before it, each still held to the
+  support check against that passage; 12 of 12 samples then verified. Tests:
+  333.
+- **On the Android emulator** (after closing Steam and Chrome to free memory),
+  with the API on real Qwen: the thinking bubble, a grounded answer with its
+  sources, and a ruling redirect all rendered as designed
+  (`comp-mobile/design/grounded-answer.png`, `thinking-bubble.png`,
+  `redirect-reply.png`).
 - Every model failure along the way (CUDA errors, empty replies) ended as an
   abstention, never as an unverified answer.
 

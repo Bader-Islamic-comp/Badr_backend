@@ -1,13 +1,21 @@
 """Verification of a generated answer before release (doc/rag-system.md §6.4).
 
-A model output is released only if every sentence cites a passage that was in
-the prompt, the cited passages actually contain most of what the sentence says,
-and the whole answer passes output checks. Anything else abstains: an answer
+A model output is released only if every sentence is attributed to a passage
+that was in the prompt, the attributed passages actually contain most of what
+the sentence says, and the whole answer passes output checks. Anything else abstains: an answer
 that cannot be traced to reviewed text is not given to a child.
 
 The support check is lexical on purpose. It cannot judge paraphrase, so it errs
 towards rejecting reworded answers, which only costs an abstention; it cannot
 be talked into accepting a sentence whose words are not in the sources.
+
+Attribution follows ordinary citation practice: a marker covers its own
+sentence and, when the model cites once at the end of a short run ("They are
+Talk, Learn, Quests and Style. Tap one to open it.[1]"), up to `MAX_CARRIED`
+uncited sentences directly before it. Qwen3.5-9B writes that shape in about two
+answers out of five (measured 2026-09-25). Each carried sentence is still held
+to the same support check against the passage it is attributed to, and a
+sentence with no marker after it is still a failure.
 """
 from dataclasses import dataclass
 import re
@@ -18,9 +26,10 @@ from .prompts import NOT_IN_SOURCES
 from .router import matchable
 from .types import Chunk
 
-VERIFIER_VERSION = "grounding-v1"
+VERIFIER_VERSION = "grounding-v2"
 MAX_CHARS = 1200
 MIN_SUPPORT = 0.5
+MAX_CARRIED = 2  # uncited sentences a following marker may cover
 
 _MARKER = r"\[\s*\d+(?:\s*,\s*\d+)*\s*\]"
 _MARKERS = re.compile(rf"(?:\s*{_MARKER})+")
@@ -123,7 +132,7 @@ def support(sentence: str, passages: Sequence[Chunk]) -> float:
 
 
 def verify(output: str, passages: Sequence[Chunk], *, min_support: float = MIN_SUPPORT,
-           max_chars: int = MAX_CHARS) -> Grounding:
+           max_chars: int = MAX_CHARS, max_carried: int = MAX_CARRIED) -> Grounding:
     """Released segments, or the first failure's reason code."""
     if not output.strip():
         return Grounding(failure="empty")
@@ -142,18 +151,27 @@ def verify(output: str, passages: Sequence[Chunk], *, min_support: float = MIN_S
         if pattern.search(folded):
             return Grounding(failure=reason)
 
-    segments = []
+    segments, uncited = [], []
     for sentence in split_sentences(output):
         numbers = cited_numbers(sentence)
         if not numbers:
-            return Grounding(failure="missing_citation")
+            uncited.append(sentence)
+            if len(uncited) > max_carried:
+                return Grounding(failure="missing_citation")
+            continue
         if any(number < 1 or number > len(passages) for number in numbers):
             return Grounding(failure="invalid_citation")
         cited = [passages[number - 1] for number in numbers]
-        text = strip_markers(sentence)
-        if support(text, cited) < min_support:
-            return Grounding(failure="unsupported_sentence")
-        segments.append(Segment(text, tuple(chunk.id for chunk in cited)))
+        # The marker covers the uncited run before it and its own sentence;
+        # each is checked on its own, so a carried sentence gains nothing.
+        for covered in (*uncited, sentence):
+            text = strip_markers(covered)
+            if support(text, cited) < min_support:
+                return Grounding(failure="unsupported_sentence")
+            segments.append(Segment(text, tuple(chunk.id for chunk in cited)))
+        uncited = []
+    if uncited:
+        return Grounding(failure="missing_citation")
     if not segments:
         return Grounding(failure="empty")
     if len(" ".join(segment.text for segment in segments)) > max_chars:

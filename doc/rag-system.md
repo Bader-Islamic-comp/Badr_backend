@@ -298,14 +298,18 @@ token, a citation marker or the sentinel is neutralized first.
 
 ### 6.4 Verification (before release)
 
-Every sentence must cite at least one passage that exists; at least half of the
-sentence's content words must be found in the cited passages (§6.7); the answer
+Every sentence must be attributed to at least one passage that exists: by its
+own `[n]` marker, or by the next marker when the model cites once at the end of
+a short run (at most two uncited sentences directly before a marker, which
+Qwen3.5-9B writes in about two answers out of five). At least half of each
+sentence's content words must be found in the passages it is attributed to
+(§6.7), carried or not; the answer
 must pass output checks (length, no URLs, emails, phone numbers or markup, no
 claims of religious authority, no secrecy promises). Any failure abstains. The
 released text has the `[n]` markers removed; `citations` and `sources` carry
 them.
 
-The support check (`grounding-v1`) is lexical on purpose: lenient on inflection
+The support check (`grounding-v2`) is lexical on purpose: lenient on inflection
 (a shared base form or 5-character prefix counts), strict on numbers. It
 cannot judge paraphrase, so it errs towards rejecting reworded answers, which
 costs only an abstention. A sentence with no content words ("Yes!") counts as
@@ -341,7 +345,7 @@ worker thread until the model call returns or reaches
 Each answer logs one line on `companion_api.rag`, fixed replies included:
 
 ```
-INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "prompt_version": "rag-answer-v1", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v1"}
+INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "prompt_version": "rag-answer-v1", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
 ```
 
 The fields are answer type, release id, model, prompt version, retriever,
@@ -593,3 +597,10 @@ above already describe the result.
     settings it attaches a stream handler to `companion_api.rag`, because
     Uvicorn does not configure that logger. The line carries versions, counts
     and timings only.
+11. **Carried citations (§6.4, `grounding-v2`).** Found running the real
+    Qwen3.5-9B: in two of five samples it wrote "They are Talk, Learn, Quests
+    and Style. Tap one to open it.[1]", one marker after two sentences, and
+    `grounding-v1` refused the whole answer. A marker now also covers up to two
+    uncited sentences directly before it. Each carried sentence is held to the
+    same support check against that passage, and a sentence with no marker
+    after it still fails. Twelve of twelve samples verified afterwards.

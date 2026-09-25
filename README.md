@@ -68,7 +68,7 @@ immutable corpus release. A development router sends safety, personal-data,
 ruling and prompt-injection messages to fixed replies. Hybrid retrieval then
 returns a reviewed answer verbatim, or abstains when the evidence is weak.
 Otherwise a self-hosted Qwen3.5-9B writes an answer from the top four passages,
-and it is released only if every sentence cites a passage that supports it.
+and it is released only if every sentence is attributed to a passage that supports it.
 The only corpus is the synthetic `corpus/dev-app-help` (help text about the
 app, no religious content), and none of this is reviewed for children. The
 router is not an approved safeguarding classifier, and the fixed replies are
@@ -301,7 +301,7 @@ safety evaluation suite remain prerequisites, not completed checks.
 .venv/Scripts/python.exe -m compileall -q src
 ```
 
-The suite has 330 tests and needs no model server: the RAG tests use the
+The suite has 333 tests and needs no model server: the RAG tests use the
 offline hashing embedder and stand-in model responses. Tests exercise startup
 restrictions, token checks, atomic reward grants, idempotency conflicts,
 inventory ownership, earning and wearing a look against the ledger, input

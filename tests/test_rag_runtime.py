@@ -397,6 +397,27 @@ def test_grounding_releases_cited_supported_sentences_without_markers():
         ("app-help-stars#1", "app-help-pause#1")]
 
 
+def test_a_trailing_marker_covers_the_uncited_sentences_just_before_it():
+    # The shape Qwen3.5-9B writes in about two answers out of five.
+    result = verify("Learning stars are earned by finishing a lesson. Each finished lesson gives five stars.[1]",
+                    PASSAGES)
+    assert result.ok, result.failure
+    assert [segment.citations for segment in result.segments] == [("app-help-stars#1",), ("app-help-stars#1",)]
+    assert result.segments[0].text == "Learning stars are earned by finishing a lesson."
+
+
+@pytest.mark.parametrize("output, failure", [
+    # A carried sentence is held to the same support check as a cited one.
+    ("Stars can be swapped for chocolate at the shop. Learning stars are earned by finishing a lesson [1].",
+     "unsupported_sentence"),
+    # At most two sentences are carried.
+    ("Stars are earned. Lessons give stars. Finish a lesson for stars. Learning stars are earned [1].",
+     "missing_citation"),
+])
+def test_carried_sentences_still_fail_when_unsupported_or_too_many(output, failure):
+    assert verify(output, PASSAGES).failure == failure
+
+
 @pytest.mark.parametrize("output, failure", [
     ("Learning stars are earned by finishing a lesson [1]. You can pause any time.", "missing_citation"),
     ("Learning stars are earned by finishing a lesson [3].", "invalid_citation"),
@@ -447,7 +468,7 @@ def test_grounded_answer_cites_sources_in_order(retriever):
     assert [segment.citations for segment in result.segments] == [("app-help-stars#1",),
                                                                    ("app-help-pause#1", "app-help-stars#1")]
     assert result.provenance == {"releaseId": "dev-runtime-1", "model": "qwen3.5:9b", "promptVersion": "rag-answer-v1",
-                                 "retriever": "hybrid-rrf-v1", "verifier": "grounding-v1",
+                                 "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2",
                                  "embedder": "hashing/hashing-v1"}
 
 
