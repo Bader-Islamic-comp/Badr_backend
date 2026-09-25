@@ -1,6 +1,10 @@
 from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+# doc/rag-system.md §7. `unavailable` is the only type while grounded answers are off. `chat` is
+# Robert's checked casual reply, with no citations or sources (doc/conversation-policy.md §9).
+AnswerType = Literal["unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety", "chat"]
+
 
 class EmptyRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
@@ -31,7 +35,8 @@ class CosmeticRequest(EmptyRequest):
 
 class Features(BaseModel):
     voice: Literal[False] = False
-    generativeAnswers: Literal[False] = False
+    # True only when this process started with a verified release and model.
+    generativeAnswers: bool = False
     unity: Literal[False] = False
 
 
@@ -84,6 +89,8 @@ class Cosmetic(BaseModel):
     id: str
     characterId: str
     name: str
+    description: str
+    cost: int
     owned: bool
     equipped: bool
 
@@ -97,15 +104,36 @@ class Equipped(BaseModel):
     characterId: str
 
 
+class Claimed(BaseModel):
+    cosmeticId: str
+    owned: bool
+    spent: int
+    balance: int
+
+
 class ConversationCreated(BaseModel):
     conversationId: str
 
 
 class TurnCreated(BaseModel):
     turnId: str
-    status: Literal["completed"]
+    status: Literal["pending", "completed"]
+
+
+class Source(BaseModel):
+    """A cited reviewed passage: `id` resolves to one chunk of the serving release."""
+    id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{1,63}#[1-9][0-9]{0,3}$")
+    # The Flutter client refuses a whole reply outside these bounds; the pipeline enforces them at build.
+    title: str = Field(min_length=1, max_length=120)
+    reference: str = Field(min_length=1, max_length=160)
 
 
 class Turn(TurnCreated):
-    text: str
-    citations: list[str]
+    """`answerType` is null and `text` empty while pending; completed text is 1-1200 characters.
+
+    `citations` and `sources` are empty for every type except `grounded` and `reviewed_answer`.
+    """
+    answerType: AnswerType | None
+    text: str = Field(max_length=1200)
+    citations: list[str] = Field(max_length=4)
+    sources: list[Source] = Field(max_length=4)

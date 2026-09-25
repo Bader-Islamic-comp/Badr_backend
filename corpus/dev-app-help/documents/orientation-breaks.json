@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "orientation-breaks",
+  "kind": "passage",
+  "title": "Taking breaks",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "orientation",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "Learning works best when you feel rested. It is always fine to take a break.",
+      "reference": "breaks 1",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "In a lesson, you can pause whenever you need and come back later.",
+      "reference": "breaks 2",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "On a break you could stretch, drink some water or rest your eyes by looking at something far away.",
+      "reference": "breaks 3",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u4",
+      "text": "There is no rush. Take the time you need.",
+      "reference": "breaks 4",
+      "section": null,
+      "keepWithNext": false
+    }
+  ]
+}

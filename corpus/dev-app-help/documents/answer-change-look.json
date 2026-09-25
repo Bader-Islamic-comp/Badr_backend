@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-change-look",
+  "kind": "answer",
+  "title": "Changing Robert's look",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "How do I change Robert's look?",
+    "How can I give Robert a new colour?",
+    "Where do I choose a look for Robert?"
+  ],
+  "answer": "Open the Style tab and choose a look you have enough learning stars for, and I'll wear it! A new look changes my colours, but my face stays the same, so I'm still me."
+}

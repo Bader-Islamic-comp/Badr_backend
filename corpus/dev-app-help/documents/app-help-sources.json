@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-sources",
+  "kind": "passage",
+  "title": "Where Robert's answers come from",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "When Robert answers a question, he shows the source he used under his answer.",
+      "reference": "sources 1",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "Sometimes Robert is not sure, or he cannot find the answer in his sources.",
+      "reference": "sources 2",
+      "section": null,
+      "keepWithNext": true
+    },
+    {
+      "id": "u3",
+      "text": "Then he tells you that he is not sure, and he suggests asking a parent, a teacher or a qualified local scholar.",
+      "reference": "sources 3",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u4",
+      "text": "Robert answers only from the sources he has been given. That is why he sometimes says he does not know.",
+      "reference": "sources 4",
+      "section": null,
+      "keepWithNext": false
+    }
+  ]
+}

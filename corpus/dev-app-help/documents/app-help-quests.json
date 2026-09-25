@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-quests",
+  "kind": "passage",
+  "title": "Today's quest",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "Today's challenge is called Explore one learning activity.",
+      "reference": "quest 1",
+      "section": null,
+      "keepWithNext": true
+    },
+    {
+      "id": "u2",
+      "text": "You complete it by finishing the orientation lesson, Meet your learning companion, in the Learn tab.",
+      "reference": "quest 2",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "Quests are for practice and fun. There is no rush, and it is fine to finish another day.",
+      "reference": "quest 3",
+      "section": null,
+      "keepWithNext": false
+    }
+  ]
+}

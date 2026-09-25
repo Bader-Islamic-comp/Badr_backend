@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-privacy",
+  "kind": "passage",
+  "title": "Keeping your details private",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "Some things are private, like your home address, your phone number and your passwords.",
+      "reference": "privacy 1",
+      "section": "What to keep private",
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "Keep these details to yourself. Do not share them with Robert or type them into your questions.",
+      "reference": "privacy 2",
+      "section": "What to keep private",
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "If you are not sure whether something is private, ask a parent or another trusted adult first.",
+      "reference": "privacy 3",
+      "section": "If you are not sure",
+      "keepWithNext": false
+    }
+  ]
+}

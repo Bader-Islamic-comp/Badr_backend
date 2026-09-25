@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-meet-robert",
+  "kind": "passage",
+  "title": "Who Robert is",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "Robert is your learning companion in this app. He helps you explore lessons, try today's quest and find your way around.",
+      "reference": "meet 1",
+      "section": "Who Robert is",
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "Robert is not an imam, a scholar or a teacher of rulings. Questions about rulings are for a parent, a teacher or a qualified local scholar.",
+      "reference": "meet 2",
+      "section": "Who Robert is",
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "Robert cannot help in an emergency. He cannot call anyone, and he cannot come to where you are.",
+      "reference": "meet 3",
+      "section": "What Robert cannot do",
+      "keepWithNext": true
+    },
+    {
+      "id": "u4",
+      "text": "If you feel unsafe, hurt or worried, talk to a trusted adult straight away, like a parent, a teacher or another grown-up you trust.",
+      "reference": "meet 4",
+      "section": "What Robert cannot do",
+      "keepWithNext": false
+    },
+    {
+      "id": "u5",
+      "text": "Robert is a helper for learning. He is not a replacement for the people who care about you.",
+      "reference": "meet 5",
+      "section": "What Robert cannot do",
+      "keepWithNext": false
+    }
+  ]
+}

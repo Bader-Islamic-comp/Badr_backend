@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-parent-area",
+  "kind": "passage",
+  "title": "The parent area",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "The parent area is for adults, like a parent or another grown-up who looks after you.",
+      "reference": "parents 1",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "It shows grown-ups whether the app is connected and the status of Robert's room.",
+      "reference": "parents 2",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "If something in the app is not working, ask a grown-up to have a look in the parent area.",
+      "reference": "parents 3",
+      "section": null,
+      "keepWithNext": false
+    }
+  ]
+}

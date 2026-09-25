@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-earn-stars",
+  "kind": "answer",
+  "title": "How to earn learning stars",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "How do I earn stars?",
+    "How can I get more learning stars?",
+    "What do I do to get stars?"
+  ],
+  "answer": "You earn learning stars by finishing lessons. The first lesson, Meet your learning companion, gives you 5 stars one time. I love collecting stars, so happy beeps for every lesson!"
+}
