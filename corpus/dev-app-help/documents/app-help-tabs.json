@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-tabs",
+  "kind": "passage",
+  "title": "Finding your way around the app",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "The app has four tabs: Talk, Learn, Quests and Style. Tap a tab to open it.",
+      "reference": "tabs 1",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "The Talk tab shows Robert and the last thing he said to you.",
+      "reference": "tabs 2",
+      "section": "Talk",
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "The Learn tab is where you find your lessons.",
+      "reference": "tabs 3",
+      "section": "Learn",
+      "keepWithNext": false
+    },
+    {
+      "id": "u4",
+      "text": "The Quests tab shows today's challenge and whether you have finished it.",
+      "reference": "tabs 4",
+      "section": "Quests",
+      "keepWithNext": false
+    },
+    {
+      "id": "u5",
+      "text": "The Style tab is where you choose looks for Robert with your learning stars.",
+      "reference": "tabs 5",
+      "section": "Style",
+      "keepWithNext": false
+    }
+  ]
+}

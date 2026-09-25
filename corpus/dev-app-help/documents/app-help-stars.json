@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-stars",
+  "kind": "passage",
+  "title": "How learning stars work",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "Learning stars show the learning you have done. You earn them by finishing lessons.",
+      "reference": "stars 1",
+      "section": "Earning stars",
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "The first lesson is called Meet your learning companion.",
+      "reference": "stars 2",
+      "section": "Earning stars",
+      "keepWithNext": true
+    },
+    {
+      "id": "u3",
+      "text": "When you finish it, you get 5 learning stars. It gives stars one time only, so finishing it again does not add more.",
+      "reference": "stars 3",
+      "section": "Earning stars",
+      "keepWithNext": false
+    },
+    {
+      "id": "u4",
+      "text": "You can spend your stars on new looks for Robert in the Style tab.",
+      "reference": "stars 4",
+      "section": "Spending stars",
+      "keepWithNext": false
+    },
+    {
+      "id": "u5",
+      "text": "Stars are never bought with real money. They only come from learning.",
+      "reference": "stars 5",
+      "section": "Spending stars",
+      "keepWithNext": false
+    }
+  ]
+}

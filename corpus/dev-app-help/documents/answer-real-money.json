@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-real-money",
+  "kind": "answer",
+  "title": "Looks and real money",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "Can I buy looks with real money?",
+    "Can I trade looks with my friends?",
+    "Can I win a look?"
+  ],
+  "answer": "No. Looks are never bought with real money, traded or won by chance. You earn them with the learning stars you get from finishing lessons."
+}

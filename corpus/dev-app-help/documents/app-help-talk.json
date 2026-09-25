@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "app-help-talk",
+  "kind": "passage",
+  "title": "Talking with Robert",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "On the Talk tab you can ask Robert about using the app, like how to earn stars or how to change his look.",
+      "reference": "talk 1",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "Robert answers one question at a time. He does not remember your earlier questions, so ask your whole question each time.",
+      "reference": "talk 2",
+      "section": null,
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "Robert keeps his answers short and simple. If an answer is not clear, try asking in a different way or ask a trusted adult.",
+      "reference": "talk 3",
+      "section": null,
+      "keepWithNext": false
+    }
+  ]
+}

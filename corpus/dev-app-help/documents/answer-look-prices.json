@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-look-prices",
+  "kind": "answer",
+  "title": "What the looks cost",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "How much do the looks cost?",
+    "How many stars is Midnight Teal?",
+    "How many stars do I need for Sunset Copper?",
+    "How much is Dune Walker?"
+  ],
+  "answer": "Robert Original is free. Sunset Copper costs 5 stars, Dune Walker costs 15 stars and Midnight Teal costs 30 stars."
+}

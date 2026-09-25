@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "orientation-first-lesson",
+  "kind": "passage",
+  "title": "Meet your learning companion",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "orientation",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "units": [
+    {
+      "id": "u1",
+      "text": "Meet your learning companion is the first lesson in the Learn tab. It shows you how to use your learning space.",
+      "reference": "lesson intro",
+      "section": "About the lesson",
+      "keepWithNext": false
+    },
+    {
+      "id": "u2",
+      "text": "Step 1: Choose a comfortable place to learn.",
+      "reference": "step 1",
+      "section": "The steps",
+      "keepWithNext": false
+    },
+    {
+      "id": "u3",
+      "text": "Step 2: Take your time. You can pause whenever you need.",
+      "reference": "step 2",
+      "section": "The steps",
+      "keepWithNext": false
+    },
+    {
+      "id": "u4",
+      "text": "Step 3: Ask a trusted adult when you need help.",
+      "reference": "step 3",
+      "section": "The steps",
+      "keepWithNext": false
+    },
+    {
+      "id": "u5",
+      "text": "When you finish the lesson, you earn 5 learning stars. You get these stars one time only.",
+      "reference": "lesson end",
+      "section": "When you finish",
+      "keepWithNext": false
+    }
+  ]
+}

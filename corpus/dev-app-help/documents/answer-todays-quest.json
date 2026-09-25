@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-todays-quest",
+  "kind": "answer",
+  "title": "Today's quest",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "What is today's quest?",
+    "How do I finish today's challenge?",
+    "How do I complete the quest?"
+  ],
+  "answer": "Today's challenge is Explore one learning activity. You complete it by finishing the orientation lesson, Meet your learning companion, in the Learn tab."
+}

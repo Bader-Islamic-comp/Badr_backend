@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-who-is-robert",
+  "kind": "answer",
+  "title": "Who Robert is",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "Who is Robert?",
+    "Is Robert an imam?",
+    "Are you a scholar?",
+    "Are you a real teacher?"
+  ],
+  "answer": "Robert is a learning companion who helps you use this app. He is not an imam, a scholar or a teacher of rulings. For questions about rulings, ask a parent, a teacher or a qualified local scholar."
+}
