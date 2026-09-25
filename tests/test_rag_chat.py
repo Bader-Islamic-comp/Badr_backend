@@ -244,7 +244,7 @@ def test_persona_prompt_carries_the_rules_and_neutralizes_the_message():
         assert rule.lower() in system.lower(), rule
     assert user.count("<message>") == 1 and user.count("</message>") == 1
     assert "<|" not in user and "[1]" not in user and "NOT_IN_SOURCES" not in user
-    assert chat.CHAT_PROMPT_VERSION == "chat-v1" and chat.CHAT_CHECKER_VERSION == "chat-check-v1"
+    assert chat.CHAT_PROMPT_VERSION == "chat-v2" and chat.CHAT_CHECKER_VERSION == "chat-check-v1"
 
 
 # Reviewed copy ---------------------------------------------------------------------------------------
@@ -496,7 +496,7 @@ def test_the_log_line_has_versions_and_outcomes_but_no_text_or_intent(retriever,
              if record.name == "companion_api.rag" and record.getMessage().startswith("rag_answer ")]
     assert [line["outcome"] for line in lines] == ["chat", "question", "chat_fallback:error:RuntimeError"]
     for line in lines:
-        assert line["chat_prompt_version"] == "chat-v1" and line["chat_checker"] == "chat-check-v1"
+        assert line["chat_prompt_version"] == "chat-v2" and line["chat_checker"] == "chat-check-v1"
         assert line["policy"] == "conversation-policy-v1"
     logged = caplog.text + " ".join(repr(vars(record)) for record in caplog.records)
     for secret in (marker, "sad", "feeling", "grown-up", "times 8", "small_talk", "Thank you"):

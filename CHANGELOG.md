@@ -10,6 +10,45 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-09-25 (outfits)
+
+The catalogue gains six modelled outfits the Unity room can now show: **Casual
+(10 stars), Gardener (20), Arab Thobe (20), Explorer (25), Cowboy (25) and
+Astronaut (35)**, alongside the colourways Robert Original (0), Sunset Copper
+(5), Dune Walker (15) and Midnight Teal (30). Paired client and room changes
+are in `comp-mobile/CHANGELOG.md`.
+
+### Changed
+
+- `content.py`: the six outfits join `COSMETICS`, still cheapest first, with
+  short child-friendly descriptions. Outfit ids use `-` where the character
+  package's folders use `_` (`arab-thobe`). Pricing is a development choice
+  and awaits product review.
+- `contracts/avatar-bridge-v1.schema.json` lists all ten looks
+  (byte-identical with comp-mobile). The OpenAPI contract is unchanged: the
+  inventory is a list, not an enumeration.
+- The development corpus describes outfits as well as colours
+  (`app-help-looks.md`, `answer-look-prices.json`, `answer-change-look.json`,
+  which also gained outfit question phrasings), and Robert's character sheet
+  names the outfits in both `doc/robert-persona.md` and the persona prompt,
+  which is now **`chat-v2`**: any wording change is a new prompt version.
+
+### Added
+
+- `test_the_catalogue_is_exactly_what_the_room_can_install`: the catalogue
+  and the bridge schema's allowlist must be the same set, cheapest first, with
+  ids of letters, digits and hyphens.
+- `test_an_outfit_is_earned_and_worn_like_any_look`: an outfit is claimed
+  against the ledger and equipped like a colourway.
+
+### Verification
+
+- `pytest`: **539 passed** (537 + 2). The corpus validates with 0 errors and 0
+  warnings.
+- The persona prompt change (`chat-v2`) was not re-run against the real
+  Qwen3.5-9B; the change only adds names to the list of looks Robert may
+  mention. Rerun `evaluate --generate` before relying on it.
+
 ## Unreleased — 2026-09-25 (conversation policy)
 
 Robert gets a voice: short, warm casual chat in his own words, and a hard rule

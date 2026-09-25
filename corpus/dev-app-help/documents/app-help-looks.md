@@ -23,13 +23,15 @@ Each look has a price in learning stars. {ref: looks 1}
 
 Robert Original is the look Robert starts with. It is free, so it costs 0 stars. {ref: looks 2}
 
-Sunset Copper costs 5 stars. Dune Walker costs 15 stars. Midnight Teal costs 30 stars. {ref: looks 3}
+Some looks give Robert new colours. Sunset Copper costs 5 stars. Dune Walker costs 15 stars. Midnight Teal costs 30 stars. {ref: looks 3}
+
+Other looks are outfits Robert can wear. Casual costs 10 stars. Gardener and Arab Thobe cost 20 stars each. Explorer and Cowboy cost 25 stars each. Astronaut costs 35 stars. {ref: looks 3}
 
 ## What a look changes
 
 When you have enough stars, choose a look and wear it. {ref: looks 4} {keep-with-next}
 
-A new look changes Robert's colours. His face stays the same, so he is still the Robert you know. {ref: looks 5}
+A colour look changes Robert's colours, and an outfit gives him new clothes, like a hat, a vest or boots. His face stays the same, so he is still the Robert you know. {ref: looks 5}
 
 ## Fair for everyone
 

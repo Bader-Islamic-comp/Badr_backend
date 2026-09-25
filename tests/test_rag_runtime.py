@@ -477,7 +477,7 @@ def test_grounded_answer_cites_sources_in_order(retriever):
     assert result.provenance == {"releaseId": "dev-runtime-1", "model": "qwen3.5:9b", "promptVersion": "rag-answer-v2",
                                  "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2",
                                  "embedder": "hashing/hashing-v1", "policy": "conversation-policy-v1",
-                                 "chatPromptVersion": "chat-v1", "chatChecker": "chat-check-v1"}
+                                 "chatPromptVersion": "chat-v2", "chatChecker": "chat-check-v1"}
     assert result.grounding == "ok"
 
 
@@ -519,7 +519,7 @@ def test_provenance_log_line_never_contains_question_passages_or_answer(retrieve
     fields = json.loads(records[0].getMessage().split(" ", 1)[1])
     assert fields["answer_type"] == "grounded" and fields["release_id"] == "dev-runtime-1"
     assert fields["model"] == "qwen3.5:9b" and fields["prompt_version"] == "rag-answer-v2"
-    assert fields["chat_prompt_version"] == "chat-v1" and fields["chat_checker"] == "chat-check-v1"
+    assert fields["chat_prompt_version"] == "chat-v2" and fields["chat_checker"] == "chat-check-v1"
     assert fields["retriever"] == "hybrid-rrf-v1" and fields["passages"] >= 1 and fields["latency_ms"] >= 0
     assert records[0].rag == fields
 
