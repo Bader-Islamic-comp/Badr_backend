@@ -8,3 +8,6 @@ __pycache__/
 *.local.json
 dist/
 build/
+
+# Corpus releases are build output; rebuild them with the pipeline CLI.
+releases/
