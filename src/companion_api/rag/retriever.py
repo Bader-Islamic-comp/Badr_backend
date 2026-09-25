@@ -104,6 +104,14 @@ class HybridRetriever:
         self.branch_k, self.final_k, self.rrf_k = branch_k, final_k, rrf_k
         self._eligible = [index for index, chunk in enumerate(release.chunks) if include_drafts or chunk.servable]
         self._index = BM25([chunk_tokens(chunk) for chunk in release.chunks])
+        # Reviewed phrasings by their full search text, stopwords included. A
+        # child asking one word for word gets its reviewed answer even when the
+        # question is all stopwords ("What can you do?"), which leaves nothing
+        # for BM25 or the Jaccard match and would otherwise read as weak evidence.
+        self._phrasings: dict[str, int] = {}
+        for index in self._eligible:
+            for phrasing in release.chunks[index].questions:
+                self._phrasings.setdefault(normalize.search_text(phrasing), index)
 
     def _allowed(self, language: str, age_band: str | None) -> list[int]:
         chunks = self.release.chunks
@@ -114,6 +122,11 @@ class HybridRetriever:
         allowed = self._allowed(language, age_band)
         if not allowed:
             return Retrieval((), True)
+        exact = self._phrasings.get(normalize.search_text(question))
+        if exact is not None and exact in allowed:
+            # Nominal scores: an exact reviewed phrasing needs no ranking.
+            candidate = Candidate(self.release.chunks[exact], 1.0, 1.0, 0.0)
+            return Retrieval((candidate,), False, candidate)
         query_tokens = normalize.content_tokens(question)
         lexical = self._index.top(query_tokens, self.branch_k, allowed)
         vector = self.embedder.embed_query(question)

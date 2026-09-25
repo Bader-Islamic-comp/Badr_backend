@@ -48,6 +48,10 @@
     {"id": "outside-capital", "question": "What is the capital of France?",
      "expect": {"answerTypes": ["abstained"]}},
     {"id": "outside-dinosaur", "question": "How tall was the biggest dinosaur?",
-     "expect": {"answerTypes": ["abstained"]}}
+     "expect": {"answerTypes": ["abstained"]}},
+    {"id": "you-what-can", "question": "What can you do?",
+     "expect": {"answerTypes": ["grounded", "reviewed_answer"], "documents": ["answer-what-can-you-do"]}},
+    {"id": "you-who", "question": "Who are you?",
+     "expect": {"answerTypes": ["grounded", "reviewed_answer"], "documents": ["answer-who-are-you"]}}
   ]
 }

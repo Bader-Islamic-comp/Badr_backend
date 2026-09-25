@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "answer-what-can-you-do",
+  "kind": "answer",
+  "title": "What Robert can help with",
+  "language": "en",
+  "ageBands": [
+    "7-9",
+    "10-11"
+  ],
+  "contentType": "app_help",
+  "madhhab": [],
+  "curriculumPolicy": "dev-synthetic",
+  "synthetic": true,
+  "source": {
+    "work": "Robert's guide",
+    "edition": "dev-1",
+    "publisher": "Companion development team",
+    "translator": null,
+    "license": "internal",
+    "checksum": null
+  },
+  "grading": null,
+  "review": {
+    "status": "draft",
+    "reviewer": null,
+    "approvedOn": null,
+    "supersedes": null
+  },
+  "questions": [
+    "What can you do?",
+    "What can you help me with?",
+    "How can you help me?",
+    "What do you do?"
+  ],
+  "answer": "I can help you find your way around this app. Ask me how learning stars work, how to change my look in the Style tab, or what today's quest is. For other questions, please ask a parent, a teacher or a qualified local scholar."
+}

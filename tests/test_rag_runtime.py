@@ -533,11 +533,25 @@ def test_an_exact_reviewed_phrasing_wins_over_a_higher_ranked_sibling_answer(tmp
                        "choose looks and find the parent area when a grown-up wants to check settings.",
                        kind="answer", questions=("Who is Robert?",))
     retriever = HybridRetriever(load_release(build_release(tmp_path, (sibling, exact, CORPUS[0]))), HashingEmbedder())
-    retrieval = retriever.retrieve("Who is Robert?")
+    # "Who's" rather than "Who is": the exact-phrasing lookup would otherwise answer before any ranking.
+    retrieval = retriever.retrieve("Who's Robert?")
     assert retrieval.candidates[0].chunk.id == "answer-change-look#1"
     assert retrieval.candidates[0].cosine >= retriever.reviewed_cosine
     assert retrieval.reviewed is not None and retrieval.reviewed.chunk.id == "answer-who-is-robert#1"
     assert retriever.retrieve("How do I earn stars?").reviewed is None
+
+
+def test_a_reviewed_phrasing_made_only_of_stopwords_is_still_answered(tmp_path):
+    # "What can you do?" leaves no content words for BM25, Jaccard or the hashing embedder, so without the
+    # exact lookup it read as weak evidence (found on the emulator, 2026-09-25).
+    answer = make_chunk("answer-what-can-you-do", "What Robert can help with",
+                        "I can help you find your way around this app.", kind="answer",
+                        questions=("What can you do?", "How can you help me?"))
+    retriever = HybridRetriever(load_release(build_release(tmp_path, (answer, CORPUS[0]))), HashingEmbedder())
+    for question in ("What can you do?", "what CAN you do", "How can you help me?"):
+        retrieval = retriever.retrieve(question)
+        assert not retrieval.weak and retrieval.reviewed.chunk.id == "answer-what-can-you-do#1"
+    assert retriever.retrieve("What can you see?").weak
 
 
 # Operator tools -------------------------------------------------------------------------------

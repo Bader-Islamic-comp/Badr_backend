@@ -267,6 +267,14 @@ covers a reviewed phrasing, but only when that phrasing is not already part of
 the search text: the pipeline puts the questions there (§4), and counting them
 twice would inflate their term frequency.
 
+**Exact reviewed phrasings first of all.** Before any scoring, the question's
+full search text (stopwords included) is looked up among the reviewed
+`questions` of the eligible answer chunks; an exact match is returned verbatim
+as `reviewed_answer`. This is what answers "What can you do?" and "Who are
+you?": every word in them is a stopword, so BM25, the Jaccard match and the
+hashing embedder all see nothing, and without the lookup they read as weak
+evidence (found on the emulator, 2026-09-25).
+
 **Reviewed answers first.** Every `answer` chunk among the top 4 is checked, in
 rank order, against its reviewed `questions`: the first whose phrasing matches
 the question closely (token Jaccard ≥ 0.6 over content words) is returned
@@ -604,3 +612,7 @@ above already describe the result.
     uncited sentences directly before it. Each carried sentence is held to the
     same support check against that passage, and a sentence with no marker
     after it still fails. Twelve of twelve samples verified afterwards.
+12. **Exact reviewed phrasings (§6.2).** Found on the emulator: a question made
+    only of stopwords ("What can you do?") abstained as weak evidence with
+    either embedder, even when a reviewed answer held that exact phrasing. An
+    exact search-text lookup now runs before scoring.

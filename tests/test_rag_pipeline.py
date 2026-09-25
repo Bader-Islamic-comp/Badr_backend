@@ -92,10 +92,10 @@ def test_dev_eval_cases_reference_only_existing_documents():
 def test_validate_prints_the_report_and_sets_the_exit_code(tmp_path, capsys):
     assert main(["validate", str(DEV_CORPUS)]) == 0
     output = capsys.readouterr().out
-    assert "Corpus dev-app-help: 18 valid documents (11 passage, 7 answer)" in output and "0 errors" in output
+    assert "Corpus dev-app-help: 20 valid documents (11 passage, 9 answer)" in output and "0 errors" in output
     assert main(["validate", str(DEV_CORPUS), "--json"]) == 0
     report = json.loads(capsys.readouterr().out)
-    assert report["ok"] and report["corpus"] == "dev-app-help" and report["documents"] == 18 and not report["issues"]
+    assert report["ok"] and report["corpus"] == "dev-app-help" and report["documents"] == 20 and not report["issues"]
     broken = write_corpus(tmp_path / "broken", real_document(synthetic=True))
     assert main(["validate", str(broken), "--json"]) == 1
     report = json.loads(capsys.readouterr().out)
@@ -116,9 +116,9 @@ def test_build_verify_and_load_round_trip(tmp_path, capsys):
     manifest = release.manifest
     assert (manifest.release_id, manifest.channel, manifest.corpus_ids) == ("dev-test-1", "development",
                                                                             ("dev-app-help",))
-    assert manifest.document_count == len(documents) == 18 and manifest.chunk_count == len(expected)
+    assert manifest.document_count == len(documents) == 20 and manifest.chunk_count == len(expected)
     assert manifest.pipeline == {"normalizer": "norm-v1", "chunker": "chunk-v1", "maxChunkWords": 180}
-    assert manifest.review == {"approved": 0, "draft": 18, "synthetic": 18}
+    assert manifest.review == {"approved": 0, "draft": 20, "synthetic": 20}
     assert manifest.embedder == HashingEmbedder().identity
     vectors = HashingEmbedder().embed_documents([embedding_text(chunk) for chunk in expected])
     assert all(abs(a - b) < 1e-6 for row, stored in zip(vectors, release.vectors) for a, b in zip(row, stored))
@@ -130,9 +130,9 @@ def test_build_verify_and_load_round_trip(tmp_path, capsys):
     assert main(["stats", str(path)]) == 0
     stats = capsys.readouterr().out
     words = [len(chunk.text.split()) for chunk in expected]
-    assert f"{len(expected)} chunks from 18 documents" in stats and "language:      en " in stats
+    assert f"{len(expected)} chunks from 20 documents" in stats and "language:      en " in stats
     assert f"average {sum(words) / len(words):.1f}, max {max(words)}" in stats
-    assert "kind:          answer 7, passage" in stats and "review status: draft" in stats
+    assert "kind:          answer 9, passage" in stats and "review status: draft" in stats
 
     printed = output.out + output.err + verified + stats
     leaked = [text for text in document_texts() if text in printed]
