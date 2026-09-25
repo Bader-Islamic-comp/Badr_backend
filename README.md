@@ -155,7 +155,7 @@ $env:COMPANION_EMBEDDING_MODEL = 'hashing'
   endpoint, so it fails without a model server even for the hashing release.
 - Offline `evaluate` (the default) calls no model and reports routing accuracy
   and retrieval recall@4. On the hashing release of `dev-app-help` it passes all
-  24 cases, with recall@4 of 14/14. `--generate` also calls the model and reports
+  26 cases, with recall@4 of 16/16. `--generate` also calls the model and reports
   answer-type match, grounding pass and abstention rates. Exit status is 0 when
   every case passes, 1 when any fails, 2 when refused.
 - Without `--check`, `ask` reads one question per line from standard input and
@@ -301,7 +301,7 @@ safety evaluation suite remain prerequisites, not completed checks.
 .venv/Scripts/python.exe -m compileall -q src
 ```
 
-The suite has 333 tests and needs no model server: the RAG tests use the
+The suite has 334 tests and needs no model server: the RAG tests use the
 offline hashing embedder and stand-in model responses. Tests exercise startup
 restrictions, token checks, atomic reward grants, idempotency conflicts,
 inventory ownership, earning and wearing a look against the ledger, input

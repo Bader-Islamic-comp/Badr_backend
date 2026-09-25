@@ -227,7 +227,7 @@ runtime meet only here, so either half can change without the other.
 
 ### Verification
 
-28 → **333 tests** (18 foundation, 142 pipeline, 145 runtime and API). None needs
+28 → **334 tests** (18 foundation, 142 pipeline, 146 runtime and API). None needs
 a model server: they use the hashing embedder, mocked HTTP transports and
 scripted generators. The paired Flutter suite passes 81 tests.
 
@@ -272,6 +272,14 @@ scripted generators. The paired Flutter suite passes 81 tests.
   up to two uncited sentences directly before it, each still held to the
   support check against that passage; 12 of 12 samples then verified. Tests:
   333.
+- **Exact reviewed phrasings.** Asked on the emulator, "What can you do?"
+  came back "Robert isn't sure": all its words are stopwords, so nothing
+  reached the retriever's scoring and it read as weak evidence with either
+  embedder. The retriever now looks a question's full search text up among the
+  reviewed phrasings before scoring. The development corpus gains two reviewed
+  answers for questions addressed to Robert (`answer-who-are-you`,
+  `answer-what-can-you-do`): 20 documents, 31 chunks, 26 evaluation cases, all
+  passing offline. Tests: 334.
 - **On the Android emulator** (after closing Steam and Chrome to free memory),
   with the API on real Qwen: the thinking bubble, a grounded answer with its
   sources, and a ruling redirect all rendered as designed
