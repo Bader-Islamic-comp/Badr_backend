@@ -5,8 +5,10 @@ Status: implemented as a development increment on synthetic data (branch
 children. The scholarly, safeguarding, privacy and legal gates in
 [`development-boundary.md`](development-boundary.md) are still open, and
 [ADR 0003](adr-0003-grounded-answers-development.md) records the boundary for
-this work and what still gates any child use. This builds the machinery those
-gates will review, and it is **off by default**.
+this work and what still gates any child use;
+[ADR 0004](adr-0004-casual-conversation.md) does the same for casual chat and
+the faith-only rule ([`conversation-policy.md`](conversation-policy.md)). This
+builds the machinery those gates will review, and it is **off by default**.
 
 This document is the contract between the data pipeline, the answer runtime and
 the Flutter client. Section numbers are referenced from code comments, so they
@@ -644,4 +646,6 @@ above already describe the result.
     `chat` answer type, the `chat-v1` persona prompt and `chat-check-v1`
     checks, `rag-answer-v2` in Robert's first-person voice, and weak evidence
     or `NOT_IN_SOURCES` outside faith asking the persona instead of abstaining
-    at once. `AnswerService.prepare` now returns a `Plan`.
+    at once. `AnswerService.prepare` now returns a `Plan`. Chat replies cannot
+    be grounded, so they pass their own checks instead; that scoped exception
+    is recorded in [ADR 0004](adr-0004-casual-conversation.md).

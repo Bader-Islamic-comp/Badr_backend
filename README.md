@@ -74,13 +74,30 @@ app, no religious content), and none of this is reviewed for children. The
 router is not an approved safeguarding classifier, and the fixed replies are
 development copy awaiting review.
 
+A conversation policy sits in front of retrieval. A faith question is answered
+only from the corpus (a reviewed answer, or a grounded answer that verifies and
+really answers) and otherwise gets a gentle faith abstention; it never reaches
+casual chat or model memory. Small talk such as "Hi, how are you?", and
+non-faith messages the corpus cannot answer, go to Robert's persona prompt. Its
+reply is released as answer type `chat`, with no sources, only after its own
+checks, or is replaced by reviewed copy; a factual question it recognises still
+abstains.
+
 - [`doc/rag-system.md`](doc/rag-system.md) is the design contract: corpus
   format, chunking, releases, routing, retrieval, thresholds, the API shapes and
   the operator commands.
+- [`doc/conversation-policy.md`](doc/conversation-policy.md) is the
+  conversation policy: the decision order, the faith and small-talk detectors,
+  the persona call and its checks, and the reviewed fallbacks and invitations.
+- [`doc/robert-persona.md`](doc/robert-persona.md) is Robert's character sheet,
+  the only source of facts about him.
 - [`corpus/README.md`](corpus/README.md) is the guide for people preparing
   corpus data.
 - [ADR 0003](doc/adr-0003-grounded-answers-development.md) records the boundary
   and what still gates any child use.
+- [ADR 0004](doc/adr-0004-casual-conversation.md) records the boundary for
+  casual chat, its scoped exception to grounding verification, and what else
+  gates child use.
 
 The model and embedding endpoints must be on this machine or a private network
 (`localhost` or a private IP address), and the model must be allowlisted
@@ -155,9 +172,10 @@ $env:COMPANION_EMBEDDING_MODEL = 'hashing'
   endpoint, so it fails without a model server even for the hashing release.
 - Offline `evaluate` (the default) calls no model and reports routing accuracy
   and retrieval recall@4. On the hashing release of `dev-app-help` it passes all
-  26 cases, with recall@4 of 16/16. `--generate` also calls the model and reports
-  answer-type match, grounding pass and abstention rates. Exit status is 0 when
-  every case passes, 1 when any fails, 2 when refused.
+  47 cases, with recall@4 of 16/16. `--generate` also calls the model and reports
+  answer-type match, grounding pass and abstention rates, and how many chat
+  replies passed the checks or fell back (`doc/conversation-policy.md` §11).
+  Exit status is 0 when every case passes, 1 when any fails, 2 when refused.
 - Without `--check`, `ask` reads one question per line from standard input and
   prints the answer type, text, sources and outcome code. Type synthetic text
   only.
@@ -301,7 +319,7 @@ safety evaluation suite remain prerequisites, not completed checks.
 .venv/Scripts/python.exe -m compileall -q src
 ```
 
-The suite has 334 tests and needs no model server: the RAG tests use the
+The suite has 537 tests and needs no model server: the RAG tests use the
 offline hashing embedder and stand-in model responses. Tests exercise startup
 restrictions, token checks, atomic reward grants, idempotency conflicts,
 inventory ownership, earning and wearing a look against the ledger, input
@@ -312,7 +330,9 @@ immutability and tamper detection, private-endpoint and model-allowlist
 refusals, routing, hybrid retrieval and reviewed-answer matching, thinking
 disabled and reasoning stripped, grounding verification, pending and completed
 turns, the event stream, the answer queue, and that question text is never
-logged or retained. They do not establish child safety or content review
+logged or retained. For the conversation policy they cover the faith and
+small-talk detectors, faith never reaching the persona, every chat check and
+fallback, the invitations and the salam return. They do not establish child safety or content review
 approval.
 
 `contracts/openapi-v1.json` is the published contract, because the app serves no

@@ -3,6 +3,8 @@
 Status: development only, 2026-09-25. Every reply below is development copy
 awaiting safeguarding and scholarly review, and nothing here approves child use:
 the gates in [ADR 0003](adr-0003-grounded-answers-development.md) still stand.
+[ADR 0004](adr-0004-casual-conversation.md) records why this policy exists, its
+scoped exception to grounding verification and what else gates child use.
 This document is the contract for how Robert decides what kind of reply a
 child's message gets. The answer runtime it extends is
 [`rag-system.md`](rag-system.md); the character is
