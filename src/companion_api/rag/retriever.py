@@ -118,15 +118,28 @@ class HybridRetriever:
         return [index for index in self._eligible if chunks[index].language == language
                 and (age_band is None or age_band in chunks[index].age_bands)]
 
+    def exact(self, question: str, *, language: str = "en", age_band: str | None = None) -> Candidate | None:
+        """The eligible answer chunk holding this exact reviewed phrasing, stopwords included, if any.
+
+        The service asks this before small talk (doc/conversation-policy.md §2),
+        so "Who are you?" gets its reviewed answer rather than a chat reply.
+        """
+        index = self._phrasings.get(normalize.search_text(question))
+        if index is None:
+            return None
+        chunk = self.release.chunks[index]
+        if chunk.language != language or (age_band is not None and age_band not in chunk.age_bands):
+            return None
+        # Nominal scores: an exact reviewed phrasing needs no ranking.
+        return Candidate(chunk, 1.0, 1.0, 0.0)
+
     def retrieve(self, question: str, *, language: str = "en", age_band: str | None = None) -> Retrieval:
         allowed = self._allowed(language, age_band)
         if not allowed:
             return Retrieval((), True)
-        exact = self._phrasings.get(normalize.search_text(question))
-        if exact is not None and exact in allowed:
-            # Nominal scores: an exact reviewed phrasing needs no ranking.
-            candidate = Candidate(self.release.chunks[exact], 1.0, 1.0, 0.0)
-            return Retrieval((candidate,), False, candidate)
+        exact = self.exact(question, language=language, age_band=age_band)
+        if exact is not None:
+            return Retrieval((exact,), False, exact)
         query_tokens = normalize.content_tokens(question)
         lexical = self._index.top(query_tokens, self.branch_k, allowed)
         vector = self.embedder.embed_query(question)

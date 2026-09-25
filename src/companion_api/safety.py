@@ -1,8 +1,9 @@
 """Fail-closed development routing, not an approved safeguarding classifier."""
 
+# Development copy awaiting safeguarding and scholarly review; Robert's voice (doc/robert-persona.md).
 UNAVAILABLE = (
-    "The learning question service is unavailable in this development demo. "
-    "Please ask a trusted adult, teacher, or qualified local scholar for help with learning questions."
+    "My question answering is unavailable in this development version of the app, so I can't answer that yet. "
+    "Please ask a trusted adult, a teacher or a qualified local scholar for help with learning questions."
 )
 
 

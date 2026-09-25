@@ -28,20 +28,28 @@ DEMO = Settings(demo_mode=True, demo_token=TOKEN)
 QUESTION = "How many stars does a lesson give, and can I pause it?"
 
 
+QUESTION_VERDICT = '{"kind": "question", "reply": "", "feeling": false}'
+
+
 class ScriptedGenerator:
-    """Answers from the prompt's own numbering, optionally waiting for a signal. Keeps no messages."""
+    """Answers from the prompt's own numbering, optionally waiting for a signal. Keeps no messages.
+
+    The persona call (JSON mode) returns `persona`: by default it judges the message a factual question."""
     model = "qwen3.5:9b"
 
-    def __init__(self, gate: Event | None = None, marker: str | None = None):
-        self.gate, self.marker = gate, marker
-        self.calls, self.saw_marker = 0, False
+    def __init__(self, gate: Event | None = None, marker: str | None = None, persona: str = QUESTION_VERDICT):
+        self.gate, self.marker, self.persona = gate, marker, persona
+        self.calls, self.saw_marker, self.modes = 0, False, []
 
-    def complete(self, messages, *, max_tokens):
+    def complete(self, messages, *, max_tokens, json_mode=False, temperature=None):
         self.calls += 1
+        self.modes.append("chat" if json_mode else "grounded")
         if self.marker is not None:
             self.saw_marker = self.saw_marker or self.marker in messages[-1]["content"]
         if self.gate is not None:
             assert self.gate.wait(10), "test never released the generator"
+        if json_mode:
+            return self.persona
         stars, pause = source_number(messages, "How learning stars work"), source_number(messages, "Pausing a lesson")
         return (f"Each finished lesson gives five learning stars [{stars}]. "
                 f"You can pause a lesson at any time [{pause}].")
@@ -123,18 +131,42 @@ def test_fixed_routes_complete_immediately_without_the_model(release_path):
         assert generator.calls == 0
 
 
-def test_weak_evidence_and_reviewed_answers_never_call_the_model(release_path):
+def test_reviewed_answers_never_call_the_model_and_weak_evidence_asks_only_the_persona(release_path):
     generator = ScriptedGenerator()
     with client_for(service_for(release_path, generator)) as client:
         cid = conversation(client)
-        abstained = completed_turn(client, ask(client, cid, "What is the capital of France?").json()["turnId"])
-        assert (abstained["answerType"], abstained["text"], abstained["sources"]) == ("abstained",
-                                                                                      responses.ABSTAIN, [])
         reviewed = completed_turn(client, ask(client, cid, "Who is Robert?").json()["turnId"])
         assert reviewed["answerType"] == "reviewed_answer" and reviewed["citations"] == ["answer-who-is-robert#1"]
         assert reviewed["sources"] == [{"id": "answer-who-is-robert#1", "title": "Who Robert is",
                                         "reference": LABEL + "part 1"}]
         assert generator.calls == 0
+        abstained = completed_turn(client, ask(client, cid, "What is the capital of France?").json()["turnId"])
+        assert (abstained["answerType"], abstained["text"], abstained["sources"]) == ("abstained",
+                                                                                      responses.ABSTAIN, [])
+        assert generator.modes == ["chat"]
+
+
+def test_a_chat_turn_is_pending_then_completed_without_sources(release_path):
+    # doc/conversation-policy.md §9: small talk runs on the answer worker like any generated answer.
+    gate = Event()
+    reply = "I'm doing great, thank you! My antennae are wiggling."
+    generator = ScriptedGenerator(gate, persona=f'{{"kind": "chat", "reply": "{reply}", "feeling": false}}')
+    try:
+        with client_for(service_for(release_path, generator)) as client:
+            created = ask(client, conversation(client), "Hi, how are you?").json()
+            assert created["status"] == "pending"
+            tid = created["turnId"]
+            assert client.get(f"/v1/turns/{tid}").json()["answerType"] is None
+            gate.set()
+            turn = completed_turn(client, tid)
+            assert turn["answerType"] == "chat" and turn["text"].startswith(reply)
+            assert turn["citations"] == [] and turn["sources"] == [] and 1 <= len(turn["text"]) <= 1200
+            events = client.get(f"/v1/turns/{tid}/events").text
+            assert events.count("event: segment") == 1 and '"citations": []' in events
+            assert f'id: 2\nevent: completed\ndata: {{"turnId": "{tid}", "answerType": "chat"}}' in events
+            assert generator.modes == ["chat"]
+    finally:
+        gate.set()
 
 
 def test_event_stream_while_pending_only_asks_the_client_to_retry(release_path):

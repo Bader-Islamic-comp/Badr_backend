@@ -140,7 +140,10 @@ class Generator(Protocol):
 
     `complete` returns only the final answer text, never reasoning traces, and
     raises on transport failure so the caller can fall back to a fixed reply.
+    `json_mode` asks for one JSON object (the persona call); `temperature`
+    overrides the adapter's default for this call only.
     """
     model: str
 
-    def complete(self, messages: Sequence[dict], *, max_tokens: int) -> str: ...
+    def complete(self, messages: Sequence[dict], *, max_tokens: int, json_mode: bool = False,
+                 temperature: float | None = None) -> str: ...

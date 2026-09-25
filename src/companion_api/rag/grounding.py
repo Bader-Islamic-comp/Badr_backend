@@ -65,6 +65,21 @@ FOLDED_CHECKS = (
 )
 
 
+# Robert saying he cannot answer ("I can't tell you about that", "my sources don't
+# say"). Lexical support cannot tell such a sentence from an answer, because its
+# words come from passages about Robert. The service applies it to faith topics
+# only (doc/conversation-policy.md §2 step 3): there a decline is not an answer
+# from the corpus. App help is left alone, because describing what Robert does
+# when he is unsure is a legitimate answer there.
+DECLINE = re.compile(
+    r"\bi (?:cannot|cant|can not|could not|couldnt|am not able to|m not able to|am unable to|dont|do not|did not|"
+    r"didnt) (?:answer|tell|say|explain|help with|find|know|have (?:any |the |an? )?(?:information|info|details|"
+    r"answers?|lessons?|sources?|stor(?:y|ies)))\b"
+    r"|\b(?:my|the|these|those|your) (?:sources?|lessons?|passages?) (?:do not|dont|does not|doesnt|did not|didnt) "
+    r"(?:say|talk|tell|mention|contain|cover|have|include|explain|answer)\b"
+    r"|\bnot (?:in|from) (?:my|the) (?:sources?|lessons?)\b|\b(?:i am|im) not sure\b|\bno information\b")
+
+
 class Segment(NamedTuple):
     """One released sentence: display text without markers, and the chunk ids it cites."""
     text: str

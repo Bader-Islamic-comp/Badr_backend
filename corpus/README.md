@@ -189,7 +189,8 @@ question. The report names fields but never repeats your text.
 ```
 
 `answerTypes` lists the acceptable kinds of reply: `grounded`,
-`reviewed_answer`, `abstained`, `redirected`, `safety` (or `unavailable`).
+`reviewed_answer`, `abstained`, `redirected`, `safety`, `chat` (Robert's casual reply,
+with no documents) or `unavailable`.
 `documents` lists the documents a good answer should come from; they must
 exist in the corpus, and `validate` checks this. Keep questions short,
 realistic for a child, and never graphic.

@@ -1,8 +1,9 @@
 from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-# doc/rag-system.md §7. `unavailable` is the only type while grounded answers are off.
-AnswerType = Literal["unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety"]
+# doc/rag-system.md §7. `unavailable` is the only type while grounded answers are off. `chat` is
+# Robert's checked casual reply, with no citations or sources (doc/conversation-policy.md §9).
+AnswerType = Literal["unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety", "chat"]
 
 
 class EmptyRequest(BaseModel):
@@ -128,7 +129,10 @@ class Source(BaseModel):
 
 
 class Turn(TurnCreated):
-    """`answerType` is null and `text` empty while pending; completed text is 1-1200 characters."""
+    """`answerType` is null and `text` empty while pending; completed text is 1-1200 characters.
+
+    `citations` and `sources` are empty for every type except `grounded` and `reviewed_answer`.
+    """
     answerType: AnswerType | None
     text: str = Field(max_length=1200)
     citations: list[str] = Field(max_length=4)

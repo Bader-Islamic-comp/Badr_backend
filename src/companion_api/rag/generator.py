@@ -10,6 +10,11 @@ ways because servers read different fields (`reasoning_effort` for Ollama,
 `chat_template_kwargs.enable_thinking` for llama.cpp and vLLM), and any
 reasoning that still comes back is dropped: only the final answer is verified,
 and reasoning is never shown to a child.
+
+The persona call (doc/conversation-policy.md §5) asks for JSON mode
+(`response_format: {"type": "json_object"}`, which Ollama, llama.cpp and vLLM
+accept) and a warmer temperature than grounded answers; both are per call, so
+one adapter serves both prompts.
 """
 import re
 from typing import Sequence
@@ -67,21 +72,27 @@ class OpenAICompatibleGenerator:
         self.temperature, self.top_p = temperature, top_p
         self._client = client or httpx.Client(timeout=timeout, follow_redirects=False)
 
-    def payload(self, messages: Sequence[dict], max_tokens: int) -> dict:
-        return {
+    def payload(self, messages: Sequence[dict], max_tokens: int, *, json_mode: bool = False,
+                temperature: float | None = None) -> dict:
+        body = {
             "model": self.model,
             "messages": list(messages),
-            "temperature": self.temperature,
+            "temperature": self.temperature if temperature is None else temperature,
             "top_p": self.top_p,
             "max_tokens": max_tokens,
             "stream": False,
             "reasoning_effort": "none",
             "chat_template_kwargs": {"enable_thinking": False},
         }
+        if json_mode:
+            body["response_format"] = {"type": "json_object"}
+        return body
 
-    def complete(self, messages: Sequence[dict], *, max_tokens: int) -> str:
+    def complete(self, messages: Sequence[dict], *, max_tokens: int, json_mode: bool = False,
+                 temperature: float | None = None) -> str:
+        payload = self.payload(messages, max_tokens, json_mode=json_mode, temperature=temperature)
         try:
-            response = self._client.post(self.base_url + "/chat/completions", json=self.payload(messages, max_tokens))
+            response = self._client.post(self.base_url + "/chat/completions", json=payload)
         except httpx.TimeoutException as exception:
             raise GenerationError(f"generation endpoint timed out ({type(exception).__name__})") from None
         except httpx.HTTPError as exception:

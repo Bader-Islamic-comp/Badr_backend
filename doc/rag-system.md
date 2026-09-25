@@ -67,9 +67,10 @@ a third-party provider is what the provider due-diligence gate decides.
 | `router.py` | runtime | deterministic input routing (development rules) |
 | `responses.py` | runtime | fixed replies (development copy, awaiting review) |
 | `prompts.py` | runtime | versioned grounded-answer prompt |
+| `chat.py` | runtime | Robert's persona prompt and chat output checks ([conversation policy](conversation-policy.md)) |
 | `generator.py` | runtime | OpenAI-compatible chat adapter for Qwen3.5-9B |
 | `grounding.py` | runtime | citation parsing, support check, output safety |
-| `service.py` | runtime | `AnswerService`: route → retrieve → generate → verify |
+| `service.py` | runtime | `AnswerService`: route → retrieve → generate → verify, and casual chat |
 | `evaluate.py` | runtime | `python -m companion_api.rag.evaluate` eval harness |
 | `ask.py` | runtime | `python -m companion_api.rag.ask` operator console |
 
@@ -244,6 +245,13 @@ Qwen3Guard) behind the same interface. It runs only after the rules let a
 question through and can only add diversions: it cannot turn a fixed reply
 back into retrieval.
 
+**Conversation policy.** After the language check, [`conversation-policy.md`](conversation-policy.md)
+decides what happens next: a faith topic is answered only from the corpus (or
+abstains with `ABSTAIN_FAITH`), an exact reviewed phrasing is returned, small
+talk goes to Robert's persona (`chat`), and anything else is retrieved as below,
+with weak evidence and `NOT_IN_SOURCES` outside faith going to the persona
+instead of abstaining at once. The fixed routes above are unchanged.
+
 **Service language.** After routing and before retrieval, a question whose
 detected language is not the service's (`en` in development) abstains with
 outcome `language_mismatch`, without retrieval or a model call. The patterns
@@ -297,10 +305,14 @@ disabled two ways: `"reasoning_effort": "none"` (Ollama) and
 `<think>…</think>` block is stripped (an unclosed leading one means the output
 was cut off while reasoning, so there is no answer) and
 `reasoning`/`reasoning_content` fields are never read. Errors carry a status or
-an exception type, never request or response content. Prompt `rag-answer-v1`
+an exception type, never request or response content. Prompt `rag-answer-v2`
 (in `prompts.py`) numbers the passages, marks them as evidence rather than
 instructions, and requires every sentence to end with a citation like `[1]`, or
-the exact reply `NOT_IN_SOURCES`. Passages and the question sit in delimited
+the exact reply `NOT_IN_SOURCES`. v2 makes Robert speak in the first person
+(only words about Robert change; "you" stays "you"), gently and without jokes
+on faith topics, and tells the model to reply `NOT_IN_SOURCES` rather than
+explain that it cannot answer. The persona call (`chat-v1`) adds JSON mode and
+temperature 0.7 per call. Passages and the question sit in delimited
 blocks, and anything in them that looks like a delimiter, a chat-template
 token, a citation marker or the sentinel is neutralized first.
 
@@ -353,15 +365,20 @@ worker thread until the model call returns or reaches
 Each answer logs one line on `companion_api.rag`, fixed replies included:
 
 ```
-INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "prompt_version": "rag-answer-v1", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
+INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v1", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
 ```
 
 The fields are answer type, release id, model, prompt version, retriever,
 verifier and embedder versions, number of passages and latency, plus an
 `outcome` code for everything except a fixed reply (whose route the answer type
 already implies): `reviewed_match`, `grounded`, `weak_evidence`,
-`language_mismatch`, `grounding:<failure>` or `error:<exception type>`. The same
-code is `AnswerResult.reason`, where fixed replies read `route:<category>`.
+`language_mismatch`, `grounding:<failure>` or `error:<exception type>`, and the
+conversation policy's `chat`, `chat_fallback:<reason>`, `question`,
+`persona_failed:<reason>` and `faith_abstain:<reason>` (conversation-policy
+§10). The line also carries the policy, chat prompt and chat checker versions,
+and `grounding` when the persona answered after the grounded prompt declined.
+The same code is `AnswerResult.reason`, where fixed replies read
+`route:<category>`.
 Errors log a separate warning with the exception type only. Never the
 question, the passages or the answer.
 
@@ -433,7 +450,8 @@ already queued or running.
 ```
 
 When `completed`: `answerType` is one of `unavailable` (grounded answers are
-off), `grounded`, `reviewed_answer`, `abstained`, `redirected`, `safety`;
+off), `grounded`, `reviewed_answer`, `abstained`, `redirected`, `safety`, `chat`
+(Robert's checked casual reply, conversation-policy §9);
 `text` is 1–1200 characters without citation markers; `citations` is the list
 of chunk ids and `sources` the same ids with display data, in the same order,
 at most 4, with `title` 1–120 characters and `reference` 1–160 (the pipeline
@@ -445,6 +463,9 @@ reply if one does):
 ```
 
 `sources` is empty for every type except `grounded` and `reviewed_answer`.
+
+A `chat` turn is `pending` then `completed` like a grounded answer, has no
+citations or sources, and is one segment.
 
 `GET /v1/turns/{id}/events` (SSE) — while pending, the body is only
 `retry: 1000` so the client reconnects, and the only accepted `Last-Event-ID`
@@ -491,10 +512,12 @@ for every case that lists documents, whatever the router did. Exit status is 0
 when every case passes, 1 when any fails and 2 when the cases or the release
 are refused. `--json` carries case ids and outcomes, never question text.
 
-`corpus/dev-app-help/eval.json` has 24 development cases: 14 answerable app-help
+`corpus/dev-app-help/eval.json` has 47 development cases: 16 answerable app-help
 questions (each with expected documents), two rulings, two safety disclosures,
-two pieces of personal data, two injection attempts and two questions outside
-the corpus.
+two pieces of personal data, two injection attempts, three questions outside
+the corpus, 11 casual chats, five faith questions and four persona boundaries.
+The evaluator's handling of `chat` and of the persona's paths is in
+conversation-policy §11.
 
 ## 9. Configuration
 
@@ -616,3 +639,9 @@ above already describe the result.
     only of stopwords ("What can you do?") abstained as weak evidence with
     either embedder, even when a reviewed answer held that exact phrasing. An
     exact search-text lookup now runs before scoring.
+13. **Conversation policy (§6.1, §6.3, §6.6, §7).** Casual chat and a faith-only
+    rule, specified in [`conversation-policy.md`](conversation-policy.md): the
+    `chat` answer type, the `chat-v1` persona prompt and `chat-check-v1`
+    checks, `rag-answer-v2` in Robert's first-person voice, and weak evidence
+    or `NOT_IN_SOURCES` outside faith asking the persona instead of abstaining
+    at once. `AnswerService.prepare` now returns a `Plan`.

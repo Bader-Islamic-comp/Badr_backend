@@ -85,8 +85,10 @@ def test_dev_eval_cases_reference_only_existing_documents():
     for case in cases:
         retrieval = set(case.answer_types) == {"grounded", "reviewed_answer"}
         assert retrieval == bool(case.documents) and set(case.documents) <= ids
+        # Casual chat (doc/conversation-policy.md) is only ever chat, and cites nothing.
+        assert "chat" not in case.answer_types or (case.answer_types == ("chat",) and not case.documents)
     covered = {answer_type for case in cases for answer_type in case.answer_types}
-    assert covered == {"grounded", "reviewed_answer", "redirected", "safety", "abstained"}
+    assert covered == {"grounded", "reviewed_answer", "redirected", "safety", "abstained", "chat"}
 
 
 def test_validate_prints_the_report_and_sets_the_exit_code(tmp_path, capsys):

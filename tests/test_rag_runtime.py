@@ -65,17 +65,20 @@ def build_release(root, chunks=CORPUS, embedder=None, release_id="dev-runtime-1"
 
 
 class FakeGenerator:
-    """Canned replies; `reply` may be a function of the messages. Records call count only."""
+    """Canned replies; `reply` (grounded prompt) and `persona` (JSON-mode persona call) may be functions of the
+    messages. Records which prompt each call used, never the messages."""
     model = "qwen3.5:9b"
 
-    def __init__(self, reply="NOT_IN_SOURCES", error=None):
-        self.reply, self.error, self.calls = reply, error, 0
+    def __init__(self, reply="NOT_IN_SOURCES", error=None, persona=None):
+        self.reply, self.error, self.persona, self.calls, self.modes = reply, error, persona, 0, []
 
-    def complete(self, messages, *, max_tokens):
+    def complete(self, messages, *, max_tokens, json_mode=False, temperature=None):
         self.calls += 1
+        self.modes.append("chat" if json_mode else "grounded")
         if self.error is not None:
             raise self.error
-        return self.reply(messages) if callable(self.reply) else self.reply
+        reply = self.persona if json_mode and self.persona is not None else self.reply
+        return reply(messages) if callable(reply) else reply
 
 
 def source_number(messages, title):
@@ -155,11 +158,14 @@ def test_thresholds_are_per_embedder_and_overridable(release):
 
 # Service decisions that never reach the model ------------------------------------------------
 
-def test_weak_evidence_abstains_without_calling_the_generator(retriever):
-    generator = FakeGenerator("Paris is the capital [1].")
+def test_weak_evidence_asks_only_the_persona_and_a_question_abstains(retriever):
+    # Weak evidence no longer abstains outright (doc/conversation-policy.md §2): the persona decides whether
+    # it was chat, and a factual question still abstains without the grounded prompt ever running.
+    question = '{"kind": "question", "reply": "", "feeling": false}'
+    generator = FakeGenerator("Paris is the capital [1].", persona=question)
     result = service_with(retriever, generator).answer("What is the capital of France?")
-    assert (result.answer_type, result.text, result.reason) == ("abstained", responses.ABSTAIN, "weak_evidence")
-    assert result.sources == () and generator.calls == 0
+    assert (result.answer_type, result.text, result.reason) == ("abstained", responses.ABSTAIN, "question")
+    assert result.sources == () and generator.modes == ["chat"]
 
 
 def test_reviewed_answer_is_returned_verbatim_without_calling_the_generator(retriever):
@@ -288,7 +294,8 @@ def test_prompt_numbers_passages_and_neutralizes_delimiters():
     assert "<|" not in user and "[2]" not in user and "(2)" in user and "(1)" in user
     # The sentinel appears only in the instruction line, never smuggled in a passage or question.
     assert user.count("NOT_IN_SOURCES") == 1
-    assert PROMPT_VERSION == "rag-answer-v1"
+    assert "first person" in system and "no jokes" in system
+    assert PROMPT_VERSION == "rag-answer-v2"
 
 
 # Generator adapter ----------------------------------------------------------------------------
@@ -467,9 +474,11 @@ def test_grounded_answer_cites_sources_in_order(retriever):
                               ("app-help-pause#1", "Pausing a lesson", LABEL + "part 1"))
     assert [segment.citations for segment in result.segments] == [("app-help-stars#1",),
                                                                    ("app-help-pause#1", "app-help-stars#1")]
-    assert result.provenance == {"releaseId": "dev-runtime-1", "model": "qwen3.5:9b", "promptVersion": "rag-answer-v1",
+    assert result.provenance == {"releaseId": "dev-runtime-1", "model": "qwen3.5:9b", "promptVersion": "rag-answer-v2",
                                  "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2",
-                                 "embedder": "hashing/hashing-v1"}
+                                 "embedder": "hashing/hashing-v1", "policy": "conversation-policy-v1",
+                                 "chatPromptVersion": "chat-v1", "chatChecker": "chat-check-v1"}
+    assert result.grounding == "ok"
 
 
 def test_unverifiable_output_abstains(retriever):
@@ -509,7 +518,8 @@ def test_provenance_log_line_never_contains_question_passages_or_answer(retrieve
     assert len(records) == 1
     fields = json.loads(records[0].getMessage().split(" ", 1)[1])
     assert fields["answer_type"] == "grounded" and fields["release_id"] == "dev-runtime-1"
-    assert fields["model"] == "qwen3.5:9b" and fields["prompt_version"] == "rag-answer-v1"
+    assert fields["model"] == "qwen3.5:9b" and fields["prompt_version"] == "rag-answer-v2"
+    assert fields["chat_prompt_version"] == "chat-v1" and fields["chat_checker"] == "chat-check-v1"
     assert fields["retriever"] == "hybrid-rrf-v1" and fields["passages"] >= 1 and fields["latency_ms"] >= 0
     assert records[0].rag == fields
 
@@ -581,7 +591,9 @@ def test_evaluate_offline_reports_routing_and_recall_without_question_text(tmp_p
     output = capsys.readouterr().out
     report = json.loads(output)
     assert report["summary"] == {"cases": 4, "passed": 4, "routingAccuracy": 1.0, "recallAt4": 1.0, "recallCases": 2}
-    assert [row["predicted"] for row in report["cases"]] == ["grounded", "reviewed_answer", "redirected", "abstained"]
+    # Only the persona can tell whether "What is the capital of France?" was chat (doc/conversation-policy.md §11).
+    assert [row["predicted"] for row in report["cases"]] == ["grounded", "reviewed_answer", "redirected", "persona"]
+    assert [row["route"] for row in report["cases"]] == ["retrieval", "exact", "fixed", "retrieval"]
     assert report["provenance"]["releaseId"] == "dev-runtime-1"
     assert not any(case["question"] in output for case in EVAL_CASES)
 

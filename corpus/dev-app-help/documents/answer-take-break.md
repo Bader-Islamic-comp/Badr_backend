@@ -16,4 +16,4 @@ source.license: internal
 review.status: draft
 ---
 
-Yes. You can pause whenever you need and come back later. Resting is part of learning well.
+Yes, of course! You can pause whenever you need and come back later. I think resting is part of learning well.

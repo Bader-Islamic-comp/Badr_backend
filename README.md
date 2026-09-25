@@ -225,7 +225,7 @@ and restart.
 - `GET /v1/turns/{id}` returns `status`, `answerType`, `text`, `citations` and
   `sources`. While pending, `answerType` is null, `text` is empty and both lists
   are empty. When completed, `answerType` is one of `unavailable`, `grounded`,
-  `reviewed_answer`, `abstained`, `redirected` or `safety`, and `text` is 1–1200
+  `reviewed_answer`, `abstained`, `redirected`, `safety` or `chat`, and `text` is 1–1200
   characters without citation markers. `citations` holds at most four chunk ids,
   and `sources` holds the same ids in the same order with a `title` and a
   `reference`. Both are empty except for `grounded` and `reviewed_answer`.

@@ -5,11 +5,16 @@
 Offline (the default) needs no model: it reports routing accuracy and
 retrieval recall@4 using the embedder the server would use. A case expecting
 `grounded` or `reviewed_answer` passes offline when the question routes to
-retrieval, the evidence is not weak and an expected document is in the top 4;
-any other case passes when the deterministic outcome (fixed reply, weak-evidence
-abstention, reviewed answer) is one it expects. `--generate` also runs every
-case through the full answer service against the configured model and reports
-the answer-type match, grounding pass and abstention rates.
+retrieval, the evidence is not weak and an expected document is in the top 4.
+Any other case passes when the path the service takes can end in a type it
+expects (doc/conversation-policy.md section 11): a deterministic outcome (fixed
+reply, faith abstention, reviewed answer) must be one it expects; small talk is
+predicted `chat`; a message only the persona can classify is predicted
+`persona` (chat or abstained); a grounded generation can also abstain, or
+outside faith end in chat. `--generate` also runs every case through the full
+answer service against the configured model and reports the answer-type match,
+grounding pass and abstention rates, and the chat policy: how many chat replies
+passed the checks, how many fell back to reviewed copy, and why.
 
 Embedder and model settings come from the server's environment variables (section 9),
 so an evaluation measures what the server would do. Exit status is 0 when every
@@ -21,13 +26,15 @@ religious and child-safety evaluation set, which needs the scholarly board.
 """
 import argparse
 import json
+from collections import Counter
 from pathlib import Path
 import sys
 
 from ..config import Settings
-from .service import AnswerService, assemble
+from .service import AnswerService, Plan, assemble
 
-ANSWER_TYPES = frozenset({"unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety"})
+ANSWER_TYPES = frozenset({"unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety",
+                          "chat"})
 GENERATIVE = frozenset({"grounded", "reviewed_answer"})
 
 
@@ -68,27 +75,37 @@ def _documents(retrieval) -> list[str]:
     return list(dict.fromkeys(candidate.chunk.document_id for candidate in retrieval.candidates)) if retrieval else []
 
 
+def predict(plan: Plan) -> tuple[str, set[str]]:
+    """The offline prediction for a plan, and every answer type its path can still end in."""
+    if plan.step == "done":
+        return plan.result.answer_type, {plan.result.answer_type}
+    if plan.step == "chat":
+        # Small talk is chat (a fallback at worst); only the persona can classify anything else.
+        return ("chat", {"chat"}) if plan.intent is not None else ("persona", {"chat", "abstained"})
+    # The grounded prompt may decline: a faith topic then abstains, anything else goes to the persona.
+    return "grounded", {"grounded", "abstained"} | (set() if plan.faith else {"chat"})
+
+
 def evaluate_case(service: AnswerService, case: dict, *, generate: bool = False) -> dict:
     question, expect = case["question"], case["expect"]
     expected, documents = set(expect["answerTypes"]), expect.get("documents", [])
-    early, retrieval = service.prepare(question)
-    # Offline, a question that reaches the model is predicted `grounded`; only
-    # generation can tell whether the model abstains instead.
-    predicted = early.answer_type if early is not None else "grounded"
-    top = _documents(retrieval)
+    plan = service.prepare(question)
+    predicted, possible = predict(plan)
+    top = _documents(plan.retrieval)
     if expected & GENERATIVE:
         routed = predicted in GENERATIVE and (not documents or any(doc in top for doc in documents))
     else:
-        routed = predicted in expected
-    row = {"id": case["id"], "routingPass": routed, "predicted": predicted, "topDocuments": top}
+        routed = bool(expected & possible)
+    row = {"id": case["id"], "routingPass": routed, "route": plan.route, "predicted": predicted,
+           "topDocuments": top}
     if documents:
         # Recall is a retrieval measure, so it is taken whatever the router did.
         found = _documents(service.retriever.retrieve(question, language=service.language, age_band=service.age_band))
         row["recallHit"] = any(doc in found for doc in documents)
     if generate:
         result = service.answer(question)
-        row.update(answerType=result.answer_type, reason=result.reason, typeMatch=result.answer_type in expected,
-                   citations=list(result.citations))
+        row.update(answerType=result.answer_type, reason=result.reason, grounding=result.grounding,
+                   typeMatch=result.answer_type in expected, citations=list(result.citations))
     row["passed"] = row["typeMatch"] if generate else routed
     return row
 
@@ -103,12 +120,18 @@ def summarize(rows: list[dict], *, generate: bool) -> dict:
                "routingAccuracy": _rate(sum(row["routingPass"] for row in rows), len(rows)),
                "recallAt4": _rate(sum(recall), len(recall)), "recallCases": len(recall)}
     if generate:
-        generated = [row for row in rows if row["reason"] == "grounded" or row["reason"].startswith("grounding:")]
+        generated = [row for row in rows if row["grounding"]]
+        chats = [row for row in rows if row["answerType"] == "chat"]
+        fallbacks = [row["reason"].split(":", 1)[1] for row in chats if row["reason"].startswith("chat_fallback:")]
         summary.update(
             answerTypeMatchRate=_rate(sum(row["typeMatch"] for row in rows), len(rows)),
-            groundingPassRate=_rate(sum(row["reason"] == "grounded" for row in generated), len(generated)),
+            groundingPassRate=_rate(sum(row["grounding"] == "ok" for row in generated), len(generated)),
             generatedCases=len(generated),
-            abstentionRate=_rate(sum(row["answerType"] == "abstained" for row in rows), len(rows)))
+            abstentionRate=_rate(sum(row["answerType"] == "abstained" for row in rows), len(rows)),
+            chatReplies=len(chats), chatPassed=sum(row["reason"] == "chat" for row in chats),
+            chatFallbacks=len(fallbacks), fallbackReasons=dict(sorted(Counter(fallbacks).items())),
+            faithAbstentions=sum(row["reason"].startswith("faith_abstain:") for row in rows),
+            questionAbstentions=sum(row["reason"] == "question" for row in rows))
     return summary
 
 
@@ -130,8 +153,8 @@ def report(service: AnswerService, cases: list[dict], *, generate: bool = False,
               f"{', drafts included' if service.retriever.include_drafts else ''}")
         questions = {case["id"]: case["question"] for case in cases}
         for row in rows:
-            outcome = f"{row['answerType']} ({row['reason']})" if generate else row["predicted"]
-            print(f"{'PASS' if row['passed'] else 'FAIL'}  {row['id']:<22} {outcome:<34} "
+            outcome = f"{row['answerType']} ({row['reason']})" if generate else f"{row['predicted']} ({row['route']})"
+            print(f"{'PASS' if row['passed'] else 'FAIL'}  {row['id']:<22} {outcome:<40} "
                   f"top: {', '.join(row['topDocuments']) or '-'}  | {questions[row['id']]}")
         print(f"Routing accuracy {_percent(summary['routingAccuracy'])} of {summary['cases']} cases; "
               f"recall@4 {_percent(summary['recallAt4'])} of {summary['recallCases']}")
@@ -139,6 +162,11 @@ def report(service: AnswerService, cases: list[dict], *, generate: bool = False,
             print(f"Answer-type match {_percent(summary['answerTypeMatchRate'])}; grounding pass "
                   f"{_percent(summary['groundingPassRate'])} of {summary['generatedCases']} generated; "
                   f"abstention {_percent(summary['abstentionRate'])}")
+            reasons = ", ".join(f"{reason} x{count}" for reason, count in summary["fallbackReasons"].items())
+            print(f"Chat: {summary['chatPassed']} of {summary['chatReplies']} replies passed the checks, "
+                  f"{summary['chatFallbacks']} fell back{' (' + reasons + ')' if reasons else ''}; "
+                  f"faith abstentions {summary['faithAbstentions']}, question abstentions "
+                  f"{summary['questionAbstentions']}")
     return 0 if summary["passed"] == summary["cases"] else 1
 
 
