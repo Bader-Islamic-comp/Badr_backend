@@ -27,7 +27,7 @@
 | 9 | التحديات والمكافآت — خارج تاسكات الكوربس | architecture §9 | not_started | — | — | 2026-09-27 |
 | 10 | كيانات البيانات — لا بيانات أطفال بالـ vector store | architecture §10 | not_started | — | 15 | 2026-09-27 |
 | 11 | سلوك الفشل: المحتوى المخترق → عزل ورجوع للإصدار السابق | architecture §11 | draft_ready | `scripts/rollback.py` | 5 | 2026-09-27 |
-| 12 | المراقبة والتقييم | architecture §12 | in_progress | `src/companion_api/rag/evaluate.py` | 11,12,13,14 | 2026-09-27 |
+| 12 | المراقبة والتقييم: مجموعة تقييم + dashboard؛ الـ embedding blocked | architecture §12 | draft_ready | `scripts/eval_retrieval.py`, `reports/retrieval/history.jsonl` | 12,13,14 | 2026-09-27 |
 | 13 | نطاق الـ MVP — قرار منتج | architecture §13 | not_started | — | — | 2026-09-27 |
 | 14 | خارطة الطريق — قرار منتج | architecture §14 | not_started | — | — | 2026-09-27 |
 | 15 | الفريق — قرار تنظيمي | architecture §15 | not_started | — | — | 2026-09-27 |
@@ -37,7 +37,7 @@
 | p1 | مصادر البيانات: الطبقة 0 منزّلة ومتحقَّق منها | plan مكوّن 1 | draft_ready | `corpus/sources/registry.yaml`, `corpus/canonical/manifest.json`; `python3 scripts/fetch_sources.py` | 2,3 | 2026-09-27 |
 | p1b | محتوى الطفل (الطبقة 2) — هيكل وقوالب ومدقق؛ النص بشري | plan مكوّن 1 | draft_ready | `corpus/drafts/age_band/schema.json`, `corpus/drafts/age_band/WRITING_GUIDE.md`; `python3 scripts/age_band.py check` | 10 | 2026-09-27 |
 | p2 | الإدخال والتقطيع — schema v2 / chunk-v2 / norm-v2، الطبقة 0 والموجة 1 | plan مكوّن 2 | draft_ready | `scripts/build_corpus.py`, `corpus/reports/ingest_summary.json`, `corpus/aliases.yaml`, `corpus/candidate/hadith_selection.yaml` | 9 | 2026-09-27 |
-| p2b | اختيار الـ embedding | plan مكوّن 2 | not_started | — | 11 | 2026-09-27 |
+| p2b | اختيار الـ embedding — blocked: القرص ممتلئ؛ ADR proposed | plan مكوّن 2 | blocked | `doc/adr-0005-embedding-selection.md` | 11 | 2026-09-27 |
 | p3 | الاسترجاع — hybrid RRF موجود، بدون إعادة صياغة ولا reranker | plan مكوّن 3 | in_progress | `src/companion_api/rag/retriever.py` | — | 2026-09-27 |
 | p4 | التوليد والتحقق — تطويري | plan مكوّن 4 | in_progress | `src/companion_api/rag/generator.py`, `src/companion_api/rag/grounding.py` | — | 2026-09-27 |
 | p5 | بوابة الأمان — خارج التاسكات الـ 15 | plan مكوّن 5 | not_started | — | — | 2026-09-27 |
@@ -45,4 +45,4 @@
 | p7 | Flutter و Unity — خارج التاسكات الـ 15 | plan مكوّن 7 | not_started | — | — | 2026-09-27 |
 | p8 | البيانات والبنية التحتية (pgvector) — خارج النطاق | plan مكوّن 8 | blocked | `doc/rag-system.md` | — | 2026-09-27 |
 | p8b | لا محتوى أطفال بالـ vector store | plan مكوّن 8 | not_started | — | 15 | 2026-09-27 |
-| p9 | التقييم: gold، harmful، dashboard | plan مكوّن 9 | not_started | — | 12,13,14 | 2026-09-27 |
+| p9 | التقييم: gold (310)، harmful (151)، dashboard | plan مكوّن 9 | draft_ready | `corpus/eval/gold.jsonl`, `corpus/eval/harmful.jsonl`, `reports/retrieval/index.html`; `PYTHONPATH=src python3 -m pytest -q tests/test_eval_retrieval.py` | 12,13,14 | 2026-09-27 |

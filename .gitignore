@@ -19,3 +19,4 @@ corpus/raw/
 corpus/canonical/**/*.jsonl
 corpus/layer0/
 corpus/wave1/
+reports/retrieval/cache/

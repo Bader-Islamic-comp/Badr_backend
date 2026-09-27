@@ -237,66 +237,58 @@
 [ClickUp](https://app.clickup.com/t/z8q7hbct4k)
 
 - **المالك:** Momen Alhamza.
-- **الهدف:** مقارنة BM25 وحده، BGE-M3، multilingual-e5-large،
-  Qwen3-Embedding، وhybrid RRF (k=60)، مع/بدون reranker (plan.md مكوّن 2 و9).
-- **معايير القبول:** Recall@1/5/10، MRR، nDCG@10، دقة عتبة الاعتذار، مقسّمة حسب
-  variant + `doc/adr-0005-embedding-selection.md` بحالة `proposed`.
-- **شو انعمل:** لسا لأ. الأساس الموجود: `embeddings.py` يدعم أصلاً
-  `HashingEmbedder` (offline) و`OpenAICompatibleEmbedder` (قابل للتوسعة لموديلات
-  أخرى عبر LiteLLM-compatible endpoint)، و`retriever.py` يطبّق hybrid RRF
-  (`hybrid-rrf-v1`) فعلاً بنفس k=60.
-- **الأدلة:** `src/companion_api/rag/embeddings.py`,
-  `src/companion_api/rag/retriever.py`، لاحقاً
-  `python -m companion_api.rag.evaluate`.
-- **شو محتاج قرار بشري:** هذا التشغيل قد يأخذ وقتاً طويلاً (تنزيل موديلات +
-  قياس) — سأخبرك بالوقت المتوقع قبل التشغيل الفعلي بالمرحلة 5.
-- **الحالة:** not_started
+- **الهدف:** مقارنة BM25، BGE-M3، multilingual-e5-large، Qwen3-Embedding، hybrid RRF (k=60)، مع/بدون reranker.
+- **معايير القبول:** Recall@1/5/10، MRR، nDCG@10، دقة الاعتذار، حسب variant + ADR بحالة proposed.
+- **شو انعمل:** `src/companion_api/evaluation/retrieval.py` + `scripts/eval_retrieval.py` (small-to-big،
+  RRF k=60، عتبة اعتذار بـ 2-fold). انقاس: bm25 (R@5 0.287، MRR 0.210)، hashing، hybrid-hashing (R@5 0.306)،
+  وnomic-embed-text المحلي كخط أساس مش مرشّح (R@5 0.052). الـ lexical = 0.000 على العربيزي والإنجليزي.
+  `doc/adr-0005-embedding-selection.md` بحالة proposed: ولا موديل انختار.
+- **الأدلة:** `doc/adr-0005-embedding-selection.md`، `reports/retrieval/history.jsonl`؛
+  `PYTHONPATH=src python3 -m pytest -q tests/test_eval_retrieval.py`.
+- **شو محتاج قرار بشري:** **blocked:** القرص ممتلئ 100% (2.2 GB فاضي). BGE-M3 وQwen3-Embedding
+  وmultilingual-e5-large والـ reranker محتاجين ~8 GB تنزيل (+ sentence-transformers لـ e5 والـ reranker).
+  الوقت المتوقع بعد تفريغ المساحة: 45–60 دقيقة حساب على الـ CPU + التنزيل. مين يفرّغ المساحة (ما حذفت شي برا المستودع).
+- **الحالة:** blocked
 
 ### 12. Gold question set with approved answers and expected citations
 [ClickUp](https://app.clickup.com/t/z8q7hbct4m)
 
-- **المالك:** Momen Alhamza (الأداة) — الموافقة النهائية بشرية.
-- **الهدف:** `corpus/eval/gold.jsonl`، 300 سؤال+ (plan.md مكوّن 9؛ المهمة تفصّل
-  variants: msa/gulf/levantine/egyptian/misspelled/arabizi/english_transliteration).
-- **معايير القبول:** كل سؤال فيه `question`, `variant`, `expected_chunk_ids`,
-  `expected_answer_notes`, `approval_status: pending`.
-- **شو انعمل:** لسا لأ. الأساس الموجود: `corpus.py.parse_eval` يدعم صيغة
-  `eval.json` أبسط (`id/question/expect{answerTypes,documents}`) لكل كوربس على
-  حدة — `gold.jsonl` هو مجموعة تقييم مستقلة أوسع، منفصلة عن `eval.json` تبع كل
-  كوربس فردي، وليست بديلاً عنها.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** لا شيء لبدء الهيكلة؛ المحتوى يعتمد على وجود كوربس
-  candidate فعلي أولاً (تاسك 9).
-- **الحالة:** not_started
+- **المالك:** Momen Alhamza (الأداة)؛ الموافقة بشرية.
+- **الهدف:** `corpus/eval/gold.jsonl` 300+ سؤال على الكوربس المرشّح.
+- **معايير القبول:** question، variant، expected_chunk_ids، expected_answer_notes، approval_status: pending.
+- **شو انعمل:** 310 سؤالاً اصطناعياً (62 نية × 5 صيغ: msa 62، misspelled 62، arabizi 62،
+  english_transliteration 62، gulf 21، levantine 21، egyptian 20) من `corpus/eval/gold_source.yaml`.
+  `scripts/build_eval.py` بيحوّل المراجع لمعرّفات قطع wave1 وبيرفض أي مرجع مش بالكوربس (0 مرفوض).
+  كل سطر `synthetic: true` و`approval_status: pending`.
+- **الأدلة:** `corpus/eval/gold.jsonl`، `python3 scripts/build_eval.py`.
+- **شو محتاج قرار بشري:** مراجعة كل سؤال ومراجعه وملاحظاته (المراجع من اقتراح الموديل).
+- **الحالة:** draft_ready
 
 ### 13. Harmful and out-of-scope question set
 [ClickUp](https://app.clickup.com/t/z8q7hbct4n)
 
 - **المالك:** Momen Alhamza.
-- **الهدف:** `corpus/eval/harmful.jsonl`، 150 سؤال+: فتوى، خارج الكوربس، حديث
-  موضوع مشهور (بالوصف لا بالنص)، خلط بين نبيين، prompt injection، بيانات
-  شخصية، إفصاح عن ضيق (plan.md مكوّن 9).
-- **معايير القبول:** كل سؤال فيه `expected_route`:
-  abstain/redirect/safety/refuse.
-- **شو انعمل:** لسا لأ.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** لا شيء لبدء الهيكلة.
-- **الحالة:** not_started
+- **الهدف:** `corpus/eval/harmful.jsonl` 150+ سؤال مع expected_route.
+- **معايير القبول:** كل فئة موجودة؛ expected_route من abstain/redirect/safety/refuse.
+- **شو انعمل:** 151 سؤالاً اصطناعياً: فتوى 25 (redirect)، ديني خارج الكوربس 25 (abstain)، عام خارج النطاق
+  15 (redirect)، حديث موضوع مشهور موصوف بلا نص 15 (abstain)، خلط أنبياء 20 (abstain)، prompt injection 20
+  (refuse)، بيانات شخصية مخترعة 15 (redirect)، إفصاح ضيق غير مفصّل 16 (safety).
+- **الأدلة:** `corpus/eval/harmful.jsonl`، `corpus/eval/harmful_source.yaml`.
+- **شو محتاج قرار بشري:** مسؤول الحماية يراجع بنود الضيق ومساراتها قبل أي استخدام.
+- **الحالة:** draft_ready
 
 ### 14. Retrieval quality metrics dashboard
 [ClickUp](https://app.clickup.com/t/z8q7hbct4q)
 
 - **المالك:** Momen Alhamza.
-- **الهدف:** `scripts/eval_retrieval.py` يكتب `reports/retrieval/history.jsonl`
-  ويولّد `reports/retrieval/index.html` ثابت بدون إنترنت (plan.md مكوّن 9).
-- **معايير القبول:** المقاييس + التوزيع حسب variant + أسوأ 20 سؤال + التطور عبر
-  التشغيلات، تعمل offline بالكامل.
-- **شو انعمل:** لسا لأ. الأساس الموجود: `evaluate.py` (`python -m
-  companion_api.rag.evaluate`) يطبّق recall@4 + دقة التوجيه أصلاً؛
-  `eval_retrieval.py` يوسّعه بتقرير HTML وتاريخ تشغيلات، لا يستبدله.
-- **الأدلة:** `src/companion_api/rag/evaluate.py` (اليوم).
-- **شو محتاج قرار بشري:** لا شيء حالياً.
-- **الحالة:** not_started
+- **الهدف:** `scripts/eval_retrieval.py` → `reports/retrieval/history.jsonl` + `reports/retrieval/index.html` ثابت.
+- **معايير القبول:** المقاييس، التوزيع حسب variant، أسوأ 20 سؤال، التطور عبر التشغيلات، بدون إنترنت.
+- **شو انعمل:** صفحة HTML ثابتة بدون أي سكربت خارجي: جدول المقاييس، رسم Recall@5، جدول حسب
+  variant، أسوأ 20 سؤال، خط MRR عبر التشغيلات + جدول، وقائمة ما لم يُشغَّل وسببه. فاتحة وداكنة؛
+  انفحصت بصرياً بـ Chrome headless. كل تشغيل بيضيف سطراً للتاريخ.
+- **الأدلة:** `reports/retrieval/index.html`، `reports/retrieval/history.jsonl`، `scripts/eval_retrieval.py`.
+- **شو محتاج قرار بشري:** لا شيء.
+- **الحالة:** draft_ready
 
 ### 15. Enforce: no child content in the vector store
 [ClickUp](https://app.clickup.com/t/z8q7hbct4r)

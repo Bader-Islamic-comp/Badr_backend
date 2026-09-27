@@ -62,3 +62,11 @@
 | 2026-09-27 | 4 | `check_progress.py`: أول تشغيل كشف 5 تعارضات حقيقية (حالات تاسكات 4،5،8،11 ما تحدّثت) → انصلحت | 0 تعارض، 6 أوامر دليل اشتغلت | `scripts/check_progress.py`, `doc/done.md`, `doc/corpus-tasks.md` |
 | 2026-09-27 | 4 | اختبارات `test_governance.py` (14) + كل المشروع | 596 passed | `tests/test_governance.py` |
 | 2026-09-27 | 4 | خطأ: نتائج المطابقة والتجميع كانت بتتغيّر بين التشغيلات (ترتيب الـ set بيتأثر بـ hash randomization) → كسر التعادل بالموقع | نفس الـ sha256 مع PYTHONHASHSEED=1 و2؛ الأرقام الرئيسية ما تغيّرت | `src/companion_api/corpusprep/hadith.py`, `cluster.py` |
+| 2026-09-27 | 5 | gold: 62 نية × 5 صيغ = 310 سؤال اصطناعي؛ المراجع انحلّت لقطع wave1 (0 مرفوض) | pending كلها | `corpus/eval/gold_source.yaml`, `corpus/eval/gold.jsonl`, `scripts/build_eval.py` |
+| 2026-09-27 | 5 | harmful: 151 سؤال بـ 8 فئات (حديث موضوع موصوف بلا نص، ضيق غير مفصّل، بيانات مخترعة) | pending كلها | `corpus/eval/harmful_source.yaml`, `corpus/eval/harmful.jsonl` |
+| 2026-09-27 | 5 | **مشكلة: القرص ممتلئ 100% (2.2 GB فاضي من 233)**؛ ولا sentence-transformers؛ ~3 GB RAM فاضي | BGE-M3 / e5-large / Qwen3-Embedding / reranker blocked؛ ما حذفت شي برا المستودع | — |
+| 2026-09-27 | 5 | قرار (6): nomic-embed-text (موجود محلياً) كخط أساس dense مش مرشّح | R@5 0.052: موديل إنجليزي ما بيفيد العربي | `scripts/eval_retrieval.py` |
+| 2026-09-27 | 5 | eval: bm25 R@5 0.287 / MRR 0.210؛ hybrid-hashing R@5 0.306؛ عربيزي وإنجليزي 0.000 lexical | كل عتبات الاعتذار ≤ 0.51 balanced | `reports/retrieval/history.jsonl` |
+| 2026-09-27 | 5 | خطأ بالعتبة: كانت تقع على أقل عيّنة موجبة → نقاط منتصف بين الدرجات (اختبار كشفه) | — | `src/companion_api/evaluation/retrieval.py` |
+| 2026-09-27 | 5 | dashboard ثابت بدون إنترنت، انفحص بصرياً (Chrome headless)، صلّحت حجم النص وتداخل التسميات | — | `reports/retrieval/index.html` |
+| 2026-09-27 | 5 | ADR-0005 proposed: ولا موديل انختار؛ hybrid RRF k=60 باقي | — | `doc/adr-0005-embedding-selection.md` |
