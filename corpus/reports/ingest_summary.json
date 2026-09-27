@@ -90,7 +90,7 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 7.3
+    "seconds": 7.1
   },
   "wave1": {
     "documents": 184,

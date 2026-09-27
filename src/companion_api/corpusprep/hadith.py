@@ -151,7 +151,7 @@ def crosscheck_by_text(primary: list[Entry], secondary: list[Entry], progress=No
                 for position in postings:
                     votes[position] = votes.get(position, 0) + 1
         compared = [_compare(entry, secondary[position], mine, grams[position])
-                    for position in sorted(votes, key=lambda p: -votes[p])[:_CANDIDATES]]
+                    for position in sorted(votes, key=lambda p: (-votes[p], p))[:_CANDIDATES]]  # ties by position: runs repeat
         best = max(compared, key=lambda match: match[1], default=None)
         if best is not None and best[1] < MATCH:
             # A primary entry can sit inside a longer second-source entry; prefer that entry if it holds it all.

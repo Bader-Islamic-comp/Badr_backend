@@ -61,3 +61,4 @@
 | 2026-09-27 | 4 | مسودات السياسات: scope، source-policy، rights-clearance (مولّد)، reviewer-policy، review-workflow، releases، re-review-policy | كلها draft، المالك Mousa al-Rashdan | `doc/governance/*.md`, `scripts/rights_table.py` |
 | 2026-09-27 | 4 | `check_progress.py`: أول تشغيل كشف 5 تعارضات حقيقية (حالات تاسكات 4،5،8،11 ما تحدّثت) → انصلحت | 0 تعارض، 6 أوامر دليل اشتغلت | `scripts/check_progress.py`, `doc/done.md`, `doc/corpus-tasks.md` |
 | 2026-09-27 | 4 | اختبارات `test_governance.py` (14) + كل المشروع | 596 passed | `tests/test_governance.py` |
+| 2026-09-27 | 4 | خطأ: نتائج المطابقة والتجميع كانت بتتغيّر بين التشغيلات (ترتيب الـ set بيتأثر بـ hash randomization) → كسر التعادل بالموقع | نفس الـ sha256 مع PYTHONHASHSEED=1 و2؛ الأرقام الرئيسية ما تغيّرت | `src/companion_api/corpusprep/hadith.py`, `cluster.py` |

@@ -77,7 +77,7 @@ def cluster(records: list[Record]) -> dict[str, dict]:
             continue
         votes = Counter(other for gram in record.grams for other in index[gram]
                         if len(index[gram]) <= _RARE_DF and other != position)
-        for other, _ in votes.most_common(10):
+        for other, _ in sorted(votes.items(), key=lambda item: (-item[1], item[0]))[:10]:
             if len(records[other].grams) >= MIN_GRAMS and dice(record.grams, records[other].grams) >= CLUSTER_DICE:
                 left, right = find(position), find(other)
                 if left != right:
@@ -120,7 +120,7 @@ def link_nawawi(nawawi: list[tuple[str, str]], records: list[Record]) -> dict[st
         named = _takhrij_names(compare_tokens(text))
         votes = Counter(other for gram in mine for other in index.get(gram, ()) if len(index[gram]) <= 200)
         best = None
-        for other, _ in votes.most_common(30):
+        for other, _ in sorted(votes.items(), key=lambda item: (-item[1], item[0]))[:30]:
             record = records[other]
             if record.collection not in named:
                 continue
