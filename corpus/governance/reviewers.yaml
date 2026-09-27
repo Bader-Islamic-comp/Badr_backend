@@ -1,0 +1,10 @@
+# Qualified reviewers (governance task 4). Filled in by the governance owner (Mousa al-Rashdan)
+# under doc/governance/reviewer-policy.md; empty until then, so no approval is possible yet.
+#
+# - name: <full name, as used in --actor>
+#   qualified: true
+#   roles: [scholarly, safeguarding, language]
+#   qualification_ref: <where the qualification is recorded>
+#   conflicts: [<draft ids this reviewer must not review>]
+#   declared_on: YYYY-MM-DD
+reviewers: []

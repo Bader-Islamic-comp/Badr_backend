@@ -1,48 +1,48 @@
 # Done — تغطية المعمارية والخطة
 
-جدول واحد يغطي كل قسم رقمي بـ [`architecture.md`](architecture.md) وكل مكوّن
-بـ [`plan.md`](plan.md). لا بند `done` بدون دليل (مسار أو أمر حقيقي). الحالات:
-`not_started` / `in_progress` / `draft_ready` / `done_pending_approval` /
-`blocked`. يتحقق منه آلياً `scripts/check_progress.py` (من أول ما يُبنى،
-المرحلة 4).
+جدول واحد يغطي كل قسم رقمي بـ [`architecture.md`](architecture.md) وكل مكوّن بـ [`plan.md`](plan.md)
+وكل تاسك بـ [`corpus-tasks.md`](corpus-tasks.md). لا بند `done` بدون دليل. الحالات: `not_started` /
+`in_progress` / `draft_ready` / `done_pending_approval` / `blocked`. بيتحقق منه
+`python3 scripts/check_progress.py`: كل مسار دليل لازم يكون موجود، وكل أمر دليل لازم يشتغل.
 
-بنود كثيرة تحت مرتبطة بتنفيذ RAG تطويري **موجود مسبقاً** قبل هذه المهمة (فرع
-`feature/rag-system-and-data-pipeline`)، وليس بعمل هذه الجلسة. علّمتها
-`in_progress` (development-only، غير مُعتمد للأطفال بعد) مع دليلها الحقيقي،
-تمييزاً عن البنود التي ستُنجَز ضمن تاسكات الكوربس الـ 15.
+بنود `in_progress` بدون تاسك (—) هي تنفيذ RAG تطويري موجود قبل هاي المهمة، مش من شغل هاي الجلسة.
 
 | id | البند | المرجع | الحالة | الدليل | التاسك | آخر تحديث |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | رؤية المنتج (وثيقة فقط، لا تنفيذ كوربس مرتبط) | architecture §1 | not_started | — | — | 2026-09-27 |
-| 2 | افتراضات التخطيط؛ عمر/سوق/منهج مفتوحة (§18 بند 1-4) | architecture §2 | not_started | — | — | 2026-09-27 |
-| 3 | مبادئ المنتج (وثيقة فقط) | architecture §3 | not_started | — | — | 2026-09-27 |
-| 4 | معمارية Flutter/Unity/Backend — خارج نطاق تاسكات الكوربس | architecture §4 | not_started | — | — | 2026-09-27 |
-| 5 | تدفّق المحادثة والصوت — تنفيذ نصّي تطويري موجود، الصوت غير منفَّذ | architecture §5 | in_progress | `src/companion_api/rag/service.py`, `store.py` | — | 2026-09-27 |
-| 6 | حوكمة الـ RAG والمحتوى الديني (نظرة عامة) | architecture §6 | not_started | — | 1,2,3,4 | 2026-09-27 |
-| 6.2 | سجل المصادر (قرآن مرخّص، تفسير، حديث بحكمه) — 13 مصدراً، كلها `pending_legal` أو `candidate`، ولا شي معتمد | architecture §6.2 | in_progress | `corpus/sources/registry.yaml`; أمر `PYTHONPATH=src python3 -m pytest -q tests/test_corpusprep.py` | 2,3 | 2026-09-27 |
-| 6.3a | جلب المصادر والتحقق بـ sha256 والتحقق البنيوي للقرآن (114/6236) ومطابقة الحديث بين مصدرين | architecture §6.3 | in_progress | `scripts/fetch_sources.py`, `src/companion_api/corpusprep/`, `corpus/reports/hadith_crosscheck.md` | 2,9 | 2026-09-27 |
-| 6.3 | خط أنابيب الإدخال (تسجيل، تطبيع، تقطيع حسب الوحدة، embeddings) — chunk-v2 على الكوربس الديني (draft)، الموافقة البشرية لسا | architecture §6.3 | draft_ready | `src/companion_api/rag/chunking.py` (`chunk-v2`), `src/companion_api/corpusprep/ingest.py`; أمر `PYTHONPATH=src python3 -m companion_api.rag.pipeline validate corpus/dev-app-help` | 9 | 2026-09-27 |
-| 6.4 | سياسة الاستعلام (توجيه، فلترة، hybrid، rerank، توليد، تحقق) — بدون reranker وبدون pgvector بعد | architecture §6.4 | in_progress | `src/companion_api/rag/retriever.py`, `generator.py`, `grounding.py`, `router.py` | 3,4 | 2026-09-27 |
-| 6.5 | خلافات الاجتهاد (madhhab) — حقل `madhhab` موجود بالسكيما، بدون منطق فلترة أو محتوى فعلي | architecture §6.5 | not_started | `src/companion_api/rag/types.py` (`Chunk.madhhab`) | 1 | 2026-09-27 |
-| 7 | الأمان والحماية — قواعد تطويرية (keywords)، ليست مصنّف معتمد | architecture §7 | in_progress | `src/companion_api/rag/router.py`, `responses.py` | — | 2026-09-27 |
-| 8 | الخصوصية وضبط الأهل — خارج نطاق تاسكات الكوربس | architecture §8 | not_started | — | — | 2026-09-27 |
-| 9 | التحديات والمكافآت والأزياء — خارج نطاق تاسكات الكوربس | architecture §9 | not_started | — | — | 2026-09-27 |
-| 10 | كيانات البيانات الأساسية — خارج نطاق تاسكات الكوربس المباشر | architecture §10 | not_started | — | — | 2026-09-27 |
-| 11 | سلوك الفشل — خارج نطاق تاسكات الكوربس | architecture §11 | not_started | — | — | 2026-09-27 |
-| 12 | المراقبة والتقييم — تقييم retrieval موجود جزئياً | architecture §12 | in_progress | `src/companion_api/rag/evaluate.py` | 11,12,13,14 | 2026-09-27 |
-| 13 | نطاق الـ MVP — قرار منتج، لا تنفيذ كوربس | architecture §13 | not_started | — | — | 2026-09-27 |
-| 14 | خارطة طريق التسليم — قرار منتج | architecture §14 | not_started | — | — | 2026-09-27 |
+| 1 | رؤية المنتج (وثيقة، لا تنفيذ كوربس) | architecture §1 | not_started | — | — | 2026-09-27 |
+| 2 | افتراضات التخطيط؛ العمر والسوق والمنهج مفتوحة | architecture §2 | not_started | — | — | 2026-09-27 |
+| 3 | مبادئ المنتج (وثيقة) | architecture §3 | not_started | — | — | 2026-09-27 |
+| 4 | معمارية Flutter/Unity/Backend — خارج تاسكات الكوربس | architecture §4 | not_started | — | — | 2026-09-27 |
+| 5 | تدفّق المحادثة — نصّي تطويري موجود، الصوت غير منفَّذ | architecture §5 | in_progress | `src/companion_api/rag/service.py`, `src/companion_api/store.py` | — | 2026-09-27 |
+| 6 | حوكمة الـ RAG: النطاق وسياسة المصادر (مسودات، ولا شي معتمد) | architecture §6 | draft_ready | `doc/governance/scope.md`, `doc/governance/source-policy.md` | 1,2 | 2026-09-27 |
+| 6.1 | مسؤولية الحوكمة: مراجعين مؤهلين وتعارض مصالح (قالب؛ القائمة فاضية) | architecture §6.1 | draft_ready | `doc/governance/reviewer-policy.md`, `corpus/governance/reviewers.yaml` | 4 | 2026-09-27 |
+| 6.2 | سجل المصادر وجدول الحقوق — 15 مصدراً، كلها `pending_legal` | architecture §6.2 | draft_ready | `corpus/sources/registry.yaml`, `doc/governance/rights-clearance.md`; `python3 scripts/rights_table.py` | 2,3 | 2026-09-27 |
+| 6.3 | خط الإدخال: جلب بـ sha256، تحقق القرآن 114/6236، مطابقة الحديث، chunk-v2 | architecture §6.3 | draft_ready | `scripts/fetch_sources.py`, `src/companion_api/corpusprep/ingest.py`, `corpus/reports/hadith_crosscheck.md`; `PYTHONPATH=src python3 -m pytest -q tests/test_corpusprep.py tests/test_corpusprep_ingest.py tests/test_rag_chunk_v2.py` | 9 | 2026-09-27 |
+| 6.3b | إصدارات ثابتة للقراءة فقط، rollback بخطوة، وعزل طارئ | architecture §6.3 | draft_ready | `src/companion_api/governance/releases.py`, `doc/governance/releases.md`; `PYTHONPATH=src python3 -m pytest -q tests/test_governance.py` | 5 | 2026-09-27 |
+| 6.3c | مسار المراجعة البشرية وسجل التدقيق بـ hash chain | architecture §6.3 | draft_ready | `scripts/review.py`, `src/companion_api/governance/audit.py`, `doc/governance/review-workflow.md`; `python3 scripts/verify_audit.py` | 6,7 | 2026-09-27 |
+| 6.4 | سياسة الاستعلام — تطويري، بدون reranker ولا pgvector | architecture §6.4 | in_progress | `src/companion_api/rag/retriever.py`, `src/companion_api/rag/grounding.py`, `src/companion_api/rag/router.py` | — | 2026-09-27 |
+| 6.5 | خلافات الاجتهاد — حقل `madhhabScope` موجود وفاضي عمداً | architecture §6.5 | not_started | `src/companion_api/rag/types.py` | 1 | 2026-09-27 |
+| 7 | الأمان والحماية — قواعد تطويرية، مش مصنّف معتمد | architecture §7 | in_progress | `src/companion_api/rag/router.py`, `src/companion_api/rag/responses.py` | — | 2026-09-27 |
+| 8 | الخصوصية وضبط الأهل — خارج تاسكات الكوربس | architecture §8 | not_started | — | — | 2026-09-27 |
+| 9 | التحديات والمكافآت — خارج تاسكات الكوربس | architecture §9 | not_started | — | — | 2026-09-27 |
+| 10 | كيانات البيانات — لا بيانات أطفال بالـ vector store | architecture §10 | not_started | — | 15 | 2026-09-27 |
+| 11 | سلوك الفشل: المحتوى المخترق → عزل ورجوع للإصدار السابق | architecture §11 | draft_ready | `scripts/rollback.py` | 5 | 2026-09-27 |
+| 12 | المراقبة والتقييم | architecture §12 | in_progress | `src/companion_api/rag/evaluate.py` | 11,12,13,14 | 2026-09-27 |
+| 13 | نطاق الـ MVP — قرار منتج | architecture §13 | not_started | — | — | 2026-09-27 |
+| 14 | خارطة الطريق — قرار منتج | architecture §14 | not_started | — | — | 2026-09-27 |
 | 15 | الفريق — قرار تنظيمي | architecture §15 | not_started | — | — | 2026-09-27 |
-| 16 | المخاطر الرئيسية والتخفيف | architecture §16 | not_started | — | — | 2026-09-27 |
-| 17 | مسار التوسّع (Postgres/pgvector لاحقاً) — موثّق كفجوة معروفة، ليس تاسك كوربس مباشر | architecture §17 | blocked | `doc/rag-system.md` §10 (يذكر الفجوة صراحة) | — | 2026-09-27 |
-| 18 | قرارات مطلوبة قبل التنفيذ (عمر، سوق، لغة، منهج، صوت، نموذج عمل، أداء) — مفتوحة عمداً، لا تُفترض | architecture §18 | blocked | — | 1,10 | 2026-09-27 |
-| p1 | مصادر البيانات وتجهيز الكوربس — الطبقة 0 منزّلة ومتحقَّق منها (قرآن، تفسير، 5 مجموعات حديث)؛ الطبقة 2 (محتوى الطفل) لسا | plan مكوّن 1 | in_progress | `corpus/sources/registry.yaml`, `corpus/canonical/manifest.json`; أمر `python3 scripts/fetch_sources.py` | 1,2,3,9 | 2026-09-27 |
-| p2 | الإدخال والتقطيع والـ embeddings — schema v2 / chunk-v2 / norm-v2، الطبقة 0 كاملة والموجة 1 مقطّعة؛ الـ embeddings: المرحلة 5 | plan مكوّن 2 | draft_ready | `scripts/build_corpus.py`, `corpus/reports/ingest_summary.json`; أمر `PYTHONPATH=src python3 -m pytest -q tests/test_rag_chunk_v2.py tests/test_corpusprep_ingest.py` | 9,11 | 2026-09-27 |
-| p1b | محتوى الطفل (الطبقة 2) — هيكل نسخ الأعمار، قوالب، مدقق، دليل كتابة؛ النص نفسه بشري | plan مكوّن 1 | draft_ready | `corpus/drafts/age_band/`, `scripts/age_band.py`; أمر `PYTHONPATH=src python3 -m pytest -q tests/test_age_band.py` | 10 | 2026-09-27 |
-| p3 | الاسترجاع — hybrid RRF k=60 موجود، بدون query rewriting ولا reranker بعد | plan مكوّن 3 | in_progress | `src/companion_api/rag/retriever.py` (`hybrid-rrf-v1`) | 11 | 2026-09-27 |
-| p4 | التوليد والتحقق — quote-by-reference وverifier موجودان تطويرياً | plan مكوّن 4 | in_progress | `src/companion_api/rag/generator.py`, `grounding.py`, `prompts.py` (`rag-answer-v2`, `grounding-v2`) | 12,13 | 2026-09-27 |
-| p5 | بوابة الأمان وموجّه النوايا — خارج نطاق تاسكات الكوربس الـ 15 | plan مكوّن 5 | not_started | — | — | 2026-09-27 |
-| p6 | منسّق المحادثة والـ API — خارج نطاق تاسكات الكوربس الـ 15 | plan مكوّن 6 | not_started | — | — | 2026-09-27 |
-| p7 | Flutter و Unity — خارج نطاق تاسكات الكوربس الـ 15 | plan مكوّن 7 | not_started | — | — | 2026-09-27 |
-| p8 | البيانات والبنية التحتية (Postgres/pgvector) — موثّق كفجوة معروفة، ليس تاسك كوربس مباشر | plan مكوّن 8 | blocked | `doc/rag-system.md` §10 | — | 2026-09-27 |
-| p9 | التقييم والمراقبة — recall@4 offline موجود، gold/harmful/dashboard غير مبنية بعد | plan مكوّن 9 | in_progress | `src/companion_api/rag/evaluate.py`؛ أمر `python -m companion_api.rag.evaluate --release <dir> --cases <eval.json>` | 11,12,13,14 | 2026-09-27 |
+| 16 | المخاطر: إعادة المراجعة ومحفّزاتها | architecture §16 | draft_ready | `doc/governance/re-review-policy.md`, `scripts/due_for_review.py` | 8 | 2026-09-27 |
+| 17 | مسار التوسّع (pgvector لاحقاً) — خارج النطاق بقرار المستخدم | architecture §17 | blocked | `doc/rag-system.md` | — | 2026-09-27 |
+| 18 | قرارات قبل التنفيذ — مفتوحة عمداً | architecture §18 | blocked | — | 1,10 | 2026-09-27 |
+| p1 | مصادر البيانات: الطبقة 0 منزّلة ومتحقَّق منها | plan مكوّن 1 | draft_ready | `corpus/sources/registry.yaml`, `corpus/canonical/manifest.json`; `python3 scripts/fetch_sources.py` | 2,3 | 2026-09-27 |
+| p1b | محتوى الطفل (الطبقة 2) — هيكل وقوالب ومدقق؛ النص بشري | plan مكوّن 1 | draft_ready | `corpus/drafts/age_band/schema.json`, `corpus/drafts/age_band/WRITING_GUIDE.md`; `python3 scripts/age_band.py check` | 10 | 2026-09-27 |
+| p2 | الإدخال والتقطيع — schema v2 / chunk-v2 / norm-v2، الطبقة 0 والموجة 1 | plan مكوّن 2 | draft_ready | `scripts/build_corpus.py`, `corpus/reports/ingest_summary.json`, `corpus/aliases.yaml`, `corpus/candidate/hadith_selection.yaml` | 9 | 2026-09-27 |
+| p2b | اختيار الـ embedding | plan مكوّن 2 | not_started | — | 11 | 2026-09-27 |
+| p3 | الاسترجاع — hybrid RRF موجود، بدون إعادة صياغة ولا reranker | plan مكوّن 3 | in_progress | `src/companion_api/rag/retriever.py` | — | 2026-09-27 |
+| p4 | التوليد والتحقق — تطويري | plan مكوّن 4 | in_progress | `src/companion_api/rag/generator.py`, `src/companion_api/rag/grounding.py` | — | 2026-09-27 |
+| p5 | بوابة الأمان — خارج التاسكات الـ 15 | plan مكوّن 5 | not_started | — | — | 2026-09-27 |
+| p6 | المنسّق والـ API — خارج التاسكات الـ 15 | plan مكوّن 6 | not_started | — | — | 2026-09-27 |
+| p7 | Flutter و Unity — خارج التاسكات الـ 15 | plan مكوّن 7 | not_started | — | — | 2026-09-27 |
+| p8 | البيانات والبنية التحتية (pgvector) — خارج النطاق | plan مكوّن 8 | blocked | `doc/rag-system.md` | — | 2026-09-27 |
+| p8b | لا محتوى أطفال بالـ vector store | plan مكوّن 8 | not_started | — | 15 | 2026-09-27 |
+| p9 | التقييم: gold، harmful، dashboard | plan مكوّن 9 | not_started | — | 12,13,14 | 2026-09-27 |

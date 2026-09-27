@@ -216,3 +216,35 @@ sources:
   numbering_system: idInBook (sunnah.com Al-Adab Al-Mufrad order)
   status: candidate
   notes: Only source found for this collection; licence unclear and no grading field, so every record is ineligible for release.
+- source_id: fawazahmed0-license
+  format: txt
+  dataset: fawazahmed0-hadith-api
+  role: licence_text
+  title: hadith-api LICENSE file
+  edition: hadith-api commit df57907be35291c91ad6a6691180e22ca9920784
+  publisher: fawazahmed0/hadith-api (GitHub)
+  url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/LICENSE
+  license: The Unlicense (public domain dedication)
+  license_url: https://unlicense.org
+  terms_summary: The licence text itself, kept so the rights table can quote it verbatim.
+  retrieved_at: '2026-09-27T16:13:43+00:00'
+  sha256: 6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e
+  numbering_system: not applicable
+  status: pending_legal
+  notes: Licence text only; no corpus content.
+- source_id: mhashim6-license
+  format: txt
+  dataset: mhashim6-open-hadith-data
+  role: licence_text
+  title: Open-Hadith-Data LICENSE file
+  edition: Open-Hadith-Data commit 1515f6cba21efed20d8916bf55acef1dffa0d2d5
+  publisher: mhashim6/Open-Hadith-Data (GitHub)
+  url: https://cdn.jsdelivr.net/gh/mhashim6/Open-Hadith-Data@1515f6cba21efed20d8916bf55acef1dffa0d2d5/LICENSE
+  license: ODbL 1.0 (database) and DbCL 1.0 (contents)
+  license_url: http://opendatacommons.org/licenses/odbl/1.0/
+  terms_summary: The licence text itself, kept so the rights table can quote it verbatim.
+  retrieved_at: '2026-09-27T16:13:44+00:00'
+  sha256: 4ad58a3a84224e2a00a49d0028d9bf4890d5c7c26a1ddfe97bd1f6f8e149efaa
+  numbering_system: not applicable
+  status: pending_legal
+  notes: Licence text only; no corpus content.

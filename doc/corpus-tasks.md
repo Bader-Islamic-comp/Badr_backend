@@ -19,15 +19,15 @@
 [ClickUp](https://app.clickup.com/t/z8q7hbct49)
 
 - **المالك:** Mousa al-Rashdan.
-- **الهدف:** توثيق شو بيدخل الكوربس وشو لأ صراحة — plan.md مرحلة 4 بند 1: فتاوى،
-  مسائل خلافية متقدمة، إسرائيليات، أحاديث ضعيفة، تصوير الأنبياء والملائكة، إلخ.
-- **معايير القبول:** مستند out-of-scope صريح لا يفترض قرارات architecture.md §18
-  (السوق، العمر الدقيق، المنهج)، بل يسجّلها كأسئلة مفتوحة.
-- **شو انعمل:** لسا لأ.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** نطاق السوق/العمر/المنهج (architecture.md §18)؛ قائمة
-  الاستثناءات الشرعية النهائية من اللجنة.
-- **الحالة:** not_started
+- **الهدف:** شو بيدخل الكوربس وشو لأ صراحة (plan.md مرحلة 4 بند 1).
+- **معايير القبول:** قائمة استثناءات صريحة بدون افتراض قرارات §18.
+- **شو انعمل:** `doc/governance/scope.md`: الطبقات الأربع ووضعها اليوم، ونطاق الموجة 1، و10 استثناءات
+  (فتاوى، خلافيات متقدمة، إسرائيليات، ضعيف/موضوع وحديث بلا حكم، تصوير الأنبياء والملائكة، التخويف،
+  النص من ذاكرة الموديل، الويب المفتوح، النصائح الشخصية، أي بيانات عن الطفل).
+- **الأدلة:** `doc/governance/scope.md`.
+- **شو محتاج قرار بشري:** اعتماد القائمة؛ أي تفسير وأي مجموعات إضافية؛ سياسة الخلاف (§6.5)؛ العمر
+  والسوق والمنهج (§18).
+- **الحالة:** draft_ready
 
 ### 2. Source selection and provenance policy
 [ClickUp](https://app.clickup.com/t/z8q7hbct4a)
@@ -42,13 +42,13 @@
   منزّل) بكل الحقول المطلوبة + `format`/`dataset`/`role`، وsha256 وتاريخ الجلب مسجّلان
   لكل واحد. `scripts/fetch_sources.py` بيتحقق من sha256 كل مرة وبيفشل (exit 2) إذا تغيّر
   ملف محلي أو المصدر نفسه، وما بيكتب فوق أي شي. روابط GitHub مثبّتة على commit محدد.
-  السياسة المكتوبة نفسها لسا (المرحلة 4).
-- **الأدلة:** `corpus/sources/registry.yaml`؛ `python3 scripts/fetch_sources.py` (كل
+  السياسة المكتوبة: `doc/governance/source-policy.md` (معايير القبول، سلسلة الأدلة، الحالات).
+- **الأدلة:** `doc/governance/source-policy.md`، `corpus/sources/registry.yaml`؛ `python3 scripts/fetch_sources.py` (كل
   المصادر `cached`)؛ `python3 scripts/fetch_sources.py --refresh --no-build` (كل المصادر
   `verified`)؛ `PYTHONPATH=src python3 -m pytest -q tests/test_corpusprep.py` (16 passed).
 - **شو محتاج قرار بشري:** موافقة اللجنة على قائمة المصادر؛ هل يُقبل مصدر نصّه الأصلي
   غير موثّق المنشأ (`fawazahmed0` ما بيذكر مصدر النص العربي).
-- **الحالة:** in_progress
+- **الحالة:** draft_ready
 
 ### 3. Rights clearance for every candidate source
 [ClickUp](https://app.clickup.com/t/z8q7hbct4b)
@@ -63,15 +63,15 @@
   CC BY 3.0 بشروط "بدون تعديل"، Unlicense لـ fawazahmed0، ODbL/DbCL لـ mhashim6). 5 مصادر
   `candidate` لأن ترخيصها غير واضح: التفسير الميسّر عبر alquran.cloud، ثلاث ملفات
   AhmedBaset (ما في ملف ترخيص)، وملفا بيانات وصفية (Tanzil metadata وquran.com) مستخدمان
-  للتحقق من العدد فقط. جدول الحقوق الكامل بنص الشروط حرفياً = المرحلة 4.
-- **الأدلة:** `corpus/sources/registry.yaml`؛ قسم "Source status" بـ
+  للتحقق من العدد فقط. جدول الحقوق: `doc/governance/rights-clearance.md`، مولّد بـ `scripts/rights_table.py` من الـ registry، والشروط منقولة حرفياً من ملفات الترخيص المنزّلة (سُجّل ملفا ترخيص كمصدرين جديدين بـ sha256)؛ حالة الترخيص لكل المصادر الـ 15: `pending_legal`.
+- **الأدلة:** `doc/governance/rights-clearance.md`، `corpus/sources/registry.yaml`؛ قسم "Source status" بـ
   `corpus/reports/hadith_crosscheck.md`.
 - **شو محتاج قرار بشري (Mousa al-Rashdan):** (1) Tanzil بيمنع "تغيير النص" — هل النسخة
   المطبّعة للبحث فقط (`text_normalized`) مسموحة؟ (2) شروط الـ share-alike بـ ODbL لو بنينا
   قاعدة بيانات مشتقة. (3) ترخيص التفسير الميسّر من مجمّع الملك فهد مباشرة. (4) رياض الصالحين
   والأدب المفرد: ما لقينا مصدراً مفتوحاً بترخيص واضح. لا يوجد API key لـ sunnah.com (قرار
   المستخدم 2026-09-27).
-- **الحالة:** in_progress
+- **الحالة:** draft_ready
 
 #### أسئلة قانونية مفتوحة — موجّهة لـ Mousa al-Rashdan
 
@@ -90,77 +90,77 @@
 [ClickUp](https://app.clickup.com/t/z8q7hbct4c)
 
 - **المالك:** Mousa al-Rashdan.
-- **الهدف:** قالب سياسة: مؤهلات المراجع، تعارض المصالح، فصل الكاتب عن المراجع
-  (plan.md مرحلة 4 بند 4).
-- **معايير القبول:** مسودة سياسة + قاعدة آلية تمنع موافقة مراجع هو نفسه الكاتب
-  (تُنفَّذ لاحقاً بأداة `review` بالمرحلة 4 بند 6).
-- **شو انعمل:** لسا لأ.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** تسمية المراجعين المؤهلين فعلياً.
-- **الحالة:** not_started
+- **الهدف:** قالب سياسة: مؤهلات، تعارض مصالح، فصل الكاتب عن المراجع.
+- **معايير القبول:** قالب + قاعدة آلية تمنع موافقة الكاتب على نفسه.
+- **شو انعمل:** `doc/governance/reviewer-policy.md` (أدوار، قواعد، قالب إفصاح)؛
+  `corpus/governance/reviewers.yaml` فاضي عمداً؛ `scripts/review.py` بيرفض: الكاتب كمراجع، مراجع مش
+  مؤهل أو مش بالقائمة، مراجع أعلن تعارضاً على البند، ونسخة ما عدّت الفحص.
+- **الأدلة:** `doc/governance/reviewer-policy.md`، `corpus/governance/reviewers.yaml`،
+  `PYTHONPATH=src python3 -m pytest -q tests/test_governance.py` (حالات الرفض الأربع).
+- **شو محتاج قرار بشري:** أسماء المراجعين ومؤهلاتهم، عدد المراجعين لكل بند، مدة تجديد الإفصاح.
+  لحد ما تنعبّى القائمة، ما في موافقة ممكنة.
+- **الحالة:** draft_ready
 
 ### 5. Immutable corpus releases with rollback
 [ClickUp](https://app.clickup.com/t/z8q7hbct4d)
 
-- **المالك:** Mousa al-Rashdan (سياسة) — التنفيذ التقني عند Momen Alhamza.
-- **الهدف:** `scripts/build_release.py` ينتج `releases/{release_id}/` للقراءة
-  فقط بـ manifest (ملفات + sha256 + نسخة registry + موديل embedding + git
-  commit)، مع مؤشر `current_release`، و`scripts/rollback.py` (plan.md مرحلة 4
-  بند 5).
-- **معايير القبول:** اختبار تعديل ملف منشور يفشّل التحقق؛ اختبار rollback
-  برجّع للإصدار السابق. **يبني فوق `release.write_release` /
-  `release.load_release` الموجودين حالياً (نفس manifest.json / chunks.jsonl /
-  vectors.f32 وsha256)، ما بيعمل صيغة موازية.**
-- **شو انعمل:** لسا لأ. الأساس الموجود: `src/companion_api/rag/release.py`
-  (immutable releases + sha256 checksums موجودة أصلاً لصيغة الـ chunks/vectors،
-  لكن بدون `current_release` pointer ولا nested registry/git-commit metadata
-  ولا `rollback.py` منفصل).
-- **الأدلة:** `src/companion_api/rag/release.py` (اليوم)؛ لاحقاً
-  `python -m scripts.build_release` و`python -m scripts.rollback` + نتائج pytest.
-- **شو محتاج قرار بشري:** لا شيء حالياً.
-- **الحالة:** not_started
+- **المالك:** Mousa al-Rashdan (سياسة)؛ التنفيذ Momen Alhamza.
+- **الهدف:** `scripts/build_release.py` + manifest بالـ provenance + قراءة فقط + `current_release` +
+  `scripts/rollback.py`.
+- **معايير القبول:** تعديل ملف منشور بيفشّل التحقق؛ الـ rollback برجّع للإصدار السابق.
+- **شو انعمل:** `src/companion_api/governance/releases.py` فوق `rag.release` نفسه (نفس الصيغة). الـ
+  manifest بيسجّل registry sha256، وsha256 كل مصدر، وsha256 الـ canonical manifest، وgit commit، ونسخة
+  السياسة، والـ embedder. المصادر `candidate`/`rejected` ما بتدخل (التفسير بيطلع برا). الملفات
+  444 والمجلد 555. `releases/current_release` + `release_history.json` + `quarantined.json`؛
+  `COMPANION_RAG_RELEASE` بيقبل ملف المؤشر، والإصدار المعزول بينرفض حتى عبر المؤشر. تجربة حقيقية:
+  `wave1-dev-1` و`wave1-dev-2` → rollback لـ `wave1-dev-1`، و5 أحداث تدقيق سليمة.
+- **الأدلة:** `scripts/build_release.py`، `scripts/rollback.py`، `doc/governance/releases.md`،
+  `PYTHONPATH=src python3 -m pytest -q tests/test_governance.py`.
+- **شو محتاج قرار بشري:** مين مسموح يعمل promote وrollback وعزل طارئ.
+- **الحالة:** draft_ready
 
 ### 6. Review workflow tooling and admin UI
 [ClickUp](https://app.clickup.com/t/z8q7hbct4e)
 
-- **المالك:** Mousa al-Rashdan (سياسة) — التنفيذ التقني عند Momen Alhamza.
-- **الهدف:** حالات `draft → in_review → approved / rejected / quarantined`، و
-  CLI: `review list / approve / reject / quarantine`، يرفض الموافقة إذا الكاتب
-  هو المراجع (plan.md مرحلة 4 بند 6). لو في admin بالـ backend، endpoints
-  بسيطة؛ وإلا توثيق الواجهة فقط بدون UI كامل.
-- **معايير القبول:** CLI يعمل ومختبر؛ منع self-review مثبت باختبار.
-- **شو انعمل:** لسا لأ. الموجود اليوم: `review.status` بسيط (`draft`/`approved`)
-  بـ `corpus.py`، بدون `in_review`/`rejected`/`quarantined` ولا CLI مراجعة.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** هل يوجد admin UI بالـ backend فعلاً أصلاً؟ (فحص
-  `src/companion_api/main.py` — لا يوجد حالياً admin router).
-- **الحالة:** not_started
+- **المالك:** Mousa al-Rashdan (سياسة)؛ التنفيذ Momen Alhamza.
+- **الهدف:** `draft → in_review → approved / rejected / quarantined` و CLI.
+- **معايير القبول:** CLI شغّال؛ رفض موافقة الكاتب على نفسه.
+- **شو انعمل:** `scripts/review.py list / submit / approve / reject / revise / quarantine` على نسخ
+  الأعمار (`<id>@<band>`)؛ كل انتقال بيتسجّل بسجل التدقيق قبل ما يتغيّر الملف. ما في admin router
+  بالـ backend، فالواجهة موثّقة بس بـ `doc/governance/review-workflow.md` (endpoints مقترحة بتستدعي نفس
+  الدوال).
+- **الأدلة:** `scripts/review.py`، `doc/governance/review-workflow.md`، `tests/test_governance.py`.
+- **شو محتاج قرار بشري:** بناء بوابة المراجعة (UI) قرار منتج؛ صلاحيات كل دور.
+- **الحالة:** draft_ready
 
 ### 7. Audit trail for every approval
 [ClickUp](https://app.clickup.com/t/z8q7hbct4f)
 
-- **المالك:** Mousa al-Rashdan (سياسة) — التنفيذ التقني عند Momen Alhamza.
-- **الهدف:** سجل append-only (jsonl) بـ hash chain، وأمر `verify_audit` يكشف أي
-  تلاعب. كل تغيير حالة يمر من هون (plan.md مرحلة 4 بند 7).
-- **معايير القبول:** اختبار يعدّل سطراً بالسجل ويتأكد `verify_audit` يكشفه.
-- **شو انعمل:** لسا لأ.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** لا شيء حالياً.
-- **الحالة:** not_started
+- **المالك:** Mousa al-Rashdan (سياسة)؛ التنفيذ Momen Alhamza.
+- **الهدف:** jsonl append-only بـ hash chain وأمر `verify_audit`.
+- **معايير القبول:** كشف أي تلاعب.
+- **شو انعمل:** `src/companion_api/governance/audit.py`: كل حدث فيه `seq` و`prev_hash` و`hash`، والإضافة
+  بترفض سجل مكسور. `scripts/verify_audit.py` بيسمّي أول سطر معدّل/محذوف/مضاف/مُعاد ترتيبه (مختبر).
+  سجلّان: `corpus/governance/audit.jsonl` (المحتوى) و`releases/audit.jsonl` (الإصدارات). بدون نص محتوى
+  ولا بيانات أطفال.
+- **الأدلة:** `python3 scripts/verify_audit.py`؛ `tests/test_governance.py`.
+- **شو محتاج قرار بشري:** مدة الاحتفاظ ومكان النسخة الاحتياطية للسجل.
+- **الحالة:** draft_ready
 
 ### 8. Re-review cadence and change triggers
 [ClickUp](https://app.clickup.com/t/z8q7hbct4h)
 
-- **المالك:** Mousa al-Rashdan (سياسة) — التنفيذ التقني عند Momen Alhamza.
-- **الهدف:** سياسة مقترحة + `scripts/due_for_review.py` يعلّم القطع المستحقة
-  بسبب تغيّر sha256 المصدر، أو موديل الـ embedding، أو السياسة، أو مرور المدة
-  (plan.md مرحلة 4 بند 8).
-- **معايير القبول:** السكربت يشتغل على release فعلي ويطبع قائمة قطع مستحقة
-  بسبب واضح.
-- **شو انعمل:** لسا لأ.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** المدة الزمنية المقترحة للـ cadence.
-- **الحالة:** not_started
+- **المالك:** Mousa al-Rashdan (سياسة)؛ التنفيذ Momen Alhamza.
+- **الهدف:** سياسة مقترحة + `scripts/due_for_review.py`.
+- **معايير القبول:** بيعلّم القطع المستحقة بسبب: sha256 المصدر، حالة المصدر، موديل الـ embedding،
+  نسخة السياسة، مرور المدة.
+- **شو انعمل:** `src/companion_api/governance/due.py` + `scripts/due_for_review.py` +
+  `doc/governance/re-review-policy.md` (مقترح: 12 شهر، ومحفّزات فورية). `corpus/governance/policy_version.txt`
+  بيعطي نسخة السياسة. على `wave1-dev-1`: 1106/1106 `embedding_changed` (الإصدار بـ hashing والإعداد
+  qwen3-embedding)، و`never_approved` للكل.
+- **الأدلة:** `python3 scripts/due_for_review.py releases/wave1-dev-1`؛ `tests/test_governance.py`.
+- **شو محتاج قرار بشري:** المدة، ومين بيعلن عزلاً طارئاً، ومتى تغيير السياسة بيعتبر جوهرياً.
+- **الحالة:** draft_ready
 
 ---
 

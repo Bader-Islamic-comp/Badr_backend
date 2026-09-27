@@ -51,3 +51,13 @@
 | 2026-09-27 | 3 | قرار (6): `jsonschema` تبعية تشغيل | — | `pyproject.toml` |
 | 2026-09-27 | 3 | اختبارات `test_age_band.py` (7) + كل المشروع | انظر السطر التالي | `tests/test_age_band.py` |
 | 2026-09-27 | 3 | كل المشروع | 582 passed | — |
+| 2026-09-27 | 4 | سجل تدقيق بـ hash chain + `verify_audit.py` | كشف التعديل والحذف وإعادة الترتيب (اختبار)؛ الإضافة بترفض سجل مكسور | `src/companion_api/governance/audit.py`, `scripts/verify_audit.py` |
+| 2026-09-27 | 4 | مسار المراجعة (`review.py`) + `reviewers.yaml` فاضي عمداً | ما في موافقة ممكنة لحد ما Mousa يسمّي المراجعين | `src/companion_api/governance/review.py`, `scripts/review.py`, `corpus/governance/` |
+| 2026-09-27 | 4 | قرار (6): ما في admin router بالـ backend → الواجهة موثّقة بس | endpoints مقترحة بتستدعي نفس الدوال | `doc/governance/review-workflow.md` |
+| 2026-09-27 | 4 | إصدارات ثابتة: `build_release.py` / `rollback.py` فوق `rag.release`؛ مؤشر `current_release` مقبول بـ `COMPANION_RAG_RELEASE` | تجربة: wave1-dev-1 → wave1-dev-2 → rollback لـ wave1-dev-1؛ 5 أحداث سليمة | `src/companion_api/governance/releases.py`, `src/companion_api/rag/release.py`, `src/companion_api/config.py` |
+| 2026-09-27 | 4 | قرار (6): سجلّا تدقيق (محتوى بـ git، إصدارات محلي مع `releases/`) بنفس الآلية | — | — |
+| 2026-09-27 | 4 | `due_for_review.py` على wave1-dev-1 | 1106/1106 `embedding_changed` (hashing مقابل qwen3-embedding) | `src/companion_api/governance/due.py`, `scripts/due_for_review.py` |
+| 2026-09-27 | 4 | ملفا ترخيص مسجّلين كمصدرين (sha256) عشان جدول الحقوق ينقل الشروط حرفياً | 15 مصدراً بالـ registry | `corpus/sources/registry.yaml` |
+| 2026-09-27 | 4 | مسودات السياسات: scope، source-policy، rights-clearance (مولّد)، reviewer-policy، review-workflow، releases، re-review-policy | كلها draft، المالك Mousa al-Rashdan | `doc/governance/*.md`, `scripts/rights_table.py` |
+| 2026-09-27 | 4 | `check_progress.py`: أول تشغيل كشف 5 تعارضات حقيقية (حالات تاسكات 4،5،8،11 ما تحدّثت) → انصلحت | 0 تعارض، 6 أوامر دليل اشتغلت | `scripts/check_progress.py`, `doc/done.md`, `doc/corpus-tasks.md` |
+| 2026-09-27 | 4 | اختبارات `test_governance.py` (14) + كل المشروع | 596 passed | `tests/test_governance.py` |

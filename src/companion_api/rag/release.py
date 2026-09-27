@@ -100,9 +100,30 @@ def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk]
     return target
 
 
+POINTER = "current_release"
+QUARANTINED = "quarantined.json"
+
+
+def resolve(path: Path) -> Path:
+    """A release directory, or a `current_release` pointer file naming one beside it.
+
+    A quarantined release is refused even when a pointer still names it.
+    """
+    path = Path(path)
+    if path.is_file() and path.name == POINTER:
+        release_id = path.read_text(encoding="utf-8").strip()
+        if not RELEASE_ID.match(release_id):
+            raise ReleaseError(f"{path} does not name a release id")
+        path = path.parent / release_id
+    quarantine = path.parent / QUARANTINED
+    if quarantine.is_file() and path.name in json.loads(quarantine.read_text(encoding="utf-8")):
+        raise ReleaseError(f"release {path.name} is quarantined")
+    return path
+
+
 def load_release(path: Path) -> LoadedRelease:
     """Reads and verifies a release. Raises `ReleaseError` on any inconsistency."""
-    path = Path(path)
+    path = resolve(path)
     try:
         manifest = ReleaseManifest.from_json(json.loads((path / MANIFEST).read_text(encoding="utf-8")))
     except FileNotFoundError:

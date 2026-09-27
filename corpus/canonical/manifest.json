@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_sha256": "948284dc2ee53faacc397ced474607f1a908d59fd0178e64751318bf72239010",
+  "registry_sha256": "51d4b1e62cb8dc1e6a29bc0dd59ea087ca85389010f7786a14c1c64aac98cdf1",
   "normalizer": "norm-v2",
   "sources": {
     "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",
@@ -15,7 +15,9 @@
     "mhashim6-muslim": "dfa4ba5de748f21384c30d6d36fd315de0bdb778158aa475aef17f1f88f7eb31",
     "ahmedbaset-nawawi40": "d824cec8d82751669a9ed1d41f2854219f8e6770a2cab151ed87f9a501357def",
     "ahmedbaset-riyadussalihin": "4cfecf7ee476899627918a3cafce7b81784caef323c70e7cf2e746b00be953cf",
-    "ahmedbaset-adab-mufrad": "86a6a96da10c109ccd38316768435e585919d99dc0fd1eaff0bd2081aaeab7a5"
+    "ahmedbaset-adab-mufrad": "86a6a96da10c109ccd38316768435e585919d99dc0fd1eaff0bd2081aaeab7a5",
+    "fawazahmed0-license": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+    "mhashim6-license": "4ad58a3a84224e2a00a49d0028d9bf4890d5c7c26a1ddfe97bd1f6f8e149efaa"
   },
   "files": {
     "hadith/adab_mufrad.jsonl": {
@@ -23,7 +25,7 @@
       "records": 1326
     },
     "hadith/bukhari.jsonl": {
-      "sha256": "3ccd6a15a9a17616d16eff5f6a39e92baa6890c4aa7c0e27068d1fdc0c5ed7bb",
+      "sha256": "7fa20079ca532f0e38b70b8cf3c2f9f8be1ab1898275dcedfc75d144434b2f6e",
       "records": 7580
     },
     "hadith/muslim.jsonl": {

@@ -13,6 +13,7 @@ from pathlib import Path
 
 from .rag.embeddings import DEFAULT_EMBEDDING_MODEL
 from .rag.endpoints import EndpointError, require_private_endpoint
+from .rag.release import ReleaseError, resolve as resolve_release
 from .rag.generator import ALLOWED_MODELS, DEFAULT_BASE_URL, DEFAULT_MODEL, is_allowed_model
 
 
@@ -68,8 +69,15 @@ class Settings:
         problems = []
         if not self.rag_release:
             problems.append("COMPANION_RAG_RELEASE must name a release directory")
-        elif not (Path(self.rag_release) / "manifest.json").is_file():
-            problems.append(f"COMPANION_RAG_RELEASE={self.rag_release} is not a release directory (no manifest.json)")
+        else:
+            try:
+                directory = resolve_release(Path(self.rag_release))
+            except ReleaseError as exception:
+                problems.append(f"COMPANION_RAG_RELEASE={self.rag_release}: {exception}")
+            else:
+                if not (directory / "manifest.json").is_file():
+                    problems.append(f"COMPANION_RAG_RELEASE={self.rag_release} is not a release directory "
+                                    "(no manifest.json)")
         for name, url in (("COMPANION_LLM_BASE_URL", self.llm_base_url),
                           ("COMPANION_EMBEDDING_BASE_URL", self.embedding_endpoint)):
             try:
