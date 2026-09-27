@@ -1,0 +1,60 @@
+# Wave 1 source map (doc/plan.md component 1). Verse ranges proposed by the model from general
+# knowledge, NOT from a source: every range is a candidate for scholarly review. The checker
+# (python3 scripts/build_corpus.py --write-maps) records whether each range exists and whether the
+# prophet is named inside it; `confidence: medium` or a failed check means needs_check.
+# origin: model_proposed (2026-09-27). review_status: draft. No ayah text is written here.
+schema_version: 1
+prophet_id: nuh
+origin: model_proposed
+review_status: draft
+ranges:
+- ref: quran:7:59-64
+  topic: الدعوة والتكذيب والنجاة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:10:71-73
+  topic: التوكل والنجاة في الفلك
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:11:25-49
+  topic: الدعوة وصنع السفينة والطوفان وابنه
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:21:76-77
+  topic: الاستجابة والنجاة
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:23:23-30
+  topic: الدعوة وصنع الفلك
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:26:105-122
+  topic: الدعوة والتكذيب
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:29:14-15
+  topic: مدة الدعوة والنجاة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:37:75-82
+  topic: النداء والنجاة
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:54:9-17
+  topic: التكذيب والطوفان
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:71:1-28
+  topic: سورة نوح - الدعوة ليلا ونهارا
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok

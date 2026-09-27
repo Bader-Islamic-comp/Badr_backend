@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "registry_sha256": "948284dc2ee53faacc397ced474607f1a908d59fd0178e64751318bf72239010",
-  "normalizer": "norm-v1",
+  "normalizer": "norm-v2",
   "sources": {
     "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",
     "tanzil-quran-simple": "b3638f5cf03e2b05e4000efc0e4b656aafb3cf6ed28f8770b6497c5b43c46089",
@@ -23,7 +23,7 @@
       "records": 1326
     },
     "hadith/bukhari.jsonl": {
-      "sha256": "6afb889b552831fc331a3ea767d8087ef8c485a3f2bfa3762ca5b6b35d04ed5a",
+      "sha256": "3ccd6a15a9a17616d16eff5f6a39e92baa6890c4aa7c0e27068d1fdc0c5ed7bb",
       "records": 7580
     },
     "hadith/muslim.jsonl": {
@@ -39,7 +39,7 @@
       "records": 1896
     },
     "quran/ayat.jsonl": {
-      "sha256": "c95e1a2fbe1bb61036af82322f9bb79490cbf7321e50b5f1b1e59aea61b0bc76",
+      "sha256": "0cd2738a0c19edfeaf466dd310625a9d856d940d939dfbc12ce8b979a06adf69",
       "records": 6236
     },
     "tafsir/alquran-cloud-muyassar.jsonl": {
@@ -53,7 +53,14 @@
     "per_surah_checked_against": [
       "qurancom-chapters",
       "tanzil-quran-metadata"
-    ]
+    ],
+    "rasm_map": {
+      "aligned_ayat": 5873,
+      "aligned_words": 70798,
+      "entries": 750,
+      "agreement_before": 0.905,
+      "agreement_after": 0.9752
+    }
   },
   "tafsir": {
     "records": 6236,

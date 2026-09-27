@@ -1,0 +1,434 @@
+# Wave 1 hadith candidates (doc/plan.md component 1): 40 hadith for review, not approved.
+#
+# Nawawi 40 entries are eligible only through their linked Bukhari/Muslim record (cluster).
+# Bukhari/Muslim entries carry a `lookup_phrase`: a few words used ONLY to find the record in
+# corpus/canonical; it is not hadith text and is never stored as such. The checker
+# (python3 scripts/build_corpus.py --write-selection) writes `number`, `ref`, `cluster_id` and
+# `needs_check` from the canonical data: needs_check is false only when the record is found,
+# eligible (match or contained_in_secondary, non-empty text) and the phrase occurs in it.
+# `topic` and `why_for_kids` are short notes for reviewers, not text for children.
+# Excluded from Nawawi 40 on suitability grounds for ages 7-11: 8 (fighting), 14 (capital
+# punishment), 25 (marital content), 38 (war declared); 4 (stages of creation) left for review later.
+# origin: model_proposed (2026-09-27). review_status: draft.
+schema_version: 1
+hadith:
+- collection: nawawi40
+  number: '1'
+  topic: النية
+  why_for_kids: أساس أن العمل بالنية الطيبة
+  linked_record: bukhari:54
+  ref: bukhari:54
+  cluster_id: hc-bukhari-54
+  cluster_primary: bukhari:54
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '2'
+  topic: أركان الإسلام والإيمان والإحسان
+  why_for_kids: يجمع أساسيات الدين في مشهد واحد (يحتاج تقسيماً لأنه طويل)
+  linked_record: muslim:93
+  ref: muslim:93
+  cluster_id: hc-muslim-93
+  cluster_primary: muslim:93
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '3'
+  topic: أركان الإسلام
+  why_for_kids: الأركان الخمسة بترتيب واضح
+  linked_record: bukhari:8
+  ref: bukhari:8
+  cluster_id: hc-bukhari-8
+  cluster_primary: bukhari:8
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '6'
+  topic: الحلال والحرام وصلاح القلب
+  why_for_kids: فكرة القلب الطيب
+  linked_record: muslim:4094
+  ref: muslim:4094
+  cluster_id: hc-muslim-4094
+  cluster_primary: muslim:4094
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '7'
+  topic: النصيحة
+  why_for_kids: الدين نصيحة بمعنى الإخلاص والخير للناس
+  linked_record: muslim:196
+  ref: muslim:196
+  cluster_id: hc-muslim-196
+  cluster_primary: muslim:196
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '9'
+  topic: الاستطاعة
+  why_for_kids: افعل ما تستطيع ولا تكلف نفسك فوق طاقتها
+  linked_record: muslim:6113
+  needs_check: false
+  check_reasons: []
+  ref: muslim:6113
+  cluster_id: hc-muslim-6113
+  cluster_primary: muslim:6113
+- collection: nawawi40
+  number: '10'
+  topic: الطيب
+  why_for_kids: الكسب الطيب والدعاء
+  linked_record: muslim:2346
+  ref: muslim:2346
+  cluster_id: hc-muslim-2346
+  cluster_primary: muslim:2346
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '13'
+  topic: حب الخير للآخرين
+  why_for_kids: تحب لأخيك ما تحب لنفسك
+  linked_record: bukhari:13
+  ref: bukhari:13
+  cluster_id: hc-bukhari-13
+  cluster_primary: bukhari:13
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '15'
+  topic: الكلام الطيب والجار والضيف
+  why_for_kids: آداب يومية واضحة
+  linked_record: muslim:173
+  ref: muslim:173
+  cluster_id: hc-muslim-173
+  cluster_primary: muslim:173
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '16'
+  topic: الغضب
+  why_for_kids: ضبط الغضب
+  linked_record: bukhari:6116
+  ref: bukhari:6116
+  cluster_id: hc-bukhari-6116
+  cluster_primary: bukhari:6116
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '20'
+  topic: الحياء
+  why_for_kids: الحياء خلق جميل
+  linked_record: bukhari:6120
+  ref: bukhari:6120
+  cluster_id: hc-bukhari-6120
+  cluster_primary: bukhari:6120
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '22'
+  topic: الفرائض والجنة
+  why_for_kids: الالتزام بالأساسيات
+  linked_record: muslim:110
+  ref: muslim:110
+  cluster_id: hc-muslim-110
+  cluster_primary: muslim:110
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '23'
+  topic: الطهارة والذكر
+  why_for_kids: النظافة والذكر
+  linked_record: muslim:534
+  ref: muslim:534
+  cluster_id: hc-muslim-534
+  cluster_primary: muslim:534
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '26'
+  topic: الصدقة بالأعمال الصغيرة
+  why_for_kids: كل عمل خير صدقة ومنها إماطة الأذى
+  linked_record: bukhari:2707
+  ref: bukhari:2707
+  cluster_id: hc-bukhari-2707
+  cluster_primary: bukhari:2707
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '27'
+  topic: حسن الخلق
+  why_for_kids: البر حسن الخلق
+  linked_record: muslim:6516
+  ref: muslim:6516
+  cluster_id: hc-muslim-6516
+  cluster_primary: muslim:6516
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '34'
+  topic: تغيير المنكر
+  why_for_kids: مسؤولية لطيفة تجاه الخطأ (يحتاج صياغة هادئة)
+  linked_record: muslim:177
+  ref: muslim:177
+  cluster_id: hc-muslim-177
+  cluster_primary: muslim:177
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '35'
+  topic: الأخوة
+  why_for_kids: لا تحاسدوا وكونوا إخوانا
+  linked_record: muslim:6541
+  ref: muslim:6541
+  cluster_id: hc-muslim-6541
+  cluster_primary: muslim:6541
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '36'
+  topic: مساعدة الآخرين
+  why_for_kids: من ساعد غيره ساعده الله
+  linked_record: muslim:6853
+  ref: muslim:6853
+  cluster_id: hc-muslim-6853
+  cluster_primary: muslim:6853
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '37'
+  topic: النية في الحسنات
+  why_for_kids: الله يكتب الحسنة حتى بالنية
+  linked_record: muslim:338
+  ref: muslim:338
+  cluster_id: hc-muslim-338
+  cluster_primary: muslim:338
+  needs_check: false
+  check_reasons: []
+- collection: nawawi40
+  number: '40'
+  topic: اغتنام الوقت
+  why_for_kids: الاستعداد وحسن استغلال الوقت
+  linked_record: bukhari:6416
+  ref: bukhari:6416
+  cluster_id: hc-bukhari-6416
+  cluster_primary: bukhari:6416
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: الكلمه الطيبه صدقه
+  topic: الكلمة الطيبة
+  why_for_kids: الكلام الطيب عمل صالح
+  lookup_matches: 1
+  needs_check: false
+  check_reasons: []
+  number: '2989'
+  ref: bukhari:2989
+  cluster_id: hc-bukhari-2989
+  cluster_primary: bukhari:2989
+- collection: bukhari
+  lookup_phrase: ليس الشديد بالصرعه
+  topic: قوة ضبط النفس
+  why_for_kids: القوي من يملك نفسه عند الغضب
+  lookup_matches: 1
+  number: '6114'
+  ref: bukhari:6114
+  cluster_id: hc-bukhari-6114
+  cluster_primary: bukhari:6114
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: ادومها وان قل
+  topic: الاستمرار
+  why_for_kids: العمل القليل الدائم
+  lookup_matches: 1
+  number: '6465'
+  ref: bukhari:6465
+  cluster_id: hc-bukhari-6465
+  cluster_primary: bukhari:6465
+  needs_check: false
+  check_reasons: []
+- collection: muslim
+  lookup_phrase: ان الله رفيق يحب الرفق
+  topic: الرفق
+  why_for_kids: اللطف في التعامل
+  lookup_matches: 1
+  number: '6601'
+  ref: muslim:6601
+  cluster_id: hc-muslim-6601
+  cluster_primary: muslim:6601
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: من لا يرحم لا يرحم
+  topic: الرحمة
+  why_for_kids: الرحمة بالصغار والكبار
+  lookup_matches: 2
+  number: '5997'
+  ref: bukhari:5997
+  cluster_id: hc-bukhari-5997
+  cluster_primary: bukhari:5997
+  needs_check: false
+  check_reasons: []
+- collection: muslim
+  lookup_phrase: من احق الناس بحسن صحابتي
+  topic: بر الأم
+  why_for_kids: مكانة الأم
+  lookup_matches: 1
+  needs_check: false
+  check_reasons: []
+  number: '6500'
+  ref: muslim:6500
+  cluster_id: hc-muslim-6500
+  cluster_primary: muslim:6500
+- collection: bukhari
+  lookup_phrase: الصلاه علي وقتها
+  topic: الصلاة وبر الوالدين
+  why_for_kids: أحب الأعمال إلى الله
+  lookup_matches: 2
+  number: '527'
+  ref: bukhari:527
+  cluster_id: hc-bukhari-527
+  cluster_primary: bukhari:527
+  needs_check: false
+  check_reasons: []
+- collection: muslim
+  lookup_phrase: افشوا السلام بينكم
+  topic: السلام
+  why_for_kids: إفشاء السلام يقوي المحبة
+  lookup_matches: 1
+  number: '194'
+  ref: muslim:194
+  cluster_id: hc-muslim-194
+  cluster_primary: muslim:194
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: تطعم الطعام وتقرا السلام
+  topic: إطعام الطعام والسلام
+  why_for_kids: عملان سهلان للطفل
+  lookup_matches: 3
+  number: '12'
+  ref: bukhari:12
+  cluster_id: hc-bukhari-12
+  cluster_primary: bukhari:12
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: خيركم من تعلم القران وعلمه
+  topic: تعلم القرآن
+  why_for_kids: فضل التعلم والتعليم
+  lookup_matches: 1
+  number: '5027'
+  ref: bukhari:5027
+  cluster_id: hc-bukhari-5027
+  cluster_primary: bukhari:5027
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: في كل كبد رطبه اجر
+  topic: الرحمة بالحيوان
+  why_for_kids: سقي الكلب العطشان
+  lookup_matches: 1
+  number: '2363'
+  ref: bukhari:2363
+  cluster_id: hc-bukhari-2363
+  cluster_primary: bukhari:2363
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: يسروا ولا تعسروا
+  topic: التيسير
+  why_for_kids: التيسير والتبشير
+  lookup_matches: 2
+  number: '69'
+  ref: bukhari:69
+  cluster_id: hc-bukhari-69
+  cluster_primary: bukhari:69
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: سم الله وكل بيمينك
+  topic: آداب الطعام
+  why_for_kids: التسمية والأكل باليمين
+  lookup_matches: 1
+  number: '5376'
+  ref: bukhari:5376
+  cluster_id: hc-bukhari-5376
+  cluster_primary: bukhari:5376
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: ان الصدق يهدي الي البر
+  topic: الصدق
+  why_for_kids: الصدق طريق الخير
+  lookup_matches: 1
+  number: '6094'
+  ref: bukhari:6094
+  cluster_id: hc-bukhari-6094
+  cluster_primary: bukhari:6094
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: المسلم من سلم المسلمون من لسانه ويده
+  topic: كف الأذى
+  why_for_kids: لا نؤذي أحدا بالكلام أو اليد
+  lookup_matches: 2
+  number: '10'
+  ref: bukhari:10
+  cluster_id: hc-bukhari-10
+  cluster_primary: bukhari:10
+  needs_check: false
+  check_reasons: []
+- collection: muslim
+  lookup_phrase: اماطه الاذي عن الطريق
+  topic: شعب الإيمان
+  why_for_kids: إزالة الأذى من الطريق
+  lookup_matches: 1
+  number: '153'
+  ref: muslim:153
+  cluster_id: hc-muslim-153
+  cluster_primary: muslim:153
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: ما زال جبريل يوصيني بالجار
+  topic: الجار
+  why_for_kids: الإحسان إلى الجار
+  lookup_matches: 1
+  number: '6015'
+  ref: bukhari:6015
+  cluster_id: hc-bukhari-6015
+  cluster_primary: bukhari:6015
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: الحياء من الايمان
+  topic: الحياء
+  why_for_kids: الحياء من الإيمان
+  lookup_matches: 2
+  number: '24'
+  ref: bukhari:24
+  cluster_id: hc-bukhari-24
+  cluster_primary: bukhari:24
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: اذا عطس احدكم فليقل الحمد لله
+  topic: آداب العطاس
+  why_for_kids: أدب يومي بسيط
+  lookup_matches: 1
+  number: '6224'
+  ref: bukhari:6224
+  cluster_id: hc-bukhari-6224
+  cluster_primary: bukhari:6224
+  needs_check: false
+  check_reasons: []
+- collection: bukhari
+  lookup_phrase: كلكم راع وكلكم مسئول عن رعيته
+  topic: المسؤولية
+  why_for_kids: كل واحد مسؤول عمّا في يده
+  lookup_matches: 6
+  number: '893'
+  ref: bukhari:893
+  cluster_id: hc-bukhari-893
+  cluster_primary: bukhari:893
+  needs_check: false
+  check_reasons: []

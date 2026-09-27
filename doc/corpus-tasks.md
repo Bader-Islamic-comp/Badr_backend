@@ -170,33 +170,45 @@
 [ClickUp](https://app.clickup.com/t/z8q7hbct4g)
 
 - **المالك:** Momen Alhamza.
-- **الهدف:** جدول التقطيع بـ plan.md مكوّن 2 (آيات 1–8، حديث قصير/طويل،
-  context_header، تطبيع عربي للفهرس، aliases.yaml، أسئلة افتراضية `generated:
-  true`). النطاق: طبقة 0 كاملة + الموجة 1 (5 أنبياء + 40 حديث).
-- **معايير القبول:** انظر "Execution plan" تحت — القرار الأساسي: **لا نبني
-  مقطّعاً موازياً**؛ نمثّل الوحدات الدينية كـ `Document`/`Unit` بصيغة
-  `corpus.py` الموجودة (بحقول `section`/`reference`/`keepWithNext`) ونمرّرها
-  على `chunking.chunk_document` (`chunk-v1`) الموجود فعلاً. توسيعات الحقول
-  (parent/child للحديث الطويل، cluster_id للمكرّر، مراجع متعددة بالمشهد الواحد)
-  تحتاج تصميماً متوافقاً للـ dataclasses الحالية، موثّق كسؤال هندسي مفتوح.
-- **شو انعمل:** لسا لأ. الأساس الموجود: `corpus.py` (يدعم أصلاً
-  `contentType: quran/tafsir/hadith/story`, `grading` إلزامي للحديث، `reference`
-  إلزامي لكل آية قرآن)، `chunking.py` (`chunk-v1`، تقطيع حسب section +
-  keepWithNext + ميزانية كلمات، بدون تقسيم unit).
-- **الأدلة:** `src/companion_api/rag/corpus.py`,
-  `src/companion_api/rag/chunking.py`، أوامر
-  `python -m companion_api.rag.pipeline validate` /
-  `python -m companion_api.rag.pipeline build`.
+- **الهدف:** جدول التقطيع بـ plan.md مكوّن 2، الطبقة 0 كاملة، والموجة 1 (5 أنبياء + 40 حديث).
+- **معايير القبول:** قطع حسب الوحدة الدينية بدون تقسيم آية أو رواية؛ context_header لكل قطعة؛
+  تطبيع عربي للفهرس فقط؛ الـ metadata الإلزامية؛ aliases.yaml؛ أسئلة افتراضية `generated`؛
+  خرائط مصادر الأنبياء الخمسة؛ 40 حديثاً مرشحاً.
 - **قرارات المستخدم للموجة 1 (2026-09-27):** مؤهل = البخاري ومسلم بحالة `match` أو
-  `contained_in_secondary` فقط، بنص المصدر الأساسي؛ `text_differs` ما بيدخل اختيار الـ 40 حديث قبل
+  `contained_in_secondary` فقط، بنص المصدر الأساسي؛ `text_differs` ما بيدخل اختيار الـ 40 قبل
   المراجعة. النووية: `cluster_id` لسجلها بالبخاري/مسلم، ومؤهلة من خلاله فقط. رياض الصالحين والأدب
   المفرد: برا الموجة 1 (canonical بس). التفسير الميسّر: بيتقطّع ويتفهرس للتطوير، وما بيدخل release.
   السجلات بنص فاضي مستبعدة.
-- **شو محتاج قرار بشري:** لا شيء. الطبقة 0 صارت جاهزة كمدخل (المرحلة 1:
-  `corpus/canonical/`). قرارات المستخدم 2026-09-27: `source_refs` قائمة مع بقاء
-  `reference` القديم مقروءاً؛ `parent_id`/`cluster_id` حقول اختيارية بنسخة `chunk-v2`
-  و`chunk-v1` يضل يتقرأ.
-- **الحالة:** not_started
+- **شو انعمل:**
+  - **schema v2 / chunk-v2 / norm-v2** بنفس الـ pipeline الموجود (`doc/rag-system.md` §13):
+    `sourceRefs` قائمة و`reference` القديم مقروء؛ `parentId`/`clusterId` اختياريان؛ ملفات chunk-v1 بتتقرأ.
+  - **آيات:** 1054 مقطعاً من ركوعات Tanzil (مصدر، مش اجتهاد)، كل مقطع 1–8 آيات و≤180 كلمة، ولا آية
+    مقسومة؛ قطعة أب للمقطع + قطعة ابن لكل آية.
+  - **تفسير:** مقطع تفسير لكل مقطع آيات بـ `parentChunk`؛ للتطوير فقط (`candidate`).
+  - **حديث:** 14940 سجلاً من البخاري ومسلم → 14112 مجموعة (719 مجموعة فيها أكثر من سجل، أكبرها 7)،
+    والرئيسي الأقوى (مؤهل، ثم البخاري، ثم أصغر رقم). 2053 حديثاً طويلاً (>80 كلمة) فيها أجزاء حرفية
+    كقطع أبناء، والرواية نفسها ما بتنقسم.
+  - **النووية:** 28 مربوطة تلقائياً (التخريج بنص النووي نفسه يسمّي المجموعة + تداخل المتن ≥ 60%)،
+    1 `needs_check` (رقم 21)، و13 غير مربوطة (عند الترمذي وغيره، فخارج الموجة 1).
+  - **aliases.yaml:** 25 نبياً؛ 35 اسماً/لقباً عربياً دليله موجود بآية، 1 `needs_check` ("أبو البشر"
+    مش لفظ قرآني)؛ 147 كتابة لاتينية/عربيزي كلها `needs_check`.
+  - **خرائط المصادر:** آدم 7، نوح 10، إبراهيم 14، يوسف 10، موسى 18 نطاقاً؛ كلها موجودة؛ 15 نطاقاً
+    `needs_check` (ثقة متوسطة أو النبي مش مذكور بالاسم داخل النطاق). مصدرها اقتراح الموديل، وكلها draft.
+  - **40 حديثاً:** 20 من النووية (مربوطة) + 20 من البخاري/مسلم بعبارة بحث؛ الـ 40 نجحوا بالفحص الآلي
+    (موجودة، مؤهلة، 40 مجموعة مختلفة). كلها draft.
+  - **مخرجات:** `corpus/layer0` (16220 وثيقة، 28560 قطعة) و`corpus/wave1` (184 وثيقة: 144 مقطع آيات
+    + 40 حديث، 1106 قطعة، بدون تفسير)؛ الاثنين بيعدّوا من `pipeline validate` بدون أخطاء، وإصدار تطوير
+    `wave1-dev-hashing-p2` انبنى وتحقّق (0 قطعة servable لأنه ولا شي معتمد).
+- **الأدلة:** `python3 scripts/build_corpus.py` → `corpus/reports/ingest_summary.json`؛
+  `corpus/aliases.yaml`، `corpus/candidate/prophets/*_source_map.yaml`،
+  `corpus/candidate/hadith_selection.yaml`، `corpus/reports/nawawi_links.json`؛
+  `PYTHONPATH=src python3 -m pytest -q tests/test_rag_chunk_v2.py tests/test_corpusprep_ingest.py` (18 passed)؛
+  `python -m companion_api.rag.pipeline build corpus/wave1 --out releases --embedding-model hashing`.
+- **شو محتاج قرار بشري:** (1) **الأسئلة الافتراضية blocked:** الحقل `generatedQuestions` جاهز ومفحوص،
+  بس ولا موديل من المسموحين (`qwen3.5:9b`) منزّل على الجهاز، والموجود (llama3.1، mistral) مش مراجَع؛
+  AGENTS.md بيمنع استخدام موديل غير مراجَع بصمت. محتاج قرار: أي موديل مسموح لتجهيز الداتا offline.
+  (2) مراجعة شرعية لكل النطاقات والـ 40 حديثاً. (3) `madhhabScope` فاضي عمداً: ما بنخمّنه.
+- **الحالة:** draft_ready
 
 ### 10. Age-band adaptation, human-written and reviewed
 [ClickUp](https://app.clickup.com/t/z8q7hbct4j)

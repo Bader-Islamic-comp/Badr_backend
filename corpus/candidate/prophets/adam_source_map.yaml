@@ -1,0 +1,45 @@
+# Wave 1 source map (doc/plan.md component 1). Verse ranges proposed by the model from general
+# knowledge, NOT from a source: every range is a candidate for scholarly review. The checker
+# (python3 scripts/build_corpus.py --write-maps) records whether each range exists and whether the
+# prophet is named inside it; `confidence: medium` or a failed check means needs_check.
+# origin: model_proposed (2026-09-27). review_status: draft. No ayah text is written here.
+schema_version: 1
+prophet_id: adam
+origin: model_proposed
+review_status: draft
+ranges:
+- ref: quran:2:30-39
+  topic: الاستخلاف وسجود الملائكة والهبوط
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:7:11-25
+  topic: السجود وإبليس والأكل من الشجرة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:15:26-43
+  topic: الخلق من صلصال وإباء إبليس
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: false}
+  verification: needs_check
+- ref: quran:17:61-65
+  topic: إباء إبليس
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:18:50
+  topic: إبليس كان من الجن
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:20:115-123
+  topic: العهد والنسيان والتوبة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:38:71-85
+  topic: الخلق والسجود وإباء إبليس
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: false}
+  verification: needs_check

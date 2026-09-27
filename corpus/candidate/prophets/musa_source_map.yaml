@@ -1,0 +1,100 @@
+# Wave 1 source map (doc/plan.md component 1). Verse ranges proposed by the model from general
+# knowledge, NOT from a source: every range is a candidate for scholarly review. The checker
+# (python3 scripts/build_corpus.py --write-maps) records whether each range exists and whether the
+# prophet is named inside it; `confidence: medium` or a failed check means needs_check.
+# origin: model_proposed (2026-09-27). review_status: draft. No ayah text is written here.
+schema_version: 1
+prophet_id: musa
+origin: model_proposed
+review_status: draft
+ranges:
+- ref: quran:28:3-13
+  topic: المولد والإلقاء في اليم
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:28:14-28
+  topic: الخروج إلى مدين
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:28:29-35
+  topic: النار والتكليم والرسالة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:20:9-36
+  topic: التكليم والآيات
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:20:37-54
+  topic: المنة الأولى والذهاب إلى فرعون
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:20:55-76
+  topic: السحرة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:20:77-98
+  topic: الخروج والعجل
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:26:10-68
+  topic: فرعون والسحرة وشق البحر
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:7:103-137
+  topic: الآيات والسحرة والنجاة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:7:138-162
+  topic: بنو إسرائيل بعد النجاة والميقات
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:10:75-92
+  topic: فرعون والغرق
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:2:49-61
+  topic: النعم على بني إسرائيل
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:2:67-73
+  topic: البقرة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:18:60-82
+  topic: موسى والعبد الصالح
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:27:7-14
+  topic: النار والآيات
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:40:23-46
+  topic: مؤمن آل فرعون
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:44:17-33
+  topic: الخروج والنجاة
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: false}
+  verification: needs_check
+- ref: quran:79:15-26
+  topic: حديث موسى وفرعون
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok

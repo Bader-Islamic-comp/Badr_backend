@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 from ..rag import normalize
-from . import hadith, quran
+from . import hadith, quran, rasm
 from .fetch import raw_path
 from .registry import Registry
 
@@ -40,6 +40,12 @@ def build_quran(registry: Registry, raw_root: Path, canonical: Path) -> tuple[di
         "tanzil-quran-metadata": quran.parse_tanzil_metadata(raw("tanzil-quran-metadata")),
         "qurancom-chapters": quran.parse_qurancom_chapters(raw("qurancom-chapters")),
     })
+    table, rasm_info = rasm.derive(uthmani, simple)
+    if rasm.write_if_changed(normalize._RASM_FILE, table):
+        normalize.RASM.clear()
+        normalize.RASM.update(table)
+        print(f"  rasm map updated: {rasm_info}", file=sys.stderr)
+    verification["rasm_map"] = rasm_info
     files = {"quran/ayat.jsonl": _write_jsonl(canonical / "quran" / "ayat.jsonl", quran.ayat_records(
         uthmani, simple, "tanzil-quran-uthmani", "tanzil-quran-simple"))}
     # The Tanzil terms require their notice in derived files; it is copied from the download, not retyped.

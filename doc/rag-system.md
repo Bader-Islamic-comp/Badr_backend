@@ -649,3 +649,39 @@ above already describe the result.
     at once. `AnswerService.prepare` now returns a `Plan`. Chat replies cannot
     be grounded, so they pass their own checks instead; that scoped exception
     is recorded in [ADR 0004](adr-0004-casual-conversation.md).
+
+## 13. Schema v2, chunk-v2 and norm-v2 (corpus tasks, 2026-09-27)
+
+Added for the religious corpus ([`corpus-tasks.md`](corpus-tasks.md), task 9). Everything
+here is optional or additive: schema v1 documents, chunk-v1 release files and the app-help
+corpus behave as before.
+
+**Document schema v2** (`schemaVersion: 2`). Extra document fields: `tier` (0 reference text,
+1 scholarly explanation, 2 child content, 3 app help), `contextHeader`, `prophetId`, `topics`,
+`madhhabScope` (`common` / `differs` / null), `clusterId` and `clusterRefs` (the same hadith in
+other collections), `sourceIds` (registry ids), `parentChunk` (for example tafsir pointing at its
+Quran segment), `children` (`units`), `generatedQuestions` (retrieval aids, at most 8, never shown).
+Extra unit fields: `sourceRefs`, a list such as `["quran:12:4"]` or `["bukhari:6018"]`, next to the
+old single `reference` that stays readable; and `parts`, verbatim excerpts of the unit, checked to
+occur in its text in order. Tier 0/1 units that cite their own `sourceRefs` skip duplicate detection,
+because reference text repeats for real (a refrain ayah, one tafsir for several ayat).
+
+**chunk-v2.** Packing is unchanged (§4). New: each chunk carries `sourceRefs`, `parentId`,
+`clusterId`, `clusterRefs`, `contextHeader`, `tier`, `prophetId`, `topics`, `madhhabScope`,
+`grading`, `reviewer`, `sourceIds`, `generatedQuestions`, `checksum` (sha256 of the text) and
+`releaseId`. Child chunks for small-to-big retrieval: one per verbatim `part`, and one per unit of a
+multi-unit chunk when `children: units`. Children are numbered after the parent chunks, so every id
+keeps the `<document>#<n>` form the API contract accepts, and they point at the parent with
+`parentId`. A narration is never split: a long hadith is one parent chunk plus part children.
+`embedding_text` puts `contextHeader` (else the title) first. Unknown chunk fields still fail
+`load_release`.
+
+**norm-v2.** norm-v1 plus one Arabic step: Uthmani-rasm spellings map to the simple spelling from
+`src/companion_api/rag/data/rasm_map.tsv`, derived from Tanzil's own Uthmani and simple texts by
+`corpusprep.rasm` (750 entries; word agreement between the two texts 90.5% → 97.5%). Latin text is
+unchanged. Search text only; displayed text never changes.
+
+**Where the corpus comes from.** `scripts/fetch_sources.py` (registry, sha256, canonical files) and
+`scripts/build_corpus.py` (checks, clusters, segments, documents) write `corpus/layer0/` and
+`corpus/wave1/` as ordinary corpus folders that `python -m companion_api.rag.pipeline build`
+releases. Both are regenerated and stay out of git.

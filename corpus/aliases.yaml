@@ -1,0 +1,343 @@
+# Alias gazetteer: the 25 prophets named in the Quran, their Quranic names and titles, Latin
+# transliterations and Arabizi spellings (doc/plan.md component 2). Deterministic lookup data for
+# query rewriting and filtering; it is never shown to a child.
+#
+# Evidence: every Arabic name or title points at an ayah. `evidence: auto` means the checker finds the
+# ayat containing the name itself; otherwise `ref` + `phrase` must occur in that ayah (simple text,
+# norm-v2). `status` is written by `python3 scripts/build_corpus.py --write-aliases`: evidence_found
+# when the check passes, needs_check otherwise. Latin and Arabizi spellings are variants of the
+# checked Arabic name, proposed without a source, so they are all needs_check until a person confirms.
+# origin: model_proposed (2026-09-27). review_status: draft.
+schema_version: 1
+prophets:
+- id: adam
+  names_ar:
+  - alias: آدم
+    evidence: auto
+    found_in:
+      count: 30
+      first: ['quran:2:31', 'quran:2:33', 'quran:2:34']
+    status: evidence_found
+  titles_ar:
+  - {alias: أبو البشر, evidence: null, note: not a Quranic phrase, status: needs_check}
+  latin: [Adam]
+  arabizi: [adam, 2adam]
+  spellings_status: needs_check
+- id: idris
+  names_ar:
+  - alias: إدريس
+    evidence: auto
+    found_in:
+      count: 2
+      first: ['quran:19:56', 'quran:21:85']
+    status: evidence_found
+  titles_ar: []
+  latin: [Idris, Idrees, Enoch]
+  arabizi: [edris, edrees]
+  spellings_status: needs_check
+- id: nuh
+  names_ar:
+  - alias: نوح
+    evidence: auto
+    found_in:
+      count: 50
+      first: ['quran:3:33', 'quran:3:44', 'quran:4:163']
+    status: evidence_found
+  titles_ar:
+  - alias: عبدا شكورا
+    evidence: {ref: 'quran:17:3', phrase: عبدا شكورا}
+    status: evidence_found
+  latin: [Nuh, Nooh, Nouh, Noah]
+  arabizi: [noo7, nou7, nu7]
+  spellings_status: needs_check
+- id: hud
+  names_ar:
+  - alias: هود
+    evidence: auto
+    found_in:
+      count: 24
+      first: ['quran:2:111', 'quran:2:113', 'quran:2:120']
+    status: evidence_found
+  titles_ar: []
+  latin: [Hud, Hood, Houd]
+  arabizi: [hood, hud]
+  spellings_status: needs_check
+- id: salih
+  names_ar:
+  - alias: صالح
+    evidence: auto
+    found_in:
+      count: 132
+      first: ['quran:2:25', 'quran:2:62', 'quran:2:82']
+    status: evidence_found
+  titles_ar: []
+  latin: [Salih, Saleh, Salah]
+  arabizi: [sale7, sali7]
+  spellings_status: needs_check
+- id: ibrahim
+  names_ar:
+  - alias: إبراهيم
+    evidence: auto
+    found_in:
+      count: 63
+      first: ['quran:2:124', 'quran:2:125', 'quran:2:126']
+    status: evidence_found
+  titles_ar:
+  - alias: خليل الله
+    evidence: {ref: 'quran:4:125', phrase: ابراهيم خليلا}
+    status: evidence_found
+  latin: [Ibrahim, Ibraheem, Ebrahim, Abraham]
+  arabizi: [ebrahim, ibrahim, ebraheem]
+  spellings_status: needs_check
+- id: lut
+  names_ar:
+  - alias: لوط
+    evidence: auto
+    found_in:
+      count: 27
+      first: ['quran:6:86', 'quran:7:80', 'quran:11:70']
+    status: evidence_found
+  titles_ar: []
+  latin: [Lut, Loot, Lot]
+  arabizi: [loot, lut]
+  spellings_status: needs_check
+- id: ismail
+  names_ar:
+  - alias: إسماعيل
+    evidence: auto
+    found_in:
+      count: 12
+      first: ['quran:2:125', 'quran:2:127', 'quran:2:133']
+    status: evidence_found
+  titles_ar: []
+  latin: [Ismail, Ismaeel, Ismael, Ishmael]
+  arabizi: [isma3il, esma3eel]
+  spellings_status: needs_check
+- id: ishaq
+  names_ar:
+  - alias: إسحاق
+    evidence: auto
+    found_in:
+      count: 16
+      first: ['quran:2:133', 'quran:2:136', 'quran:2:140']
+    status: evidence_found
+  titles_ar: []
+  latin: [Ishaq, Is'haq, Isaac]
+  arabizi: [is7aq, es7a2]
+  spellings_status: needs_check
+- id: yaqub
+  names_ar:
+  - alias: يعقوب
+    evidence: auto
+    found_in:
+      count: 16
+      first: ['quran:2:132', 'quran:2:133', 'quran:2:136']
+    status: evidence_found
+  titles_ar:
+  - alias: إسرائيل
+    evidence: {ref: 'quran:3:93', phrase: اسرائيل}
+    status: evidence_found
+  latin: [Yaqub, Yaqoob, Yacoub, Jacob]
+  arabizi: [ya3qoob, ya3qub]
+  spellings_status: needs_check
+- id: yusuf
+  names_ar:
+  - alias: يوسف
+    evidence: auto
+    found_in:
+      count: 26
+      first: ['quran:6:84', 'quran:12:4', 'quran:12:7']
+    status: evidence_found
+  titles_ar: []
+  latin: [Yusuf, Yousef, Yousuf, Youssef, Joseph]
+  arabizi: [yosef, yousef, yusuf]
+  spellings_status: needs_check
+- id: ayyub
+  names_ar:
+  - alias: أيوب
+    evidence: auto
+    found_in:
+      count: 4
+      first: ['quran:4:163', 'quran:6:84', 'quran:21:83']
+    status: evidence_found
+  titles_ar: []
+  latin: [Ayyub, Ayoub, Ayub, Job]
+  arabizi: [ayoob, ayyoub]
+  spellings_status: needs_check
+- id: shuayb
+  names_ar:
+  - alias: شعيب
+    evidence: auto
+    found_in:
+      count: 10
+      first: ['quran:7:85', 'quran:7:88', 'quran:7:90']
+    status: evidence_found
+  titles_ar: []
+  latin: [Shuayb, Shoaib, Shuaib, Jethro]
+  arabizi: [sho3aib, shu3ayb]
+  spellings_status: needs_check
+- id: musa
+  names_ar:
+  - alias: موسى
+    evidence: auto
+    found_in:
+      count: 131
+      first: ['quran:2:51', 'quran:2:53', 'quran:2:54']
+    status: evidence_found
+  titles_ar:
+  - alias: كليم الله
+    evidence: {ref: 'quran:4:164', phrase: وكلم الله موسي}
+    status: evidence_found
+  latin: [Musa, Moosa, Mousa, Moses]
+  arabizi: [mosa, moosa, musa]
+  spellings_status: needs_check
+- id: harun
+  names_ar:
+  - alias: هارون
+    evidence: auto
+    found_in:
+      count: 20
+      first: ['quran:2:248', 'quran:4:163', 'quran:6:84']
+    status: evidence_found
+  titles_ar: []
+  latin: [Harun, Haroon, Haroun, Aaron]
+  arabizi: [haroon, harun]
+  spellings_status: needs_check
+- id: dhulkifl
+  names_ar:
+  - alias: ذا الكفل
+    evidence: auto
+    found_in:
+      count: 2
+      first: ['quran:21:85', 'quran:38:48']
+    status: evidence_found
+  titles_ar: []
+  latin: [Dhul-Kifl, Dhulkifl, Zulkifl, Zul-Kifl]
+  arabizi: [thulkifl, zulkifl]
+  spellings_status: needs_check
+- id: dawud
+  names_ar:
+  - alias: داود
+    evidence: auto
+    found_in:
+      count: 16
+      first: ['quran:2:251', 'quran:4:163', 'quran:5:78']
+    status: evidence_found
+  titles_ar: []
+  latin: [Dawud, Dawood, Daoud, David]
+  arabizi: [dawood, dawud]
+  spellings_status: needs_check
+- id: sulayman
+  names_ar:
+  - alias: سليمان
+    evidence: auto
+    found_in:
+      count: 16
+      first: ['quran:2:102', 'quran:4:163', 'quran:6:84']
+    status: evidence_found
+  titles_ar: []
+  latin: [Sulayman, Sulaiman, Suleiman, Solomon]
+  arabizi: [solaiman, sulaiman]
+  spellings_status: needs_check
+- id: ilyas
+  names_ar:
+  - alias: إلياس
+    evidence: auto
+    found_in:
+      count: 2
+      first: ['quran:6:85', 'quran:37:123']
+    status: evidence_found
+  titles_ar: []
+  latin: [Ilyas, Elias, Elijah]
+  arabizi: [elyas, ilyas]
+  spellings_status: needs_check
+- id: alyasa
+  names_ar:
+  - alias: اليسع
+    evidence: auto
+    found_in:
+      count: 2
+      first: ['quran:6:86', 'quran:38:48']
+    status: evidence_found
+  titles_ar: []
+  latin: [Al-Yasa, Alyasa, Elisha]
+  arabizi: [alyasa3, elyasa3]
+  spellings_status: needs_check
+- id: yunus
+  names_ar:
+  - alias: يونس
+    evidence: auto
+    found_in:
+      count: 4
+      first: ['quran:4:163', 'quran:6:86', 'quran:10:98']
+    status: evidence_found
+  titles_ar:
+  - alias: ذو النون
+    evidence: {ref: 'quran:21:87', phrase: وذا النون}
+    status: evidence_found
+  - alias: صاحب الحوت
+    evidence: {ref: 'quran:68:48', phrase: كصاحب الحوت}
+    status: evidence_found
+  latin: [Yunus, Younes, Yunis, Jonah]
+  arabizi: [younes, yunus, yoonis]
+  spellings_status: needs_check
+- id: zakariya
+  names_ar:
+  - alias: زكريا
+    evidence: auto
+    found_in:
+      count: 6
+      first: ['quran:3:37', 'quran:3:38', 'quran:6:85']
+    status: evidence_found
+  titles_ar: []
+  latin: [Zakariya, Zakaria, Zakariyya, Zechariah]
+  arabizi: [zakaria, zakariya]
+  spellings_status: needs_check
+- id: yahya
+  names_ar:
+  - alias: يحيى
+    evidence: auto
+    found_in:
+      count: 35
+      first: ['quran:2:28', 'quran:2:73', 'quran:2:258']
+    status: evidence_found
+  titles_ar: []
+  latin: [Yahya, Yehya, John]
+  arabizi: [ya7ya, yahya]
+  spellings_status: needs_check
+- id: isa
+  names_ar:
+  - alias: عيسى
+    evidence: auto
+    found_in:
+      count: 25
+      first: ['quran:2:87', 'quran:2:136', 'quran:2:253']
+    status: evidence_found
+  titles_ar:
+  - alias: المسيح
+    evidence: {ref: 'quran:4:171', phrase: المسيح عيسي ابن مريم}
+    status: evidence_found
+  - alias: ابن مريم
+    evidence: {ref: 'quran:4:171', phrase: عيسي ابن مريم}
+    status: evidence_found
+  latin: [Isa, Eesa, Issa, Jesus]
+  arabizi: [3isa, 3eesa, isa]
+  spellings_status: needs_check
+- id: muhammad
+  names_ar:
+  - alias: محمد
+    evidence: auto
+    found_in:
+      count: 4
+      first: ['quran:3:144', 'quran:33:40', 'quran:47:2']
+    status: evidence_found
+  titles_ar:
+  - alias: أحمد
+    evidence: {ref: 'quran:61:6', phrase: اسمه احمد}
+    status: evidence_found
+  - alias: خاتم النبيين
+    evidence: {ref: 'quran:33:40', phrase: وخاتم النبيين}
+    status: evidence_found
+  latin: [Muhammad, Mohammed, Mohamed, Mohammad]
+  arabizi: [m7md, mo7amed, mohamed]
+  spellings_status: needs_check

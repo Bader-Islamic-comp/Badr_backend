@@ -1,0 +1,80 @@
+# Wave 1 source map (doc/plan.md component 1). Verse ranges proposed by the model from general
+# knowledge, NOT from a source: every range is a candidate for scholarly review. The checker
+# (python3 scripts/build_corpus.py --write-maps) records whether each range exists and whether the
+# prophet is named inside it; `confidence: medium` or a failed check means needs_check.
+# origin: model_proposed (2026-09-27). review_status: draft. No ayah text is written here.
+schema_version: 1
+prophet_id: ibrahim
+origin: model_proposed
+review_status: draft
+ranges:
+- ref: quran:2:124-133
+  topic: الإمامة وبناء البيت والوصية
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:2:258-260
+  topic: المحاجة وإحياء الموتى
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:3:65-68
+  topic: ملة إبراهيم
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:6:74-83
+  topic: النظر في الكواكب وحجة التوحيد
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:11:69-76
+  topic: البشرى بإسحاق
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:14:35-41
+  topic: الدعاء لمكة والذرية
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:15:51-60
+  topic: ضيف إبراهيم
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:19:41-50
+  topic: الحوار مع أبيه
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:21:51-73
+  topic: تحطيم الأصنام والنار
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:26:69-89
+  topic: الحوار مع قومه والدعاء
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:29:16-27
+  topic: الدعوة والنجاة من النار
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check
+- ref: quran:37:83-113
+  topic: الأصنام والنار والذبح
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:51:24-37
+  topic: ضيف إبراهيم المكرمين
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:60:4
+  topic: الأسوة الحسنة
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check

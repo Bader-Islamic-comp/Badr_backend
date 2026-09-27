@@ -17,3 +17,5 @@ releases/
 # Third-party text stays out of git until rights clearance (every licence is pending_legal).
 corpus/raw/
 corpus/canonical/**/*.jsonl
+corpus/layer0/
+corpus/wave1/

@@ -15,6 +15,9 @@ test = ["pytest>=8.3,<10", "jsonschema>=4.23,<5"]
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+companion_api = ["rag/data/*.tsv"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]

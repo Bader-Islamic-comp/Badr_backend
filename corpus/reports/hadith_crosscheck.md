@@ -67,9 +67,9 @@ Full list: `corpus/reports/hadith_crosscheck_details.jsonl`.
 
 | number | status | best match in second source | Dice | containment |
 | --- | --- | --- | ---: | ---: |
+| 5105 | not_matched | 1049 | 0.025 | 0.017 |
 | 6949 | not_matched | 6297 | 0.041 | 0.034 |
 | 774.2 | not_matched | 4630 | 0.051 | 0.038 |
-| 5105 | not_matched | 6638 | 0.051 | 0.029 |
 | 2290 | not_matched | 1807 | 0.055 | 0.045 |
 | 5124 | not_matched | 5595 | 0.061 | 0.055 |
 | 2767 | not_matched | 1579 | 0.063 | 0.079 |
@@ -78,11 +78,11 @@ Full list: `corpus/reports/hadith_crosscheck_details.jsonl`.
 | 1572 | not_matched | 1578 | 0.084 | 0.092 |
 | 6896 | not_matched | 2839 | 0.087 | 0.076 |
 | 1608 | not_matched | 1627 | 0.091 | 0.125 |
+| 7195 | not_matched | 4411 | 0.094 | 0.088 |
 | 5590 | not_matched | 1809 | 0.099 | 0.091 |
 | 2193 | not_matched | 4411 | 0.111 | 0.083 |
 | 5018 | not_matched | 610 | 0.12 | 0.074 |
 | 2700 | not_matched | 2500 | 0.122 | 0.125 |
-| 7195 | not_matched | 2027 | 0.122 | 0.103 |
 | 848 | not_matched | 1470 | 0.133 | 0.156 |
 | 41 | not_matched | 283 | 0.141 | 0.192 |
 | 5163 | not_matched | 4418 | 0.141 | 0.1 |
@@ -90,8 +90,8 @@ Full list: `corpus/reports/hadith_crosscheck_details.jsonl`.
 | 2778 | not_matched | 6597 | 0.171 | 0.128 |
 | 1296 | not_matched | 2600 | 0.174 | 0.149 |
 | 6653 | not_matched | 6953 | 0.184 | 0.264 |
-| 6341 | not_matched | 562 | 0.186 | 0.296 |
 | 7361 | not_matched | 5577 | 0.187 | 0.179 |
+| 1753 | not_matched | 819 | 0.188 | 0.151 |
 
 ### muslim (63 unresolved)
 
