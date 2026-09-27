@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://badr.local/corpus/drafts/age_band/schema.json",
+  "title": "Age-band draft (tier 2 child content): one story scene or one hadith explanation",
+  "description": "Human-written, human-reviewed. Tools create empty templates and write reading_level_checks; they never write text or set a review status other than empty.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "kind", "prophet_id", "title", "source_refs", "source_status", "disputed",
+               "excluded_details", "reviewer_notes", "versions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "pattern": "^(story-[a-z][a-z0-9]{1,31}-s[0-9]{2}|hadith-[a-z0-9]{2,20}-[0-9][0-9-]{0,9})$"},
+    "kind": {"enum": ["story_scene", "hadith_explanation"]},
+    "prophet_id": {"type": ["string", "null"], "pattern": "^[a-z][a-z0-9_-]{1,31}$"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 120,
+              "description": "Reviewer-facing label from the source map or selection; a writer may propose a child-facing title in reviewer_notes."},
+    "source_refs": {"type": "array", "minItems": 1, "uniqueItems": true,
+                    "items": {"type": "string", "pattern": "^(quran:[1-9][0-9]{0,2}:[1-9][0-9]{0,2}(-[1-9][0-9]{0,2})?|[a-z][a-z0-9_]{1,31}:[0-9][0-9.]{0,9})$"}},
+    "source_status": {"enum": ["ok", "needs_check"], "description": "Copied from the source map or hadith selection check."},
+    "cluster_id": {"type": ["string", "null"]},
+    "disputed": {"type": "boolean"},
+    "excluded_details": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+                                                     "required": ["detail", "reason"],
+                                                     "properties": {"detail": {"type": "string"}, "reason": {"type": "string"}}}},
+    "reviewer_notes": {"type": "string"},
+    "versions": {
+      "type": "object", "additionalProperties": false, "required": ["7-9", "10-11"],
+      "properties": {"7-9": {"$ref": "#/$defs/version"}, "10-11": {"$ref": "#/$defs/version"}}
+    }
+  },
+  "$defs": {
+    "version": {
+      "type": "object", "additionalProperties": false,
+      "required": ["text", "lesson", "author", "reviewer", "review_status", "reading_level_checks"],
+      "properties": {
+        "text": {"type": "string", "description": "Empty in templates. Sacred text is never typed here: use [[quote:<ref>]] markers."},
+        "lesson": {"type": "string"},
+        "author": {"type": ["string", "null"]},
+        "reviewer": {"type": ["string", "null"]},
+        "review_status": {"enum": ["empty", "draft", "in_review", "approved", "rejected", "quarantined"]},
+        "reading_level_checks": {"type": ["object", "null"], "description": "Written by scripts/age_band.py check."}
+      }
+    }
+  }
+}

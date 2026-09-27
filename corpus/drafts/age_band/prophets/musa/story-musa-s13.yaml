@@ -1,0 +1,32 @@
+# Age-band draft (tier 2). Human-written, human-reviewed: see WRITING_GUIDE.md in this folder.
+# Write only in `text` and `lesson` of each version; never type Quran or hadith text, use
+# [[quote:<ref>]] markers. `reading_level_checks` is written by scripts/age_band.py check.
+schema_version: 1
+id: story-musa-s13
+kind: story_scene
+prophet_id: musa
+title: البقرة
+source_refs:
+- quran:2:67-73
+source_status: ok
+cluster_id: null
+disputed: false
+excluded_details: []
+reviewer_notes: ''
+versions:
+  7-9:
+    text: ''
+    lesson: ''
+    author: null
+    reviewer: null
+    review_status: empty
+    reading_level_checks:
+      status: empty
+  10-11:
+    text: ''
+    lesson: ''
+    author: null
+    reviewer: null
+    review_status: empty
+    reading_level_checks:
+      status: empty

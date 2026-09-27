@@ -46,3 +46,8 @@
 | 2026-09-27 | 2 | `scripts/build_corpus.py` → `corpus/layer0` و`corpus/wave1` (خارج git) + `pipeline build` لـ wave1 بـ hashing | layer0: 16220 وثيقة / 28560 قطعة؛ wave1: 184 / 1106؛ 0 أخطاء؛ release انبنى وتحقّق | `scripts/build_corpus.py`, `.gitignore` |
 | 2026-09-27 | 2 | الأسئلة الافتراضية: blocked — ولا موديل مسموح منزّل (llama3.1/mistral مش مراجَعين) | الحقل جاهز، التوليد بانتظار قرار | — |
 | 2026-09-27 | 2 | اختبارات: `test_rag_chunk_v2.py` (7) + `test_corpusprep_ingest.py` (11) + كل المشروع | 575 passed | `tests/` |
+| 2026-09-27 | 3 | schema.json + 99 قالب فاضي (59 مشهد + 40 حديث) + مدقق + WRITING_GUIDE.md | الفحص: 99 ملف، 198 نسخة فاضية، 0 فشل | `corpus/drafts/age_band/`, `src/companion_api/corpusprep/age_band.py`, `scripts/age_band.py` |
+| 2026-09-27 | 3 | قرار (6): كشف النص المقدس بـ 5 كلمات متتالية مقابل كل القرآن وكل حديث البخاري/مسلم/النووية، مع استثناء الـ 5-grams الموجودة بأكثر من 50 حديث (صيغ) | المدقق بيطبع المواضع بس، بدون النص | `age_band.py` |
+| 2026-09-27 | 3 | قرار (6): `jsonschema` تبعية تشغيل | — | `pyproject.toml` |
+| 2026-09-27 | 3 | اختبارات `test_age_band.py` (7) + كل المشروع | انظر السطر التالي | `tests/test_age_band.py` |
+| 2026-09-27 | 3 | كل المشروع | 582 passed | — |
