@@ -10,6 +10,36 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-09-27 (animation allowlists)
+
+Not yet committed; the coordinator adds the commit hash here when it lands on
+branch `feature/rag-system-and-data-pipeline`. The paired client change is
+Robert's animation update in `comp-mobile/CHANGELOG.md`, which quotes the
+product owner's request of 2026-09-27 and covers the new character package,
+the Unity room and when the app cues Robert to talk and react.
+
+### Changed
+
+- `contracts/avatar-bridge-v1.schema.json` (byte-identical with comp-mobile):
+  `avatar.play`'s `animation` enum gains `Standing` and `Talk`, and is now
+  `Standing`, `Idle`, `Wave`, `Talk`, `Nod`, `Celebrate`; `avatar.set_emotion`'s
+  `emotion` enum gains `joy`, `giggle`, `wink`, `curious`, `wow`, `sleepy`,
+  `bashful` and `starry`. The bridge stays v1: the additions are allowlisted
+  names, not new fields or commands.
+- No service code, OpenAPI contract or corpus changed. The app picks every cue
+  itself, from a reply's answer type and length only.
+
+Noted for later: the app gives no face after a `chat` reply, because the
+service's reply to a sad feeling is also `chat` and the app must not read the
+text to tell them apart. A playful face after chat would need a non-text tone
+signal from the service first; none was added.
+
+### Verification
+
+- `pytest`: **539 passed**, unchanged.
+- The schema is byte-identical with
+  `comp-mobile/contracts/avatar-bridge-v1.schema.json`.
+
 ## Unreleased — 2026-09-25 (outfits)
 
 Commit `6076c7e` ("Sell the six modelled outfits in the catalogue") on branch
