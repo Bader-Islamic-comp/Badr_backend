@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "registry_sha256": "948284dc2ee53faacc397ced474607f1a908d59fd0178e64751318bf72239010",
+  "normalizer": "norm-v1",
+  "sources": {
+    "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",
+    "tanzil-quran-simple": "b3638f5cf03e2b05e4000efc0e4b656aafb3cf6ed28f8770b6497c5b43c46089",
+    "tanzil-quran-metadata": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a",
+    "qurancom-chapters": "ff6ef5aadcc7710271179c0f9c1519c89ae613b11c8ba3265873c6c4fc6aed0b",
+    "alquran-cloud-muyassar": "e409898887a10a92de554b364c12c56a59b9030f2b07df94578040af234b7153",
+    "fawazahmed0-ara-bukhari": "f887d8724f75fb6e1d5d29342a173af5346ad9b933173c85e6e3cb570063ea33",
+    "fawazahmed0-ara-muslim": "2cb296f3455ff8a3da9f6a0ca3de75da675788b2fb446ad316df297838e48217",
+    "fawazahmed0-ara-nawawi": "862c35fbc6af4bc8c1e50e776d37b67a7f6720ee540b30d2747987ec22047b6b",
+    "mhashim6-bukhari": "e78f8ea42c4bdf58027a2b634b0d19393f4a3232645ed79887959a2978685317",
+    "mhashim6-muslim": "dfa4ba5de748f21384c30d6d36fd315de0bdb778158aa475aef17f1f88f7eb31",
+    "ahmedbaset-nawawi40": "d824cec8d82751669a9ed1d41f2854219f8e6770a2cab151ed87f9a501357def",
+    "ahmedbaset-riyadussalihin": "4cfecf7ee476899627918a3cafce7b81784caef323c70e7cf2e746b00be953cf",
+    "ahmedbaset-adab-mufrad": "86a6a96da10c109ccd38316768435e585919d99dc0fd1eaff0bd2081aaeab7a5"
+  },
+  "files": {
+    "hadith/adab_mufrad.jsonl": {
+      "sha256": "b93cb1f83079fa93b3f51b97b170aaadd38b9687b0eca4a7ef726be9a0e3e7a8",
+      "records": 1326
+    },
+    "hadith/bukhari.jsonl": {
+      "sha256": "f5b2efdb2a08e0bdf4f02f2944cbdc725d3ac938155946f5190e9694d8c675ba",
+      "records": 7580
+    },
+    "hadith/muslim.jsonl": {
+      "sha256": "c67e3bf142d1b34880b9ee7e2c803db85d45d23e2ae88916ff12efa339a96736",
+      "records": 7360
+    },
+    "hadith/nawawi40.jsonl": {
+      "sha256": "3196905515fdaa4296a6f294537e8ebdce36411d69bd34edd80ec356e9620ef7",
+      "records": 42
+    },
+    "hadith/riyadussalihin.jsonl": {
+      "sha256": "cb5f538d7f5e11d7a2349086c792cffa4cb9894926e334a38a4fe28f51272922",
+      "records": 1896
+    },
+    "quran/ayat.jsonl": {
+      "sha256": "c95e1a2fbe1bb61036af82322f9bb79490cbf7321e50b5f1b1e59aea61b0bc76",
+      "records": 6236
+    },
+    "tafsir/alquran-cloud-muyassar.jsonl": {
+      "sha256": "cae60f0a6fe863890281dd729b3c88837b5cad3e607911bdd0dc2a275413c0ff",
+      "records": 6236
+    }
+  },
+  "quran": {
+    "surahs": 114,
+    "ayat": 6236,
+    "per_surah_checked_against": [
+      "qurancom-chapters",
+      "tanzil-quran-metadata"
+    ]
+  },
+  "tafsir": {
+    "records": 6236,
+    "missing_ayat": 0,
+    "empty": 0
+  },
+  "hadith": [
+    {
+      "collection": "bukhari",
+      "records": 7580,
+      "primary_empty_text": 9,
+      "secondary_entries": 7008,
+      "secondary_unmatched": 27,
+      "secondary_matched_more_than_once": 531,
+      "statuses": {
+        "match": 6795,
+        "contained_in_secondary": 512,
+        "text_differs": 205,
+        "not_matched": 68
+      },
+      "eligible": 7307,
+      "primary_source": "fawazahmed0-ara-bukhari",
+      "secondary_source": "mhashim6-bukhari",
+      "pairing": "text"
+    },
+    {
+      "collection": "muslim",
+      "records": 7360,
+      "primary_empty_text": 203,
+      "secondary_entries": 5362,
+      "secondary_unmatched": 67,
+      "secondary_matched_more_than_once": 2027,
+      "statuses": {
+        "contained_in_secondary": 2876,
+        "match": 3337,
+        "text_differs": 1109,
+        "not_matched": 38
+      },
+      "eligible": 6213,
+      "primary_source": "fawazahmed0-ara-muslim",
+      "secondary_source": "mhashim6-muslim",
+      "pairing": "text"
+    },
+    {
+      "collection": "nawawi40",
+      "records": 42,
+      "primary_empty_text": 0,
+      "secondary_entries": 42,
+      "secondary_unmatched": 0,
+      "secondary_matched_more_than_once": 0,
+      "statuses": {
+        "text_differs": 4,
+        "match": 38
+      },
+      "eligible": 0,
+      "primary_source": "fawazahmed0-ara-nawawi",
+      "secondary_source": "ahmedbaset-nawawi40",
+      "pairing": "number"
+    },
+    {
+      "collection": "riyadussalihin",
+      "records": 1896,
+      "primary_empty_text": 0,
+      "secondary_entries": null,
+      "secondary_unmatched": null,
+      "secondary_matched_more_than_once": null,
+      "statuses": {
+        "single_source": 1896
+      },
+      "eligible": 0,
+      "primary_source": "ahmedbaset-riyadussalihin",
+      "secondary_source": null,
+      "pairing": null
+    },
+    {
+      "collection": "adab_mufrad",
+      "records": 1326,
+      "primary_empty_text": 0,
+      "secondary_entries": null,
+      "secondary_unmatched": null,
+      "secondary_matched_more_than_once": null,
+      "statuses": {
+        "single_source": 1326
+      },
+      "eligible": 0,
+      "primary_source": "ahmedbaset-adab-mufrad",
+      "secondary_source": null,
+      "pairing": null
+    }
+  ]
+}

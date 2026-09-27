@@ -38,10 +38,17 @@
 - **معايير القبول:** سياسة مكتوبة + تطابقها مع حقول `registry.yaml` الفعلية
   (source_id, title, edition, publisher, url, license, license_url,
   terms_summary, retrieved_at, sha256, numbering_system, status, notes).
-- **شو انعمل:** لسا لأ (السياسة)؛ سكيما `registry.yaml` مخطط لها بالمرحلة 1.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** موافقة اللجنة على قائمة المصادر المقترحة.
-- **الحالة:** not_started
+- **شو انعمل (المرحلة 1):** `corpus/sources/registry.yaml` فيه 13 مصدراً (سطر لكل ملف
+  منزّل) بكل الحقول المطلوبة + `format`/`dataset`/`role`، وsha256 وتاريخ الجلب مسجّلان
+  لكل واحد. `scripts/fetch_sources.py` بيتحقق من sha256 كل مرة وبيفشل (exit 2) إذا تغيّر
+  ملف محلي أو المصدر نفسه، وما بيكتب فوق أي شي. روابط GitHub مثبّتة على commit محدد.
+  السياسة المكتوبة نفسها لسا (المرحلة 4).
+- **الأدلة:** `corpus/sources/registry.yaml`؛ `python3 scripts/fetch_sources.py` (كل
+  المصادر `cached`)؛ `python3 scripts/fetch_sources.py --refresh --no-build` (كل المصادر
+  `verified`)؛ `PYTHONPATH=src python3 -m pytest -q tests/test_corpusprep.py` (16 passed).
+- **شو محتاج قرار بشري:** موافقة اللجنة على قائمة المصادر؛ هل يُقبل مصدر نصّه الأصلي
+  غير موثّق المنشأ (`fawazahmed0` ما بيذكر مصدر النص العربي).
+- **الحالة:** in_progress
 
 ### 3. Rights clearance for every candidate source
 [ClickUp](https://app.clickup.com/t/z8q7hbct4b)
@@ -51,11 +58,20 @@
   والسؤال القانوني المفتوح. الحالة `pending_legal` دايماً (plan.md مرحلة 4 بند 3).
 - **معايير القبول:** كل مصدر بالـ registry مربوط بسطر ترخيص كامل؛ لا مصدر
   ترخيصه غير واضح يدخل أي release (يبقى `candidate` مع السبب).
-- **شو انعمل:** لسا لأ.
-- **الأدلة:** —
-- **شو محتاج قرار بشري:** كل قرار ترخيص نهائي (owner: Mousa al-Rashdan)، خصوصاً
-  لو احتجنا API key لمصدر مثل sunnah.com.
-- **الحالة:** not_started
+- **شو انعمل (المرحلة 1):** لكل مصدر بالـ registry: `license`، `license_url`،
+  `terms_summary`، و`status`. 8 مصادر `pending_legal` (شروطها موجودة ومسجّلة: Tanzil
+  CC BY 3.0 بشروط "بدون تعديل"، Unlicense لـ fawazahmed0، ODbL/DbCL لـ mhashim6). 5 مصادر
+  `candidate` لأن ترخيصها غير واضح: التفسير الميسّر عبر alquran.cloud، ثلاث ملفات
+  AhmedBaset (ما في ملف ترخيص)، وملفا بيانات وصفية (Tanzil metadata وquran.com) مستخدمان
+  للتحقق من العدد فقط. جدول الحقوق الكامل بنص الشروط حرفياً = المرحلة 4.
+- **الأدلة:** `corpus/sources/registry.yaml`؛ قسم "Source status" بـ
+  `corpus/reports/hadith_crosscheck.md`.
+- **شو محتاج قرار بشري (Mousa al-Rashdan):** (1) Tanzil بيمنع "تغيير النص" — هل النسخة
+  المطبّعة للبحث فقط (`text_normalized`) مسموحة؟ (2) شروط الـ share-alike بـ ODbL لو بنينا
+  قاعدة بيانات مشتقة. (3) ترخيص التفسير الميسّر من مجمّع الملك فهد مباشرة. (4) رياض الصالحين
+  والأدب المفرد: ما لقينا مصدراً مفتوحاً بترخيص واضح. لا يوجد API key لـ sunnah.com (قرار
+  المستخدم 2026-09-27).
+- **الحالة:** in_progress
 
 ### 4. Reviewer qualification and conflict-of-interest policy
 [ClickUp](https://app.clickup.com/t/z8q7hbct4c)
@@ -158,8 +174,10 @@
   `src/companion_api/rag/chunking.py`، أوامر
   `python -m companion_api.rag.pipeline validate` /
   `python -m companion_api.rag.pipeline build`.
-- **شو محتاج قرار بشري:** لا شيء لبدء الهيكلة؛ محتوى الطبقة 0 نفسه يحتاج مصادر
-  موثّقة (تاسك المرحلة 1).
+- **شو محتاج قرار بشري:** لا شيء. الطبقة 0 صارت جاهزة كمدخل (المرحلة 1:
+  `corpus/canonical/`). قرارات المستخدم 2026-09-27: `source_refs` قائمة مع بقاء
+  `reference` القديم مقروءاً؛ `parent_id`/`cluster_id` حقول اختيارية بنسخة `chunk-v2`
+  و`chunk-v1` يضل يتقرأ.
 - **الحالة:** not_started
 
 ### 10. Age-band adaptation, human-written and reviewed
@@ -173,11 +191,9 @@
   canonical).
 - **شو انعمل:** لسا لأ.
 - **الأدلة:** —
-- **شو محتاج قرار بشري:** **تعارض تسمية الفئات العمرية** — انظر "Execution
-  plan" تعارض 1. الفئتان `7-8`/`9-11` بـ plan.md لا تطابقان enum
-  `AGE_BANDS` الحالي (`5-6, 7-9, 10-11, 12-14`) بـ `corpus.py`. لن نغيّر الـ
-  enum الحالي بدون قرار صريح؛ الفئتان تُستخدَمان فقط كحقول تأليف داخل
-  `corpus/drafts/age_band/` بالمرحلة 3.
+- **شو محتاج قرار بشري:** العمر الدقيق للإطلاق (`architecture.md` §18 بند 1) مفتوح.
+  **محسوم (المستخدم، 2026-09-27):** الفئات `7-9`/`10-11` من `AGE_BANDS` بالكود هي
+  المرجع؛ `plan.md` انعدّل ليطابقها، والقوالب بالمرحلة 3 رح تستخدمها.
 - **الحالة:** not_started
 
 ### 11. Embedding model selection, evaluated on Arabic and transliteration
@@ -371,3 +387,31 @@
    `product-architecture-roadmap.md`.** أُبقي كما استُلم (لا حذف ولا دمج)؛
    المرجع المعتمد الأحدث الذي يستشهد به `AGENTS.md` يبقى
    `product-architecture-roadmap.md`.
+
+### قرارات التعارضات (المستخدم، 2026-09-27)
+
+| # | التعارض | القرار |
+| --- | --- | --- |
+| 1 | الفئات العمرية | `AGE_BANDS` بالكود (`7-9` / `10-11`) هي المرجع؛ `plan.md` انعدّل؛ العمر الدقيق سؤال مفتوح لـ §18 |
+| 2 | مراجع متعددة | `source_refs` قائمة، و`reference` القديم يضل مقروءاً (المرحلة 2) |
+| 3 | parent/cluster | `parent_id` و`cluster_id` اختياريان بنسخة `chunk-v2`؛ `chunk-v1` يضل يتقرأ (المرحلة 2) |
+| 4 | Postgres/pgvector | خارج النطاق؛ نكمّل على الإصدارات الملفية |
+| 5 | sunnah.com | بدون API key؛ مصدران مفتوحان مستقلان، وإلا `crosscheck_status: single_source` |
+| 6 | الباقي | الحل الأبسط اللي ما بيكسر الموجود، وكل قرار مسجّل بـ `progress-log.md` |
+
+## نتائج المرحلة 1 (2026-09-27)
+
+الأمر: `python3 scripts/fetch_sources.py` (أول تشغيل بـ `--record`). المخرجات: `corpus/raw/`
+و`corpus/canonical/**/*.jsonl` خارج git (بيتولّدوا من جديد بنفس الـ sha256)؛ الموجود
+بـ git: `corpus/sources/registry.yaml`، `corpus/canonical/manifest.json`،
+`corpus/canonical/quran/NOTICE.txt`، `corpus/reports/hadith_crosscheck.md` و`_details.jsonl`.
+
+| البند | النتيجة |
+| --- | --- |
+| القرآن (Tanzil، عثماني + بسيط) | 114 سورة، 6236 آية؛ عدد كل سورة مطابق لـ Tanzil metadata ولـ quran.com (مصدر مستقل) |
+| التفسير الميسّر | 6236 سجل، ولا آية ناقصة (المصدر `candidate`: ترخيصه غير واضح) |
+| البخاري | 7580 سجل (9 فاضيين بالمصدر): 6795 تطابق، 512 محتوى بمدخل أطول، 205 اختلاف نص، 68 بلا مقابل |
+| مسلم | 7360 سجل (203 فاضيين بالمصدر): 3337 تطابق، 2876 محتوى بمدخل أطول، 1109 اختلاف نص، 38 بلا مقابل |
+| الأربعون النووية | 42 سجل: 38 تطابق، 4 اختلاف نص؛ بدون حكم منظّم، فكلها غير مؤهلة |
+| رياض الصالحين | 1896 سجل، `single_source`، غير مؤهلة (بدون حكم وترخيص غير واضح) |
+| الأدب المفرد | 1326 سجل، `single_source`، غير مؤهلة (بدون حكم وترخيص غير واضح) |

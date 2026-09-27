@@ -1,0 +1,218 @@
+# Source registry (corpus tasks Phase 1). One entry per downloaded file.
+#
+# status: candidate     = licence unclear or not found; never enters a release (reason in notes)
+#         pending_legal = terms found and recorded; awaits the rights owner (Mousa al-Rashdan)
+#         rejected      = must not be used
+# Nothing here is cleared: every licence decision belongs to governance, not to this file.
+# sha256 and retrieved_at are written by `scripts/fetch_sources.py --record` on first
+# download and verified on every later run; a changed file fails the run.
+schema_version: 1
+sources:
+- source_id: tanzil-quran-uthmani
+  format: txt
+  dataset: tanzil-quran
+  role: quran_text_canonical
+  title: Tanzil Quran Text (Uthmani)
+  edition: Tanzil Quran Text 1.1 (Feb 2021); quranType=uthmani, no pause/sajdah/rub marks, tatweel kept
+  publisher: Tanzil Project
+  url: https://tanzil.net/pub/download/index.php?marks=false&sajdah=false&rub=false&tatweel=true&quranType=uthmani&outType=txt-2&agree=true
+  license: CC BY 3.0 with Tanzil terms of use
+  license_url: https://tanzil.net/docs/Text_License
+  terms_summary: Verbatim copying and distribution allowed; changing the text is not allowed; source (Tanzil Project) must be indicated with a link to tanzil.net; the copyright notice must be included in verbatim copies and derived files.
+  retrieved_at: '2026-09-27T15:28:33+00:00'
+  sha256: 7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326
+  numbering_system: surah:ayah, Hafs/Kufan count (6236)
+  status: pending_legal
+  notes: Canonical display text. Open legal question - is a search-only normalized copy (text_normalized) a prohibited change or a permitted derived file? Notice is kept in corpus/canonical/quran/NOTICE.txt.
+- source_id: tanzil-quran-simple
+  format: txt
+  dataset: tanzil-quran
+  role: quran_text_search
+  title: Tanzil Quran Text (Simple)
+  edition: Tanzil Quran Text 1.1 (Feb 2021); quranType=simple, no pause/sajdah/rub marks, tatweel kept
+  publisher: Tanzil Project
+  url: https://tanzil.net/pub/download/index.php?marks=false&sajdah=false&rub=false&tatweel=true&quranType=simple&outType=txt-2&agree=true
+  license: CC BY 3.0 with Tanzil terms of use
+  license_url: https://tanzil.net/docs/Text_License
+  terms_summary: Same terms as tanzil-quran-uthmani.
+  retrieved_at: '2026-09-27T15:28:34+00:00'
+  sha256: b3638f5cf03e2b05e4000efc0e4b656aafb3cf6ed28f8770b6497c5b43c46089
+  numbering_system: surah:ayah, Hafs/Kufan count (6236)
+  status: pending_legal
+  notes: Simple (imla'i) script, used for search only, never displayed in place of the Uthmani text.
+- source_id: tanzil-quran-metadata
+  format: xml
+  dataset: tanzil-quran
+  role: quran_structure_reference
+  title: Tanzil Quran Metadata (quran-data.xml)
+  edition: quran-data.xml as published on the download date
+  publisher: Tanzil Project
+  url: https://tanzil.net/res/text/metadata/quran-data.xml
+  license: Tanzil Project documentation; licence for metadata not stated separately
+  license_url: https://tanzil.net/docs/quran_metadata
+  terms_summary: Metadata page gives download links without separate terms.
+  retrieved_at: '2026-09-27T15:28:34+00:00'
+  sha256: 8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a
+  numbering_system: sura index 1-114 with ayas count
+  status: candidate
+  notes: Used only as the standard per-surah ayah count for verification; no text from it is stored. Licence for the metadata file is not stated.
+- source_id: qurancom-chapters
+  format: json
+  dataset: qurancom-api
+  role: quran_structure_crosscheck
+  title: Quran.com API v4 chapters list
+  edition: api.quran.com/api/v4/chapters (response on the download date)
+  publisher: Quran.com (Quran Foundation)
+  url: https://api.quran.com/api/v4/chapters?language=en
+  license: Not stated in the response
+  license_url: null
+  terms_summary: No terms were retrieved with this response.
+  retrieved_at: '2026-09-27T15:28:34+00:00'
+  sha256: ff6ef5aadcc7710271179c0f9c1519c89ae613b11c8ba3265873c6c4fc6aed0b
+  numbering_system: chapter id 1-114 with verses_count
+  status: candidate
+  notes: Independent second check of per-surah ayah counts only; no text used. API responses can change, which fails the sha256 check by design.
+- source_id: alquran-cloud-muyassar
+  format: json
+  dataset: alquran-cloud
+  role: tafsir
+  title: Al-Tafsir al-Muyassar (ar.muyassar)
+  edition: alquran.cloud edition ar.muyassar ("King Fahad Quran Complex")
+  publisher: King Fahd Complex for the Printing of the Holy Quran (original); served by alquran.cloud (Islamic Network)
+  url: https://api.alquran.cloud/v1/quran/ar.muyassar
+  license: Not found
+  license_url: null
+  terms_summary: No licence or terms page found for this edition (alquran.cloud/terms returned 404 on 2026-09-27).
+  retrieved_at: '2026-09-27T15:28:36+00:00'
+  sha256: e409898887a10a92de554b364c12c56a59b9030f2b07df94578040af234b7153
+  numbering_system: surah:ayah (numberInSurah), 6236 entries
+  status: candidate
+  notes: Licence unclear, so it must not enter any release until the original publisher's redistribution terms are confirmed. Fetched through a mirror, not from the publisher.
+- source_id: fawazahmed0-ara-bukhari
+  format: json
+  dataset: fawazahmed0-hadith-api
+  role: hadith_primary
+  title: Sahih al-Bukhari, Arabic (ara-bukhari)
+  edition: hadith-api commit df57907be35291c91ad6a6691180e22ca9920784
+  publisher: fawazahmed0/hadith-api (GitHub)
+  url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/editions/ara-bukhari.min.json
+  license: The Unlicense (public domain dedication)
+  license_url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/LICENSE
+  terms_summary: Repository dedicated to the public domain; the edition lists no upstream source for the Arabic text.
+  retrieved_at: '2026-09-27T15:28:36+00:00'
+  sha256: f887d8724f75fb6e1d5d29342a173af5346ad9b933173c85e6e3cb570063ea33
+  numbering_system: sunnah.com-style hadithnumber (decimal sub-numbers such as 402.2)
+  status: pending_legal
+  notes: Upstream origin of the Arabic text is not documented by the repository; open question for rights review.
+- source_id: fawazahmed0-ara-muslim
+  format: json
+  dataset: fawazahmed0-hadith-api
+  role: hadith_primary
+  title: Sahih Muslim, Arabic (ara-muslim)
+  edition: hadith-api commit df57907be35291c91ad6a6691180e22ca9920784
+  publisher: fawazahmed0/hadith-api (GitHub)
+  url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/editions/ara-muslim.min.json
+  license: The Unlicense (public domain dedication)
+  license_url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/LICENSE
+  terms_summary: Same as fawazahmed0-ara-bukhari.
+  retrieved_at: '2026-09-27T15:28:36+00:00'
+  sha256: 2cb296f3455ff8a3da9f6a0ca3de75da675788b2fb446ad316df297838e48217
+  numbering_system: sunnah.com-style hadithnumber
+  status: pending_legal
+  notes: Some entries have empty text; they are reported, not filled from another source.
+- source_id: fawazahmed0-ara-nawawi
+  format: json
+  dataset: fawazahmed0-hadith-api
+  role: hadith_primary
+  title: Forty Hadith of an-Nawawi, Arabic (ara-nawawi)
+  edition: hadith-api commit df57907be35291c91ad6a6691180e22ca9920784
+  publisher: fawazahmed0/hadith-api (GitHub)
+  url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/editions/ara-nawawi.min.json
+  license: The Unlicense (public domain dedication)
+  license_url: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@df57907be35291c91ad6a6691180e22ca9920784/LICENSE
+  terms_summary: Same as fawazahmed0-ara-bukhari.
+  retrieved_at: '2026-09-27T15:28:36+00:00'
+  sha256: 862c35fbc6af4bc8c1e50e776d37b67a7f6720ee540b30d2747987ec22047b6b
+  numbering_system: hadith 1-42 (sunnah.com nawawi40 order)
+  status: pending_legal
+  notes: No grading field in the source; the takhrij sentence sits inside the text.
+- source_id: mhashim6-bukhari
+  format: csv
+  dataset: mhashim6-open-hadith-data
+  role: hadith_crosscheck
+  title: Sahih al-Bukhari, Arabic without diacritics (Open-Hadith-Data)
+  edition: Open-Hadith-Data commit 1515f6cba21efed20d8916bf55acef1dffa0d2d5
+  publisher: mhashim6/Open-Hadith-Data (GitHub), from ceefour/hadith-islamware
+  url: https://cdn.jsdelivr.net/gh/mhashim6/Open-Hadith-Data@1515f6cba21efed20d8916bf55acef1dffa0d2d5/Sahih_Al-Bukhari/sahih_al-bukhari_ahadith.utf8.csv
+  license: ODbL 1.0 (database) and DbCL 1.0 (contents)
+  license_url: https://cdn.jsdelivr.net/gh/mhashim6/Open-Hadith-Data@1515f6cba21efed20d8916bf55acef1dffa0d2d5/LICENSE
+  terms_summary: Open Database License with Database Contents License; attribution and share-alike apply to derived databases.
+  retrieved_at: '2026-09-27T15:28:37+00:00'
+  sha256: e78f8ea42c4bdf58027a2b634b0d19393f4a3232645ed79887959a2978685317
+  numbering_system: islamware numbering (7008 entries), differs from sunnah.com
+  status: pending_legal
+  notes: Independent upstream (islamware), used to cross-check text only. Share-alike obligations are an open legal question.
+- source_id: mhashim6-muslim
+  format: csv
+  dataset: mhashim6-open-hadith-data
+  role: hadith_crosscheck
+  title: Sahih Muslim, Arabic without diacritics (Open-Hadith-Data)
+  edition: Open-Hadith-Data commit 1515f6cba21efed20d8916bf55acef1dffa0d2d5
+  publisher: mhashim6/Open-Hadith-Data (GitHub), from ceefour/hadith-islamware
+  url: https://cdn.jsdelivr.net/gh/mhashim6/Open-Hadith-Data@1515f6cba21efed20d8916bf55acef1dffa0d2d5/Sahih_Muslim/sahih_muslim_ahadith.utf8.csv
+  license: ODbL 1.0 (database) and DbCL 1.0 (contents)
+  license_url: https://cdn.jsdelivr.net/gh/mhashim6/Open-Hadith-Data@1515f6cba21efed20d8916bf55acef1dffa0d2d5/LICENSE
+  terms_summary: Same as mhashim6-bukhari.
+  retrieved_at: '2026-09-27T15:28:40+00:00'
+  sha256: dfa4ba5de748f21384c30d6d36fd315de0bdb778158aa475aef17f1f88f7eb31
+  numbering_system: islamware numbering, differs from sunnah.com
+  status: pending_legal
+  notes: Independent upstream (islamware), used to cross-check text only.
+- source_id: ahmedbaset-nawawi40
+  format: json
+  dataset: ahmedbaset-hadith-json
+  role: hadith_crosscheck
+  title: The Forty Hadith of al-Nawawi (hadith-json)
+  edition: hadith-json v1.2.0 (commit ca32fd72aa16eeeb9a819c80bb65c9e78766532d)
+  publisher: AhmedBaset/hadith-json (GitHub), scraped from sunnah.com
+  url: https://cdn.jsdelivr.net/gh/AhmedBaset/hadith-json@ca32fd72aa16eeeb9a819c80bb65c9e78766532d/db/by_book/forties/nawawi40.json
+  license: Not stated (repository has no licence file)
+  license_url: null
+  terms_summary: No licence; data is described as scraped from sunnah.com, whose terms were not retrieved.
+  retrieved_at: '2026-09-27T15:28:41+00:00'
+  sha256: d824cec8d82751669a9ed1d41f2854219f8e6770a2cab151ed87f9a501357def
+  numbering_system: idInBook 1-42 (sunnah.com order)
+  status: candidate
+  notes: Licence unclear, so used only to cross-check nawawi40; its text is not stored as primary. Likely shares an upstream with fawazahmed0, so it is not fully independent.
+- source_id: ahmedbaset-riyadussalihin
+  format: json
+  dataset: ahmedbaset-hadith-json
+  role: hadith_primary
+  title: Riyad as-Salihin (hadith-json)
+  edition: hadith-json v1.2.0 (commit ca32fd72aa16eeeb9a819c80bb65c9e78766532d)
+  publisher: AhmedBaset/hadith-json (GitHub), scraped from sunnah.com
+  url: https://cdn.jsdelivr.net/gh/AhmedBaset/hadith-json@ca32fd72aa16eeeb9a819c80bb65c9e78766532d/db/by_book/other_books/riyad_assalihin.json
+  license: Not stated (repository has no licence file)
+  license_url: null
+  terms_summary: No licence; scraped from sunnah.com.
+  retrieved_at: '2026-09-27T15:28:42+00:00'
+  sha256: 4cfecf7ee476899627918a3cafce7b81784caef323c70e7cf2e746b00be953cf
+  numbering_system: idInBook (sunnah.com Riyad as-Salihin order)
+  status: candidate
+  notes: Only source found for this collection; licence unclear and no grading field, so every record is ineligible for release.
+- source_id: ahmedbaset-adab-mufrad
+  format: json
+  dataset: ahmedbaset-hadith-json
+  role: hadith_primary
+  title: Al-Adab Al-Mufrad (hadith-json)
+  edition: hadith-json v1.2.0 (commit ca32fd72aa16eeeb9a819c80bb65c9e78766532d)
+  publisher: AhmedBaset/hadith-json (GitHub), scraped from sunnah.com
+  url: https://cdn.jsdelivr.net/gh/AhmedBaset/hadith-json@ca32fd72aa16eeeb9a819c80bb65c9e78766532d/db/by_book/other_books/aladab_almufrad.json
+  license: Not stated (repository has no licence file)
+  license_url: null
+  terms_summary: No licence; scraped from sunnah.com.
+  retrieved_at: '2026-09-27T15:28:43+00:00'
+  sha256: 86a6a96da10c109ccd38316768435e585919d99dc0fd1eaff0bd2081aaeab7a5
+  numbering_system: idInBook (sunnah.com Al-Adab Al-Mufrad order)
+  status: candidate
+  notes: Only source found for this collection; licence unclear and no grading field, so every record is ineligible for release.

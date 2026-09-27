@@ -12,3 +12,19 @@
 | 2026-09-27 | 0 | إنشاء `doc/corpus-tasks.md`: 15 تاسكاً (8 حوكمة + 7 pipeline/eval) بكل الحقول المطلوبة، وقسم Execution plan (شو موجود / شو رح تضيف ووين / 6 تعارضات موثّقة بين plan.md والكود) | ملف كامل، كل التاسكات `not_started` | `doc/corpus-tasks.md` (جديد) |
 | 2026-09-27 | 0 | إنشاء `doc/done.md`: جدول تغطية لكل قسم بـ architecture.md (1–18) وكل مكوّن بـ plan.md (1–9)، مع دليل حقيقي لكل بند `in_progress` | ملف كامل، لا بند `done` بدون دليل | `doc/done.md` (جديد) |
 | 2026-09-27 | 0 | إنشاء `doc/progress-log.md` (هذا الملف) | — | `doc/progress-log.md` (جديد) |
+| 2026-09-27 | 0 | commit `a863eff` (نقل المراجع + ملفات التتبّع) | 539 passed | — |
+| 2026-09-27 | 1 | قرارات المستخدم على التعارضات 1–6 | انسجّلت بـ `doc/corpus-tasks.md` (جدول "قرارات التعارضات") | `doc/corpus-tasks.md` |
+| 2026-09-27 | 1 | فحص المصادر: Tanzil (نموذج التنزيل `/pub/download/index.php`)، alquran.cloud، quran.com، fawazahmed0/hadith-api، AhmedBaset/hadith-json، mhashim6/Open-Hadith-Data | sunnah.com وdorar.net رجعوا 403 (ومحتاجين مفتاح)؛ الباقي شغّال. تنزيل Tanzil ثابت (نفس sha256 مرتين) | — |
+| 2026-09-27 | 1 | قرار (6): التفسير الميسّر عبر alquran.cloud = `candidate` (صفحة الشروط 404، ما في ترخيص منشور) | مخزّن بس ما بيدخل أي release | `corpus/sources/registry.yaml` |
+| 2026-09-27 | 1 | قرار (5): مصدر ثانٍ مستقل للبخاري ومسلم = mhashim6 (أصله islamware، ترقيم مختلف، ODbL). النووية: AhmedBaset للتحقق فقط (ما في ترخيص). رياض الصالحين والأدب المفرد: مصدر واحد (AhmedBaset) = `single_source` | — | `corpus/sources/registry.yaml` |
+| 2026-09-27 | 1 | قرار (6): `corpus/raw/` و`corpus/canonical/**/*.jsonl` خارج git (نص طرف ثالث، والتراخيص كلها `pending_legal`)؛ الموجود بـ git هو `manifest.json` بالـ sha256 لكل ملف مولّد | الملفات بتتولّد من جديد بـ `fetch_sources.py` | `.gitignore` |
+| 2026-09-27 | 1 | قرار (6): إضافة `pyyaml>=6,<7` لـ `pyproject.toml` | — | `pyproject.toml` |
+| 2026-09-27 | 1 | بناء `src/companion_api/corpusprep/` (registry, fetch, quran, hadith, build) و`scripts/fetch_sources.py` | النص المقدّس منسوخ حرفياً من الملف المنزّل (تحقّقت: 6236/6236 آية و7580/7580 بخاري مطابقة بايت ببايت) | `src/companion_api/corpusprep/*.py`, `scripts/fetch_sources.py` |
+| 2026-09-27 | 1 | أول تشغيل `--record` (13 مصدراً، ~36MB، 16 ثانية) | sha256 + retrieved_at مسجّلين؛ القرآن 114/6236 مطابق لمرجعين | `corpus/sources/registry.yaml`, `corpus/canonical/` |
+| 2026-09-27 | 1 | مشكلة: مسلم 2004 "بلا مقابل" بالتشغيل الأول. السبب: islamware بيجمع أكثر من رواية تحت رقم واحد. الحل: مقياس containment وحالة `contained_in_secondary`، و`text_differs` إذا Dice أو containment ≥ 0.6 | مسلم: بلا مقابل 2004 → 38 | `src/companion_api/corpusprep/hadith.py`, `build.py` |
+| 2026-09-27 | 1 | قرار (6): `text_normalized` = `norm-v1` (الموجود بـ `rag/normalize.py`) على النص البسيط؛ جدول مقابلة الرسم العثماني = المرحلة 2. `narrator` = null إلا إذا المصدر بيعطيه منظّماً (AhmedBaset: بالإنجليزي) | ما في استخراج راوٍ من المتن بالتخمين | `quran.py`, `hadith.py` |
+| 2026-09-27 | 1 | اختبار التلاعب: تعديل بايت بملف raw منسوخ | exit 2 مع رسالة "modified after download" | — |
+| 2026-09-27 | 1 | `--refresh`: أول مرة فشل مصدر واحد بخطأ شبكة عابر، وثلاث تشغيلات بعدها نجحت (13/13 `verified`). قرار (6): إعادة محاولة لأخطاء الشبكة فقط (3 مرات)، وعدم تطابق sha256 بيفشل فوراً | — | `src/companion_api/corpusprep/fetch.py` |
+| 2026-09-27 | 1 | قرار المستخدم (1): تعديل `plan.md` لـ `7-9`/`10-11` مع ملاحظة | 9 أسطر | `doc/plan.md` |
+| 2026-09-27 | 1 | اختبارات: `tests/test_corpusprep.py` (16) + كل المشروع | 555 passed | `tests/test_corpusprep.py` |
+| 2026-09-27 | 1 | تحديث `corpus-tasks.md` (تاسك 2 و3 → in_progress، نتائج المرحلة 1) و`done.md` (p1، 6.2، 6.3a) | `check_progress.py` لسا ما انبنى (المرحلة 4) | `doc/corpus-tasks.md`, `doc/done.md` |

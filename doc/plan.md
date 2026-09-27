@@ -8,6 +8,10 @@
 > الموجود فعلاً بـ `src/companion_api/rag/`. هذا الملف هو خطة معمارية جديدة لكل
 > مكوّن (بما فيها الكوربس) والبرومبتات المرافقة لها.
 
+> **الفئات العمرية (قرار 2026-09-27):** كل نسختين عمريتين بهذا الملف صارتا `7-9` و`10-11`
+> لتطابق `AGE_BANDS` الموجودة بالكود (`src/companion_api/rag/corpus.py`) بدل `7-8` و`9-11`
+> بالمسودة الأصلية. العمر الدقيق للإطلاق ما زال سؤالاً مفتوحاً (`architecture.md` §18 بند 1).
+
 ## نظرة عامة
 
 نبدأ بالكوربس لأن كل مكوّن بعده يعتمد عليه: استرجاع ضعيف على داتا ممتازة ينصلح، لكن أقوى استرجاع على داتا ملخبطة ما بينصلح. كل مكوّن هون مستقل وله مدخلات ومخرجات واضحة، عشان تطوروه وتبدلوه واحد واحد بدون ما تكسروا الباقي.
@@ -310,7 +314,7 @@ received → safety_in → routed → rewriting → retrieving → generating
 
 ## التقسيم
 - قسّم القصة إلى فصول (chapters) بحسب المراحل الكبرى لحياة النبي ودعوته، وكل فصل إلى 3–6 مشاهد (scenes).
-- المشهد = حدث واحد متكامل. طوله 150–300 كلمة في نسخة 9–11 سنة، و80–150 كلمة في نسخة 7–8 سنوات.
+- المشهد = حدث واحد متكامل. طوله 150–300 كلمة في نسخة 10–11 سنة، و80–150 كلمة في نسخة 7–9 سنوات.
 - كل مشهد مفهوم وحده تماماً: يبدأ بجملة تعرّف السياق (من، وماذا حدث قبله باختصار)، ولا يبدأ بـ "ثم" أو بضمير يعود على مشهد سابق. السبب: النظام قد يسترجع مشهداً واحداً بدون غيره.
 - اتبع ترتيب الأحداث الثابت، وإذا كان الترتيب اجتهادياً فاذكر ذلك في reviewer_notes.
 
@@ -319,13 +323,13 @@ received → safety_in → routed → rewriting → retrieving → generating
 {"chunk_id":"story-{slug}-c01","content_type":"story_chapter","tier":2,"prophet_id":"{slug}","chapter_title":"","summary":"ملخص 60–100 كلمة","scene_ids":[],"source_refs":[]}
 
 ثم سطر لكل مشهد:
-{"chunk_id":"story-{slug}-c01-s01","parent_id":"story-{slug}-c01","content_type":"story_scene","tier":2,"prophet_id":"{slug}","chapter_title":"","scene_title":"","context_header":"قصة {اسم_النبي} عليه السلام — الفصل 1: ... — المشهد 1: ...","text_9_11":"","text_7_8":"","source_refs":["quran:.."],"lesson":"عبرة واحدة بجملة قصيرة","vocabulary":[{"word":"","meaning":""}],"child_questions":["سؤالان بالفصحى","سؤال بالعامية الخليجية","سؤال بالعامية الشامية","سؤال فيه خطأ إملائي شائع عند الأطفال"],"quiz":{"question":"","options":["","","",""],"answer_index":0,"explanation":""},"topics":[],"aliases":["ألقاب النبي وأسماء الأماكن والأشخاص الواردة في المصدر"],"disputed":false,"verification":"ok","reviewer_notes":"","review_status":"draft"}
+{"chunk_id":"story-{slug}-c01-s01","parent_id":"story-{slug}-c01","content_type":"story_scene","tier":2,"prophet_id":"{slug}","chapter_title":"","scene_title":"","context_header":"قصة {اسم_النبي} عليه السلام — الفصل 1: ... — المشهد 1: ...","text_10_11":"","text_7_9":"","source_refs":["quran:.."],"lesson":"عبرة واحدة بجملة قصيرة","vocabulary":[{"word":"","meaning":""}],"child_questions":["سؤالان بالفصحى","سؤال بالعامية الخليجية","سؤال بالعامية الشامية","سؤال فيه خطأ إملائي شائع عند الأطفال"],"quiz":{"question":"","options":["","","",""],"answer_index":0,"explanation":""},"topics":[],"aliases":["ألقاب النبي وأسماء الأماكن والأشخاص الواردة في المصدر"],"disputed":false,"verification":"ok","reviewer_notes":"","review_status":"draft"}
 
 وأخيراً سطر واحد:
 {"chunk_id":"story-{slug}-meta","content_type":"story_meta","excluded_details":[{"detail":"","reason":""}],"all_quran_refs":[],"all_hadith_refs":[],"open_questions_for_board":[]}
 
 ## الأسلوب
-- فصحى بسيطة دافئة. جمل قصيرة: أقل من 15 كلمة لنسخة 7–8، وأقل من 22 لنسخة 9–11.
+- فصحى بسيطة دافئة. جمل قصيرة: أقل من 15 كلمة لنسخة 7–9، وأقل من 22 لنسخة 10–11.
 - "عليه السلام" بعد اسم كل نبي أول مرة في المشهد.
 - لا تخويف ولا تفاصيل عنف أو عذاب، وما حدث للمكذّبين يُذكر بإيجاز وهدوء مع التركيز على رحمة الله ونجاة المؤمنين.
 - العبرة عملية وقريبة من حياة الطفل (الصدق، الصبر، بر الوالدين، التوكل)، بلا توبيخ.
@@ -354,7 +358,7 @@ received → safety_in → routed → rewriting → retrieving → generating
 5. اختر أحاديث يستطيع الطفل فهمها وتطبيقها، وتجنّب ما يحتاج سياقاً فقهياً معقداً أو فيه مسائل خلافية.
 
 المخرج: JSONL، سطر لكل ترشيح:
-{"candidate_id":"h001","topic":"","collection":"bukhari|muslim|nawawi40|riyadussalihin|adab_mufrad|abudawud|tirmidhi|nasai|ibnmajah","number":"","narrator":"الصحابي","opening_words":"أول 5–8 كلمات","meaning_summary":"المعنى بجملة","why_for_kids":"","age_band":"7-8|9-11|both","verification":"needs_check"}
+{"candidate_id":"h001","topic":"","collection":"bukhari|muslim|nawawi40|riyadussalihin|adab_mufrad|abudawud|tirmidhi|nasai|ibnmajah","number":"","narrator":"الصحابي","opening_words":"أول 5–8 كلمات","meaning_summary":"المعنى بجملة","why_for_kids":"","age_band":"7-9|10-11|both","verification":"needs_check"}
 ثم سطر أخير: {"content_type":"known_weak_list","items":[{"description":"","why_weak":""}]}
 أخرج JSONL فقط.
 ```
@@ -372,7 +376,7 @@ received → safety_in → routed → rewriting → retrieving → generating
 5. إذا تكرّر الحديث نفسه من أكثر من مصدر، اجعل له cluster_id واحداً، والمصدر الرئيسي هو الأقوى (البخاري ثم مسلم ثم غيرهما).
 
 المخرج: JSONL، سطر لكل سجل:
-{"chunk_id":"hadith-{collection}-{number}","parent_id":null,"cluster_id":"","content_type":"hadith","tier":0,"collection":"","number":"","numbering_system":"كما في المصدر المعطى","narrator":"","arabic_text":"منسوخ حرفياً","grading":"","grader":"","context_header":"حديث عن {الموضوع} — رواه {المصدر}","explanation_9_11":"60–120 كلمة","explanation_7_8":"30–60 كلمة","lesson":"","practical_action":"","vocabulary":[{"word":"","meaning":""}],"child_questions":["سؤالان بالفصحى","سؤال بالعامية الخليجية","سؤال بالعامية الشامية","سؤال بخطأ إملائي شائع"],"quiz":{"question":"","options":["","","",""],"answer_index":0,"explanation":""},"topics":[],"age_band":"","madhhab_scope":"common|differs","reviewer_notes":"","review_status":"draft"}
+{"chunk_id":"hadith-{collection}-{number}","parent_id":null,"cluster_id":"","content_type":"hadith","tier":0,"collection":"","number":"","numbering_system":"كما في المصدر المعطى","narrator":"","arabic_text":"منسوخ حرفياً","grading":"","grader":"","context_header":"حديث عن {الموضوع} — رواه {المصدر}","explanation_10_11":"60–120 كلمة","explanation_7_9":"30–60 كلمة","lesson":"","practical_action":"","vocabulary":[{"word":"","meaning":""}],"child_questions":["سؤالان بالفصحى","سؤال بالعامية الخليجية","سؤال بالعامية الشامية","سؤال بخطأ إملائي شائع"],"quiz":{"question":"","options":["","","",""],"answer_index":0,"explanation":""},"topics":[],"age_band":"","madhhab_scope":"common|differs","reviewer_notes":"","review_status":"draft"}
 
 قبل الإخراج قارن arabic_text في كل سجل بالنص المعطى حرفاً بحرف. ثم أخرج JSONL فقط.
 
