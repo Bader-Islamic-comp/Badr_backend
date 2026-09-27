@@ -22,7 +22,7 @@ from _common import ROOT
 from companion_api.evaluation import retrieval
 from companion_api.governance.releases import git_commit
 from companion_api.rag import embeddings
-from companion_api.rag.chunking import chunk_documents
+from companion_api.rag.chunking import chunk_documents, embedding_text
 from companion_api.rag.corpus import load_corpus
 
 OUT = ROOT / "reports/retrieval"
@@ -30,9 +30,12 @@ CACHE = OUT / "cache"
 # Known embedders on an OpenAI-compatible (Ollama) endpoint: dimensions and the prefixes the model expects.
 OLLAMA_MODELS = {
     "nomic-embed-text": {"dims": 768, "doc": "search_document: ", "query": "search_query: ", "candidate": False},
-    "bge-m3": {"dims": 1024, "doc": "", "query": "", "candidate": True},
     "qwen3-embedding:0.6b": {"dims": 1024, "doc": "", "query": None, "candidate": True},
 }
+# Hugging Face models: repo and encoder options. BGE-M3 runs here because Ollama's build returns NaN on this text.
+HF_MODELS = {"multilingual-e5-large": ("intfloat/multilingual-e5-large", {}),
+             "bge-m3": ("BAAI/bge-m3", {"doc_prefix": "", "query_prefix": "", "pooling": "cls"})}
+RERANKER = "BAAI/bge-reranker-v2-m3"
 REQUESTED = ("bge-m3", "multilingual-e5-large", "qwen3-embedding:0.6b", "bge-reranker-v2-m3")
 
 
@@ -40,47 +43,109 @@ def _jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
-def _blocked(available: set[str]) -> dict[str, str]:
+def _blocked(ran: set[str]) -> dict[str, str]:
     free_gb = shutil.disk_usage(ROOT).free / 1e9
-    reasons = {}
-    for name in REQUESTED:
-        if name in available:
-            continue
-        if name == "bge-reranker-v2-m3":
-            reasons[name] = (f"cross-encoder needs sentence-transformers (not installed) and a ~2.3 GB model; "
-                             f"{free_gb:.1f} GB free on disk")
-        elif name == "multilingual-e5-large":
-            reasons[name] = f"not in the Ollama library; needs sentence-transformers and ~2.2 GB; {free_gb:.1f} GB free"
-        else:
-            reasons[name] = f"not pulled into the local Ollama (~1.2-2.3 GB); {free_gb:.1f} GB free on disk"
-    return reasons
+    return {name: f"not run in this invocation ({free_gb:.1f} GB free on disk); see the flags in --help"
+            for name in REQUESTED if name not in ran}
 
 
-def build_methods(chunks, ollama: list[str], base_url: str):
-    bm25 = retrieval.bm25_index(chunks)
-    texts = retrieval.document_texts(chunks)
-    methods = [(retrieval.Method("bm25", chunks, bm25=bm25), {"candidate": True})]
+def _embedder(name: str, base_url: str):
+    if name in HF_MODELS:  # checked first: bge-m3 is served from Hugging Face
+        from companion_api.evaluation.models import HFEmbedder
+        repo, options = HF_MODELS[name]
+        return HFEmbedder(repo, **options), True, (lambda e: e.embed_query)
+    spec = OLLAMA_MODELS[name]
+    embedder = embeddings.OpenAICompatibleEmbedder(
+        base_url, name, dimensions=spec["dims"],
+        query_instruction=embeddings.QWEN_QUERY_INSTRUCTION if spec["query"] is None else "", batch_size=32)
+    prefix = spec["query"] or ""
+    return embedder, spec["candidate"], (lambda e: (lambda q: e.embed_query(prefix + q)))
+
+
+MAX_EMBED_WORDS = 350  # long narrations exceed model context; their verbatim part-chunks carry the rest
+
+
+def _clip(text: str) -> str:
+    words = text.split()
+    return text if len(words) <= MAX_EMBED_WORDS else " ".join(words[:MAX_EMBED_WORDS])
+
+
+def _robust(embedder):
+    """Embeds in batches of 8, halving a batch the server refuses, with progress."""
+    def embed(texts):
+        out, step = [], 8
+        for start in range(0, len(texts), step):
+            out += _batch(embedder, texts[start:start + step])
+            if start % 200 == 0:
+                print(f"    ... embedded {start}/{len(texts)}", file=sys.stderr, flush=True)
+        return out
+    return embed
+
+
+def _batch(embedder, texts):
+    try:
+        return embedder.embed_documents(texts)
+    except embeddings.EmbeddingError:
+        if len(texts) == 1:
+            raise
+        middle = len(texts) // 2
+        return _batch(embedder, texts[:middle]) + _batch(embedder, texts[middle:])
+
+
+def build_methods(chunks, models: list[str], base_url: str, reranker=None, questions: list[str] = ()):
+    parents = {chunk.id: chunk for chunk in chunks if not chunk.is_child}
+    plain, with_q = retrieval.entries(chunks, with_questions=False), retrieval.entries(chunks, with_questions=True)
+    rerank = None
+    if reranker is not None:
+        texts = {pid: embedding_text(chunk) for pid, chunk in parents.items()}
+        rerank = lambda question, ids: reranker.score(question, [texts[i] for i in ids])
+    methods = []
+    bm25 = {False: retrieval.bm25_index(plain), True: retrieval.bm25_index(with_q)}
+    items = {False: plain, True: with_q}
+    for q in (False, True):
+        suffix = "+q" if q else ""
+        methods.append((retrieval.Method(f"bm25{suffix}", items[q], bm25=bm25[q]), {"candidate": True}))
+        if rerank:
+            methods.append((retrieval.Method(f"bm25{suffix}+rerank", items[q], bm25=bm25[q], rerank=rerank),
+                            {"candidate": True}))
     hashing = embeddings.HashingEmbedder()
-    vectors = hashing.embed_documents(texts)
-    methods += [(retrieval.Method("dense:hashing", chunks, vectors=vectors, embed_query=hashing.embed_query),
-                 {"candidate": False}),
-                (retrieval.Method("hybrid:hashing", chunks, bm25=bm25, vectors=vectors,
-                                  embed_query=hashing.embed_query), {"candidate": False})]
+    hv = hashing.embed_documents([item.text for item in plain])
+    methods.append((retrieval.Method("hybrid:hashing", plain, bm25=bm25[False], vectors=hv,
+                                     embed_query=hashing.embed_query), {"candidate": False}))
     ran = set()
-    for name in ollama:
-        spec = OLLAMA_MODELS[name]
-        embedder = embeddings.OpenAICompatibleEmbedder(
-            base_url, name, dimensions=spec["dims"],
-            query_instruction=embeddings.QWEN_QUERY_INSTRUCTION if spec["query"] is None else "", batch_size=32)
-        print(f"embedding {len(texts)} chunks with {name} (cached after the first run)", file=sys.stderr, flush=True)
-        vectors = retrieval.cached_vectors(CACHE, name.replace(":", "_"), [spec["doc"] + t for t in texts],
-                                           embedder.embed_documents)
-        query = (lambda q, e=embedder, p=spec["query"] or "": e.embed_query(p + q))
-        methods += [(retrieval.Method(f"dense:{name}", chunks, vectors=vectors, embed_query=query),
-                     {"candidate": spec["candidate"]}),
-                    (retrieval.Method(f"hybrid:{name}", chunks, bm25=bm25, vectors=vectors, embed_query=query),
-                     {"candidate": spec["candidate"]})]
+    for name in models:
+        embedder, candidate, query_fn = _embedder(name, base_url)
+        print(f"embedding {len(with_q)} entries with {name} (cached after the first run)", file=sys.stderr, flush=True)
+        prefix = OLLAMA_MODELS.get(name, {}).get("doc", "")
+        vectors_q = retrieval.cached_vectors(CACHE, name.replace(":", "_").replace("/", "_"),
+                                             [prefix + _clip(item.text) for item in with_q], _robust(embedder))
+        vectors = {True: vectors_q, False: vectors_q[:len(plain)]}  # plain entries are the leading items
+        embed_query = query_fn(embedder)
+        print(f"embedding {len(questions)} questions with {name}", file=sys.stderr, flush=True)
+        cached = retrieval.cached_vectors(CACHE, "q-" + name.replace(":", "_").replace("/", "_"),
+                                          list(questions), lambda qs: [embed_query(q) for q in qs])
+        table = dict(zip(questions, cached))
+        query = (lambda q, table=table, fallback=embed_query: table.get(q) or fallback(q))
+        # Free the model before loading the next one: this machine has little memory to spare.
+        close = getattr(embedder, "close", None)
+        if close:
+            close()
+        del embedder
+        import gc
+        gc.collect()
+        for q in (False, True):
+            suffix = "+q" if q else ""
+            methods.append((retrieval.Method(f"dense:{name}{suffix}", items[q], vectors=vectors[q],
+                                             embed_query=query), {"candidate": candidate}))
+            methods.append((retrieval.Method(f"hybrid:{name}{suffix}", items[q], bm25=bm25[q], vectors=vectors[q],
+                                             embed_query=query), {"candidate": candidate}))
+            if rerank:
+                methods.append((retrieval.Method(f"hybrid:{name}{suffix}+rerank", items[q], bm25=bm25[q],
+                                                 vectors=vectors[q], embed_query=query, rerank=rerank),
+                                {"candidate": candidate}))
         ran.add(name)
+    if reranker is not None:
+        ran.add("bge-reranker-v2-m3")
     return methods, ran
 
 
@@ -88,6 +153,8 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--corpus", type=Path, default=ROOT / "corpus/wave1")
     parser.add_argument("--ollama", action="append", default=[], choices=sorted(OLLAMA_MODELS))
+    parser.add_argument("--hf", action="append", default=[], choices=sorted(HF_MODELS))
+    parser.add_argument("--rerank", action="store_true", help=f"also rerank with {RERANKER} (cross-encoder)")
     parser.add_argument("--base-url", default=embeddings.DEFAULT_BASE_URL)
     parser.add_argument("--no-dashboard", action="store_true")
     args = parser.parse_args(argv)
@@ -98,11 +165,18 @@ def main(argv=None) -> int:
     chunks = chunk_documents(corpus.documents)
     gold = _jsonl(ROOT / "corpus/eval/gold.jsonl")
     harmful = _jsonl(ROOT / "corpus/eval/harmful.jsonl")
-    methods, ran = build_methods(chunks, args.ollama, args.base_url)
+    questions = [item["question"] for item in gold + harmful]
+    reranker = None
+    if args.rerank:
+        from companion_api.evaluation.models import LazyReranker
+        reranker = LazyReranker(RERANKER, CACHE / "rerank-scores.json")  # loads after the embedders are freed
+    methods, ran = build_methods(chunks, args.ollama + args.hf, args.base_url, reranker, questions)
     results, worst = {}, {}
     for method, info in methods:
         print(f"evaluating {method.name}", file=sys.stderr, flush=True)
         result = retrieval.evaluate(method, gold, harmful)
+        if reranker is not None:
+            reranker.save()
         per_question = result.pop("per_question")
         results[method.name] = {**result, "candidate": info["candidate"]}
         worst[method.name] = sorted(per_question, key=lambda r: (r["rank"] is not None, -(r["rank"] or 0)))[:20]
@@ -251,6 +325,13 @@ def dashboard(history: list[dict], questions: dict) -> str:
         f"<td>{h['methods'][h['best_by_mrr']]['overall']['r5']:.3f}</td><td>{len(h['methods'])}</td></tr>"
         for h in reversed(history[-30:]))
     blocked = "".join(f"<li><b>{_esc(k)}</b>: {_esc(v)}</li>" for k, v in run["blocked"].items())
+    score_file = ROOT / "reports/progress/score.json"
+    progress = ""
+    if score_file.is_file():
+        s = json.loads(score_file.read_text(encoding="utf-8"))
+        progress = (f'<p><b>Corpus-task progress: {s["total"]} / 100</b> — automated {s["automated"]} '
+                    f'(of {s["automated_possible"]} possible), human decisions {s["human"]} '
+                    f'(of {s["human_possible"]}). Computed {_esc(s["computed_at"])} by scripts/progress_score.py.</p>')
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Retrieval quality</title>
 <style>{STYLE}</style></head><body><main class="viz-root">
@@ -259,6 +340,7 @@ def dashboard(history: list[dict], questions: dict) -> str:
 {run['abstain_negatives']} unanswerable ones. Run {_esc(run['run_at'])}, commit {_esc(run['git_commit'][:12])}.
 <b>All questions are synthetic and pending approval</b>; the corpus is draft. Best by MRR:
 <b>{_esc(run['best_by_mrr'])}</b>.</p>
+{progress}
 <h2>Metrics (latest run)</h2><div class="wrap"><table><thead><tr><th>method</th><th>R@1</th><th>R@5</th>
 <th>R@10</th><th>MRR</th><th>nDCG@10</th><th>abstain acc. (2-fold)</th><th>threshold</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table></div>

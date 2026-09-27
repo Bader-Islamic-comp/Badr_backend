@@ -1,0 +1,636 @@
+{
+ "batch": 12,
+ "output": "corpus/reviews/ai_prereview/batch-12.jsonl",
+ "items": [
+  {
+   "item_id": "yusuf-10-msa",
+   "item_type": "gold_question",
+   "question": "كيف صبر يعقوب عليه السلام على فراق يوسف؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1",
+    "quran-012-080-086#1",
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-10-gulf",
+   "item_type": "gold_question",
+   "question": "كيف صبر يعقوب على فراق ولده يوسف؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1",
+    "quran-012-080-086#1",
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-10-misspelled",
+   "item_type": "gold_question",
+   "question": "كيف صبر يعقوب على فراق يوسف ومااياس",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1",
+    "quran-012-080-086#1",
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-10-arabizi",
+   "item_type": "gold_question",
+   "question": "kif sabar ya3qoob 3ala fra2 yusuf?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1",
+    "quran-012-080-086#1",
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-10-english_transliteration",
+   "item_type": "gold_question",
+   "question": "How was Yaqub patient when he lost Yusuf?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1",
+    "quran-012-080-086#1",
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-01-msa",
+   "item_type": "gold_question",
+   "question": "لماذا وضعت أم موسى ابنها في النهر؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-028-001-007#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-01-levantine",
+   "item_type": "gold_question",
+   "question": "ليش إم موسى حطّت ابنها بالنهر؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-028-001-007#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-01-misspelled",
+   "item_type": "gold_question",
+   "question": "ليش ام موسا حطت ابنها بالنهر",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-028-001-007#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-01-arabizi",
+   "item_type": "gold_question",
+   "question": "leish emm mousa 7attat ibna bel nahr?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-028-001-007#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-01-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Why did Musa's mother put her baby in the river?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-028-001-007#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-02-msa",
+   "item_type": "gold_question",
+   "question": "كيف رجع موسى الرضيع إلى أمه؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-028-008-013#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-02-egyptian",
+   "item_type": "gold_question",
+   "question": "موسى وهو صغير رجع لأمه إزاي؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-028-008-013#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-02-misspelled",
+   "item_type": "gold_question",
+   "question": "كيف رجع موسا الرضيع لامة",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-028-008-013#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-02-arabizi",
+   "item_type": "gold_question",
+   "question": "kif reje3 mousa el zghir la emmo?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-028-008-013#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-02-english_transliteration",
+   "item_type": "gold_question",
+   "question": "How did baby Musa return to his mother?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-028-008-013#1",
+    "quran-020-033-040#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-03-msa",
+   "item_type": "gold_question",
+   "question": "ماذا رأى موسى عليه السلام في الطريق فذهب إليه وكلمه الله؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-020-009-016#1",
+    "quran-028-029-035#1",
+    "quran-027-001-007#1",
+    "quran-027-008-014#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-03-gulf",
+   "item_type": "gold_question",
+   "question": "وش شاف موسى بالطريق وراح له وكلمه الله؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-020-009-016#1",
+    "quran-028-029-035#1",
+    "quran-027-001-007#1",
+    "quran-027-008-014#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-03-misspelled",
+   "item_type": "gold_question",
+   "question": "شو شاف موسا بالطريق وراحلة وكلمة الله",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-020-009-016#1",
+    "quran-028-029-035#1",
+    "quran-027-001-007#1",
+    "quran-027-008-014#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-03-arabizi",
+   "item_type": "gold_question",
+   "question": "shu shaf mousa bel tari2 w ra7 3ando w kallamo allah?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-020-009-016#1",
+    "quran-028-029-035#1",
+    "quran-027-001-007#1",
+    "quran-027-008-014#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-03-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did Musa see on the road before Allah spoke to him?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-020-009-016#1",
+    "quran-028-029-035#1",
+    "quran-027-001-007#1",
+    "quran-027-008-014#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-04-msa",
+   "item_type": "gold_question",
+   "question": "ماذا حدث لعصا موسى عندما ألقاها؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-020-017-024#1",
+    "quran-028-029-035#1",
+    "quran-027-008-014#1",
+    "quran-007-105-108#1",
+    "quran-026-026-033#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-04-levantine",
+   "item_type": "gold_question",
+   "question": "شو صار بعصاية موسى لما رماها؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-020-017-024#1",
+    "quran-028-029-035#1",
+    "quran-027-008-014#1",
+    "quran-007-105-108#1",
+    "quran-026-026-033#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-04-misspelled",
+   "item_type": "gold_question",
+   "question": "ماذا حدث لعصى موسا لما القاها",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-020-017-024#1",
+    "quran-028-029-035#1",
+    "quran-027-008-014#1",
+    "quran-007-105-108#1",
+    "quran-026-026-033#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-04-arabizi",
+   "item_type": "gold_question",
+   "question": "shu sar b 3asayet mousa lama rama7a?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-020-017-024#1",
+    "quran-028-029-035#1",
+    "quran-027-008-014#1",
+    "quran-007-105-108#1",
+    "quran-026-026-033#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-04-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What happened to Musa's staff when he threw it down?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-020-017-024#1",
+    "quran-028-029-035#1",
+    "quran-027-008-014#1",
+    "quran-007-105-108#1",
+    "quran-026-026-033#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-05-msa",
+   "item_type": "gold_question",
+   "question": "من الذي طلب موسى أن يكون معه في الدعوة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-020-025-032#1",
+    "quran-020-033-040#1",
+    "quran-028-029-035#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-05-egyptian",
+   "item_type": "gold_question",
+   "question": "موسى طلب مين يكون معاه وهو رايح لفرعون؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-020-025-032#1",
+    "quran-020-033-040#1",
+    "quran-028-029-035#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-05-misspelled",
+   "item_type": "gold_question",
+   "question": "مين الي طلب موسا يكون معو بالدعوه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-020-025-032#1",
+    "quran-020-033-040#1",
+    "quran-028-029-035#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-05-arabizi",
+   "item_type": "gold_question",
+   "question": "meen talab mousa ykoon ma3o w howe ray7 3a fer3on?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-020-025-032#1",
+    "quran-020-033-040#1",
+    "quran-028-029-035#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-05-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who did Musa ask to go with him to Firawn?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-020-025-032#1",
+    "quran-020-033-040#1",
+    "quran-028-029-035#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-06-msa",
+   "item_type": "gold_question",
+   "question": "ماذا حدث في المواجهة بين موسى والسحرة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-020-063-070#1",
+    "quran-007-109-114#1",
+    "quran-007-115-120#1",
+    "quran-007-121-126#1",
+    "quran-026-041-047#1",
+    "quran-026-048-052#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-06-gulf",
+   "item_type": "gold_question",
+   "question": "وش صار بين موسى والسحرة؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-020-063-070#1",
+    "quran-007-109-114#1",
+    "quran-007-115-120#1",
+    "quran-007-121-126#1",
+    "quran-026-041-047#1",
+    "quran-026-048-052#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-06-misspelled",
+   "item_type": "gold_question",
+   "question": "شو صار بين موسا والسحره",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-020-063-070#1",
+    "quran-007-109-114#1",
+    "quran-007-115-120#1",
+    "quran-007-121-126#1",
+    "quran-026-041-047#1",
+    "quran-026-048-052#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-06-arabizi",
+   "item_type": "gold_question",
+   "question": "shu sar bein mousa wel sa7ara?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-020-063-070#1",
+    "quran-007-109-114#1",
+    "quran-007-115-120#1",
+    "quran-007-121-126#1",
+    "quran-026-041-047#1",
+    "quran-026-048-052#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-06-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What happened when Musa faced the magicians?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-020-063-070#1",
+    "quran-007-109-114#1",
+    "quran-007-115-120#1",
+    "quran-007-121-126#1",
+    "quran-026-041-047#1",
+    "quran-026-048-052#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-07-msa",
+   "item_type": "gold_question",
+   "question": "كيف نجا موسى وقومه من فرعون عند البحر؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-026-059-064#1",
+    "quran-026-065-069#1",
+    "quran-020-077-083#1",
+    "quran-002-047-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-07-levantine",
+   "item_type": "gold_question",
+   "question": "كيف نجي موسى وجماعته من فرعون عند البحر؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-026-059-064#1",
+    "quran-026-065-069#1",
+    "quran-020-077-083#1",
+    "quran-002-047-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-07-misspelled",
+   "item_type": "gold_question",
+   "question": "كيف نجا موسا وقومة من فرعون عند البحر",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-026-059-064#1",
+    "quran-026-065-069#1",
+    "quran-020-077-083#1",
+    "quran-002-047-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-07-arabizi",
+   "item_type": "gold_question",
+   "question": "kif naja mousa w 2awmo mn fer3on 3end el ba7r?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-026-059-064#1",
+    "quran-026-065-069#1",
+    "quran-020-077-083#1",
+    "quran-002-047-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-07-english_transliteration",
+   "item_type": "gold_question",
+   "question": "How were Musa and his people saved from Firawn at the sea?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-026-059-064#1",
+    "quran-026-065-069#1",
+    "quran-020-077-083#1",
+    "quran-002-047-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-08-msa",
+   "item_type": "gold_question",
+   "question": "ما قصة العجل الذي عبده بنو إسرائيل؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-020-084-089#1",
+    "quran-020-090-097#1",
+    "quran-007-148-151#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-08-egyptian",
+   "item_type": "gold_question",
+   "question": "إيه حكاية العجل اللي عبدوه بني إسرائيل؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-020-084-089#1",
+    "quran-020-090-097#1",
+    "quran-007-148-151#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-08-misspelled",
+   "item_type": "gold_question",
+   "question": "ماقصه العجل الي عبدو بنو اسرائيل",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-020-084-089#1",
+    "quran-020-090-097#1",
+    "quran-007-148-151#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-08-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2esset el 3ejl elli 3abado bani israeel?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-020-084-089#1",
+    "quran-020-090-097#1",
+    "quran-007-148-151#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-08-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What is the story of the calf that Bani Israil worshipped?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-020-084-089#1",
+    "quran-020-090-097#1",
+    "quran-007-148-151#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-09-msa",
+   "item_type": "gold_question",
+   "question": "ما قصة موسى مع العبد الصالح والسفينة والجدار؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-018-060-065#1",
+    "quran-018-066-070#1",
+    "quran-018-071-076#1",
+    "quran-018-077-082#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-09-gulf",
+   "item_type": "gold_question",
+   "question": "وش قصة موسى مع العبد الصالح والسفينة والجدار؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-018-060-065#1",
+    "quran-018-066-070#1",
+    "quran-018-071-076#1",
+    "quran-018-077-082#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-09-misspelled",
+   "item_type": "gold_question",
+   "question": "ماقصه موسا مع العبد الصالح والسفينه والجدار",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-018-060-065#1",
+    "quran-018-066-070#1",
+    "quran-018-071-076#1",
+    "quran-018-077-082#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-09-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2esset mousa ma3 el 3abd el saleh wel safine wel 7eit?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-018-060-065#1",
+    "quran-018-066-070#1",
+    "quran-018-071-076#1",
+    "quran-018-077-082#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-09-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What is the story of Musa, the wise servant, the boat and the wall?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-018-060-065#1",
+    "quran-018-066-070#1",
+    "quran-018-071-076#1",
+    "quran-018-077-082#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  }
+ ]
+}

@@ -74,3 +74,18 @@
 | 2026-09-27 | 6 | قرار (6): الوثائق الحقيقية بصيغة v1 (بدون sourceIds) ما عادت قابلة للإصدار؛ `pipeline build` بياخد `--registry` | تعديل fixtures اختبارين قديمين ليستشهدوا بمصدر مسجّل (بدل تخفيف القاعدة) | `src/companion_api/rag/pipeline.py`, `tests/test_rag_pipeline.py`, `tests/test_rag_runtime.py` |
 | 2026-09-27 | 6 | `scan_index.py` + `test_no_child_content.py` (24) | wave1-dev-3 نظيف؛ wave1-dev-1 (قبل القائمة) مكشوف | `scripts/scan_index.py`, `tests/test_no_child_content.py` |
 | 2026-09-27 | 6 | كل المشروع + check_progress كامل (9 أوامر دليل) | 623 passed؛ 0 تعارض | — |
+| 2026-09-27 | B1 | git: كل الـ commits على branch `corpus-tasks`؛ `main` رجع لـ bd15d42؛ push رُفض (403: momenalhamza بدون صلاحية كتابة على Bader-Islamic-comp/Badr_backend) | محتاج صلاحية أو fork | — |
+| 2026-09-27 | B1 | تنزيل: qwen3-embedding:0.6b (Ollama)، bge-m3 (Ollama ثم HF)، multilingual-e5-large، bge-reranker-v2-m3 | القرص 34 → ~25 GB فاضي | — |
+| 2026-09-27 | B1 | الأسئلة الافتراضية: 552 (3 لكل قطعة من 184: فصحى، عامية، عربيزي) كتبتها بعد قراءة كل مقطع؛ فحص الـ 5-grams رفض 4 كانت بتقتبس لفظ آيات → أعدت صياغتها | `generated: true`، ما بتنعرض للطفل | `corpus/candidate/retrieval_questions.json`, `scripts/build_corpus.py` |
+| 2026-09-27 | B1 | خطأ: bge-m3 عبر Ollama بيرجّع NaN (HTTP 500) على هالنص حتى بدون تشكيل (39/60) → تشغيله عبر transformers (BAAI/bge-m3، CLS) | — | `src/companion_api/evaluation/models.py` |
+| 2026-09-27 | B1 | خطأ: Ollama رفض دفعات فيها نصوص طويلة → قص مدخل الـ embedding لـ 350 كلمة (الأجزاء الحرفية بتغطي الباقي) + دفعات تنقسم عند الخطأ | — | `scripts/eval_retrieval.py` |
+| 2026-09-27 | B1 | الذاكرة: 3 GB فاضي؛ Ollama حاجز 2.4 GB → `ollama stop`؛ الموديلات bf16 وواحد بكل مرة، والـ reranker بيتحمّل آخر شي | — | `scripts/eval_retrieval.py`, `models.py` |
+| 2026-09-27 | B1 | ملاحظة: bm25+q قفز لـ R@5 0.671 من 0.287 — مشكوك: نفس الكاتب (أنا) كتب gold والأسئلة الافتراضية → تسرّب | لازم gold مستقل قبل ما نعتمد الرقم | — |
+| 2026-09-27 | B2 | الوكيل B: `.claude/agents/corpus-reviewer.md`؛ 15 دفعة (567 بند) كل دفعة وكيل جديد بدون سياق؛ الوكيل المخصّص ما انسجّل بهالجلسة فاستخدمت general-purpose بتعليمات الملف | 567/567؛ 0 مشاكل schema؛ 0 كتابة برا `corpus/reviews/` | `corpus/reviews/ai_prereview/`, `scripts/prereview_batches.py` |
+| 2026-09-27 | B2 | قيد: بعض وكلاء B ما لقوا Grep/Glob (Read بس) فخفّضوا الثقة ببعض البنود | مسجّل بـ reasons | — |
+| 2026-09-27 | B2 | مراجع خارجي (LiteLLM): ما في `.env` ولا مفتاح مزوّد → تخطّيت | — | — |
+| 2026-09-27 | B2 | B لقى: 2:259 مش عن إبراهيم (fail)؛ حديث الخمسين صلاة صحيح وموصوف كموضوع (flag)؛ سؤال "إماطة الأذى صدقة" قطعته ما فيها الطريق (5 fail)؛ الإصدار بيقبل مصادر pending_legal (flag سياسة)؛ ۞ و۩ موجودين رغم "بدون علامات" | الوصف بالـ registry انصلح (النص ما تغيّر)؛ الباقي بحزم القرار | `corpus/sources/registry.yaml` |
+| 2026-09-27 | B3 | حالة `cleared` (بس عبر apply_decisions)؛ المنشور بيحتاج كل المصادر cleared؛ review.py ما عاد بيقبل approve/reject بدون decision_id | — | `src/companion_api/governance/decisions.py`, `releases.py`, `review.py`, `corpusprep/registry.py` |
+| 2026-09-27 | B3 | `apply_decisions.py` + `decisions.yaml` فاضي + 6 حزم قرار | اختبارات 11 | `doc/decisions/`, `scripts/apply_decisions.py`, `scripts/build_decision_packages.py`, `tests/test_decisions.py` |
+| 2026-09-27 | B4 | `progress_score.py` + `doc/progress_items.yaml` (بنود M/H بأوزان، كل تاسك 100/15) | تشغيل جاف: 52.0 (كله آلي) | `scripts/progress_score.py`, `doc/progress_items.yaml` |
+| 2026-09-27 | B3 | قرار (6): حزمة 04 فيها نص آيات وأحاديث منقول → برا git (نفس قاعدة canonical)، وبتتولّد بأمر | — | `.gitignore`, `doc/decisions/README.md` |

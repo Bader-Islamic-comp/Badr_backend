@@ -76,6 +76,11 @@ def build(corpus_dir: Path, releases_root: Path, release_id: str, *, registry_pa
         raise ReleaseError("no document is eligible for a release")
     if channel == "published" and any(d.synthetic or d.review.status != "approved" for d in kept):
         raise ReleaseError("the published channel needs every document approved and non-synthetic")
+    if channel == "published":
+        uncleared = sorted({sid for d in kept for sid in d.source_ids if status[sid] != "cleared"})
+        if uncleared:
+            raise ReleaseError("the published channel needs every source cleared by the rights owner "
+                               f"(doc/decisions/decisions.yaml); not cleared: {', '.join(uncleared)}")
     chunks = [replace(chunk, release_id=release_id) for chunk in chunk_documents(kept)]
     embedder = embeddings.embedder_for(embedding_model, embedding_base_url)
     try:

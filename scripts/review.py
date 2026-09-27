@@ -7,7 +7,8 @@
     python scripts/review.py revise     ITEM --actor AUTHOR
     python scripts/review.py quarantine ITEM --actor NAME --reason TEXT
 
-ITEM is `<draft id>@<band>`, e.g. story-yusuf-s01@7-9. Approval needs a qualified reviewer from
+approve and reject are refused here: they come only from doc/decisions/decisions.yaml through
+scripts/apply_decisions.py. ITEM is `<draft id>@<band>`, e.g. story-yusuf-s01@7-9. Approval needs a qualified reviewer from
 corpus/governance/reviewers.yaml who is not the author and has no declared conflict. Every change
 is written to corpus/governance/audit.jsonl first.
 """

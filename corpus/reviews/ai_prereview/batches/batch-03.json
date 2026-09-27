@@ -1,0 +1,78 @@
+{
+ "batch": 3,
+ "output": "corpus/reviews/ai_prereview/batch-03.jsonl",
+ "items": [
+  {
+   "item_id": "map-yusuf-02",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:7-18",
+   "stated_topic": "الإخوة والبئر",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-03",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:19-22",
+   "stated_topic": "السيارة وبيت العزيز",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-04",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:23-34",
+   "stated_topic": "الامتحان والصبر",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-05",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:35-42",
+   "stated_topic": "السجن وتعبير الرؤى",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-06",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:43-57",
+   "stated_topic": "رؤيا الملك والخروج من السجن",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-07",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:58-82",
+   "stated_topic": "قدوم الإخوة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-08",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:83-98",
+   "stated_topic": "حزن يعقوب واللقاء",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-09",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:99-101",
+   "stated_topic": "اجتماع الأسرة وتحقق الرؤيا",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-10",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:40:34",
+   "stated_topic": "ذكر يوسف في سورة غافر",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  }
+ ]
+}

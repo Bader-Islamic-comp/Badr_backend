@@ -1,0 +1,61 @@
+# Acceptance items per corpus task, for scripts/progress_score.py. Taken from doc/corpus-tasks.md.
+# kind M = automated: done when every `evidence` path exists and every command exits 0.
+# kind H = human: done when every item matching `decisions` (glob over decision item ids) has an applied
+#          final decision (approve/reject; a source: cleared/rejected) in corpus/governance/decision_state.json
+#          AND an event for it in corpus/governance/audit.jsonl. `owner` says who must decide.
+# Weights are relative within a task; every task counts 100/15 of the total.
+schema_version: 1
+tasks:
+  1:
+    - {id: 1a, kind: M, weight: 40, text: Scope and out-of-scope draft, evidence: [doc/governance/scope.md]}
+    - {id: 1b, kind: H, weight: 60, text: Scope approved, owner: Mousa al-Rashdan, decisions: [policy-scope]}
+  2:
+    - {id: 2a, kind: M, weight: 30, text: Registry with sha256 and verified fetch, evidence: [corpus/sources/registry.yaml, "PYTHONPATH=src python3 -m pytest -q tests/test_corpusprep.py"]}
+    - {id: 2b, kind: M, weight: 20, text: Source policy draft, evidence: [doc/governance/source-policy.md]}
+    - {id: 2c, kind: H, weight: 25, text: Source policy approved, owner: Mousa al-Rashdan, decisions: [policy-source-policy]}
+    - {id: 2d, kind: H, weight: 25, text: Every registered source accepted or rejected, owner: Mousa al-Rashdan, decisions: ["source:*"]}
+  3:
+    - {id: 3a, kind: M, weight: 30, text: Rights table with verbatim terms, evidence: [doc/governance/rights-clearance.md, "python3 scripts/rights_table.py"]}
+    - {id: 3b, kind: M, weight: 20, text: Licensing decision package with draft permission emails, evidence: [doc/decisions/01-licensing.md]}
+    - {id: 3c, kind: H, weight: 50, text: Every source cleared or rejected by the rights owner, owner: Mousa al-Rashdan, decisions: ["source:*"]}
+  4:
+    - {id: 4a, kind: M, weight: 30, text: Reviewer policy and enforcement tests, evidence: [doc/governance/reviewer-policy.md, "PYTHONPATH=src python3 -m pytest -q tests/test_governance.py tests/test_decisions.py"]}
+    - {id: 4b, kind: M, weight: 10, text: Reviewer template decision package, evidence: [doc/decisions/02-reviewers.md]}
+    - {id: 4c, kind: H, weight: 20, text: Reviewer policy approved, owner: Mousa al-Rashdan, decisions: [policy-reviewer-policy]}
+    - {id: 4d, kind: H, weight: 40, text: Reviewers named and approved, owner: Mousa al-Rashdan, decisions: [reviewers]}
+  5:
+    - {id: 5a, kind: M, weight: 60, text: Immutable releases, pointer, rollback, quarantine, cleared-only published, evidence: [scripts/build_release.py, scripts/rollback.py, "PYTHONPATH=src python3 -m pytest -q tests/test_governance.py"]}
+    - {id: 5b, kind: H, weight: 40, text: Release policy approved, owner: Mousa al-Rashdan, decisions: [policy-releases]}
+  6:
+    - {id: 6a, kind: M, weight: 50, text: Review CLI and signed-decision application, evidence: [scripts/review.py, scripts/apply_decisions.py, "python3 scripts/apply_decisions.py --check"]}
+    - {id: 6b, kind: M, weight: 10, text: Admin interface documented, evidence: [doc/governance/review-workflow.md]}
+    - {id: 6c, kind: H, weight: 40, text: Review workflow approved, owner: Mousa al-Rashdan, decisions: [policy-review-workflow]}
+  7:
+    - {id: 7a, kind: M, weight: 70, text: Hash-chained audit trail verified, evidence: ["python3 scripts/verify_audit.py"]}
+    - {id: 7b, kind: H, weight: 30, text: Audit and retention rules approved (in the review workflow policy), owner: Mousa al-Rashdan, decisions: [policy-review-workflow]}
+  8:
+    - {id: 8a, kind: M, weight: 50, text: Re-review triggers tool and tests, evidence: [scripts/due_for_review.py, "PYTHONPATH=src python3 -m pytest -q tests/test_governance.py"]}
+    - {id: 8b, kind: H, weight: 50, text: Re-review cadence approved, owner: Mousa al-Rashdan, decisions: [policy-re-review-policy]}
+  9:
+    - {id: 9a, kind: M, weight: 30, text: Schema v2, chunk-v2, norm-v2, evidence: ["PYTHONPATH=src python3 -m pytest -q tests/test_rag_chunk_v2.py tests/test_corpusprep_ingest.py"]}
+    - {id: 9b, kind: M, weight: 20, text: Layer 0 and Wave 1 corpora built and validated, evidence: [corpus/reports/ingest_summary.json]}
+    - {id: 9c, kind: M, weight: 10, text: Aliases, source maps and hadith selection checked, evidence: [corpus/aliases.yaml, corpus/candidate/hadith_selection.yaml]}
+    - {id: 9d, kind: M, weight: 10, text: Generated retrieval questions (3 per Wave 1 chunk), evidence: [corpus/candidate/retrieval_questions.json]}
+    - {id: 9e, kind: H, weight: 20, text: Prophet source-map ranges decided by a scholarly reviewer, owner: scholarly board, decisions: ["map-*"]}
+    - {id: 9f, kind: H, weight: 10, text: Wave 1 hadith selection decided by a scholarly reviewer, owner: scholarly board, decisions: ["selection-*"]}
+  10:
+    - {id: 10a, kind: M, weight: 40, text: Age-band schema, templates, checker, writing guide, evidence: [corpus/drafts/age_band/schema.json, corpus/drafts/age_band/WRITING_GUIDE.md, "python3 scripts/age_band.py check"]}
+    - {id: 10b, kind: H, weight: 60, text: Every age-band version written by a person and approved by a qualified reviewer, owner: writers + scholarly board, decisions: ["*@7-9", "*@10-11"]}
+  11:
+    - {id: 11a, kind: M, weight: 70, text: BM25, BGE-M3, e5-large, Qwen3 and hybrid RRF measured with/without reranker and questions, evidence: [doc/adr-0005-embedding-selection.md], history_methods: [bm25, "hybrid:bge-m3", "hybrid:multilingual-e5-large", "hybrid:qwen3-embedding:0.6b", "hybrid:bge-m3+rerank", "hybrid:bge-m3+q"]}
+    - {id: 11b, kind: H, weight: 30, text: ADR 0005 accepted, owner: Momen Alhamza, decisions: [adr-0005]}
+  12:
+    - {id: 12a, kind: M, weight: 40, text: 300+ gold questions with resolved expected chunks, evidence: [corpus/eval/gold.jsonl, "PYTHONPATH=src python3 -m pytest -q tests/test_eval_retrieval.py"]}
+    - {id: 12b, kind: H, weight: 60, text: Every gold question approved or rejected, owner: Momen Alhamza, decisions: ["adam-*", "nuh-*", "ibrahim-*", "yusuf-*", "musa-*", "hadith-*"]}
+  13:
+    - {id: 13a, kind: M, weight: 40, text: 150+ harmful questions with expected routes, evidence: [corpus/eval/harmful.jsonl]}
+    - {id: 13b, kind: H, weight: 60, text: Every harmful question approved or rejected, owner: Momen Alhamza (safety items with the safeguarding lead), decisions: ["ruling_request-*", "out_of_corpus_religious-*", "out_of_scope_general-*", "fabricated_hadith_request-*", "prophet_mixup-*", "prompt_injection-*", "personal_data-*", "distress_disclosure-*"]}
+  14:
+    - {id: 14a, kind: M, weight: 100, text: Offline dashboard with history, variants and worst 20, evidence: [reports/retrieval/index.html, reports/retrieval/history.jsonl, scripts/eval_retrieval.py]}
+  15:
+    - {id: 15a, kind: M, weight: 100, text: Single-writer gate, schema refusal, conversation-indexing test, import guard, index scan, evidence: ["PYTHONPATH=src python3 -m pytest -q tests/test_no_child_content.py", "python3 scripts/scan_index.py"]}

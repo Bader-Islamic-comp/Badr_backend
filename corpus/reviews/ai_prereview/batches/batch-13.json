@@ -1,0 +1,531 @@
+{
+ "batch": 13,
+ "output": "corpus/reviews/ai_prereview/batch-13.jsonl",
+ "items": [
+  {
+   "item_id": "musa-10-msa",
+   "item_type": "gold_question",
+   "question": "ماذا حدث لفرعون في النهاية؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-010-088-092#1",
+    "quran-020-077-083#1",
+    "quran-026-065-069#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-10-levantine",
+   "item_type": "gold_question",
+   "question": "شو صار بفرعون بالآخر؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-010-088-092#1",
+    "quran-020-077-083#1",
+    "quran-026-065-069#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-10-misspelled",
+   "item_type": "gold_question",
+   "question": "ماذا حدث لفرعون فى النهايه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-010-088-092#1",
+    "quran-020-077-083#1",
+    "quran-026-065-069#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-10-arabizi",
+   "item_type": "gold_question",
+   "question": "shu sar b fer3on bel a5er?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-010-088-092#1",
+    "quran-020-077-083#1",
+    "quran-026-065-069#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "musa-10-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What happened to Firawn in the end?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-010-088-092#1",
+    "quran-020-077-083#1",
+    "quran-026-065-069#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-niyyah-msa",
+   "item_type": "gold_question",
+   "question": "ما الحديث الذي يتحدث عن أن الأعمال بالنيات؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-54#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-niyyah-egyptian",
+   "item_type": "gold_question",
+   "question": "فيه حديث بيقول إن الأعمال بالنية؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-bukhari-54#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-niyyah-misspelled",
+   "item_type": "gold_question",
+   "question": "ماالحديث الي بيحكي ان الاعمال بالنيه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-54#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-niyyah-arabizi",
+   "item_type": "gold_question",
+   "question": "fi 7adith 3an en el a3mal bel niyye?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-54#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-niyyah-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Is there a hadith that says actions are judged by intentions?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-54#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-pillars-msa",
+   "item_type": "gold_question",
+   "question": "على كم شيء بني الإسلام كما في الحديث؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-8#1",
+    "hadith-muslim-93#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-pillars-gulf",
+   "item_type": "gold_question",
+   "question": "الإسلام مبني على كم شي بالحديث؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-bukhari-8#1",
+    "hadith-muslim-93#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-pillars-misspelled",
+   "item_type": "gold_question",
+   "question": "على كم شي بنى الاسلام بالحديث",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-8#1",
+    "hadith-muslim-93#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-pillars-arabizi",
+   "item_type": "gold_question",
+   "question": "el islam mabni 3ala kam shi bel 7adith?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-8#1",
+    "hadith-muslim-93#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-pillars-english_transliteration",
+   "item_type": "gold_question",
+   "question": "According to the hadith, how many things is Islam built on?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-8#1",
+    "hadith-muslim-93#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-love-brother-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال النبي صلى الله عليه وسلم عن حب الخير للآخرين؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-13#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-love-brother-levantine",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن إنك تحب لأخوك متل ما بتحب لحالك؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-bukhari-13#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-love-brother-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن حب الخير للاخرين",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-13#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-love-brother-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al el nabi 3an enno t7eb la a5ook mitl ma bt7eb la 7alak?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-13#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-love-brother-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet say about loving for your brother what you love for yourself?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-13#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-anger-msa",
+   "item_type": "gold_question",
+   "question": "ماذا نصح النبي صلى الله عليه وسلم الرجل الذي طلب وصية؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6116#1",
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-anger-egyptian",
+   "item_type": "gold_question",
+   "question": "النبي قال إيه عن الغضب؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6116#1",
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-anger-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن الغضب ومين القوي",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6116#1",
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-anger-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al el nabi 3an el ghadab?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6116#1",
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-anger-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet say about getting angry?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6116#1",
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-speak-good-msa",
+   "item_type": "gold_question",
+   "question": "ما الحديث الذي يأمر بقول الخير أو الصمت وإكرام الضيف؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-173#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-speak-good-gulf",
+   "item_type": "gold_question",
+   "question": "وش الحديث اللي يقول قل خير أو اسكت واكرم الضيف؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-muslim-173#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-speak-good-misspelled",
+   "item_type": "gold_question",
+   "question": "ماالحديث الي بيقول قول خير او اسكت واكرم الضيف",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-173#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-speak-good-arabizi",
+   "item_type": "gold_question",
+   "question": "shu el 7adith elli bi2ool 2ool khair aw eskot?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-173#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-speak-good-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Which hadith says to say something good or stay quiet and honour your guest?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-173#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-purity-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال النبي صلى الله عليه وسلم عن الطهور والنظافة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-534#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-purity-levantine",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن الطهارة؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-muslim-534#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-purity-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن الطهور والنظافه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-534#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-purity-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al el nabi 3an el taharah?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-534#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-purity-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet say about purity and being clean?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-534#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-charity-joints-msa",
+   "item_type": "gold_question",
+   "question": "هل إزالة الأذى من الطريق صدقة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2707#1",
+    "hadith-muslim-153#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-charity-joints-egyptian",
+   "item_type": "gold_question",
+   "question": "لو شلت حاجة بتأذي الناس من الطريق تبقى صدقة؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2707#1",
+    "hadith-muslim-153#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-charity-joints-misspelled",
+   "item_type": "gold_question",
+   "question": "هل ازاله الاذى من الطريق صدقه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2707#1",
+    "hadith-muslim-153#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-charity-joints-arabizi",
+   "item_type": "gold_question",
+   "question": "iza shilt shi bi2azi mn el tari2 btsir sada2a?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2707#1",
+    "hadith-muslim-153#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-charity-joints-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Is removing something harmful from the road a kind of charity?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2707#1",
+    "hadith-muslim-153#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-envy-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال النبي صلى الله عليه وسلم عن الحسد والأخوة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-6541#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-envy-gulf",
+   "item_type": "gold_question",
+   "question": "وش قال النبي عن الحسد وإننا نكون إخوان؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-muslim-6541#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-envy-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن الحسد والاخوه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-6541#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-envy-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al el nabi 3an el 7asad?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-6541#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-envy-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet say about envy and being brothers?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-6541#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-relieve-msa",
+   "item_type": "gold_question",
+   "question": "ما جزاء من يساعد غيره ويفرج عنه كربته؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-6853#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-relieve-levantine",
+   "item_type": "gold_question",
+   "question": "شو أجر اللي بيساعد حدا زعلان وبيفرّج عنه؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-muslim-6853#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-relieve-misspelled",
+   "item_type": "gold_question",
+   "question": "ماجزاء الي بيساعد غيرة ويفرج عنة",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-6853#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-relieve-arabizi",
+   "item_type": "gold_question",
+   "question": "shu ajr elli bisa3ed 7ada w bifarrej 3anno?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-6853#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-relieve-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What is the reward for helping someone who is in trouble?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-6853#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  }
+ ]
+}

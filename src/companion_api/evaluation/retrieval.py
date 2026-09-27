@@ -37,14 +37,32 @@ def parent_of(chunk: Chunk) -> str:
     return chunk.parent_id if chunk.is_child else chunk.id
 
 
-def bm25_index(chunks: Sequence[Chunk]) -> BM25:
-    return BM25([normalize.content_tokens(chunk.context_header + " " + chunk.search_text) for chunk in chunks])
+@dataclass
+class Entry:
+    """One indexed item: a chunk, or a generated question pointing at its chunk's parent."""
+    parent: str
+    text: str            # what is embedded
+    search: str          # what BM25 reads
 
 
-def _collapse(chunks: Sequence[Chunk], order: list[tuple[int, float]]) -> list[str]:
+def entries(chunks: Sequence[Chunk], *, with_questions: bool) -> list[Entry]:
+    items = [Entry(parent_of(chunk), embedding_text(chunk), chunk.context_header + " " + chunk.search_text)
+             for chunk in chunks]
+    if with_questions:
+        for chunk in chunks:
+            if not chunk.is_child:
+                items += [Entry(chunk.id, question, question) for question in chunk.generated_questions]
+    return items
+
+
+def bm25_index(items: Sequence[Entry]) -> BM25:
+    return BM25([normalize.content_tokens(item.search) for item in items])
+
+
+def _collapse(items: Sequence[Entry], order: list[tuple[int, float]]) -> list[str]:
     seen, parents = set(), []
     for position, _ in order:
-        parent = parent_of(chunks[position])
+        parent = items[position].parent
         if parent not in seen:
             seen.add(parent)
             parents.append(parent)
@@ -52,11 +70,13 @@ def _collapse(chunks: Sequence[Chunk], order: list[tuple[int, float]]) -> list[s
 
 
 class Method:
-    """One retrieval configuration: `rank(question) -> Ranked`."""
+    """One retrieval configuration: `rank(question) -> Ranked`. An optional reranker rescores the top parents."""
 
-    def __init__(self, name: str, chunks: Sequence[Chunk], *, bm25: BM25 | None = None,
-                 vectors: list[list[float]] | None = None, embed_query: Callable[[str], list[float]] | None = None):
-        self.name, self.chunks, self.bm25, self.vectors, self.embed_query = name, chunks, bm25, vectors, embed_query
+    def __init__(self, name: str, items: Sequence[Entry], *, bm25: BM25 | None = None,
+                 vectors: list[list[float]] | None = None, embed_query: Callable[[str], list[float]] | None = None,
+                 rerank: Callable[[str, list[str]], list[float]] | None = None, rerank_k: int = 30):
+        self.name, self.items, self.bm25, self.vectors, self.embed_query = name, items, bm25, vectors, embed_query
+        self.rerank, self.rerank_k = rerank, rerank_k
 
     def _lexical(self, question: str) -> list[tuple[int, float]]:
         return self.bm25.top(normalize.content_tokens(question), BRANCH_K * 4)
@@ -67,7 +87,7 @@ class Method:
                         key=lambda item: (-item[1], item[0]))
         return scored[:BRANCH_K * 4]
 
-    def rank(self, question: str) -> Ranked:
+    def _first_stage(self, question: str) -> Ranked:
         lexical = self._lexical(question) if self.bm25 is not None else None
         dense = self._dense(question) if self.vectors is not None else None
         if lexical is not None and dense is not None:
@@ -76,9 +96,18 @@ class Method:
                 for rank, (position, _) in enumerate(branch, 1):
                     fused[position] = fused.get(position, 0.0) + 1 / (RRF_K + rank)
             order = sorted(fused.items(), key=lambda item: (-item[1], item[0]))
-            return Ranked(_collapse(self.chunks, order), dense[0][1] if dense else 0.0)
+            return Ranked(_collapse(self.items, order), dense[0][1] if dense else 0.0)
         order = lexical if lexical is not None else dense
-        return Ranked(_collapse(self.chunks, order), order[0][1] if order else 0.0)
+        return Ranked(_collapse(self.items, order), order[0][1] if order else 0.0)
+
+    def rank(self, question: str) -> Ranked:
+        first = self._first_stage(question)
+        if self.rerank is None or not first.parents:
+            return first
+        head = first.parents[:self.rerank_k]
+        scores = self.rerank(question, head)
+        order = sorted(range(len(head)), key=lambda i: (-scores[i], i))
+        return Ranked([head[i] for i in order] + first.parents[self.rerank_k:], max(scores))
 
 
 def metrics_for(ranked: Ranked, expected: Sequence[str]) -> dict:
@@ -162,5 +191,14 @@ def cached_vectors(cache: Path, name: str, texts: list[str], embed: Callable[[li
     return vectors
 
 
-def document_texts(chunks: Sequence[Chunk]) -> list[str]:
-    return [embedding_text(chunk) for chunk in chunks]
+
+
+def memo(function: Callable[[str], list[float]]) -> Callable[[str], list[float]]:
+    """Caches query embeddings: every method using one embedder asks for the same questions."""
+    cache: dict[str, list[float]] = {}
+
+    def wrapped(text: str) -> list[float]:
+        if text not in cache:
+            cache[text] = function(text)
+        return cache[text]
+    return wrapped

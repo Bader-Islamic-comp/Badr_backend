@@ -18,7 +18,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from companion_api.corpusprep import candidates, cluster, ingest, quran, registry as registry_module  # noqa: E402
+from companion_api.corpusprep import age_band, candidates, cluster, ingest, quran, registry as registry_module  # noqa: E402
 from companion_api.corpusprep.segments import load_metadata, segment, verify_cover  # noqa: E402
 from companion_api.rag.chunking import VERSION as CHUNKER, chunk_documents  # noqa: E402
 from companion_api.rag.corpus import load_corpus, word_count  # noqa: E402
@@ -115,6 +115,18 @@ def main(argv=None) -> int:
     built_quran = ingest.quran_documents(segments, ayat, tafsir, surah_names, registry, prophets_by_ayah)
     built_hadith = ingest.hadith_documents(hadith_rows, clusters, links, registry)
     layer0 = built_quran.documents + built_hadith.documents
+    _log("attaching generated retrieval questions (checked against sacred text)")
+    generated = json.loads((base / "candidate/retrieval_questions.json").read_text(encoding="utf-8"))
+    sacred = age_band.SacredIndex([row["text_simple"] for row in ayat_rows],
+                                  [row["arabic_text"] for row in hadith_rows.values()] +
+                                  [row["arabic_text"] for row in nawawi_rows])
+    refused = [(doc_id, q) for doc_id, qs in generated["questions"].items() for q in qs if sacred.overlaps(q)]
+    if refused:
+        raise SystemExit(f"FAILED: {len(refused)} generated questions repeat sacred text, e.g. {refused[:3]}")
+    questions_by_doc = generated["questions"]
+    for doc in layer0:
+        if doc["id"] in questions_by_doc:
+            doc["generatedQuestions"] = questions_by_doc[doc["id"]]
     ingest.write_corpus(base / "layer0", "layer0", "Layer 0 reference text (development index)",
                         "Quran (Tanzil), Tafsir al-Muyassar (candidate licence), Sahih al-Bukhari and Sahih Muslim "
                         "cluster primaries. Draft, not reviewed, not for children.", layer0)
@@ -150,6 +162,7 @@ def main(argv=None) -> int:
         "skipped": {**built_quran.skipped, **built_hadith.skipped},
         "long_hadith_with_parts": sum(1 for doc in built_hadith.documents if doc["units"][0]["parts"]),
         "wave1_prophet_segments": len(wave_segments), "wave1_hadith": len(chosen),
+        "generated_questions": sum(len(doc["generatedQuestions"]) for doc in wave1),
     }
     summary["layer0"] = _validate(base / "layer0")
     summary["wave1"] = _validate(base / "wave1")

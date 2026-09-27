@@ -1,0 +1,521 @@
+{
+ "batch": 11,
+ "output": "corpus/reviews/ai_prereview/batch-11.jsonl",
+ "items": [
+  {
+   "item_id": "ibrahim-08-msa",
+   "item_type": "gold_question",
+   "question": "ما قصة الطيور الأربعة مع إبراهيم عليه السلام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-258-260#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "ibrahim-08-egyptian",
+   "item_type": "gold_question",
+   "question": "إيه حكاية الأربع طيور مع إبراهيم؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-002-258-260#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "ibrahim-08-misspelled",
+   "item_type": "gold_question",
+   "question": "ماقصه الطيور الاربعه مع ابراهيم",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-258-260#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "ibrahim-08-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2esset el arba3 tyoor ma3 ibrahim?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-258-260#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "ibrahim-08-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What is the story of Ibrahim and the four birds?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-258-260#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-01-msa",
+   "item_type": "gold_question",
+   "question": "ماذا رأى يوسف عليه السلام في منامه وهو صغير؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-001-006#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-01-gulf",
+   "item_type": "gold_question",
+   "question": "وش شاف يوسف في منامه وهو صغير؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-012-001-006#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-01-misspelled",
+   "item_type": "gold_question",
+   "question": "ماذا راى يوسف فى منامة وهو صغير",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-001-006#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-01-arabizi",
+   "item_type": "gold_question",
+   "question": "shu shaf yusuf b manamo w howe zghir?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-001-006#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-01-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did Prophet Yusuf see in his dream when he was young?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-001-006#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-02-msa",
+   "item_type": "gold_question",
+   "question": "لماذا غار إخوة يوسف منه؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-02-levantine",
+   "item_type": "gold_question",
+   "question": "ليش إخوة يوسف غاروا منه؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-02-misspelled",
+   "item_type": "gold_question",
+   "question": "ليش اخوه يوسف غارو منه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-02-arabizi",
+   "item_type": "gold_question",
+   "question": "leish ekhwet yusuf gharo meno?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-02-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Why were Yusuf's brothers jealous of him?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-03-msa",
+   "item_type": "gold_question",
+   "question": "أين ألقى الإخوة يوسف عليه السلام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1",
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-03-egyptian",
+   "item_type": "gold_question",
+   "question": "إخوات يوسف رموه فين؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1",
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-03-misspelled",
+   "item_type": "gold_question",
+   "question": "وين رمو اخوه يوسف يوسف",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1",
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-03-arabizi",
+   "item_type": "gold_question",
+   "question": "wein rmo ekhwet yusuf yusuf? bel bir?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1",
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-03-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Where did the brothers throw Yusuf?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-007-013#1",
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-04-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال الإخوة لأبيهم عندما عادوا بدون يوسف؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-04-gulf",
+   "item_type": "gold_question",
+   "question": "وش قالوا الإخوان لأبوهم لما رجعوا بدون يوسف؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-04-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قالو الاخوه لابوهم لما رجعو بدون يوسف",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-04-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2alo el ekhwe la abuhom lama rij3o bdoon yusuf?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-04-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the brothers tell their father when they came back without Yusuf?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-014-020#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-05-msa",
+   "item_type": "gold_question",
+   "question": "من الذين دخلوا السجن مع يوسف وماذا رأوا في المنام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-036-042#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-05-levantine",
+   "item_type": "gold_question",
+   "question": "مين اللي فاتوا عالسجن مع يوسف وشو شافوا بالمنام؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-012-036-042#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-05-misspelled",
+   "item_type": "gold_question",
+   "question": "مين الي دخلو السجن مع يوسف وشو شافو بالمنام",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-036-042#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-05-arabizi",
+   "item_type": "gold_question",
+   "question": "meen elli fato 3al sijn ma3 yusuf w shu shafo bel manam?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-036-042#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-05-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who went to prison with Yusuf and what did they dream about?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-036-042#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-06-msa",
+   "item_type": "gold_question",
+   "question": "ما رؤيا الملك التي فسرها يوسف عليه السلام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-06-egyptian",
+   "item_type": "gold_question",
+   "question": "الملك شاف إيه في الحلم ويوسف فسره إزاي؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-012-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-06-misspelled",
+   "item_type": "gold_question",
+   "question": "ما روءيا الملك الي فسرها يوسف",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-06-arabizi",
+   "item_type": "gold_question",
+   "question": "shu shaf el malik bel 7elem w kif fassaro yusuf?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-06-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What was the king's dream that Yusuf explained?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-07-msa",
+   "item_type": "gold_question",
+   "question": "هل عرف الإخوة يوسف عندما جاؤوا إليه لأخذ الطعام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-058-063#1",
+    "quran-012-069-074#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-07-gulf",
+   "item_type": "gold_question",
+   "question": "الإخوان عرفوا يوسف لما جوه ياخذون أكل؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-012-058-063#1",
+    "quran-012-069-074#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-07-misspelled",
+   "item_type": "gold_question",
+   "question": "هل عرف الاخوه يوسف لما جاو ياخدو الاكل",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-058-063#1",
+    "quran-012-069-074#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-07-arabizi",
+   "item_type": "gold_question",
+   "question": "el ekhwe 3erfo yusuf lama ijo yakhdo akl?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-058-063#1",
+    "quran-012-069-074#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-07-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Did the brothers recognize Yusuf when they came to get food?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-058-063#1",
+    "quran-012-069-074#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-08-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال يوسف لإخوته بعد أن عرّفهم بنفسه؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-08-levantine",
+   "item_type": "gold_question",
+   "question": "شو قال يوسف لإخوته لما عرّفهم عحاله؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-08-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال يوسف لاخوتة بعد ماعرفهم بحالو",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-08-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al yusuf la ekhwto lama 3arrafhom 3a 7alo?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-08-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did Yusuf say to his brothers after he told them who he was?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-09-msa",
+   "item_type": "gold_question",
+   "question": "كيف عاد البصر إلى يعقوب عليه السلام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1",
+    "quran-012-094-099#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-09-egyptian",
+   "item_type": "gold_question",
+   "question": "سيدنا يعقوب رجعله نظره إزاي؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1",
+    "quran-012-094-099#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-09-misspelled",
+   "item_type": "gold_question",
+   "question": "كيف رجع البصر ليعقوب",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1",
+    "quran-012-094-099#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-09-arabizi",
+   "item_type": "gold_question",
+   "question": "kif reje3 el nazar la ya3qoob?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1",
+    "quran-012-094-099#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "yusuf-09-english_transliteration",
+   "item_type": "gold_question",
+   "question": "How did Prophet Yaqub get his eyesight back?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-012-087-093#1",
+    "quran-012-094-099#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  }
+ ]
+}

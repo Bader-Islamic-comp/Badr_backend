@@ -1,0 +1,106 @@
+{
+ "batch": 15,
+ "output": "corpus/reviews/ai_prereview/batch-15.jsonl",
+ "items": [
+  {
+   "item_id": "hadith-truth-msa",
+   "item_type": "gold_question",
+   "question": "إلى أين يهدي الصدق كما في الحديث؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6094#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-truth-gulf",
+   "item_type": "gold_question",
+   "question": "الصدق وين يودي الواحد بالحديث؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6094#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-truth-misspelled",
+   "item_type": "gold_question",
+   "question": "الى وين بيودي الصدق بالحديث",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6094#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-truth-arabizi",
+   "item_type": "gold_question",
+   "question": "el sede2 wein bywaddi bel 7adith?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6094#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-truth-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Where does being truthful lead you, according to the hadith?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6094#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-harmless-msa",
+   "item_type": "gold_question",
+   "question": "من هو المسلم كما عرّفه النبي صلى الله عليه وسلم في حديث اللسان واليد؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-10#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-harmless-levantine",
+   "item_type": "gold_question",
+   "question": "مين المسلم اللي الناس بيسلموا من لسانه وإيده؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-bukhari-10#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-harmless-misspelled",
+   "item_type": "gold_question",
+   "question": "مين المسلم الي الناس بيسلمو من لسانة وايدة",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-10#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-harmless-arabizi",
+   "item_type": "gold_question",
+   "question": "meen el muslim elli el nas byeslamo mn lsano w edo?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-10#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-harmless-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who is a true Muslim in the hadith about the tongue and the hand?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-10#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  }
+ ]
+}

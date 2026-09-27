@@ -72,6 +72,7 @@
   "long_hadith_with_parts": 2053,
   "wave1_prophet_segments": 144,
   "wave1_hadith": 40,
+  "generated_questions": 552,
   "layer0": {
     "documents": 16220,
     "chunks": 28560,
@@ -90,7 +91,7 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 7.1
+    "seconds": 9.3
   },
   "wave1": {
     "documents": 184,
@@ -109,6 +110,6 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 0.1
+    "seconds": 0.2
   }
 }

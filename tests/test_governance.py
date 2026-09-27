@@ -63,8 +63,9 @@ def _draft(tmp_path, status="draft", checks="pass", author="Writer"):
 
 
 def _go(drafts, reviewers, tmp_path, action, actor, reason=""):
+    decision = "D-test" if action in ("approve", "reject") else None
     return review.transition(drafts, "story-yusuf-s01@7-9", action, actor, audit_path=tmp_path / "a.jsonl",
-                             reviewers_path=reviewers, reason=reason)
+                             reviewers_path=reviewers, reason=reason, decision_id=decision)
 
 
 def test_review_flow_is_audited(tmp_path):

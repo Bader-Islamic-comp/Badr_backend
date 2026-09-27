@@ -1,0 +1,366 @@
+{
+ "batch": 1,
+ "output": "corpus/reviews/ai_prereview/batch-01.jsonl",
+ "items": [
+  {
+   "item_id": "selection-01",
+   "item_type": "hadith",
+   "ref": "bukhari:54",
+   "also_listed_as": "nawawi40:1",
+   "topic": "النية",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-54.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-02",
+   "item_type": "hadith",
+   "ref": "muslim:93",
+   "also_listed_as": "nawawi40:2",
+   "topic": "أركان الإسلام والإيمان والإحسان",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-93.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-03",
+   "item_type": "hadith",
+   "ref": "bukhari:8",
+   "also_listed_as": "nawawi40:3",
+   "topic": "أركان الإسلام",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-8.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-04",
+   "item_type": "hadith",
+   "ref": "muslim:4094",
+   "also_listed_as": "nawawi40:6",
+   "topic": "الحلال والحرام وصلاح القلب",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-4094.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-05",
+   "item_type": "hadith",
+   "ref": "muslim:196",
+   "also_listed_as": "nawawi40:7",
+   "topic": "النصيحة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-196.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-06",
+   "item_type": "hadith",
+   "ref": "muslim:6113",
+   "also_listed_as": "nawawi40:9",
+   "topic": "الاستطاعة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-6113.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-07",
+   "item_type": "hadith",
+   "ref": "muslim:2346",
+   "also_listed_as": "nawawi40:10",
+   "topic": "الطيب",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-2346.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-08",
+   "item_type": "hadith",
+   "ref": "bukhari:13",
+   "also_listed_as": "nawawi40:13",
+   "topic": "حب الخير للآخرين",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-13.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-09",
+   "item_type": "hadith",
+   "ref": "muslim:173",
+   "also_listed_as": "nawawi40:15",
+   "topic": "الكلام الطيب والجار والضيف",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-173.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-10",
+   "item_type": "hadith",
+   "ref": "bukhari:6116",
+   "also_listed_as": "nawawi40:16",
+   "topic": "الغضب",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6116.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-11",
+   "item_type": "hadith",
+   "ref": "bukhari:6120",
+   "also_listed_as": "nawawi40:20",
+   "topic": "الحياء",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6120.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-12",
+   "item_type": "hadith",
+   "ref": "muslim:110",
+   "also_listed_as": "nawawi40:22",
+   "topic": "الفرائض والجنة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-110.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-13",
+   "item_type": "hadith",
+   "ref": "muslim:534",
+   "also_listed_as": "nawawi40:23",
+   "topic": "الطهارة والذكر",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-534.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-14",
+   "item_type": "hadith",
+   "ref": "bukhari:2707",
+   "also_listed_as": "nawawi40:26",
+   "topic": "الصدقة بالأعمال الصغيرة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-2707.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-15",
+   "item_type": "hadith",
+   "ref": "muslim:6516",
+   "also_listed_as": "nawawi40:27",
+   "topic": "حسن الخلق",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-6516.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-16",
+   "item_type": "hadith",
+   "ref": "muslim:177",
+   "also_listed_as": "nawawi40:34",
+   "topic": "تغيير المنكر",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-177.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-17",
+   "item_type": "hadith",
+   "ref": "muslim:6541",
+   "also_listed_as": "nawawi40:35",
+   "topic": "الأخوة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-6541.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-18",
+   "item_type": "hadith",
+   "ref": "muslim:6853",
+   "also_listed_as": "nawawi40:36",
+   "topic": "مساعدة الآخرين",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-6853.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-19",
+   "item_type": "hadith",
+   "ref": "muslim:338",
+   "also_listed_as": "nawawi40:37",
+   "topic": "النية في الحسنات",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-338.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-20",
+   "item_type": "hadith",
+   "ref": "bukhari:6416",
+   "also_listed_as": "nawawi40:40",
+   "topic": "اغتنام الوقت",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6416.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-21",
+   "item_type": "hadith",
+   "ref": "bukhari:2989",
+   "also_listed_as": null,
+   "topic": "الكلمة الطيبة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-2989.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-22",
+   "item_type": "hadith",
+   "ref": "bukhari:6114",
+   "also_listed_as": null,
+   "topic": "قوة ضبط النفس",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6114.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-23",
+   "item_type": "hadith",
+   "ref": "bukhari:6465",
+   "also_listed_as": null,
+   "topic": "الاستمرار",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6465.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-24",
+   "item_type": "hadith",
+   "ref": "muslim:6601",
+   "also_listed_as": null,
+   "topic": "الرفق",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-6601.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-25",
+   "item_type": "hadith",
+   "ref": "bukhari:5997",
+   "also_listed_as": null,
+   "topic": "الرحمة",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-5997.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-26",
+   "item_type": "hadith",
+   "ref": "muslim:6500",
+   "also_listed_as": null,
+   "topic": "بر الأم",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-6500.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-27",
+   "item_type": "hadith",
+   "ref": "bukhari:527",
+   "also_listed_as": null,
+   "topic": "الصلاة وبر الوالدين",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-527.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-28",
+   "item_type": "hadith",
+   "ref": "muslim:194",
+   "also_listed_as": null,
+   "topic": "السلام",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-194.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-29",
+   "item_type": "hadith",
+   "ref": "bukhari:12",
+   "also_listed_as": null,
+   "topic": "إطعام الطعام والسلام",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-12.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-30",
+   "item_type": "hadith",
+   "ref": "bukhari:5027",
+   "also_listed_as": null,
+   "topic": "تعلم القرآن",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-5027.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-31",
+   "item_type": "hadith",
+   "ref": "bukhari:2363",
+   "also_listed_as": null,
+   "topic": "الرحمة بالحيوان",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-2363.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-32",
+   "item_type": "hadith",
+   "ref": "bukhari:69",
+   "also_listed_as": null,
+   "topic": "التيسير",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-69.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-33",
+   "item_type": "hadith",
+   "ref": "bukhari:5376",
+   "also_listed_as": null,
+   "topic": "آداب الطعام",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-5376.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-34",
+   "item_type": "hadith",
+   "ref": "bukhari:6094",
+   "also_listed_as": null,
+   "topic": "الصدق",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6094.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-35",
+   "item_type": "hadith",
+   "ref": "bukhari:10",
+   "also_listed_as": null,
+   "topic": "كف الأذى",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-10.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-36",
+   "item_type": "hadith",
+   "ref": "muslim:153",
+   "also_listed_as": null,
+   "topic": "شعب الإيمان",
+   "displayed_text_file": "corpus/wave1/documents/hadith-muslim-153.json",
+   "canonical_file": "corpus/canonical/hadith/muslim.jsonl"
+  },
+  {
+   "item_id": "selection-37",
+   "item_type": "hadith",
+   "ref": "bukhari:6015",
+   "also_listed_as": null,
+   "topic": "الجار",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6015.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-38",
+   "item_type": "hadith",
+   "ref": "bukhari:24",
+   "also_listed_as": null,
+   "topic": "الحياء",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-24.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-39",
+   "item_type": "hadith",
+   "ref": "bukhari:6224",
+   "also_listed_as": null,
+   "topic": "آداب العطاس",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-6224.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  },
+  {
+   "item_id": "selection-40",
+   "item_type": "hadith",
+   "ref": "bukhari:893",
+   "also_listed_as": null,
+   "topic": "المسؤولية",
+   "displayed_text_file": "corpus/wave1/documents/hadith-bukhari-893.json",
+   "canonical_file": "corpus/canonical/hadith/bukhari.jsonl"
+  }
+ ]
+}

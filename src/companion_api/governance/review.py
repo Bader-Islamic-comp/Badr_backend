@@ -65,9 +65,12 @@ def load_reviewers(path: Path) -> dict[str, dict]:
 
 
 def transition(drafts: Path, item_id: str, action: str, actor: str, *, audit_path: Path, reviewers_path: Path,
-               reason: str = "") -> Item:
+               reason: str = "", decision_id: str | None = None) -> Item:
     if action not in TRANSITIONS:
         raise ReviewError(f"unknown action {action!r}")
+    if action in ("approve", "reject") and not decision_id:
+        raise ReviewError("approve and reject come only from a signed decision: add it to "
+                          "doc/decisions/decisions.yaml and run scripts/apply_decisions.py")
     allowed, target = TRANSITIONS[action]
     match = next((item for item in items(drafts) if item.item_id == item_id), None)
     if match is None:
@@ -91,7 +94,7 @@ def transition(drafts: Path, item_id: str, action: str, actor: str, *, audit_pat
     if action in ("reject", "quarantine") and not reason.strip():
         raise ReviewError(f"{action} needs a reason")
     audit.append(audit_path, actor=actor, action=f"review.{action}", item=item_id, from_state=match.status,
-                 to_state=target, reason=reason)
+                 to_state=target, reason=f"{decision_id}: {reason}" if decision_id else reason)
     header, data = _load(match.path)
     version = data["versions"][match.band]
     version["review_status"] = target

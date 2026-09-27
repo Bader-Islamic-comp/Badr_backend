@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_sha256": "51d4b1e62cb8dc1e6a29bc0dd59ea087ca85389010f7786a14c1c64aac98cdf1",
+  "registry_sha256": "e774ef4d72d206f5ee99e46039efdb481c82eea8bb53a52e474987f8194a303d",
   "normalizer": "norm-v2",
   "sources": {
     "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",

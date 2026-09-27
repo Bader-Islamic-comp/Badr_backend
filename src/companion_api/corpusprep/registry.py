@@ -7,7 +7,7 @@ import re
 import yaml
 
 SCHEMA_VERSION = 1
-STATUSES = ("candidate", "pending_legal", "rejected")
+STATUSES = ("candidate", "pending_legal", "cleared", "rejected")  # cleared: only via governance.decisions
 FORMATS = ("txt", "xml", "json", "csv")
 REQUIRED = ("source_id", "title", "edition", "publisher", "url", "license", "license_url", "terms_summary",
             "retrieved_at", "sha256", "numbering_system", "status", "notes")

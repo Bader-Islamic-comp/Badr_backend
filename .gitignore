@@ -20,3 +20,5 @@ corpus/canonical/**/*.jsonl
 corpus/layer0/
 corpus/wave1/
 reports/retrieval/cache/
+# Contains Quran and hadith text copied from corpus/canonical; regenerate with scripts/build_decision_packages.py
+doc/decisions/04-content-review.md

@@ -1,0 +1,69 @@
+{
+ "batch": 4,
+ "output": "corpus/reviews/ai_prereview/batch-04.jsonl",
+ "items": [
+  {
+   "item_id": "policy-re-review-policy",
+   "item_type": "policy",
+   "file": "doc/governance/re-review-policy.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  },
+  {
+   "item_id": "policy-releases",
+   "item_type": "policy",
+   "file": "doc/governance/releases.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  },
+  {
+   "item_id": "policy-review-workflow",
+   "item_type": "policy",
+   "file": "doc/governance/review-workflow.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  },
+  {
+   "item_id": "policy-reviewer-policy",
+   "item_type": "policy",
+   "file": "doc/governance/reviewer-policy.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  },
+  {
+   "item_id": "policy-rights-clearance",
+   "item_type": "policy",
+   "file": "doc/governance/rights-clearance.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  },
+  {
+   "item_id": "policy-scope",
+   "item_type": "policy",
+   "file": "doc/governance/scope.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  },
+  {
+   "item_id": "policy-source-policy",
+   "item_type": "policy",
+   "file": "doc/governance/source-policy.md",
+   "compare_with": [
+    "doc/architecture.md",
+    "AGENTS.md"
+   ]
+  }
+ ]
+}

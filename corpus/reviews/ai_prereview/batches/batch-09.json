@@ -1,0 +1,616 @@
+{
+ "batch": 9,
+ "output": "corpus/reviews/ai_prereview/batch-09.jsonl",
+ "items": [
+  {
+   "item_id": "adam-01-msa",
+   "item_type": "gold_question",
+   "question": "ماذا طلب الله من الملائكة عندما خلق آدم؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-038-065-072#1",
+    "quran-038-073-080#1",
+    "quran-017-061-065#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-01-gulf",
+   "item_type": "gold_question",
+   "question": "وش قال الله للملايكة لما خلق آدم؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-038-065-072#1",
+    "quran-038-073-080#1",
+    "quran-017-061-065#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-01-misspelled",
+   "item_type": "gold_question",
+   "question": "ماذا طلب اللة من الملاءكه لما خلق ادم",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-038-065-072#1",
+    "quran-038-073-080#1",
+    "quran-017-061-065#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-01-arabizi",
+   "item_type": "gold_question",
+   "question": "shu talab allah mn el malaeke lama 5ala2 adam?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-038-065-072#1",
+    "quran-038-073-080#1",
+    "quran-017-061-065#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-01-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did Allah ask the angels to do when He created Adam?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-038-065-072#1",
+    "quran-038-073-080#1",
+    "quran-017-061-065#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-02-msa",
+   "item_type": "gold_question",
+   "question": "ما الذي علّمه الله لآدم عليه السلام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-02-levantine",
+   "item_type": "gold_question",
+   "question": "شو علّم الله لآدم؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-02-misspelled",
+   "item_type": "gold_question",
+   "question": "ماالذي علمة الله لادم عليه السلام",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-02-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 3allam allah la adam?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-02-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did Allah teach Prophet Adam?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-03-msa",
+   "item_type": "gold_question",
+   "question": "لماذا رفض إبليس أن يسجد لآدم؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-015-033-039#1",
+    "quran-017-061-065#1",
+    "quran-038-073-080#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-03-egyptian",
+   "item_type": "gold_question",
+   "question": "ليه إبليس مرضيش يسجد لآدم؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-015-033-039#1",
+    "quran-017-061-065#1",
+    "quran-038-073-080#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-03-misspelled",
+   "item_type": "gold_question",
+   "question": "ليش ابليس رفض يسجد لادم",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-015-033-039#1",
+    "quran-017-061-065#1",
+    "quran-038-073-080#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-03-arabizi",
+   "item_type": "gold_question",
+   "question": "leish iblees rafad yosjod la adam?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-015-033-039#1",
+    "quran-017-061-065#1",
+    "quran-038-073-080#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-03-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Why did Iblis refuse to bow to Adam?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-030-034#1",
+    "quran-007-011-018#1",
+    "quran-015-026-032#1",
+    "quran-015-033-039#1",
+    "quran-017-061-065#1",
+    "quran-038-073-080#1",
+    "quran-018-050-053#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-04-msa",
+   "item_type": "gold_question",
+   "question": "ما قصة الشجرة التي نهى الله آدم عنها؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-04-gulf",
+   "item_type": "gold_question",
+   "question": "وش سالفة الشجرة اللي الله نهى آدم عنها؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-04-misspelled",
+   "item_type": "gold_question",
+   "question": "ما قصه الشجره الي نهى الله ادم عنها",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-04-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2esset el shajara elli allah naha adam 3anha?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-04-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What is the story of the tree Adam was told not to eat from?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-05-msa",
+   "item_type": "gold_question",
+   "question": "كيف تاب آدم عليه السلام بعد أن أكل من الشجرة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-05-levantine",
+   "item_type": "gold_question",
+   "question": "كيف آدم تاب بعد ما أكل من الشجرة؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-05-misspelled",
+   "item_type": "gold_question",
+   "question": "كيف تاب ادم بعد مااكل من الشجره",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-05-arabizi",
+   "item_type": "gold_question",
+   "question": "kif adam tab ba3d ma akal mn el shajara?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-05-english_transliteration",
+   "item_type": "gold_question",
+   "question": "How did Adam repent after eating from the tree?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-116-122#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-06-msa",
+   "item_type": "gold_question",
+   "question": "أين عاش آدم بعد أن خرج من الجنة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-123-128#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-06-egyptian",
+   "item_type": "gold_question",
+   "question": "آدم راح فين بعد ما خرج من الجنة؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-123-128#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-06-misspelled",
+   "item_type": "gold_question",
+   "question": "وين عاش ادم بعد ماخرج من الجنه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-123-128#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-06-arabizi",
+   "item_type": "gold_question",
+   "question": "wein 3ash adam ba3d ma tele3 mn el jannah?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-123-128#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-06-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Where did Adam live after leaving Jannah?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-002-035-039#1",
+    "quran-007-019-025#1",
+    "quran-020-123-128#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-07-msa",
+   "item_type": "gold_question",
+   "question": "هل كان إبليس من الملائكة أم من الجن؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-018-050-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-07-gulf",
+   "item_type": "gold_question",
+   "question": "إبليس كان من الملايكة ولا من الجن؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-018-050-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-07-misspelled",
+   "item_type": "gold_question",
+   "question": "هل كان ابليس من الملاءكة ام من الجن",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-018-050-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-07-arabizi",
+   "item_type": "gold_question",
+   "question": "iblees kan mn el malaeke walla mn el jinn?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-018-050-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "adam-07-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Was Iblis one of the angels or one of the jinn?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-018-050-053#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-01-msa",
+   "item_type": "gold_question",
+   "question": "كم سنة دعا نوح عليه السلام قومه؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-029-014-018#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-01-levantine",
+   "item_type": "gold_question",
+   "question": "قديش ضل نوح يدعي قومه؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "quran-029-014-018#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-01-misspelled",
+   "item_type": "gold_question",
+   "question": "كم سنه دعى نوح قومة",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-029-014-018#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-01-arabizi",
+   "item_type": "gold_question",
+   "question": "2adeish dal noo7 yed3i 2awmo?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-029-014-018#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-01-english_transliteration",
+   "item_type": "gold_question",
+   "question": "How many years did Prophet Nuh call his people?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-029-014-018#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-02-msa",
+   "item_type": "gold_question",
+   "question": "من أمر نوحاً ببناء السفينة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-023-023-027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-02-egyptian",
+   "item_type": "gold_question",
+   "question": "مين قال لنوح يبني السفينة؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-023-023-027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-02-misspelled",
+   "item_type": "gold_question",
+   "question": "مين امر نوح يبني السفينه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-023-023-027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-02-arabizi",
+   "item_type": "gold_question",
+   "question": "meen amar noo7 yebni el safine?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-023-023-027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-02-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who told Nuh to build the ark?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-023-023-027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-03-msa",
+   "item_type": "gold_question",
+   "question": "ماذا حدث لابن نوح عندما رفض أن يركب السفينة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-011-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-03-gulf",
+   "item_type": "gold_question",
+   "question": "وش صار لولد نوح لما رفض يركب السفينة؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-011-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-03-misspelled",
+   "item_type": "gold_question",
+   "question": "شو صار لابن نوح لما رفض يركب السفينه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-011-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-03-arabizi",
+   "item_type": "gold_question",
+   "question": "shu sar la ibn noo7 lama rafad yerkab el safine?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-011-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "nuh-03-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What happened to Nuh's son when he refused to get on the ark?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "quran-011-036-042#1",
+    "quran-011-043-049#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  }
+ ]
+}
