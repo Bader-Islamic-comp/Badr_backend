@@ -18,6 +18,12 @@ CONTAINED = 0.9   # share of the primary's trigrams found in one longer second-s
                   # groups several narrations (islamware does): same text, different granularity
 _RARE_DF = 30     # a trigram in more documents than this (isnad phrases) does not propose candidates
 _CANDIDATES = 8
+_SPAN_WINDOW = 3  # a primary entry may be split over up to this many neighbours of its best secondary entry
+
+# Comparison-only view (never stored or shown): norm-v1 tokens, a detached conjunction waw joined to the
+# next word ("و حدثنا" = "وحدثنا"), and alef dropped so classical spellings compare equal ("اسحق" = "اسحاق").
+# Measured on 50 sampled Muslim text_differs records: 44 were these two spelling conventions, not wording.
+COMPARE_VERSION = "crosscheck-norm-v1"
 
 SAHIH_COLLECTIONS = {"bukhari": "Sahih al-Bukhari", "muslim": "Sahih Muslim"}
 NUMBERING = {"fawazahmed0": "sunnah.com", "ahmedbaset": "sunnah.com", "mhashim6": "islamware"}
@@ -77,8 +83,18 @@ def parse_mhashim6(path: Path) -> Parsed:
     return parsed
 
 
+def compare_tokens(text: str) -> list[str]:
+    words: list[str] = []
+    for word in normalize.tokens(text):
+        if words and words[-1] == "\u0648":
+            words[-1] += word
+        else:
+            words.append(word)
+    return [word.replace("\u0627", "") or word for word in words]
+
+
 def shingles(text: str) -> set:
-    words = normalize.tokens(text)
+    words = compare_tokens(text)
     if len(words) < 3:
         return set(words)
     return {tuple(words[i:i + 3]) for i in range(len(words) - 2)}
@@ -120,6 +136,7 @@ def crosscheck_by_number(primary: list[Entry], secondary: list[Entry]) -> dict[s
 def crosscheck_by_text(primary: list[Entry], secondary: list[Entry], progress=None) -> dict[str, tuple | None]:
     """Different numbering systems: find each primary entry's most similar secondary entry."""
     grams = [shingles(entry.text) for entry in secondary]
+    positions = {entry.number: position for position, entry in enumerate(secondary)}
     index: dict = {}
     for position, gram_set in enumerate(grams):
         for gram in gram_set:
@@ -141,10 +158,35 @@ def crosscheck_by_text(primary: list[Entry], secondary: list[Entry], progress=No
             holder = max(compared, key=lambda match: match[2])
             if holder[2] >= CONTAINED:
                 best = holder
+            else:
+                best = _span(mine, best, holder, secondary, grams, positions)
         result[entry.number] = best
         if progress and count % 1000 == 0:
             progress(count, len(primary))
     return result
+
+
+def _span(mine: set, best: tuple, holder: tuple, secondary: list[Entry], grams: list[set],
+          positions: dict) -> tuple:
+    """Tries consecutive secondary entries around the best one; returns a `first-last` span if they hold it."""
+    centre = positions[holder[0]]
+    top = (holder[2], centre, centre)
+    for low in range(max(0, centre - _SPAN_WINDOW), centre + 1):
+        union: set = set()
+        for high in range(low, min(len(grams), centre + _SPAN_WINDOW + 1)):
+            union |= grams[high]
+            if high >= centre and high > low:
+                share = containment(mine, union)
+                if share > top[0]:
+                    top = (share, low, high)
+    share, low, high = top
+    while low < high and not mine & grams[low]:  # drop neighbours that add nothing
+        low += 1
+    while high > low and not mine & grams[high]:
+        high -= 1
+    if share >= CONTAINED and low != high:
+        return f"{secondary[low].number}-{secondary[high].number}", best[1], share
+    return best
 
 
 def records(collection: str, primary: Parsed, primary_id: str, secondary_id: str | None,

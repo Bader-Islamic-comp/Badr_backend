@@ -23,15 +23,15 @@
       "records": 1326
     },
     "hadith/bukhari.jsonl": {
-      "sha256": "f5b2efdb2a08e0bdf4f02f2944cbdc725d3ac938155946f5190e9694d8c675ba",
+      "sha256": "6afb889b552831fc331a3ea767d8087ef8c485a3f2bfa3762ca5b6b35d04ed5a",
       "records": 7580
     },
     "hadith/muslim.jsonl": {
-      "sha256": "c67e3bf142d1b34880b9ee7e2c803db85d45d23e2ae88916ff12efa339a96736",
+      "sha256": "7b86f194a2b13fa5f7884273d79a16899fd2c77d1c471aeee1af994865d4ef8d",
       "records": 7360
     },
     "hadith/nawawi40.jsonl": {
-      "sha256": "3196905515fdaa4296a6f294537e8ebdce36411d69bd34edd80ec356e9620ef7",
+      "sha256": "d0d9df24d7ab3716971617aec9448082db3a4147305e8abf54e6a8c3b2cee6cd",
       "records": 42
     },
     "hadith/riyadussalihin.jsonl": {
@@ -66,15 +66,15 @@
       "records": 7580,
       "primary_empty_text": 9,
       "secondary_entries": 7008,
-      "secondary_unmatched": 27,
-      "secondary_matched_more_than_once": 531,
+      "secondary_unmatched": 55,
+      "secondary_matched_more_than_once": 530,
       "statuses": {
-        "match": 6795,
-        "contained_in_secondary": 512,
-        "text_differs": 205,
-        "not_matched": 68
+        "match": 6848,
+        "contained_in_secondary": 532,
+        "text_differs": 133,
+        "not_matched": 67
       },
-      "eligible": 7307,
+      "eligible": 7380,
       "primary_source": "fawazahmed0-ara-bukhari",
       "secondary_source": "mhashim6-bukhari",
       "pairing": "text"
@@ -84,15 +84,15 @@
       "records": 7360,
       "primary_empty_text": 203,
       "secondary_entries": 5362,
-      "secondary_unmatched": 67,
-      "secondary_matched_more_than_once": 2027,
+      "secondary_unmatched": 81,
+      "secondary_matched_more_than_once": 2052,
       "statuses": {
-        "contained_in_secondary": 2876,
-        "match": 3337,
-        "text_differs": 1109,
-        "not_matched": 38
+        "match": 3806,
+        "contained_in_secondary": 3491,
+        "text_differs": 54,
+        "not_matched": 9
       },
-      "eligible": 6213,
+      "eligible": 7297,
       "primary_source": "fawazahmed0-ara-muslim",
       "secondary_source": "mhashim6-muslim",
       "pairing": "text"

@@ -184,3 +184,18 @@ def test_parsers_skip_and_report_empty_text(tmp_path):
     mh.write_text('"1"," a b"\n"2",""\n', encoding="utf-8")
     parsed = hadith.parse_mhashim6(mh)
     assert [entry.text for entry in parsed.entries] == [" a b"] and parsed.empty_numbers == ["2"]
+
+
+def test_compare_tokens_join_detached_waw_and_ignore_alef():
+    waw, alef = "و", "ا"
+    word = "حدثن" + alef  # a placeholder word ending in alef
+    assert hadith.compare_tokens(f"{waw} {word}") == hadith.compare_tokens(f"{waw}{word}")
+    assert hadith.compare_tokens("سح" + alef + "ق") == hadith.compare_tokens("سحق")
+
+
+def test_crosscheck_by_text_finds_entry_split_over_consecutive_numbers():
+    primary = [hadith.Entry("1", _text(40))]
+    secondary = [hadith.Entry("10", _text(20, 900)), hadith.Entry("11", _text(21)),
+                 hadith.Entry("12", _text(21, 19)), hadith.Entry("13", _text(20, 950))]
+    match = hadith.crosscheck_by_text(primary, secondary)["1"]
+    assert match[0] == "11-12" and hadith.status_for(match) == "contained_in_secondary"

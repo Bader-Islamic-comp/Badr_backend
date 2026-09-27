@@ -6,16 +6,20 @@ is copied from one source into another. The report lists numbers and scores only
 
 ## Method
 
-- Both texts are reduced to `norm-v1` search text (diacritics, tatweel, alef/ya/ta-marbuta folded,
-  punctuation removed); the canonical `arabic_text` is untouched.
+- Both texts are reduced to a comparison-only view, `crosscheck-norm-v1`: `norm-v1` search text
+  (diacritics, tatweel, alef/ya/ta-marbuta folded, punctuation removed), a detached conjunction waw
+  joined to the next word, and alef dropped so classical spellings compare equal. This view is never
+  stored or shown; the canonical `arabic_text` is untouched.
 - Similarity is the Dice coefficient of word-trigram sets.
+- A primary entry split over consecutive second-source entries (up to 3 either side of its best
+  match) is compared with their union; the match is then a span such as `2729-2732`.
 - `match`: Dice >= 0.9. `contained_in_secondary`: Dice lower, but >= 0.9 of the
   primary's trigrams are inside one longer second-source entry (islamware groups several narrations
   under one number), so the wording agrees and only the granularity differs.
   `text_differs`: Dice or containment >= 0.6. Lower, or no candidate: `not_matched`. One source: `single_source`.
 - Same numbering system: the entry with the same number is compared. Different numbering
   (sunnah.com vs islamware): each primary entry is compared with its most similar entries in the
-  second source, so the report also gives the number mapping between the two systems.
+  second source. The number mapping between the two systems is `corpus/reports/hadith_number_mapping.csv`.
 - Grading: Bukhari and Muslim are `sahih` by collection rule. No other source gives a structured
   grading with its grader, so those records have `grading: null` and are ineligible.
 
@@ -23,8 +27,8 @@ is copied from one source into another. The report lists numbers and scores only
 
 | collection | primary | second source | pairing | records | empty in primary | match / contained / text_differs / not_matched / single_source | second-source entries never matched | eligible |
 | --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: |
-| bukhari | `fawazahmed0-ara-bukhari` | `mhashim6-bukhari` | text | 7580 | 9 | 6795 / 512 / 205 / 68 / 0 | 27 | 7307 |
-| muslim | `fawazahmed0-ara-muslim` | `mhashim6-muslim` | text | 7360 | 203 | 3337 / 2876 / 1109 / 38 / 0 | 67 | 6213 |
+| bukhari | `fawazahmed0-ara-bukhari` | `mhashim6-bukhari` | text | 7580 | 9 | 6848 / 532 / 133 / 67 / 0 | 55 | 7380 |
+| muslim | `fawazahmed0-ara-muslim` | `mhashim6-muslim` | text | 7360 | 203 | 3806 / 3491 / 54 / 9 / 0 | 81 | 7297 |
 | nawawi40 | `fawazahmed0-ara-nawawi` | `ahmedbaset-nawawi40` | number | 42 | 0 | 38 / 0 / 4 / 0 / 0 | 0 | 0 |
 | riyadussalihin | `ahmedbaset-riyadussalihin` | — | — | 1896 | 0 | 0 / 0 / 0 / 0 / 1896 | — | 0 |
 | adab_mufrad | `ahmedbaset-adab-mufrad` | — | — | 1326 | 0 | 0 / 0 / 0 / 0 / 1326 | — | 0 |
@@ -59,72 +63,72 @@ is copied from one source into another. The report lists numbers and scores only
 
 Full list: `corpus/reports/hadith_crosscheck_details.jsonl`.
 
-### bukhari (273 unresolved)
+### bukhari (200 unresolved)
 
 | number | status | best match in second source | Dice | containment |
 | --- | --- | --- | ---: | ---: |
 | 6949 | not_matched | 6297 | 0.041 | 0.034 |
-| 2290 | not_matched | 833 | 0.046 | 0.045 |
 | 774.2 | not_matched | 4630 | 0.051 | 0.038 |
 | 5105 | not_matched | 6638 | 0.051 | 0.029 |
+| 2290 | not_matched | 1807 | 0.055 | 0.045 |
 | 5124 | not_matched | 5595 | 0.061 | 0.055 |
 | 2767 | not_matched | 1579 | 0.063 | 0.079 |
-| 4757 | not_matched | 3826 | 0.069 | 0.104 |
-| 6896 | not_matched | 2839 | 0.07 | 0.061 |
-| 5802 | not_matched | 2611 | 0.075 | 0.154 |
+| 4757 | not_matched | 3826 | 0.071 | 0.107 |
+| 5802 | not_matched | 6998 | 0.077 | 0.154 |
 | 1572 | not_matched | 1578 | 0.084 | 0.092 |
+| 6896 | not_matched | 2839 | 0.087 | 0.076 |
 | 1608 | not_matched | 1627 | 0.091 | 0.125 |
 | 5590 | not_matched | 1809 | 0.099 | 0.091 |
-| 5018 | not_matched | 610 | 0.107 | 0.066 |
 | 2193 | not_matched | 4411 | 0.111 | 0.083 |
+| 5018 | not_matched | 610 | 0.12 | 0.074 |
 | 2700 | not_matched | 2500 | 0.122 | 0.125 |
-| 7195 | not_matched | 1659 | 0.126 | 0.103 |
+| 7195 | not_matched | 2027 | 0.122 | 0.103 |
 | 848 | not_matched | 1470 | 0.133 | 0.156 |
-| 4758 | not_matched | 5964 | 0.138 | 0.182 |
 | 41 | not_matched | 283 | 0.141 | 0.192 |
 | 5163 | not_matched | 4418 | 0.141 | 0.1 |
-| 1753 | not_matched | 819 | 0.161 | 0.129 |
-| 1296 | not_matched | 1809 | 0.168 | 0.164 |
+| 4758 | not_matched | 5964 | 0.161 | 0.212 |
 | 2778 | not_matched | 6597 | 0.171 | 0.128 |
-| 6341 | not_matched | 3518 | 0.177 | 0.259 |
+| 1296 | not_matched | 2600 | 0.174 | 0.149 |
 | 6653 | not_matched | 6953 | 0.184 | 0.264 |
+| 6341 | not_matched | 562 | 0.186 | 0.296 |
+| 7361 | not_matched | 5577 | 0.187 | 0.179 |
 
-### muslim (1147 unresolved)
+### muslim (63 unresolved)
 
 | number | status | best match in second source | Dice | containment |
 | --- | --- | --- | ---: | ---: |
 | 855 | not_matched | — | — | — |
-| 1903 | not_matched | — | — | — |
-| 1907 | not_matched | — | — | — |
 | 2425 | not_matched | — | — | — |
 | 3863 | not_matched | — | — | — |
+| 4323 | not_matched | — | — | — |
 | 5068 | not_matched | — | — | — |
 | 5432 | not_matched | — | — | — |
 | 5471 | not_matched | — | — | — |
 | 7246 | not_matched | — | — | — |
-| 4323 | not_matched | 34 | 0.071 | 0.375 |
-| 6573 | text_differs | 4674 | 0.099 | 0.833 |
-| 6574 | text_differs | 4674 | 0.099 | 0.833 |
-| 6939 | text_differs | 4920 | 0.117 | 0.75 |
-| 1277 | text_differs | 889 | 0.119 | 0.875 |
-| 2700 | text_differs | 1939 | 0.128 | 0.857 |
-| 6150 | text_differs | 4375 | 0.129 | 0.769 |
-| 4095 | not_matched | 3334 | 0.13 | 0.286 |
-| 4062 | text_differs | 2969 | 0.131 | 0.867 |
-| 5879 | text_differs | 4180 | 0.137 | 0.833 |
-| 3273 | text_differs | 2391 | 0.14 | 0.889 |
-| 7401 | text_differs | 5242 | 0.141 | 0.833 |
-| 6872 | text_differs | 4877 | 0.147 | 0.889 |
-| 4851 | text_differs | 3481 | 0.15 | 0.857 |
-| 5395 | text_differs | 3849 | 0.151 | 0.852 |
-| 6188 | text_differs | 4402 | 0.154 | 0.857 |
+| 6063 | text_differs | 543 | 0.186 | 0.667 |
+| 1259 | not_matched | 3035 | 0.22 | 0.541 |
+| 1275 | text_differs | 889 | 0.228 | 0.875 |
+| 2099 | text_differs | 1506 | 0.241 | 0.885 |
+| 4166 | text_differs | 3045 | 0.289 | 0.875 |
+| 973 | text_differs | 654 | 0.302 | 0.727 |
+| 1341 | text_differs | 933 | 0.305 | 0.895 |
+| 6445 | text_differs | 4582 | 0.318 | 0.889 |
+| 2077 | text_differs | 1491 | 0.364 | 0.842 |
+| 2580 | text_differs | 1857 | 0.386 | 0.842 |
+| 4456 | text_differs | 3219 | 0.388 | 0.893 |
+| 541 | text_differs | 333 | 0.395 | 0.886 |
+| 1210 | text_differs | 842 | 0.398 | 0.892 |
+| 1045 | text_differs | 713 | 0.403 | 0.867 |
+| 1195 | text_differs | 832 | 0.422 | 0.852 |
+| 1387 | text_differs | 965 | 0.433 | 0.879 |
+| 1192 | text_differs | 830 | 0.441 | 0.871 |
 
 ### nawawi40 (4 unresolved)
 
 | number | status | best match in second source | Dice | containment |
 | --- | --- | --- | ---: | ---: |
-| 14 | text_differs | 14 | 0.761 | 0.643 |
-| 32 | text_differs | 32 | 0.847 | 0.758 |
-| 13 | text_differs | 13 | 0.873 | 0.775 |
+| 14 | text_differs | 14 | 0.754 | 0.634 |
+| 32 | text_differs | 32 | 0.844 | 0.754 |
+| 13 | text_differs | 13 | 0.87 | 0.769 |
 | 1 | text_differs | 1 | 0.896 | 0.83 |
 

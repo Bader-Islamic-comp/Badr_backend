@@ -75,6 +75,27 @@ def build_hadith(registry: Registry, raw_root: Path, canonical: Path, out=sys.st
     return files, summaries, discrepancies
 
 
+def write_mapping(reports: Path, registry: Registry, raw_root: Path, canonical: Path) -> Path:
+    """One CSV row per primary record paired by text: its number in each numbering system (numbers only)."""
+    reports.mkdir(parents=True, exist_ok=True)
+    path = reports / "hadith_number_mapping.csv"
+    lines = ["collection,primary_source,primary_number,primary_numbering,secondary_source,secondary_number,"
+             "secondary_numbering,status,dice,containment"]
+    for collection, primary_id, secondary_id, pairing in COLLECTIONS:
+        if pairing != "text":
+            continue
+        numbering = hadith.NUMBERING[secondary_id.split("-", 1)[0]]
+        for line in (canonical / "hadith" / f"{collection}.jsonl").read_text(encoding="utf-8").splitlines():
+            row = json.loads(line)
+            other = row["crosscheck"] or {}
+            lines.append(",".join(str(value) for value in (
+                collection, primary_id, row["number"], row["numbering_system"], secondary_id,
+                other.get("number", ""), numbering, row["crosscheck_status"], other.get("similarity", ""),
+                other.get("containment", ""))))
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    return path
+
+
 def write_manifest(canonical: Path, registry: Registry, files: dict, quran_info: dict, tafsir_info: dict,
                    hadith_info: list) -> Path:
     manifest = {
@@ -108,16 +129,20 @@ def write_report(reports: Path, registry: Registry, hadith_info: list, discrepan
         "",
         "## Method",
         "",
-        "- Both texts are reduced to `norm-v1` search text (diacritics, tatweel, alef/ya/ta-marbuta folded,",
-        "  punctuation removed); the canonical `arabic_text` is untouched.",
+        f"- Both texts are reduced to a comparison-only view, `{hadith.COMPARE_VERSION}`: `norm-v1` search text",
+        "  (diacritics, tatweel, alef/ya/ta-marbuta folded, punctuation removed), a detached conjunction waw",
+        "  joined to the next word, and alef dropped so classical spellings compare equal. This view is never",
+        "  stored or shown; the canonical `arabic_text` is untouched.",
         "- Similarity is the Dice coefficient of word-trigram sets.",
+        "- A primary entry split over consecutive second-source entries (up to 3 either side of its best",
+        "  match) is compared with their union; the match is then a span such as `2729-2732`.",
         f"- `match`: Dice >= {hadith.MATCH}. `contained_in_secondary`: Dice lower, but >= {hadith.CONTAINED} of the",
         "  primary's trigrams are inside one longer second-source entry (islamware groups several narrations",
         "  under one number), so the wording agrees and only the granularity differs.",
         f"  `text_differs`: Dice or containment >= {hadith.DIFFERS}. Lower, or no candidate: `not_matched`. One source: `single_source`.",
         "- Same numbering system: the entry with the same number is compared. Different numbering",
         "  (sunnah.com vs islamware): each primary entry is compared with its most similar entries in the",
-        "  second source, so the report also gives the number mapping between the two systems.",
+        "  second source. The number mapping between the two systems is `corpus/reports/hadith_number_mapping.csv`.",
         "- Grading: Bukhari and Muslim are `sahih` by collection rule. No other source gives a structured",
         "  grading with its grader, so those records have `grading: null` and are ineligible.",
         "",

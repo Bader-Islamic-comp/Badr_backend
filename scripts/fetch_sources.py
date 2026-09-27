@@ -67,6 +67,7 @@ def main(argv=None) -> int:
     files.update(hadith_files)
     manifest = build.write_manifest(args.canonical_dir, registry, files, quran_info, tafsir_info, hadith_info)
     report = build.write_report(args.reports_dir, registry, hadith_info, discrepancies)
+    build.write_mapping(args.reports_dir, registry, args.raw_dir, args.canonical_dir)
 
     print(f"\nquran: {quran_info['surahs']} surahs, {quran_info['ayat']} ayat "
           f"(per-surah counts match {', '.join(quran_info['per_surah_checked_against'])})")
