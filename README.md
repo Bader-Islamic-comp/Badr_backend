@@ -213,7 +213,8 @@ and restart.
 - `GET /health/live` is the only unauthenticated endpoint.
 - `GET /v1/bootstrap`, `/v1/lessons`, `/v1/challenges/today`, `/v1/rewards`, and
   `/v1/inventory` expose one synthetic profile, one orientation activity, an
-  earn-only learning reward, and the four-look cosmetic catalogue. Bootstrap's
+  earn-only learning reward, and the ten-look cosmetic catalogue (the original,
+  three colourways and six modelled outfits). Bootstrap's
   `features.generativeAnswers` is `true` only when this process started with
   grounded answers enabled.
 - `POST /v1/lessons/demo-learning/complete` with `{}` grants five learning stars

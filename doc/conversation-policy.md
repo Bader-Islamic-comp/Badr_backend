@@ -125,7 +125,11 @@ is used only to choose a reviewed fallback and to decide on an invitation; it is
 released reply then always returns it ("Wa alaikum assalam!", §7). The
 detectors are data (`router.SMALL_TALK`, `INTENTS`), versioned with the policy.
 
-## 5. The persona call (`chat-v1`)
+## 5. The persona call (`chat-v2`)
+
+`chat-v2` (2026-09-25) differs from `chat-v1` only in the character sheet,
+which now names the six outfits among the looks Robert loves; everything
+below is unchanged.
 
 One Qwen3.5-9B call in JSON mode (`response_format: {"type": "json_object"}`),
 thinking disabled as for every call (rag-system §6.3), temperature 0.7 for
@@ -235,7 +239,7 @@ both copies of `contracts/openapi-v1.json` carry the new value.
 ## 10. Provenance and outcome codes
 
 The `companion_api.rag` line (rag-system §6.6) gains `chat_prompt_version`
-(`chat-v1`) and `chat_checker` (`chat-check-v1`) on every answer, and
+(`chat-v2`) and `chat_checker` (`chat-check-v1`) on every answer, and
 `grounding` (the grounded prompt's failure code) when the persona ran after the
 grounded prompt. New `outcome` codes:
 

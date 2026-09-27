@@ -10,6 +10,80 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-09-27 (animation allowlists)
+
+Not yet committed; the coordinator adds the commit hash here when it lands on
+branch `feature/rag-system-and-data-pipeline`. The paired client change is
+Robert's animation update in `comp-mobile/CHANGELOG.md`, which quotes the
+product owner's request of 2026-09-27 and covers the new character package,
+the Unity room and when the app cues Robert to talk and react.
+
+### Changed
+
+- `contracts/avatar-bridge-v1.schema.json` (byte-identical with comp-mobile):
+  `avatar.play`'s `animation` enum gains `Standing` and `Talk`, and is now
+  `Standing`, `Idle`, `Wave`, `Talk`, `Nod`, `Celebrate`; `avatar.set_emotion`'s
+  `emotion` enum gains `joy`, `giggle`, `wink`, `curious`, `wow`, `sleepy`,
+  `bashful` and `starry`. The bridge stays v1: the additions are allowlisted
+  names, not new fields or commands.
+- No service code, OpenAPI contract or corpus changed. The app picks every cue
+  itself, from a reply's answer type and length only.
+
+Noted for later: the app gives no face after a `chat` reply, because the
+service's reply to a sad feeling is also `chat` and the app must not read the
+text to tell them apart. A playful face after chat would need a non-text tone
+signal from the service first; none was added.
+
+### Verification
+
+- `pytest`: **539 passed**, unchanged.
+- The schema is byte-identical with
+  `comp-mobile/contracts/avatar-bridge-v1.schema.json`.
+
+## Unreleased — 2026-09-25 (outfits)
+
+Commit `6076c7e` ("Sell the six modelled outfits in the catalogue") on branch
+`feature/rag-system-and-data-pipeline`. The catalogue gains six modelled outfits the Unity room can now show: **Casual
+(10 stars), Gardener (20), Arab Thobe (20), Explorer (25), Cowboy (25) and
+Astronaut (35)**, alongside the colourways Robert Original (0), Sunset Copper
+(5), Dune Walker (15) and Midnight Teal (30). Paired client and room changes
+are in `comp-mobile/CHANGELOG.md`.
+
+### Changed
+
+- `content.py`: the six outfits join `COSMETICS`, still cheapest first, with
+  short child-friendly descriptions. Outfit ids use `-` where the character
+  package's folders use `_` (`arab-thobe`). Pricing is a development choice
+  and awaits product review.
+- `contracts/avatar-bridge-v1.schema.json` lists all ten looks
+  (byte-identical with comp-mobile). The OpenAPI contract is unchanged: the
+  inventory is a list, not an enumeration.
+- The development corpus describes outfits as well as colours
+  (`app-help-looks.md`, `answer-look-prices.json`, `answer-change-look.json`,
+  which also gained outfit question phrasings), and Robert's character sheet
+  names the outfits in both `doc/robert-persona.md` and the persona prompt,
+  which is now **`chat-v2`**: any wording change is a new prompt version.
+
+### Added
+
+- `test_the_catalogue_is_exactly_what_the_room_can_install`: the catalogue
+  and the bridge schema's allowlist must be the same set, cheapest first, with
+  ids of letters, digits and hyphens.
+- `test_an_outfit_is_earned_and_worn_like_any_look`: an outfit is claimed
+  against the ledger and equipped like a colourway.
+
+### Verification
+
+- Docs: `README.md` (the ten-look catalogue), `doc/conversation-policy.md`,
+  `doc/robert-persona.md` and `doc/rag-system.md` (`chat-v2`), and the shared
+  roadmap's §9 status note (byte-identical with comp-mobile). ADR 0004 and older
+  changelog entries still say `chat-v1`: they record what was decided then.
+- `pytest`: **539 passed** (537 + 2). The corpus validates with 0 errors and 0
+  warnings.
+- The persona prompt change (`chat-v2`) was not re-run against the real
+  Qwen3.5-9B; the change only adds names to the list of looks Robert may
+  mention. Rerun `evaluate --generate` before relying on it.
+
 ## Unreleased — 2026-09-25 (conversation policy)
 
 Robert gets a voice: short, warm casual chat in his own words, and a hard rule

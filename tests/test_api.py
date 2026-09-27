@@ -227,6 +227,49 @@ def test_equipment_follows_ownership(client):
     assert items["dune"]["owned"] is False
 
 
+def test_the_catalogue_is_exactly_what_the_room_can_install():
+    # The room refuses any id outside the bridge schema's allowlist, and the
+    # service must never sell a look the room cannot show.
+    import json
+    from pathlib import Path
+
+    from companion_api.content import CATALOGUE, COSMETICS
+
+    schema = json.loads((Path(__file__).parent.parent / "contracts" / "avatar-bridge-v1.schema.json")
+                        .read_text(encoding="utf-8"))
+    allowlist = set()
+
+    def collect(node):
+        if isinstance(node, dict):
+            if "cosmeticId" in node.get("properties", {}):
+                allowlist.update(node["properties"]["cosmeticId"]["enum"])
+            for value in node.values():
+                collect(value)
+        elif isinstance(node, list):
+            for value in node:
+                collect(value)
+
+    collect(schema)
+    assert allowlist == set(CATALOGUE)
+    assert [item["cost"] for item in COSMETICS] == sorted(item["cost"] for item in COSMETICS)
+    assert all(item["id"].replace("-", "").isalnum() for item in COSMETICS)
+
+
+def test_an_outfit_is_earned_and_worn_like_any_look(client):
+    from companion_api.store import Grant
+
+    # Only the orientation lesson grants stars in this demo, so seed the
+    # ledger the way a later lesson would.
+    client.app.state.store._ledger.append(Grant("test-lessons", 40))
+    claimed = write(client, "POST", "/v1/cosmetics/claim", {"cosmeticId": "arab-thobe"}).json()
+    assert claimed == {"cosmeticId": "arab-thobe", "owned": True, "spent": 20, "balance": 20}
+    assert write(client, "PUT", "/v1/equipped-cosmetics", {"cosmeticId": "arab-thobe"}).json() == {
+        "cosmeticId": "arab-thobe", "characterId": "robert"}
+    items = {item["id"]: item for item in client.get("/v1/inventory").json()["items"]}
+    assert items["arab-thobe"]["equipped"] and items["arab-thobe"]["name"] == "Arab Thobe"
+    assert write(client, "POST", "/v1/cosmetics/claim", {"cosmeticId": "astronaut"}).status_code == 403
+
+
 def test_published_contract_matches_the_routes_the_app_serves():
     # The app serves no /openapi.json, so contracts/openapi-v1.json is what
     # consumers build against. Hand-editing is how it drifts from the routes;
