@@ -98,7 +98,7 @@ def build(corpus_dir: Path, releases_root: Path, release_id: str, *, registry_pa
     manifest = ReleaseManifest(release_id=release_id, created_at="", channel=channel, corpus_ids=(corpus.id,),
                                document_count=len(kept), chunk_count=len(chunks), embedder=embedder.identity,
                                pipeline=pipeline, review=review)
-    path = write_release(Path(releases_root), manifest, chunks, vectors)
+    path = write_release(Path(releases_root), manifest, chunks, vectors, sources=status)
     _read_only(path)
     audit.append(Path(releases_root) / AUDIT, actor=actor, action="release.build", item=release_id, from_state=None,
                  to_state="built", reason=f"{len(kept)} documents, {len(chunks)} chunks, excluded {excluded}")

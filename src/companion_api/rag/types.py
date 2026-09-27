@@ -135,10 +135,13 @@ class ReleaseManifest:
     review: dict = field(default_factory=dict)
     checksums: dict = field(default_factory=dict)
     schema_version: int = SCHEMA_VERSION
+    # Every chunk id in the release, written by write_release; empty in releases written before it existed.
+    chunk_ids: tuple[str, ...] = ()
 
     def to_json(self) -> dict:
         data = {_camel(key): getattr(self, key) for key in self.__dataclass_fields__}
         data["corpusIds"] = list(self.corpus_ids)
+        data["chunkIds"] = list(self.chunk_ids)
         data["embedder"] = self.embedder.to_json()
         return data
 
@@ -146,6 +149,7 @@ class ReleaseManifest:
     def from_json(cls, data: dict) -> "ReleaseManifest":
         values = {_snake(key): value for key, value in data.items()}
         values["corpus_ids"] = tuple(values["corpus_ids"])
+        values["chunk_ids"] = tuple(values.get("chunk_ids", ()))
         values["embedder"] = EmbedderIdentity.from_json(values["embedder"])
         return cls(**values)
 

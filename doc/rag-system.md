@@ -685,3 +685,18 @@ unchanged. Search text only; displayed text never changes.
 `scripts/build_corpus.py` (checks, clusters, segments, documents) write `corpus/layer0/` and
 `corpus/wave1/` as ordinary corpus folders that `python -m companion_api.rag.pipeline build`
 releases. Both are regenerated and stay out of git.
+
+## 14. No child content in the vector store (corpus tasks, 2026-09-27)
+
+`release.write_release` is the only writer of vectors, and it admits a chunk only when
+`release.admission_problems` finds nothing: an indexable content type; synthetic chunks only as
+`app_help` or `orientation`; every other chunk citing at least one `sourceIds` entry that is in the
+source registry and is not `candidate` or `rejected`. Both builders pass the registry
+(`pipeline build --registry`, default `corpus/sources/registry.yaml`; `scripts/build_release.py`), so a
+schema v1 non-synthetic document, which cannot cite a registry source, is no longer releasable. The
+manifest lists every `chunkIds` entry, and `load_release` refuses a release whose chunks differ from it.
+`python scripts/scan_index.py [release]` rescans a release: ids against the manifest, text against each
+chunk's checksum, and every chunk against the admission rule (a source that becomes blocked later shows
+up here). `tests/test_no_child_content.py` checks that conversation modules (router, chat, service,
+generator, grounding, API, store) never import the pipeline, corpus preparation, governance or the chunker,
+and never call `write_release` or `embed_documents`.

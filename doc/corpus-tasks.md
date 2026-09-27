@@ -294,22 +294,19 @@
 [ClickUp](https://app.clickup.com/t/z8q7hbct4r)
 
 - **المالك:** Momen Alhamza.
-- **الهدف:** الكاتب الوحيد للـ index يقبل فقط قطع من release manifest ومصدرها
-  بالـ registry؛ schema القطعة يرفض أي حقل غير معرّف؛ اختبار يمنع فهرسة نص
-  محادثة؛ اختبار معماري يمنع أي module محادثة من استيراد كاتب الـ index؛ فحص
-  يمسح الـ index ويتأكد كل `chunk_id` موجود بالـ manifest (plan.md مرحلة 6).
-- **معايير القبول:** كل الاختبارات أعلاه موجودة وناجحة.
-- **شو انعمل:** لسا لأ. الأساس الموجود يدعم جزءاً من هذا فعلاً:
-  `Chunk` (`types.py`) هو `frozen dataclass` بحقول صريحة (يرفض أي حقل غير معرّف
-  ضمنياً عبر `from_json`/`__post_init__` لأنها كائن Python صريح لا `dict` حر)،
-  و`release.write_release`/`load_release` يتحققان من sha256 لكل شيء، ولا يوجد
-  أي مسار بالكود اليوم يفهرس نص محادثة (الطفل) أصلاً — الكاتب الوحيد المستهلَك
-  هو `pipeline.build` من كوربس مُحقَّق. يبقى مطلوباً: اختبار صريح يثبت الرفض،
-  والفحص المعماري (import guard)، وفحص مسح الـ index مقابل الـ manifest.
-- **الأدلة:** `src/companion_api/rag/types.py`,
-  `src/companion_api/rag/release.py`؛ لاحقاً اختبارات جديدة بـ `tests/`.
-- **شو محتاج قرار بشري:** لا شيء حالياً.
-- **الحالة:** not_started
+- **الهدف:** الكاتب الوحيد للـ index بيقبل بس قطع من release manifest ومصدرها بالـ registry؛ schema القطعة
+  بيرفض أي حقل غير معرّف؛ اختبار فهرسة نص محادثة؛ اختبار معماري؛ فحص مسح الـ index مقابل الـ manifest.
+- **معايير القبول:** كل الاختبارات موجودة وناجحة.
+- **شو انعمل:** `write_release` صار بوابة القبول الوحيدة (`admission_problems`): نوع محتوى قابل للفهرسة،
+  الاصطناعي app help بس، وكل الباقي لازم يستشهد بمصدر مسجّل مش candidate ولا rejected. الـ manifest بيسجّل
+  كل `chunkIds` و`load_release` بيرفض أي اختلاف. `scripts/scan_index.py` بيمسح الإصدار. اختبارات: 5 طرق
+  لإدخال نص محادثة أو مصدر مجهول كلها بترفض وما بتكتب شي؛ حقل غير معرّف بيرفض؛ 15 وحدة محادثة ما بتقدر
+  تستورد الـ pipeline/corpusprep/governance/chunker ولا تستدعي `write_release`/`embed_documents`.
+  تجربة حقيقية: `wave1-dev-3` → `scan_index.py` نظيف.
+- **الأدلة:** `PYTHONPATH=src python3 -m pytest -q tests/test_no_child_content.py` (24 passed)؛
+  `python3 scripts/scan_index.py`؛ `doc/rag-system.md` §14.
+- **شو محتاج قرار بشري:** لما ينتقل الـ index لـ pgvector (برا النطاق الآن)، نفس البوابة لازم تكون الكاتب الوحيد.
+- **الحالة:** draft_ready
 
 ---
 

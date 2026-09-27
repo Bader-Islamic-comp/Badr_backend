@@ -44,6 +44,16 @@ def _describe(identity: EmbedderIdentity) -> str:
     return f"{identity.name} / {identity.model}, {identity.dimensions} dimensions"
 
 
+def _registry_statuses(path: str | None) -> dict[str, str] | None:
+    """source_id -> status from the source registry, so write_release can admit registered chunks only."""
+    registry = Path(path) if path else Path("corpus/sources/registry.yaml")
+    if not registry.is_file():
+        return None
+    import yaml  # the registry is YAML; synthetic-only builds never need it
+    data = yaml.safe_load(registry.read_text(encoding="utf-8")) or {}
+    return {entry["source_id"]: entry["status"] for entry in data.get("sources") or []}
+
+
 def review_counts(documents) -> dict:
     return {"approved": sum(document.review.status == "approved" for document in documents),
             "draft": sum(document.review.status == "draft" for document in documents),
@@ -108,7 +118,7 @@ def _build(args) -> int:
         pipeline={"normalizer": normalize.VERSION, "chunker": CHUNKER_VERSION, "maxChunkWords": args.max_chunk_words},
         review=review_counts(documents))
     try:
-        path = write_release(out, manifest, chunks, vectors)
+        path = write_release(out, manifest, chunks, vectors, sources=_registry_statuses(args.registry))
     except ReleaseError as error:
         return _fail(f"Build refused: {error}")
     kinds = Counter(chunk.kind for chunk in chunks)
@@ -239,6 +249,7 @@ def _parser() -> argparse.ArgumentParser:
     build.add_argument("--embedding-base-url", help="default: $COMPANION_EMBEDDING_BASE_URL, "
                                                     f"$COMPANION_LLM_BASE_URL or {embeddings.DEFAULT_BASE_URL}")
     build.add_argument("--channel", choices=("development", "published"), default="development")
+    build.add_argument("--registry", default=None, help="source registry (default corpus/sources/registry.yaml); non-synthetic chunks must cite registered sources")
     budget(build)
     build.set_defaults(handler=_build)
 

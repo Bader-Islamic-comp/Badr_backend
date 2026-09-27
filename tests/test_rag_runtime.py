@@ -28,11 +28,12 @@ BASE = "http://127.0.0.1:11434/v1"
 
 
 def make_chunk(document_id, title, text, *, kind="passage", questions=(), language="en", age_bands=("7-9", "10-11"),
-               synthetic=True, review_status="draft"):
+               synthetic=True, review_status="draft", source_ids=()):
     return Chunk(id=f"{document_id}#1", document_id=document_id, kind=kind, title=title, language=language,
                  age_bands=age_bands, content_type="app_help", madhhab=(), review_status=review_status,
                  synthetic=synthetic, text=text, search_text=normalize.search_text(" ".join((*questions, text))),
-                 references=("part 1",), source_label=LABEL + "part 1", unit_ids=("u1",), questions=questions)
+                 references=("part 1",), source_label=LABEL + "part 1", unit_ids=("u1",), questions=questions,
+                 source_ids=source_ids)
 
 
 CORPUS = (
@@ -46,7 +47,7 @@ CORPUS = (
                kind="answer", questions=("Who is Robert?", "What is Robert?")),
     # Real (non-synthetic) content that is still a draft: never served to the app.
     make_chunk("draft-garden", "The garden lesson", "The garden lesson opens after ten finished lessons.",
-               synthetic=False),
+               synthetic=False, source_ids=("fixture-source",)),
     make_chunk("app-help-timeline", "The timeline view", "Older learners can unlock the timeline view after twenty "
                "lessons.", age_bands=("10-11",)),
     # "Learning stars are earned by finishing lessons", in Arabic.
@@ -61,7 +62,7 @@ def build_release(root, chunks=CORPUS, embedder=None, release_id="dev-runtime-1"
     manifest = ReleaseManifest(release_id=release_id, created_at="", channel="development", corpus_ids=("dev",),
                                document_count=0, chunk_count=0, embedder=embedder.identity)
     vectors = embedder.embed_documents(["\n".join((chunk.title, *chunk.questions, chunk.text)) for chunk in chunks])
-    return write_release(root, manifest, chunks, vectors)
+    return write_release(root, manifest, chunks, vectors, sources={"fixture-source": "pending_legal"})
 
 
 class FakeGenerator:

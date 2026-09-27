@@ -70,3 +70,7 @@
 | 2026-09-27 | 5 | خطأ بالعتبة: كانت تقع على أقل عيّنة موجبة → نقاط منتصف بين الدرجات (اختبار كشفه) | — | `src/companion_api/evaluation/retrieval.py` |
 | 2026-09-27 | 5 | dashboard ثابت بدون إنترنت، انفحص بصرياً (Chrome headless)، صلّحت حجم النص وتداخل التسميات | — | `reports/retrieval/index.html` |
 | 2026-09-27 | 5 | ADR-0005 proposed: ولا موديل انختار؛ hybrid RRF k=60 باقي | — | `doc/adr-0005-embedding-selection.md` |
+| 2026-09-27 | 6 | `write_release` = بوابة القبول الوحيدة + `chunkIds` بالـ manifest + `scan()` | — | `src/companion_api/rag/release.py`, `src/companion_api/rag/types.py` |
+| 2026-09-27 | 6 | قرار (6): الوثائق الحقيقية بصيغة v1 (بدون sourceIds) ما عادت قابلة للإصدار؛ `pipeline build` بياخد `--registry` | تعديل fixtures اختبارين قديمين ليستشهدوا بمصدر مسجّل (بدل تخفيف القاعدة) | `src/companion_api/rag/pipeline.py`, `tests/test_rag_pipeline.py`, `tests/test_rag_runtime.py` |
+| 2026-09-27 | 6 | `scan_index.py` + `test_no_child_content.py` (24) | wave1-dev-3 نظيف؛ wave1-dev-1 (قبل القائمة) مكشوف | `scripts/scan_index.py`, `tests/test_no_child_content.py` |
+| 2026-09-27 | 6 | كل المشروع + check_progress كامل (9 أوامر دليل) | 623 passed؛ 0 تعارض | — |
