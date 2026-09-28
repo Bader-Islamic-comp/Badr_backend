@@ -106,3 +106,5 @@
 | 2026-09-28 | R4 | قرارات المستخدم: العبارات القصيرة بتضل بدون squash؛ الصلاحية بيطلبها المستخدم؛ ما في fork؛ حزمة gh ما بتنلمس | — | — |
 | 2026-09-28 | R4 | مقطع يوسف 12:23 بتعليق B: الحروف مطابقة للنص البسيط بس مش مطابق حرفياً للـ canonical (بدون تشكيل) → استبدلته بـ `quran:12:23`؛ النسخة القديمة باقية بتاريخ الـ commits (بقرار عدم الـ squash). Known issues بوصف الـ PR انحدّث | الملف JSONL سليم | `corpus/reviews/ai_prereview/batch-03.jsonl`, `doc/pr/corpus-tasks.md` |
 | 2026-09-28 | R5 | الجاية (بعد ما توصل الصلاحية): `git push -u origin corpus-tasks`، رابط compare للمستخدم، تحديث تعليقات ClickUp الـ 23 برابط الـ PR | بانتظار المستخدم | — |
+| 2026-09-28 | R6 | الصلاحية وصلت (API: push true، collaborator write، token scope repo) → `git push -u origin corpus-tasks` | نجح من أول مرة؛ الـ branch على GitHub مطابق للمحلي | — |
+| 2026-09-28 | R6 | الجاية: المستخدم بيفتح الـ draft PR من رابط compare، وبعدها تحديث تعليقات ClickUp الـ 23 برابط الـ PR | بانتظار رابط الـ PR | — |
