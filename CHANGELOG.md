@@ -10,6 +10,49 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-09-28 (corpus tasks)
+
+On branch `corpus-tasks` (not merged, not yet pushed). Works through the 15 corpus tasks in
+[`doc/corpus-tasks.md`](doc/corpus-tasks.md) on top of the existing development RAG: same release,
+manifest and config format, extended. Everything is draft or candidate; every source licence is
+`pending_legal`; nothing is approved. Rebuild and verify with [`doc/SETUP.md`](doc/SETUP.md).
+
+### Added
+
+- Source registry (15 sources, sha256) and `scripts/fetch_sources.py`: verified download, canonical
+  Quran (114 surahs, 6236 ayat, checked against two references), tafsir and five hadith collections,
+  and a Bukhari/Muslim cross-check against an independent second source
+  (`corpus/reports/hadith_crosscheck.md`). The third-party text itself stays out of git.
+- Structure-aware ingestion: corpus schema v2, chunk-v2 (parent/child, cluster), norm-v2 with an
+  Uthmani rasm map; layer 0 (16,220 documents, 28,560 chunks) and wave 1 (184 documents, 1,106
+  chunks); prophet aliases, five prophet source maps, a 40-hadith selection and 552 generated
+  retrieval questions (`generated: true`, never shown to a child).
+- Age-band structure only: schema, 99 empty templates, a checker and a writing guide. No child text.
+- Governance: hash-chained audit logs, immutable releases with rollback and quarantine, a review
+  CLI, re-review triggers, policy drafts, signed human decisions (`doc/decisions/decisions.yaml`,
+  `scripts/apply_decisions.py`) and six decision packages.
+- Evaluation: 310 synthetic gold questions, 151 harmful questions, `scripts/eval_retrieval.py` with
+  an offline dashboard, and ADR 0005 (proposed) comparing BM25, Qwen3-Embedding-0.6B, BGE-M3,
+  multilingual-e5-large, hybrid RRF and bge-reranker-v2-m3.
+- An independent AI pre-review (`corpus/reviews/ai_prereview/`, 567 items): a separate status, never
+  an approval.
+- `scripts/check_progress.py`, `scripts/progress_score.py` and `doc/done.md`.
+
+### Changed
+
+- `write_release` is the only writer of the vector index; documents without a registered source are
+  refused, and the `published` channel requires every source to be `cleared`.
+- `doc/architecture.md` and `doc/plan.md` moved from the repository root to `doc/`.
+- Dependencies: `pyyaml` and `jsonschema` are runtime dependencies.
+
+### Verification
+
+- `pytest`: **634 passed** (539 before this work).
+- `scripts/check_progress.py`: 0 conflicts. `scripts/progress_score.py`: 58.7 / 100 (automated
+  58.7 of 58.7 possible, human 0 of 41.3).
+- Fresh clone: `fetch_sources.py` and `build_corpus.py` rebuild the corpus with an identical
+  canonical manifest.
+
 ## Unreleased — 2026-09-27 (animation allowlists)
 
 Not yet committed; the coordinator adds the commit hash here when it lands on
