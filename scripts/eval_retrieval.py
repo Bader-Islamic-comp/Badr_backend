@@ -92,21 +92,25 @@ def _batch(embedder, texts):
         return _batch(embedder, texts[:middle]) + _batch(embedder, texts[middle:])
 
 
-def build_methods(chunks, models: list[str], base_url: str, reranker=None, questions: list[str] = ()):
+def build_methods(chunks, models: list[str], base_url: str, reranker=None, questions: list[str] = (),
+                  rerank_k: int = 30, rerank_on: set[str] | None = None):
+    """`rerank_on` limits the +rerank variants to those base methods (None = all); the cross-encoder is slow on CPU."""
     parents = {chunk.id: chunk for chunk in chunks if not chunk.is_child}
     plain, with_q = retrieval.entries(chunks, with_questions=False), retrieval.entries(chunks, with_questions=True)
     rerank = None
     if reranker is not None:
         texts = {pid: embedding_text(chunk) for pid, chunk in parents.items()}
         rerank = lambda question, ids: reranker.score(question, [texts[i] for i in ids])
+    wants = lambda name: rerank is not None and (rerank_on is None or name in rerank_on)
     methods = []
     bm25 = {False: retrieval.bm25_index(plain), True: retrieval.bm25_index(with_q)}
     items = {False: plain, True: with_q}
     for q in (False, True):
         suffix = "+q" if q else ""
         methods.append((retrieval.Method(f"bm25{suffix}", items[q], bm25=bm25[q]), {"candidate": True}))
-        if rerank:
-            methods.append((retrieval.Method(f"bm25{suffix}+rerank", items[q], bm25=bm25[q], rerank=rerank),
+        if wants(f"bm25{suffix}"):
+            methods.append((retrieval.Method(f"bm25{suffix}+rerank", items[q], bm25=bm25[q], rerank=rerank,
+                                             rerank_k=rerank_k),
                             {"candidate": True}))
     hashing = embeddings.HashingEmbedder()
     hv = hashing.embed_documents([item.text for item in plain])
@@ -139,9 +143,10 @@ def build_methods(chunks, models: list[str], base_url: str, reranker=None, quest
                                              embed_query=query), {"candidate": candidate}))
             methods.append((retrieval.Method(f"hybrid:{name}{suffix}", items[q], bm25=bm25[q], vectors=vectors[q],
                                              embed_query=query), {"candidate": candidate}))
-            if rerank:
+            if wants(f"hybrid:{name}{suffix}"):
                 methods.append((retrieval.Method(f"hybrid:{name}{suffix}+rerank", items[q], bm25=bm25[q],
-                                                 vectors=vectors[q], embed_query=query, rerank=rerank),
+                                                 vectors=vectors[q], embed_query=query, rerank=rerank,
+                                                 rerank_k=rerank_k),
                                 {"candidate": candidate}))
         ran.add(name)
     if reranker is not None:
@@ -155,6 +160,9 @@ def main(argv=None) -> int:
     parser.add_argument("--ollama", action="append", default=[], choices=sorted(OLLAMA_MODELS))
     parser.add_argument("--hf", action="append", default=[], choices=sorted(HF_MODELS))
     parser.add_argument("--rerank", action="store_true", help=f"also rerank with {RERANKER} (cross-encoder)")
+    parser.add_argument("--rerank-k", type=int, default=30, help="how many top parents the reranker rescores")
+    parser.add_argument("--rerank-on", action="append", metavar="METHOD",
+                        help="rerank only these base methods, e.g. hybrid:bge-m3 (repeatable; default all)")
     parser.add_argument("--base-url", default=embeddings.DEFAULT_BASE_URL)
     parser.add_argument("--no-dashboard", action="store_true")
     args = parser.parse_args(argv)
@@ -170,7 +178,8 @@ def main(argv=None) -> int:
     if args.rerank:
         from companion_api.evaluation.models import LazyReranker
         reranker = LazyReranker(RERANKER, CACHE / "rerank-scores.json")  # loads after the embedders are freed
-    methods, ran = build_methods(chunks, args.ollama + args.hf, args.base_url, reranker, questions)
+    methods, ran = build_methods(chunks, args.ollama + args.hf, args.base_url, reranker, questions,
+                                 args.rerank_k, set(args.rerank_on) if args.rerank_on else None)
     results, worst = {}, {}
     for method, info in methods:
         print(f"evaluating {method.name}", file=sys.stderr, flush=True)
@@ -189,6 +198,7 @@ def main(argv=None) -> int:
         "abstain_negatives": sum(i["category"] in retrieval.ABSTAIN_CATEGORIES for i in harmful),
         "methods": results, "best_by_mrr": best, "worst_20_best_method": worst[best],
         "blocked": _blocked(ran), "synthetic_questions": True,
+        "rerank": {"k": args.rerank_k, "on": args.rerank_on or "all"} if args.rerank else None,
     }
     OUT.mkdir(parents=True, exist_ok=True)
     with (OUT / "history.jsonl").open("a", encoding="utf-8") as handle:

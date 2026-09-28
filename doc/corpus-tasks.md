@@ -85,6 +85,7 @@
 4. **رياض الصالحين والأدب المفرد:** المصدر الوحيد المفتوح (AhmedBaset، منقول من sunnah.com) ما فيه
    ترخيص. هل نطلب ترخيص/API key من sunnah.com، أو نعتمد طبعة مطبوعة مرخّصة، أو نشيلهم من النطاق؟
    حالياً: بالـ canonical بس وبرا الموجة 1.
+- **تحديث (الجولة 2):** حزمة قرار `doc/decisions/01-licensing.md`: لكل مصدر الشروط حرفياً والخطر والتوصية، و5 مسودات إيميل طلب إذن (Tanzil، مجمّع الملك فهد، fawazahmed0، mhashim6، AhmedBaset/sunnah.com) — مسودات، ما انبعت شي. القرار عبر `decisions.yaml` (`source:*` → `cleared`/`rejected`).
 
 ### 4. Reviewer qualification and conflict-of-interest policy
 [ClickUp](https://app.clickup.com/t/z8q7hbct4c)
@@ -100,6 +101,7 @@
 - **شو محتاج قرار بشري:** أسماء المراجعين ومؤهلاتهم، عدد المراجعين لكل بند، مدة تجديد الإفصاح.
   لحد ما تنعبّى القائمة، ما في موافقة ممكنة.
 - **الحالة:** draft_ready
+- **تحديث (الجولة 2):** حزمة `doc/decisions/02-reviewers.md` (قالب أسماء ومؤهلات وإفصاح). B نبّه: موافقة مراجع واحد كافية اليوم، والدور ما بيتطابق مع نوع البند لكل الأنواع — نقطتان مفتوحتان بالحزمة.
 
 ### 5. Immutable corpus releases with rollback
 [ClickUp](https://app.clickup.com/t/z8q7hbct4d)
@@ -118,6 +120,7 @@
   `PYTHONPATH=src python3 -m pytest -q tests/test_governance.py`.
 - **شو محتاج قرار بشري:** مين مسموح يعمل promote وrollback وعزل طارئ.
 - **الحالة:** draft_ready
+- **تحديث (الجولة 2):** القناة المنشورة صارت تشترط كل مصادر الإصدار `cleared` (ثغرة لقاها B: `pending_legal` كان بيعدّي).
 
 ### 6. Review workflow tooling and admin UI
 [ClickUp](https://app.clickup.com/t/z8q7hbct4e)
@@ -132,6 +135,7 @@
 - **الأدلة:** `scripts/review.py`، `doc/governance/review-workflow.md`، `tests/test_governance.py`.
 - **شو محتاج قرار بشري:** بناء بوابة المراجعة (UI) قرار منتج؛ صلاحيات كل دور.
 - **الحالة:** draft_ready
+- **تحديث (الجولة 2):** `approve`/`reject` ما بتصير إلا من `doc/decisions/decisions.yaml` عبر `scripts/apply_decisions.py` (بيتحقق من الاسم والدور والتاريخ والصلاحية، وبيطبّق عبر أداة المراجعة وسجل التدقيق، وبيرفض الملف كله عند أي خطأ). `review.py` ما عاد بيقبلها مباشرة. `tests/test_decisions.py` (11).
 
 ### 7. Audit trail for every approval
 [ClickUp](https://app.clickup.com/t/z8q7hbct4f)
@@ -209,6 +213,7 @@
   AGENTS.md بيمنع استخدام موديل غير مراجَع بصمت. محتاج قرار: أي موديل مسموح لتجهيز الداتا offline.
   (2) مراجعة شرعية لكل النطاقات والـ 40 حديثاً. (3) `madhhabScope` فاضي عمداً: ما بنخمّنه.
 - **الحالة:** draft_ready
+- **تحديث (الجولة 2):** الأسئلة الافتراضية: 552 سؤالاً (3 لكل قطعة أب من 184 بالموجة 1: فصحى، عامية خليجية/شامية، عربيزي) بـ `corpus/candidate/retrieval_questions.json`، `generated: true`، ما بتنعرض للطفل. `build_corpus.py` بيرفض أي سؤال فيه 5 كلمات متتالية من نص مقدس (رفض 4 وانصلحوا). ai_prereview (B): حديث 34/6/0، نطاقات 53/5/1 (pass/flag/fail).
 
 ### 10. Age-band adaptation, human-written and reviewed
 [ClickUp](https://app.clickup.com/t/z8q7hbct4j)
@@ -245,10 +250,12 @@
   `doc/adr-0005-embedding-selection.md` بحالة proposed: ولا موديل انختار.
 - **الأدلة:** `doc/adr-0005-embedding-selection.md`، `reports/retrieval/history.jsonl`؛
   `PYTHONPATH=src python3 -m pytest -q tests/test_eval_retrieval.py`.
-- **شو محتاج قرار بشري:** **blocked:** القرص ممتلئ 100% (2.2 GB فاضي). BGE-M3 وQwen3-Embedding
-  وmultilingual-e5-large والـ reranker محتاجين ~8 GB تنزيل (+ sentence-transformers لـ e5 والـ reranker).
-  الوقت المتوقع بعد تفريغ المساحة: 45–60 دقيقة حساب على الـ CPU + التنزيل. مين يفرّغ المساحة (ما حذفت شي برا المستودع).
-- **الحالة:** blocked
+- **شو محتاج قرار بشري:** Momen Alhamza يختار بين الخيارين بـ ADR-0005 (A: qwen3 + reranker، B: bge-m3)
+  ويقبل الـ ADR عبر `decisions.yaml` (`adr-0005`). يُفضَّل بعد gold مراجَع أو مكتوب بشكل مستقل (تسرّب "+q").
+- **الحالة:** draft_ready
+- **تحديث (الجولة 2):** الأربعة انقاسوا محلياً (qwen3 عبر Ollama، bge-m3 وe5 وbge-reranker-v2-m3 عبر transformers).
+  بدون أسئلة: hybrid:qwen3 + rerank الأفضل (MRR 0.538، R@5 0.661)؛ مع الأسئلة: dense:bge-m3+q (MRR 0.746، R@5 0.884).
+  الـ reranker على أعلى 10 و3 طرق بس (الإعداد الكامل ≈ 7 ساعات على هالـ CPU).
 
 ### 12. Gold question set with approved answers and expected citations
 [ClickUp](https://app.clickup.com/t/z8q7hbct4m)
@@ -263,6 +270,7 @@
 - **الأدلة:** `corpus/eval/gold.jsonl`، `python3 scripts/build_eval.py`.
 - **شو محتاج قرار بشري:** مراجعة كل سؤال ومراجعه وملاحظاته (المراجع من اقتراح الموديل).
 - **الحالة:** draft_ready
+- **تحديث (الجولة 2):** ai_prereview (B): 230 pass، 25 flag، 5 fail (كلها سؤال "إماطة الأذى صدقة": القطعة المتوقعة ما فيها الطريق). الحزمة: `doc/decisions/05-eval-review.md`. **تنبيه:** الأسئلة الافتراضية وأسئلة gold من نفس الكاتب، فنتائج "+q" ممكن تكون متفائلة.
 
 ### 13. Harmful and out-of-scope question set
 [ClickUp](https://app.clickup.com/t/z8q7hbct4n)
@@ -276,6 +284,7 @@
 - **الأدلة:** `corpus/eval/harmful.jsonl`، `corpus/eval/harmful_source.yaml`.
 - **شو محتاج قرار بشري:** مسؤول الحماية يراجع بنود الضيق ومساراتها قبل أي استخدام.
 - **الحالة:** draft_ready
+- **تحديث (الجولة 2):** ai_prereview (B): 139 pass، 12 flag، 0 fail؛ منها: حديث الخمسين صلاة صحيح وموصوف غلط كموضوع، وأسئلة عدد ركعات التراويح/أشواط العمرة ممكن تكون redirect مش abstain.
 
 ### 14. Retrieval quality metrics dashboard
 [ClickUp](https://app.clickup.com/t/z8q7hbct4q)

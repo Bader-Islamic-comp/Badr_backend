@@ -27,7 +27,7 @@
 | 9 | التحديات والمكافآت — خارج تاسكات الكوربس | architecture §9 | not_started | — | — | 2026-09-27 |
 | 10 | كيانات البيانات — لا بيانات أطفال بالـ vector store (بوابة الكاتب الوحيد + فحص) | architecture §10 | draft_ready | `src/companion_api/rag/release.py`, `scripts/scan_index.py`; `PYTHONPATH=src python3 -m pytest -q tests/test_no_child_content.py` | 15 | 2026-09-27 |
 | 11 | سلوك الفشل: المحتوى المخترق → عزل ورجوع للإصدار السابق | architecture §11 | draft_ready | `scripts/rollback.py` | 5 | 2026-09-27 |
-| 12 | المراقبة والتقييم: مجموعة تقييم + dashboard؛ الـ embedding blocked | architecture §12 | draft_ready | `scripts/eval_retrieval.py`, `reports/retrieval/history.jsonl` | 12,13,14 | 2026-09-27 |
+| 12 | المراقبة والتقييم: مجموعة تقييم + dashboard + مقارنة embeddings كاملة | architecture §12 | draft_ready | `scripts/eval_retrieval.py`, `reports/retrieval/history.jsonl` | 12,13,14 | 2026-09-27 |
 | 13 | نطاق الـ MVP — قرار منتج | architecture §13 | not_started | — | — | 2026-09-27 |
 | 14 | خارطة الطريق — قرار منتج | architecture §14 | not_started | — | — | 2026-09-27 |
 | 15 | الفريق — قرار تنظيمي | architecture §15 | not_started | — | — | 2026-09-27 |
@@ -37,7 +37,7 @@
 | p1 | مصادر البيانات: الطبقة 0 منزّلة ومتحقَّق منها | plan مكوّن 1 | draft_ready | `corpus/sources/registry.yaml`, `corpus/canonical/manifest.json`; `python3 scripts/fetch_sources.py` | 2,3 | 2026-09-27 |
 | p1b | محتوى الطفل (الطبقة 2) — هيكل وقوالب ومدقق؛ النص بشري | plan مكوّن 1 | draft_ready | `corpus/drafts/age_band/schema.json`, `corpus/drafts/age_band/WRITING_GUIDE.md`; `python3 scripts/age_band.py check` | 10 | 2026-09-27 |
 | p2 | الإدخال والتقطيع — schema v2 / chunk-v2 / norm-v2، الطبقة 0 والموجة 1 | plan مكوّن 2 | draft_ready | `scripts/build_corpus.py`, `corpus/reports/ingest_summary.json`, `corpus/aliases.yaml`, `corpus/candidate/hadith_selection.yaml` | 9 | 2026-09-27 |
-| p2b | اختيار الـ embedding — blocked: القرص ممتلئ؛ ADR proposed | plan مكوّن 2 | blocked | `doc/adr-0005-embedding-selection.md` | 11 | 2026-09-27 |
+| p2b | اختيار الـ embedding — 4 موديلات + reranker انقاسوا؛ ADR proposed بخيارين، القرار لـ Momen | plan مكوّن 2 | draft_ready | `doc/adr-0005-embedding-selection.md`, `reports/retrieval/history.jsonl` | 11 | 2026-09-28 |
 | p3 | الاسترجاع — hybrid RRF موجود، بدون إعادة صياغة ولا reranker | plan مكوّن 3 | in_progress | `src/companion_api/rag/retriever.py` | — | 2026-09-27 |
 | p4 | التوليد والتحقق — تطويري | plan مكوّن 4 | in_progress | `src/companion_api/rag/generator.py`, `src/companion_api/rag/grounding.py` | — | 2026-09-27 |
 | p5 | بوابة الأمان — خارج التاسكات الـ 15 | plan مكوّن 5 | not_started | — | — | 2026-09-27 |
@@ -46,3 +46,38 @@
 | p8 | البيانات والبنية التحتية (pgvector) — خارج النطاق | plan مكوّن 8 | blocked | `doc/rag-system.md` | — | 2026-09-27 |
 | p8b | لا محتوى أطفال بالـ vector store | plan مكوّن 8 | draft_ready | `tests/test_no_child_content.py`; `python3 scripts/scan_index.py` | 15 | 2026-09-27 |
 | p9 | التقييم: gold (310)، harmful (151)، dashboard | plan مكوّن 9 | draft_ready | `corpus/eval/gold.jsonl`, `corpus/eval/harmful.jsonl`, `reports/retrieval/index.html`; `PYTHONPATH=src python3 -m pytest -q tests/test_eval_retrieval.py` | 12,13,14 | 2026-09-27 |
+
+## بنود ما بتكمل آلياً (الجولة 2)
+
+كل بند حالته مش done بهالجدول، وليش ما بقدر أكمّله:
+
+| البنود | السبب |
+| --- | --- |
+| 1، 2، 3، 4، 13، 14، 15، 16 (أقسام المنتج) | وثائق/قرارات منتج وتنظيم، مش تاسكات كوربس. |
+| 5، 7، 6.4، p3، p4 | تنفيذ تطويري قديم (قبل المهمة)؛ تحسين الموجّه والتوليد خارج التاسكات الـ 15. |
+| 6.5، 18 | قرارات بشرية (§18، madhhabScope): حزمة `doc/decisions/06-section18.md`. |
+| 8، 9، p5، p6، p7 | خارج نطاق الكوربس (الخصوصية، المكافآت، الأمان، الـ API، Flutter/Unity). |
+| 17، p8 | Postgres/pgvector خارج النطاق بقرار المستخدم (2026-09-27). |
+| كل بنود H بـ `doc/progress_items.yaml` | ما بتنجز إلا بقرار بشري موقّع بـ `decisions.yaml`. |
+
+## التقدم
+
+التقدم الكلي: **58.7 / 100** — الآلي 58.7 / 58.7 ممكن، والبشري 0.0 / 41.3 ممكن (حُسب 2026-09-28T00:53:31+00:00 بـ `python3 scripts/progress_score.py`).
+
+| # | التاسك | الكلي | الآلي | البشري | الناقص (صاحبه) |
+| --- | --- | ---: | ---: | ---: | --- |
+| 1 | Define corpus scope and an explicit out-of-scope list | 40.0 | 40.0 | 0.0 | 1b Scope approved (Mousa al-Rashdan) |
+| 2 | Source selection and provenance policy | 50.0 | 50.0 | 0.0 | 2c Source policy approved (Mousa al-Rashdan)؛ 2d Every registered source accepted or rejected (Mousa al-Rashdan) |
+| 3 | Rights clearance for every candidate source | 50.0 | 50.0 | 0.0 | 3c Every source cleared or rejected by the rights owner (Mousa al-Rashdan) |
+| 4 | Reviewer qualification and conflict-of-interest policy | 40.0 | 40.0 | 0.0 | 4c Reviewer policy approved (Mousa al-Rashdan)؛ 4d Reviewers named and approved (Mousa al-Rashdan) |
+| 5 | Immutable corpus releases with rollback | 60.0 | 60.0 | 0.0 | 5b Release policy approved (Mousa al-Rashdan) |
+| 6 | Review workflow tooling and admin UI | 60.0 | 60.0 | 0.0 | 6c Review workflow approved (Mousa al-Rashdan) |
+| 7 | Audit trail for every approval | 70.0 | 70.0 | 0.0 | 7b Audit and retention rules approved (in the review workflow policy) (Mousa al-Rashdan) |
+| 8 | Re-review cadence and change triggers | 50.0 | 50.0 | 0.0 | 8b Re-review cadence approved (Mousa al-Rashdan) |
+| 9 | Structure-aware ingestion and chunking | 70.0 | 70.0 | 0.0 | 9e Prophet source-map ranges decided by a scholarly reviewer (scholarly board)؛ 9f Wave 1 hadith selection decided by a scholarly reviewer (scholarly board) |
+| 10 | Age-band adaptation, human-written and reviewed | 40.0 | 40.0 | 0.0 | 10b Every age-band version written by a person and approved by a qualified reviewer (writers + scholarly board) |
+| 11 | Embedding model selection, evaluated on Arabic and transliteration | 70.0 | 70.0 | 0.0 | 11b ADR 0005 accepted (Momen Alhamza) |
+| 12 | Gold question set with approved answers and expected citations | 40.0 | 40.0 | 0.0 | 12b Every gold question approved or rejected (Momen Alhamza) |
+| 13 | Harmful and out-of-scope question set | 40.0 | 40.0 | 0.0 | 13b Every harmful question approved or rejected (Momen Alhamza (safety items with the safeguarding lead)) |
+| 14 | Retrieval quality metrics dashboard | 100.0 | 100.0 | 0.0 | — |
+| 15 | Enforce: no child content in the vector store | 100.0 | 100.0 | 0.0 | — |

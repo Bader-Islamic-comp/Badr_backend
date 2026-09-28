@@ -1,6 +1,6 @@
 """Local Hugging Face models for offline evaluation only (never used by the server).
 
-Loaded from the local cache (`local_files_only`), in bfloat16 to fit a small machine, one at a time.
+Loaded from the local cache (`local_files_only`), lazily and one at a time (float32 unless EVAL_DTYPE says otherwise).
 """
 from hashlib import sha256
 import json
@@ -11,20 +11,39 @@ from typing import Sequence
 from ..rag.embeddings import l2_normalize
 
 
+def _dtype(torch):
+    """float32 by default: on CPUs without bf16 instructions bfloat16 is emulated and several times slower.
+    Set EVAL_DTYPE=bfloat16 to halve memory instead."""
+    import os
+    return getattr(torch, os.environ.get("EVAL_DTYPE", "float32"))
+
+
 class HFEmbedder:
     """Mean-pooled sentence embeddings (multilingual-e5 style, with its query/passage prefixes)."""
 
     def __init__(self, repo: str, *, doc_prefix: str = "passage: ", query_prefix: str = "query: ",
                  max_length: int = 512, batch_size: int = 16, pooling: str = "mean"):
-        import torch
-        from transformers import AutoModel, AutoTokenizer
-        self.torch = torch
-        self.tokenizer = AutoTokenizer.from_pretrained(repo, local_files_only=True)
-        self.model = AutoModel.from_pretrained(repo, local_files_only=True, torch_dtype=torch.bfloat16).eval()
+        # The model loads on first encode, so a fully cached run never takes its memory.
+        self.repo, self.model, self.tokenizer = repo, None, None
         self.doc_prefix, self.query_prefix = doc_prefix, query_prefix
         self.max_length, self.batch_size, self.pooling = max_length, batch_size, pooling
 
+    def _load(self) -> None:
+        if self.model is None:
+            import torch
+            from transformers import AutoModel, AutoTokenizer
+            print(f"loading {self.repo}", file=sys.stderr, flush=True)
+            self.torch = torch
+            self.tokenizer = AutoTokenizer.from_pretrained(self.repo, local_files_only=True)
+            self.model = AutoModel.from_pretrained(self.repo, local_files_only=True,
+                                                   torch_dtype=_dtype(torch)).eval()
+
+    def close(self) -> None:
+        """Drops the weights; anything still holding this embedder no longer pins the model in memory."""
+        self.model = self.tokenizer = None
+
     def _encode(self, texts: Sequence[str]) -> list[list[float]]:
+        self._load()
         torch = self.torch
         out = []
         with torch.inference_mode():
@@ -58,7 +77,7 @@ class HFReranker:
         self.torch = torch
         self.tokenizer = AutoTokenizer.from_pretrained(repo, local_files_only=True)
         self.model = AutoModelForSequenceClassification.from_pretrained(
-            repo, local_files_only=True, torch_dtype=torch.bfloat16).eval()
+            repo, local_files_only=True, torch_dtype=_dtype(torch)).eval()
         self.max_length, self.batch_size = max_length, batch_size
         self.path = cache
         self.scores = json.loads(cache.read_text()) if cache.is_file() else {}
