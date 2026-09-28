@@ -159,8 +159,12 @@ git status                                   # only timing fields in corpus/repo
   describes the fifty-prayers hadith as fabricated although it is authentic.
 - The reranker ran in a reduced setting (top 10, three methods): the full setting is ~7 hours on CPU.
 - All evaluation questions are synthetic and pending review; the "+q" gain is not yet trustworthy.
-- Wave-1 search anchors in `corpus/candidate/hadith_selection.yaml` are short verbatim phrases (5–6
-  words) used to locate each hadith.
+- **Short verbatim phrases kept by decision.** `corpus/candidate/hadith_selection.yaml` holds about 10
+  hadith phrases of 5–6 words, used as search anchors to locate each selected hadith in the canonical
+  text. They are not a copy of a licensed dataset and were kept as they are (no history rewrite). One
+  reviewer-B note (`corpus/reviews/ai_prereview/batch-03.jsonl`, item `map-yusuf-04`) quoted five words
+  of Yusuf 12:23 without diacritics; the current version cites `quran:12:23` instead, and the earlier
+  wording remains in the branch history. A history-wide scan found no run of 8 or more canonical words.
 
 ## Risks and follow-ups
 
