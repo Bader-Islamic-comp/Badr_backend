@@ -27,10 +27,19 @@ Two problems found while validating the `corpus-tasks` branch, fixed on it.
   `write_release` (`publication_problems`), and `scan` reports a published release whose clearance
   was withdrawn.
 
+### Added
+
+- **Corpus preview for adult operators** (`doc/rag-system.md` §9.1). `COMPANION_RAG_LANGUAGE=ar` and
+  `COMPANION_RAG_PREVIEW_DRAFTS=true` let the development server answer from the Arabic draft corpus,
+  so it can be tried in the app; both default to off. The bootstrap then reports
+  `contentStatus: "unreviewed_drafts"` (`contracts/openapi-v1.json`), which an older app refuses.
+  A development exception, never child-facing: the router's small-talk and safety patterns still read
+  English only.
+
 ### Verification
 
-- `pytest`: **644 passed** (634 before; 10 new in `tests/test_rag_small_to_big.py`, 7 of which fail
-  without the fixes).
+- `pytest`: **647 passed** (634 before; 10 new in `tests/test_rag_small_to_big.py`, 7 of which fail
+  without the fixes, and 3 for the corpus preview).
 
 ## Unreleased — 2026-09-28 (corpus tasks)
 

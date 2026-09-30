@@ -45,7 +45,9 @@ class Bootstrap(BaseModel):
     characterId: Literal["robert"] = "robert"
     profileId: Literal["demo-child"] = "demo-child"
     features: Features = Field(default_factory=Features)
-    contentStatus: Literal["awaiting_review"] = "awaiting_review"
+    # "unreviewed_drafts": an adult operator's corpus preview serves draft religious content
+    # (doc/rag-system.md §9.1). Never a child-facing setting.
+    contentStatus: Literal["awaiting_review", "unreviewed_drafts"] = "awaiting_review"
 
 
 class Lesson(BaseModel):

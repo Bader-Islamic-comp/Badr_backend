@@ -370,7 +370,7 @@ def assemble(settings, release_dir: str | Path, *, include_drafts: bool = False)
                                               settings.llm_timeout_seconds)
     except (RetrieverError, ValueError) as exception:
         raise RuntimeError(f"Grounded answers cannot start: {exception}") from None
-    return AnswerService(retriever, generator)
+    return AnswerService(retriever, generator, language=getattr(settings, "rag_language", "en"))
 
 
 def _record_provenance():
@@ -387,6 +387,8 @@ def _record_provenance():
 def build_answer_service(settings) -> AnswerService:
     """The API's answer service. Fails closed: any configuration problem stops startup."""
     settings.require_rag()
-    service = assemble(settings, settings.rag_release)
+    # Drafts reach the API only in the operator's corpus preview (§9.1); the bootstrap then says so,
+    # and an app built without that notice refuses the service.
+    service = assemble(settings, settings.rag_release, include_drafts=settings.rag_preview_drafts)
     _record_provenance()
     return service
