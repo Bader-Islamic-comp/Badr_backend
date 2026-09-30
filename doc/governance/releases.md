@@ -14,7 +14,9 @@ python scripts/rollback.py --actor "NAME" --reason "why" --quarantine # and neve
 ```
 
 - **Gate:** documents whose `sourceIds` include a `candidate` or `rejected` registry source are left
-  out (counted in `pipeline.excludedDocuments`); `published` needs every document approved.
+  out (counted in `pipeline.excludedDocuments`); `published` needs every document approved and every
+  source `cleared`. `rag.release.write_release` enforces the published rule itself, so
+  `python -m companion_api.rag.pipeline build --channel published` cannot skip it.
 - **Provenance** in the manifest `pipeline` block: `registrySha256`, `sourceSha256` per source,
   `canonicalManifestSha256`, `gitCommit`, `policyVersion`, chunker and normalizer versions; the
   embedding model is the manifest `embedder`. Every chunk carries its `releaseId`.

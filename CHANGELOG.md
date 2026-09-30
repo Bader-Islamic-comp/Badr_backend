@@ -10,9 +10,31 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-09-30 (corpus-tasks review fixes)
+
+Two problems found while validating the `corpus-tasks` branch, fixed on it.
+
+### Fixed
+
+- **Chunk-v2 children are served as their parent** (`hybrid-rrf-v2`). The serving retriever ranked
+  children as separate chunks, so one passage could take up to three of the four prompt slots and a
+  citation could name a fragment (wave 1 is 922 children to 184 parents). A child's hit now serves its
+  parent once, at the best rank any member reached, as `scripts/eval_retrieval.py` already assumed.
+  Releases without children rank as before. `write_release` refuses a child whose parent is missing.
+- **The published channel needs every source `cleared`, on every build path.** Only
+  `scripts/build_release.py` checked clearance; `python -m companion_api.rag.pipeline build --channel
+  published` accepted `pending_legal` sources, and a test asserted it. The rule now lives in
+  `write_release` (`publication_problems`), and `scan` reports a published release whose clearance
+  was withdrawn.
+
+### Verification
+
+- `pytest`: **644 passed** (634 before; 10 new in `tests/test_rag_small_to_big.py`, 7 of which fail
+  without the fixes).
+
 ## Unreleased — 2026-09-28 (corpus tasks)
 
-On branch `corpus-tasks` (not merged, not yet pushed). Works through the 15 corpus tasks in
+On branch `corpus-tasks` (pushed 2026-09-28, not merged). Works through the 15 corpus tasks in
 [`doc/corpus-tasks.md`](doc/corpus-tasks.md) on top of the existing development RAG: same release,
 manifest and config format, extended. Everything is draft or candidate; every source licence is
 `pending_legal`; nothing is approved. Rebuild and verify with [`doc/SETUP.md`](doc/SETUP.md).

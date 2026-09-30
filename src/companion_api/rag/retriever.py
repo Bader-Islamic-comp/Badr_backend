@@ -13,6 +13,15 @@ are made here, before any model is called:
   reviewed-answer threshold, that reviewed text is returned verbatim and no
   model is called.
 
+Small-to-big (`hybrid-rrf-v2`). A chunk-v2 release holds parent chunks and
+their child chunks (one per verbatim part of a long unit, or per unit of a
+multi-unit chunk). Both are ranked, so a child can match a question its parent
+dilutes, but a hit on a child serves its parent: the parent appears once, at
+the best rank any of its members reached, carrying that member's scores. The
+model sees the whole unit in context and cites the parent id, and one passage
+never fills several of the final slots. Releases without children rank as
+under v1.
+
 Threshold calibration. Cosine scales differ between embedders, so both
 thresholds are per embedder and can be overridden at construction:
 
@@ -44,7 +53,7 @@ from .lexical import BM25, chunk_tokens
 from .release import LoadedRelease
 from .types import Chunk, Embedder
 
-RETRIEVER_VERSION = "hybrid-rrf-v1"
+RETRIEVER_VERSION = "hybrid-rrf-v2"
 RRF_K = 60
 BRANCH_K = 20
 FINAL_K = 4
@@ -104,6 +113,15 @@ class HybridRetriever:
         self.branch_k, self.final_k, self.rrf_k = branch_k, final_k, rrf_k
         self._eligible = [index for index, chunk in enumerate(release.chunks) if include_drafts or chunk.servable]
         self._index = BM25([chunk_tokens(chunk) for chunk in release.chunks])
+        # Where each chunk's hit is served: itself, or for a chunk-v2 child its parent (small-to-big).
+        positions = {chunk.id: index for index, chunk in enumerate(release.chunks)}
+        self._serves: list[int] = []
+        for index, chunk in enumerate(release.chunks):
+            parent = positions.get(chunk.parent_id) if chunk.is_child else index
+            if parent is None or release.chunks[parent].is_child:
+                raise RetrieverError(f"release {release.manifest.release_id!r}: child chunk {chunk.id} names a "
+                                     "parent that is not a parent chunk in the release")
+            self._serves.append(parent)
         # Reviewed phrasings by their full search text, stopwords included. A
         # child asking one word for word gets its reviewed answer even when the
         # question is all stopwords ("What can you do?"), which leaves nothing
@@ -153,9 +171,14 @@ class HybridRetriever:
             for rank, (index, _score) in enumerate(ranking, start=1):
                 fused[index] = fused.get(index, 0.0) + 1.0 / (self.rrf_k + rank)
         bm25 = dict(lexical)
-        order = sorted(fused, key=lambda index: (-fused[index], index))[:self.final_k]
-        candidates = tuple(Candidate(self.release.chunks[index], fused[index], cosines[index], bm25.get(index, 0.0))
-                           for index in order)
+        # Each served chunk once, at the best rank any of its members reached, with that member's scores.
+        best: dict[int, int] = {}
+        for index in sorted(fused, key=lambda index: (-fused[index], index)):
+            best.setdefault(self._serves[index], index)
+            if len(best) == self.final_k:
+                break
+        candidates = tuple(Candidate(self.release.chunks[served], fused[member], cosines[member],
+                                     bm25.get(member, 0.0)) for served, member in best.items())
         return Retrieval(candidates, False, self._reviewed(question, candidates))
 
     def _reviewed(self, question: str, candidates: Sequence[Candidate]) -> Candidate | None:

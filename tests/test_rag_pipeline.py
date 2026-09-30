@@ -62,10 +62,10 @@ def real_document(**overrides):
     return data
 
 
-def write_registry(path):
+def write_registry(path, status="pending_legal"):
     source = {"source_id": "fixture-source", "format": "txt", "title": "t", "edition": "e", "publisher": "p",
               "url": "https://example.invalid/x", "license": "l", "license_url": None, "terms_summary": "t",
-              "retrieved_at": None, "sha256": None, "numbering_system": "n", "status": "pending_legal", "notes": None}
+              "retrieved_at": None, "sha256": None, "numbering_system": "n", "status": status, "notes": None}
     path.write_text(json.dumps({"schema_version": 1, "sources": [source]}), encoding="utf-8")  # JSON is valid YAML
     return str(path)
 
@@ -195,11 +195,18 @@ def test_published_channel_needs_approved_real_documents(tmp_path, capsys):
     assert main(["build", str(draft), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
                  "--channel", "published"]) == 1
     approved = write_corpus(tmp_path / "approved", real_document())
-    registry = write_registry(tmp_path / "registry.yaml")
+    pending = write_registry(tmp_path / "pending.yaml")
+    cleared = write_registry(tmp_path / "cleared.yaml", status="cleared")
     assert main(["build", str(approved), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
                  "--channel", "published", "--release-id", "real-1"]) == 1  # no registry: real content refused
+    capsys.readouterr()
+    # A licence still pending legal review is not a clearance, whichever build path is used.
     assert main(["build", str(approved), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
-                 "--channel", "published", "--release-id", "real-1", "--registry", registry]) == 0
+                 "--channel", "published", "--release-id", "real-1", "--registry", pending]) == 1
+    assert "source fixture-source is pending_legal, not cleared" in capsys.readouterr().err
+    assert not (tmp_path / "out" / "real-1").exists()
+    assert main(["build", str(approved), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
+                 "--channel", "published", "--release-id", "real-1", "--registry", cleared]) == 0
     manifest = load_release(tmp_path / "out" / "real-1").manifest
     assert manifest.channel == "published" and manifest.review == {"approved": 1, "draft": 0, "synthetic": 0}
 

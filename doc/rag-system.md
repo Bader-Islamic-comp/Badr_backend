@@ -203,7 +203,12 @@ canonical JSON; loading also accepts `.md` directly.
 
 Written by `release.write_release`, verified by `release.load_release` (see its
 docstring for the layout). `channel` is `development` unless every document is
-approved and non-synthetic, in which case the builder may write `published`.
+approved and non-synthetic and every source it cites is `cleared` in the source
+registry, in which case the builder may write `published`. `write_release`
+enforces this itself (`publication_problems`), so the pipeline CLI and
+`scripts/build_release.py` apply the same rule: a licence still `pending_legal`
+never publishes. It also refuses a chunk-v2 child whose parent is not in the
+release, because the retriever serves children as their parent (§6.2).
 The manifest records the embedder identity, `pipeline`
 (`{"normalizer": "norm-v1", "chunker": "chunk-v1", "maxChunkWords": 180}`) and
 `review` counts. Releases live outside git (`releases/` is ignored).
@@ -264,8 +269,12 @@ question in another Latin-script language is routed as if it were English.
 
 ### 6.2 Retrieval
 
-Hybrid (`hybrid-rrf-v1`): BM25 over `searchText` and cosine over vectors, each
+Hybrid (`hybrid-rrf-v2`): BM25 over `searchText` and cosine over vectors, each
 top-20, fused with reciprocal rank fusion (k = 60); top 4 go to the prompt.
+Small-to-big (new in v2): a chunk-v2 child is ranked like any chunk, but its hit
+serves its parent, once, at the best rank any member reached. The prompt gets
+the whole unit and the citation names the parent, and one passage cannot take
+several of the four slots. Releases without children rank exactly as in v1.
 Filters: servable, language (profile language, `en` in development), age band
 when given (the API gives none yet: it has one synthetic profile). Weak
 evidence — no BM25 hit among the eligible chunks and best cosine under the
@@ -367,7 +376,7 @@ worker thread until the model call returns or reaches
 Each answer logs one line on `companion_api.rag`, fixed replies included:
 
 ```
-INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v2", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
+INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v2", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v2", "verifier": "grounding-v2"}
 ```
 
 The fields are answer type, release id, model, prompt version, retriever,

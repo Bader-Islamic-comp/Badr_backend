@@ -92,12 +92,34 @@ def admission_problems(chunks: Sequence[Chunk], sources: dict[str, str] | None) 
     return problems
 
 
+def publication_problems(chunks: Sequence[Chunk], sources: dict[str, str] | None) -> list[str]:
+    """Why chunks may not be published, on top of `admission_problems`.
+
+    The published channel serves approved, non-synthetic content only, and every source a chunk cites
+    must be `cleared` by the rights owner (doc/decisions/decisions.yaml); `pending_legal` is not enough.
+    Checked here, in the only writer, so no build path can publish around it.
+    """
+    problems = []
+    for chunk in chunks:
+        if chunk.synthetic or chunk.review_status != "approved":
+            problems.append(f"{chunk.id}: the published channel needs approved, non-synthetic content")
+        elif sources is None:
+            problems.append(f"{chunk.id}: no source registry was given to check clearance against")
+        else:
+            for source_id in chunk.source_ids:
+                status = sources.get(source_id, "not registered")
+                if status != "cleared":
+                    problems.append(f"{chunk.id}: source {source_id} is {status}, not cleared")
+    return problems
+
+
 def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk],
                   vectors: Sequence[Sequence[float]], *, sources: dict[str, str] | None = None) -> Path:
     """Writes a new release directory and returns its path. The only writer of vectors.
 
     Chunks are admitted only as `admission_problems` allows, checked against `sources`
-    (registry source_id -> status); any refusal writes nothing.
+    (registry source_id -> status), and a `published` release also only as
+    `publication_problems` allows; any refusal writes nothing.
 
     `manifest` supplies identity and metadata; counts, checksums and (when
     empty) `created_at` are filled in here. An existing release id is refused:
@@ -107,11 +129,20 @@ def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk]
         raise ReleaseError("release ids are 3-64 characters of a-z, 0-9, '.', '_' or '-'")
     if not chunks or len(chunks) != len(vectors):
         raise ReleaseError("a release needs at least one chunk and exactly one vector per chunk")
-    if len({chunk.id for chunk in chunks}) != len(chunks):
+    ids = {chunk.id for chunk in chunks}
+    if len(ids) != len(chunks):
         raise ReleaseError("chunk ids must be unique within a release")
+    # The retriever serves a child chunk as its parent (small-to-big), so the parent must be here too.
+    orphans = [chunk.id for chunk in chunks if chunk.is_child and chunk.parent_id not in ids]
+    if orphans:
+        raise ReleaseError(f"{len(orphans)} child chunks name a parent outside the release: " + ", ".join(orphans[:5]))
     problems = admission_problems(chunks, sources)
     if problems:
         raise ReleaseError(f"{len(problems)} chunks may not be indexed: " + "; ".join(problems[:5]))
+    if manifest.channel == "published":
+        problems = publication_problems(chunks, sources)
+        if problems:
+            raise ReleaseError(f"{len(problems)} chunks may not be published: " + "; ".join(problems[:5]))
     root = Path(root)
     target = root / manifest.release_id
     if target.exists():
@@ -195,7 +226,9 @@ def load_release(path: Path) -> LoadedRelease:
 
 def scan(path: Path, sources: dict[str, str] | None) -> list[str]:
     """Scans a release (the index) and returns every problem: ids not in the manifest, altered text,
-    or chunks that `admission_problems` would refuse. An empty list means the index is clean."""
+    or chunks that `admission_problems` would refuse (and, for a published release, that
+    `publication_problems` would: a source whose clearance was withdrawn). An empty list means
+    the index is clean."""
     loaded = load_release(path)
     problems = []
     listed = set(loaded.manifest.chunk_ids)
@@ -207,4 +240,6 @@ def scan(path: Path, sources: dict[str, str] | None) -> list[str]:
         if chunk.checksum and sha256(chunk.text.encode("utf-8")).hexdigest() != chunk.checksum:
             problems.append(f"{chunk.id}: text does not match its checksum")
     problems += admission_problems(loaded.chunks, sources)
+    if loaded.manifest.channel == "published":
+        problems += publication_problems(loaded.chunks, sources)
     return problems
