@@ -82,7 +82,28 @@ def test_chunk_v1_release_still_loads(tmp_path):
     assert load_release(path).chunks[0].text == "hello" and json.loads(lines[0])["sourceRefs"] == []
 
 
-def test_norm_v2_maps_rasm_only_for_arabic():
+def test_norm_v3_maps_rasm_only_for_quran_text():
     assert normalize.search_text("Stars, STARS!") == "stars stars"
     word, target = next(iter(normalize.RASM.items()))
-    assert normalize.search_text(word) == target and normalize.search_text_v1(word) == word
+    assert normalize.search_text(word, quranic=True) == target and normalize.search_text_v1(word) == word
+    # A question, a hadith or app help is never mapped: these keys are ordinary words there.
+    assert normalize.search_text(word) == word
+    for ordinary in ("شعير", "ثلث", "تبرك"):  # barley, a third, seeking blessing
+        assert ordinary in normalize.RASM and normalize.search_text(ordinary) == ordinary
+
+
+def test_quran_chunks_are_searched_and_embedded_in_simple_spelling():
+    word, target = next(iter(normalize.RASM.items()))
+    document, _ = parse_document(_doc(contentType="quran", grading=None, clusterId=None, clusterRefs=[], units=[
+        {"id": "u1", "text": f"{word} alpha.", "reference": "demo:1", "sourceRefs": ["demo:1"]}]), "x.json")
+    chunk = chunk_document(document)[0]
+    assert chunk.text.startswith(word) and target in chunk.search_text.split()
+    assert target in embedding_text(chunk) and word not in embedding_text(chunk).split()
+
+
+def test_arabic_forms_match_across_clitics():
+    forms = normalize.arabic_forms
+    assert forms("والملايكه") & forms("للملايكه")  # and-the-angels, to-the-angels
+    assert "ادم" in forms("لادم") and forms("كتابهم") & forms("الكتاب")  # the ك of كتاب is a root letter
+    assert forms("في") == {"في"} and forms("stars") == {"stars"}
+    assert not forms("ثلث") & forms("ثلاث")

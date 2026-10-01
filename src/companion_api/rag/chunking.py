@@ -78,6 +78,8 @@ def chunk_document(document: Document, max_chunk_words: int = DEFAULT_MAX_CHUNK_
     """Chunks for one validated document, numbered from 1 in reading order."""
     if max_chunk_words < 1:
         raise ValueError("max_chunk_words must be at least 1")
+    # norm-v3: the rasm map applies to Quran text only.
+    quranic = document.content_type == "quran"
     if document.kind == "answer":
         search = normalize.search_text("\n".join((*document.questions, document.answer)))
         return [_chunk(document, 1, text=document.answer, search=search, questions=document.questions)]
@@ -98,7 +100,8 @@ def chunk_document(document: Document, max_chunk_words: int = DEFAULT_MAX_CHUNK_
     for number, units in enumerate(packed, 1):
         text = "\n\n".join(unit.text for unit in units)
         references = tuple(dict.fromkeys(unit.reference for unit in units if unit.reference))
-        chunks.append(_chunk(document, number, text=text, search=normalize.search_text(text), references=references,
+        chunks.append(_chunk(document, number, text=text, search=normalize.search_text(text, quranic=quranic),
+                             references=references,
                              unit_ids=tuple(unit.id for unit in units), source_refs=_refs(units)))
     children = []
     for parent, units in zip(chunks, packed):
@@ -109,7 +112,7 @@ def chunk_document(document: Document, max_chunk_words: int = DEFAULT_MAX_CHUNK_
                 if unit.parts:
                     header += f" — part {index} of {len(unit.parts)}"
                 children.append(_chunk(document, len(chunks) + len(children) + 1, text=piece,
-                                       search=normalize.search_text(piece),
+                                       search=normalize.search_text(piece, quranic=quranic),
                                        references=(unit.reference,) if unit.reference else (),
                                        unit_ids=(unit.id,), source_refs=unit.source_refs, parent_id=parent.id,
                                        header=header))
@@ -123,5 +126,10 @@ def chunk_documents(documents: Iterable[Document], max_chunk_words: int = DEFAUL
 
 
 def embedding_text(chunk: Chunk) -> str:
-    """What the embedder sees: the context header (else the title), questions before the answer, the text (§4)."""
-    return "\n".join((chunk.context_header or chunk.title, *chunk.questions, chunk.text))
+    """What the embedder sees: the context header (else the title), questions before the answer, the text (§4).
+
+    A Quran chunk is embedded from its search text, the simple spelling (norm-v3), because questions are
+    written in simple spelling and are never mapped; its displayed text keeps the Uthmani rasm.
+    """
+    body = chunk.search_text if chunk.content_type == "quran" else chunk.text
+    return "\n".join((chunk.context_header or chunk.title, *chunk.questions, body))

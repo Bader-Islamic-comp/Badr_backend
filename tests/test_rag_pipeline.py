@@ -128,7 +128,7 @@ def test_build_verify_and_load_round_trip(tmp_path, capsys):
     assert (manifest.release_id, manifest.channel, manifest.corpus_ids) == ("dev-test-1", "development",
                                                                             ("dev-app-help",))
     assert manifest.document_count == len(documents) == 20 and manifest.chunk_count == len(expected)
-    assert manifest.pipeline == {"normalizer": "norm-v2", "chunker": "chunk-v2", "maxChunkWords": 180}
+    assert manifest.pipeline == {"normalizer": "norm-v3", "chunker": "chunk-v2", "maxChunkWords": 180}
     assert manifest.review == {"approved": 0, "draft": 20, "synthetic": 20}
     assert manifest.embedder == HashingEmbedder().identity
     vectors = HashingEmbedder().embed_documents([embedding_text(chunk) for chunk in expected])

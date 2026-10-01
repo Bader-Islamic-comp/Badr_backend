@@ -5,15 +5,22 @@ is only Unicode-composed and trimmed. Search text folds case, Arabic diacritics,
 tatweel and letter variants so that "أ" and "ا", or "Stars" and "stars", match.
 Search text is never displayed and never written back over canonical text.
 
-norm-v2 adds one step for Arabic: Uthmani-rasm spellings are mapped to the
+norm-v2 added one step for Arabic: Uthmani-rasm spellings are mapped to the
 simple spelling ("الصلوه" -> "الصلاه") from a table derived from Tanzil data
 (`data/rasm_map.tsv`, built by `corpusprep.rasm`). Latin text is unchanged.
+
+norm-v3 applies that map to Quran text only (`search_text(text, quranic=True)`,
+set by the chunker for Quran documents). Several of its keys are ordinary words
+in other text, and mapping them everywhere merged distinct words in questions,
+hadith and app help: شعير (barley) became شعاير (rituals), ثلث (a third) became
+ثلاث (three), تبرك became تبارك. A question is never mapped; it is written in
+simple spelling already, which is what a mapped Quran text becomes.
 """
 from pathlib import Path
 import re
 import unicodedata
 
-VERSION = "norm-v2"
+VERSION = "norm-v3"
 _RASM_FILE = Path(__file__).with_name("data") / "rasm_map.tsv"
 
 
@@ -67,9 +74,14 @@ def tokens_v1(text: str) -> list[str]:
     return search_text_v1(text).split()
 
 
-def search_text(text: str) -> str:
-    """The matchable form (norm-v2). Deterministic, idempotent and never shown."""
-    return " ".join(RASM.get(word, word) for word in search_text_v1(text).split())
+def search_text(text: str, *, quranic: bool = False) -> str:
+    """The matchable form (norm-v3). Deterministic, idempotent and never shown.
+
+    `quranic` maps Uthmani-rasm spellings to the simple spelling; only Quran
+    text is written in that rasm, so only Quran text sets it.
+    """
+    words = search_text_v1(text).split()
+    return " ".join(RASM.get(word, word) for word in words) if quranic else " ".join(words)
 
 
 def tokens(text: str) -> list[str]:
@@ -85,3 +97,26 @@ def content_tokens(text: str) -> list[str]:
 def detect_language(text: str) -> str:
     """"ar" when Arabic letters outnumber Latin ones, otherwise "en"."""
     return "ar" if len(_ARABIC_LETTER.findall(text)) > len(_LATIN_LETTER.findall(text)) else "en"
+
+
+# Arabic clitics for the light stem, longest first: conjunction + preposition + article, then the parts.
+_ARABIC_WORD = re.compile("^[ء-ي]+$")
+_PREFIXES = ("وال", "بال", "كال", "فال", "لل", "ال", "و", "ف", "ب", "ك", "ل")
+_SUFFIXES = ("هما", "كما", "هم", "هن", "كم", "كن", "نا", "ها", "ه", "ك", "ي")
+
+
+def arabic_forms(token: str) -> frozenset[str]:
+    """The token and its light stems: each leading clitic and each trailing pronoun it may carry, removed.
+
+    Two tokens match when their forms share one: "والملايكه" and "للملايكه"
+    share "ملايكه", "كتابهم" and "الكتاب" share "كتاب". Every possible split
+    is kept rather than one guessed, because a clitic letter can also be a root
+    letter (the ك of كتاب). A form keeps at least three letters. Latin tokens
+    and digits have only themselves. For matching only (grounding-v3).
+    """
+    if not _ARABIC_WORD.match(token):
+        return frozenset((token,))
+    starts = {token} | {token[len(prefix):] for prefix in _PREFIXES
+                        if token.startswith(prefix) and len(token) - len(prefix) >= 3}
+    return frozenset(starts | {start[:-len(suffix)] for start in starts for suffix in _SUFFIXES
+                               if start.endswith(suffix) and len(start) - len(suffix) >= 3})

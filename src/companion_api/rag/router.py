@@ -343,7 +343,7 @@ _I_AM = "(?:i am|im|i m|i feel|i am feeling|im feeling|i feel like|feeling|i was
 _VERY = "(?:so |very |really |super |quite |pretty |a bit |a little |kind of |kinda |totally |extremely |too )*"
 _WHEN = "(?: (?:today|now|right now|again|tonight|this morning|at the moment|lately|a lot|all day))?"
 # A short tail on a feeling: "scared of the dark", "a great day at school".
-_ABOUT = "(?: (?:of|about|at|in|with|because of|for) (?:the |my |a |an )?\w+(?: \w+)?)?"
+_ABOUT = r"(?: (?:of|about|at|in|with|because of|for) (?:the |my |a |an )?\w+(?: \w+)?)?"
 _YOU = "(?:you|u|ya)"
 SMALL_TALK: dict[str, str] = {
     "greeting": f"(?:{_GREETING})(?: (?:there|again|everyone|all))?",

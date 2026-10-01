@@ -56,7 +56,7 @@ a third-party provider is what the provider due-diligence gate decides.
 | Module | Owner | Purpose |
 |---|---|---|
 | `types.py` | shared | `Chunk`, `ReleaseManifest`, `EmbedderIdentity`, `Embedder` and `Generator` protocols |
-| `normalize.py` | shared | canonical vs search text, tokens, language detection (`norm-v1`) |
+| `normalize.py` | shared | canonical vs search text, tokens, language detection, Arabic light stems (`norm-v3`) |
 | `embeddings.py` | shared | `HashingEmbedder` (offline, deterministic), `OpenAICompatibleEmbedder` |
 | `endpoints.py` | shared | private-endpoint guard |
 | `release.py` | shared | write/load/verify immutable releases |
@@ -716,6 +716,15 @@ keeps the `<document>#<n>` form the API contract accepts, and they point at the 
 `src/companion_api/rag/data/rasm_map.tsv`, derived from Tanzil's own Uthmani and simple texts by
 `corpusprep.rasm` (750 entries; word agreement between the two texts 90.5% → 97.5%). Latin text is
 unchanged. Search text only; displayed text never changes.
+
+**norm-v3 (test/corpus-tasks, 2026-10-01).** The rasm map applies to Quran text only
+(`search_text(text, quranic=True)`, set by the chunker for `contentType: quran`), and a Quran chunk is
+embedded from that simple-spelling search text. norm-v2 mapped every text, so ordinary words in questions,
+hadith and app help were merged with Quranic spellings: شعير (barley) became شعاير (rituals), ثلث (a third)
+became ثلاث (three), and 59 of the 750 keys occur as ordinary words in the Bukhari and Muslim texts.
+Questions are never mapped: they are written in simple spelling, which is what a mapped Quran text becomes.
+`normalize.arabic_forms` gives a token's light stems (each leading clitic and trailing pronoun removed) for
+grounding-v3's matching; it never changes search text.
 
 **Where the corpus comes from.** `scripts/fetch_sources.py` (registry, sha256, canonical files) and
 `scripts/build_corpus.py` (checks, clusters, segments, documents) write `corpus/layer0/` and
