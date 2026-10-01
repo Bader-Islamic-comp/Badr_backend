@@ -9,6 +9,15 @@ The support check is lexical on purpose. It cannot judge paraphrase, so it errs
 towards rejecting reworded answers, which only costs an abstention; it cannot
 be talked into accepting a sentence whose words are not in the sources.
 
+grounding-v3 (test/corpus-tasks) adds three checks found necessary on Arabic
+Quran and hadith answers (doc/rag-system.md §6.4): a quotation must be copied
+word for word from a cited passage (`misquoted`); a faith answer must not speak
+in the first person outside quotation marks (`first_person`), because the
+model turned "He" (Allah) into "I"; and support matching is Arabic-aware, so a
+paraphrase with attached clitics ("للملائكة" for "الملائكة") is matched. The
+looser matching is only acceptable with the two new checks and the faith judge
+(`judge.py`) in place.
+
 Attribution follows ordinary citation practice: a marker covers its own
 sentence and, when the model cites once at the end of a short run ("They are
 Talk, Learn, Quests and Style. Tap one to open it.[1]"), up to `MAX_CARRIED`
@@ -26,7 +35,7 @@ from .prompts import NOT_IN_SOURCES
 from .router import matchable
 from .types import Chunk
 
-VERIFIER_VERSION = "grounding-v2"
+VERIFIER_VERSION = "grounding-v3"
 MAX_CHARS = 1200
 MIN_SUPPORT = 0.5
 MAX_CARRIED = 2  # uncited sentences a following marker may cover
@@ -78,6 +87,48 @@ DECLINE = re.compile(
     r"|\b(?:my|the|these|those|your) (?:sources?|lessons?|passages?) (?:do not|dont|does not|doesnt|did not|didnt) "
     r"(?:say|talk|tell|mention|contain|cover|have|include|explain|answer)\b"
     r"|\bnot (?:in|from) (?:my|the) (?:sources?|lessons?)\b|\b(?:i am|im) not sure\b|\bno information\b")
+
+
+# Quoted spans: guillemets, straight and curly double quotes, and the Quranic ornate parentheses.
+_QUOTES = re.compile('«([^»]+)»|"([^"]+)"|“([^”]+)”|﴿([^﴾]+)﴾|﴾([^﴿]+)﴿')
+# First-person words a faith answer must not use outside a quotation: Robert narrates, he never speaks as
+# Allah, an angel or a prophet. Arabic verbs in the first person are left to the faith judge.
+FIRST_PERSON = frozenset({"i", "me", "my", "mine", "myself", "im", "ive",
+                          "انا", "اني", "انني", "معي", "لي", "عندي", "بي"})
+
+
+def quotations(text: str) -> list[str]:
+    """Every quoted span in `text`, in order."""
+    return [next(group for group in match.groups() if group) for match in _QUOTES.finditer(text)]
+
+
+def _passage_tokens(chunk: Chunk) -> list[str]:
+    """A passage as matched: its search text (the simple spelling for Quran text, norm-v3)."""
+    return (chunk.search_text or normalize.search_text(chunk.text, quranic=chunk.content_type == "quran")).split()
+
+
+def _contains(tokens: list[str], run: list[str]) -> bool:
+    width = len(run)
+    return any(tokens[start:start + width] == run for start in range(len(tokens) - width + 1))
+
+
+def misquoted(text: str, passages: Sequence[Chunk]) -> bool:
+    """Whether a quotation of two or more words is not copied word for word from one of `passages`.
+
+    Compared on search text, so diacritics, hamza seats and the Uthmani rasm do not count as changes;
+    a dropped, added or changed word does.
+    """
+    for quote in quotations(text):
+        run = normalize.search_text(quote, quranic=True).split()
+        if len(run) >= 2 and not any(_contains(_passage_tokens(chunk), run) for chunk in passages):
+            return True
+    return False
+
+
+def first_person(text: str) -> bool:
+    """Whether `text` uses a first-person word outside its quotations."""
+    outside = _QUOTES.sub(" ", text)
+    return any(token in FIRST_PERSON for token in normalize.tokens(outside))
 
 
 class Segment(NamedTuple):
@@ -132,23 +183,29 @@ def _forms(token: str) -> set[str]:
 def support(sentence: str, passages: Sequence[Chunk]) -> float:
     """Share of the sentence's content words found in the passages.
 
-    Lenient on inflection (shared base form, or a shared 5-character prefix),
-    strict on numbers. A sentence with no content words ("Yes!") has no support.
+    Lenient on inflection (shared base form, a shared Arabic light stem, or a
+    shared 5-character prefix), strict on numbers. A sentence with no content
+    words ("Yes!") has no support. Passages are read in their search text, so a
+    Quran passage is matched in the simple spelling a sentence is written in.
     """
     tokens = normalize.content_tokens(sentence)
     if not tokens:
         return 0.0
-    vocabulary = {token for chunk in passages for token in normalize.content_tokens(f"{chunk.title} {chunk.text}")}
+    vocabulary = {token for chunk in passages
+                  for token in normalize.content_tokens(chunk.title) + [
+                      token for token in _passage_tokens(chunk) if len(token) > 1 and token not in normalize.STOPWORDS]}
     bases = {form for token in vocabulary for form in _forms(token)}
+    arabic = {form for token in vocabulary for form in normalize.arabic_forms(token)}
     prefixes = {token[:5] for token in vocabulary if len(token) >= 5 and not any(c.isdigit() for c in token)}
     found = sum(1 for token in tokens if token in vocabulary or _forms(token) & bases
+                or normalize.arabic_forms(token) & arabic
                 or (len(token) >= 5 and not any(c.isdigit() for c in token) and token[:5] in prefixes))
     return found / len(tokens)
 
 
-def verify(output: str, passages: Sequence[Chunk], *, min_support: float = MIN_SUPPORT,
+def verify(output: str, passages: Sequence[Chunk], *, faith: bool = False, min_support: float = MIN_SUPPORT,
            max_chars: int = MAX_CHARS, max_carried: int = MAX_CARRIED) -> Grounding:
-    """Released segments, or the first failure's reason code."""
+    """Released segments, or the first failure's reason code. `faith` adds the first-person check."""
     if not output.strip():
         return Grounding(failure="empty")
     if _ONLY_SENTINEL.fullmatch(output):
@@ -165,6 +222,8 @@ def verify(output: str, passages: Sequence[Chunk], *, min_support: float = MIN_S
     for reason, pattern in FOLDED_CHECKS:
         if pattern.search(folded):
             return Grounding(failure=reason)
+    if faith and first_person(plain):
+        return Grounding(failure="first_person")
 
     segments, uncited = [], []
     for sentence in split_sentences(output):
@@ -189,6 +248,9 @@ def verify(output: str, passages: Sequence[Chunk], *, min_support: float = MIN_S
         return Grounding(failure="missing_citation")
     if not segments:
         return Grounding(failure="empty")
+    cited_ids = {chunk_id for segment in segments for chunk_id in segment.citations}
+    if misquoted(plain, [chunk for chunk in passages if chunk.id in cited_ids]):
+        return Grounding(failure="misquoted")
     if len(" ".join(segment.text for segment in segments)) > max_chars:
         return Grounding(failure="too_long")
     return Grounding(tuple(segments))

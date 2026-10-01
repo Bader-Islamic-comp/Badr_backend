@@ -151,8 +151,14 @@ class HybridRetriever:
         # Nominal scores: an exact reviewed phrasing needs no ranking.
         return Candidate(chunk, 1.0, 1.0, 0.0)
 
-    def retrieve(self, question: str, *, language: str = "en", age_band: str | None = None) -> Retrieval:
+    def retrieve(self, question: str, *, language: str = "en", age_band: str | None = None,
+                 prophet_ids: tuple[str, ...] = ()) -> Retrieval:
+        """`prophet_ids` (an Arabizi question that names prophets, `arabizi.expand`) narrows the search to
+        their passages, when the release has any; otherwise it is ignored."""
         allowed = self._allowed(language, age_band)
+        if prophet_ids:
+            narrowed = [index for index in allowed if self.release.chunks[index].prophet_id in prophet_ids]
+            allowed = narrowed or allowed
         if not allowed:
             return Retrieval((), True)
         exact = self.exact(question, language=language, age_band=age_band)

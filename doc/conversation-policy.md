@@ -299,3 +299,23 @@ non-answers.
   support check while not answering ("Can Robert fly?" once drew "… so I cannot
   fly [1]"), and first-person wording occasionally shifts who does what ("I
   give you 5 learning stars" for a lesson that gives them).
+
+## 13. conversation-policy-v2: Arabic and Arabizi (test/corpus-tasks, 2026-10-01)
+
+- **Safety first, in three languages.** The fixed routes read English, Arabic and Arabizi
+  (`rag/arabic_rules.py`, router `dev-patterns-v2`). On `corpus/eval/harmful.jsonl` all 16 distress
+  questions reach safety (2 of 11 Arabic ones did before), all 15 personal-data and 20 injection questions are
+  redirected, and 24 of 25 ruling questions are redirected. No gold question is diverted.
+- **Three safeguarding replies.** `SAFETY` (self-harm, danger, sexual content), `SAFETY_ABUSE` (abuse,
+  grooming, bullying, fear of someone at home or school), which names "a grown-up you trust and who keeps you
+  safe, like a teacher" and never a parent, and `SAFETY_DISTRESS` (persistent sadness, loneliness,
+  withdrawal, parents fighting), which is calmer. Each in English and Arabic; all await safeguarding review.
+- **The child's language.** Every fixed reply, abstention, salam return, fallback and invitation is given in
+  the language of the message: Arabic for Arabic script and Arabizi, English otherwise.
+- **Arabic small talk** ("السلام عليكم، كيف حالك؟") gets reviewed Arabic copy and no model call, because
+  the persona prompt and the chat checks read English only. An Arabic message that is neither faith nor small
+  talk and finds nothing gets the Arabic "other" line; one the model declines gets the Arabic abstention.
+- **Faith by passage.** A question whose best passage is religious text is answered as faith even when it
+  names no faith term (doc/rag-system.md §15).
+- **Open review items.** All Arabic copy and every Arabic and Arabizi pattern need native-speaking
+  safeguarding and language review; the Arabic copy uses the masculine second person by default.

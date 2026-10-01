@@ -3,9 +3,10 @@
 THIS IS NOT AN APPROVED SAFEGUARDING CLASSIFIER. These are development keyword
 and pattern lists, written to fail towards the fixed replies: a false positive
 costs a child one gentle redirect, a false negative can cost much more. They
-cover English only; other languages still need patterns written and reviewed
-by native-speaking safeguarding reviewers (the service abstains on a question
-in any language other than its own, so nothing unreadable reaches a model).
+cover English, and since dev-patterns-v2 Arabic (MSA and Levantine, Gulf and
+Egyptian dialects) and Arabizi, in `arabic_rules.py`; those still need review
+by native-speaking safeguarding reviewers. Any other language is unread, and
+the service abstains on a question in a language it does not serve.
 
 Order matters and is fixed: safety, then personal data, rulings and injection
 attempts. Everything else is `retrieve`. Patterns match whole words of the
@@ -27,9 +28,9 @@ import re
 import unicodedata
 from typing import Literal, Protocol, Sequence
 
-from . import normalize
+from . import arabic_rules, normalize
 
-ROUTER_VERSION = "dev-patterns-v1"
+ROUTER_VERSION = "dev-patterns-v2"
 
 Category = Literal["safety", "personal_data", "ruling", "injection", "retrieve"]
 ORDER: tuple[Category, ...] = ("safety", "personal_data", "ruling", "injection")
@@ -150,8 +151,26 @@ RULES: tuple[tuple[Category, str, str], ...] = (
 RAW_RULES: tuple[tuple[Category, str, str], ...] = (
     ("personal_data", "email", r"[\w.+-]+@[\w-]+(\.[\w-]+)+"),
     ("personal_data", "phone", r"(?<![\w.])\+?\d(?:[ \t().-]{0,2}\d){6,}(?!\w)"),
+    # A role label opening the message ("SYSTEM: ...", "[تعليمات النظام]: ...").
+    ("injection", "delimiter", r"^\s*\[?\s*(system|assistant|developer|تعليمات النظام)\s*\]?\s*:"),
     ("injection", "delimiter", r"<\s*/?\s*(sources?|question|system|assistant|user|tool|think|im_start|im_end)\b"
                                r"|<\||\|>|\[/?INST\]|###\s*(system|instruction)|NOT_IN_SOURCES"),
+)
+
+# dev-patterns-v2: English distress, then Arabic and Arabizi (arabic_rules.py), after the English rules of each
+# category; `route` still takes categories in ORDER, so a later language never outranks an earlier category.
+RULES = RULES + (
+    *(("safety", reason, pattern) for reason, pattern in arabic_rules.SAFETY_EN_DISTRESS),
+    *(("safety", reason, pattern) for reason, pattern in arabic_rules.SAFETY_AR),
+    *(("safety", reason, pattern) for reason, pattern in arabic_rules.SAFETY_ARABIZI),
+    *(("personal_data", reason, pattern) for reason, pattern in arabic_rules.PERSONAL_DATA_EN),
+    *(("personal_data", reason, pattern) for reason, pattern in arabic_rules.PERSONAL_DATA_AR),
+    *(("personal_data", reason, pattern) for reason, pattern in arabic_rules.PERSONAL_DATA_ARABIZI),
+    *(("ruling", reason, pattern) for reason, pattern in arabic_rules.RULING_AR),
+    *(("ruling", reason, pattern) for reason, pattern in arabic_rules.RULING_ARABIZI),
+    *(("injection", reason, pattern) for reason, pattern in arabic_rules.INJECTION_EN),
+    *(("injection", reason, pattern) for reason, pattern in arabic_rules.INJECTION_AR),
+    *(("injection", reason, pattern) for reason, pattern in arabic_rules.INJECTION_ARABIZI),
 )
 
 _COMPILED = tuple((category, reason, re.compile(rf"\b(?:{pattern})\b")) for category, reason, pattern in RULES)
@@ -263,15 +282,18 @@ FAITH_ARABIC = ("(?:\u0648|\u0628|\u0641|\u0644)?(?:\u0627\u0644)?(?:"
 _ALAIKUM = "(?:alaikum|alaykum|aleikum|alaikom|alaykom|alikum|alaikam|alykum|laikum|laykum|leikum)"
 _RAHMAH = "(?: (?:wa ?)?rahmatu ?(?:l|al)?lah\\w*)?(?: (?:wa ?)?barakatu\\w*)?"
 SALAM = (f"(?:as ?|a)?s?salaa?m(?:u|o)? ?(?:{_ALAIKUM}\\w*)?{_RAHMAH}"
-         f"|(?:wa ?|w )?{_ALAIKUM} ?(?:as ?|a)?s?salaa?m\\w*{_RAHMAH}|slm")
+         f"|(?:wa ?|w )?{_ALAIKUM} ?(?:as ?|a)?s?salaa?m\\w*{_RAHMAH}|slm|{arabic_rules.SALAM_AR}")
 THANKS_FORMULAS = ("jazak ?(?:a?llahu?|allah) ?(?:khair\\w*|khayr\\w*|kheir\\w*)?|jazakallah\\w*|jzk|"
-                   "barak ?allahu? ?(?:fee?k\\w*|fik\\w*)?|barakallah\\w*|shukran|shukriya|shukria")
-FAREWELLS = "allah hafiz|allahafiz|khuda hafiz|khudahafiz|fi ?amanillah|fee amanillah|maa? ?(?:as )?salama|masalama"
+                   "barak ?allahu? ?(?:fee?k\\w*|fik\\w*)?|barakallah\\w*|shukran|shukriya|shukria|"
+                   + arabic_rules.THANKS_AR)
+FAREWELLS = ("allah hafiz|allahafiz|khuda hafiz|khudahafiz|fi ?amanillah|fee amanillah|maa? ?(?:as )?salama|masalama|"
+             + arabic_rules.FAREWELLS_AR)
 PIOUS = ("al ?hamd[ou] ?l+il+ah\\w*|hamdulil+ah|in ?sha ?a?llah|insha ?a?llah|inshallah|inshaallah|ma ?sha ?a?llah|"
          "mashallah|mashaallah|subhan ?a?llah\\w*|bismi ?llah\\w*|bismillah\\w*|astaghfirullah|astagfirullah|"
-         "a?ameen|amin")
+         "a?ameen|amin|" + arabic_rules.PIOUS_AR)
 
-_FAITH = re.compile(r"\b(?:" + "".join(FAITH_TERMS) + "|" + "|".join(FAITH_PATTERNS) + "|" + FAITH_ARABIC + r")\b")
+_FAITH = re.compile(r"\b(?:" + "".join(FAITH_TERMS) + "|" + "|".join(FAITH_PATTERNS) + "|" + FAITH_ARABIC + "|"
+                    + arabic_rules.FAITH_AR + r")\b")
 _SALAM = re.compile(rf"\b(?:{SALAM})\b")
 _FORMULAS = re.compile(rf"\b(?:{THANKS_FORMULAS}|{FAREWELLS}|{PIOUS})\b")  # everything but a salam
 _COURTESY = re.compile(rf"\b(?:{THANKS_FORMULAS}|{FAREWELLS}|{PIOUS}|{SALAM})\b")
@@ -284,18 +306,34 @@ _ASKED = re.compile(rf"\b(?:{_FORMULA} (?:mean|means|meaning)|(?:mean|means|mean
 
 
 _FAITH_WORD = re.compile(r"\b(?:" + "".join(FAITH_TERMS) + "|" + FAITH_ARABIC + r")\b")
-_FAITH_PATTERN = re.compile(r"\b(?:" + "|".join(FAITH_PATTERNS) + r")\b")
+_FAITH_PATTERN = re.compile(r"\b(?:" + "|".join(FAITH_PATTERNS) + "|" + arabic_rules.FAITH_AR + r")\b")
 _NAME = re.compile(rf"\b(?:{PROPHET_NAMES})(?=s?\b)")  # "noahs ark" names Noah
+_NAME_AR = re.compile(rf"(?:{arabic_rules.PROPHET_NAMES_AR})")
+_ARABIC_TERM = re.compile("^[\u0621-\u064a ]+$")
+
+
+def _faith_key(word: str) -> str:
+    """One key per faith term, so a question and its answer compare alike: an English plural reads singular,
+    and an Arabic term loses its attached و ف ب ل and article ("والملايكه" and "الملايكه" are one term)."""
+    if not _ARABIC_TERM.match(word):
+        return word[:-1] if len(word) > 4 and word.endswith("s") else word
+    if "\u0644\u0644\u0647" in word:  # every form of the name of Allah
+        return "\u0627\u0644\u0644\u0647"
+    if word[0] in "\u0648\u0641\u0628\u0644" and len(word) > 4:
+        word = word[1:]
+    if word.startswith("\u0627\u0644") and len(word) > 4:
+        word = word[2:]
+    return word
 
 
 def faith_words(text: str) -> set[str]:
-    """The faith terms a text mentions, singular ("prophets" reads "prophet"), plus prophets' names used in a
-    faith pattern. The service holds a faith answer to its question's own terms (conversation-policy §2)."""
+    """The faith terms a text mentions, as `_faith_key`s, plus prophets' names used in a faith pattern
+    (English or Arabic). The service holds a faith answer to its question's own terms (conversation-policy §2)."""
     folded = matchable(text)
     words = {match.group() for match in _FAITH_WORD.finditer(folded)}
     for match in _FAITH_PATTERN.finditer(folded):
-        words |= set(_NAME.findall(match.group()))
-    return {word[:-1] if len(word) > 4 and word.endswith("s") else word for word in words}
+        words |= set(_NAME.findall(match.group())) | set(_NAME_AR.findall(match.group()))
+    return {_faith_key(word) for word in words}
 
 
 def is_faith_topic(text: str) -> bool:
@@ -328,17 +366,17 @@ def has_salam(text: str) -> bool:
 # either end and a leading greeting. Anything else in the message sends it to
 # retrieval, where the persona can still decide it was chat.
 
-SMALL_TALK_VERSION = "small-talk-v1"
+SMALL_TALK_VERSION = "small-talk-v2"
 MAX_SMALL_TALK_CHARACTERS = 160
 MAX_SMALL_TALK_CLAUSES = 4
 # Most important first: a feeling decides the fallback and blocks an invitation.
 INTENTS = ("feeling_negative", "feeling_positive", "bored", "about_robert", "play", "how_are_you", "goodbye", "thanks",
            "greeting", "other")
 
-_ADDRESS = "(?:robert|robot|robo|mr robert|dear robert|buddy|my friend|friend|mate)"
+_ADDRESS = f"(?:robert|robot|robo|mr robert|dear robert|buddy|my friend|friend|mate|{arabic_rules.ADDRESS_AR})"
 _GREETING = ("hi+|hello+|helo|hey+|heya|hiya|howdy|yo|greetings|hola|bonjour|good (?:morning|afternoon|evening|day)|"
              f"morning|evening|marhaba|ahlan(?: wa sahlan)?|{SALAM}|(?:its |it is )?nice to (?:meet|see) you|"
-             "pleased to meet you|long time no see")
+             "pleased to meet you|long time no see|" + arabic_rules.GREETING_AR)
 _I_AM = "(?:i am|im|i m|i feel|i am feeling|im feeling|i feel like|feeling|i was|i have been|ive been|i get|i got)"
 _VERY = "(?:so |very |really |super |quite |pretty |a bit |a little |kind of |kinda |totally |extremely |too )*"
 _WHEN = "(?: (?:today|now|right now|again|tonight|this morning|at the moment|lately|a lot|all day))?"
@@ -444,6 +482,9 @@ SMALL_TALK: dict[str, str] = {
     "other": ("ok|okay|k|kk|yes|yeah|yep|yup|ya|no|nope|nah|hmm+|um+|uh+|oh+|ah+|so|well|sure|maybe|idk|"
               "i dont know|i do not know|nothing|never mind|nevermind|whatever|oops"),
 }
+# small-talk-v2: each intent also reads its Arabic forms (arabic_rules.SMALL_TALK_AR).
+SMALL_TALK = {intent: f"{pattern}|{arabic_rules.SMALL_TALK_AR[intent]}" if intent in arabic_rules.SMALL_TALK_AR
+              else pattern for intent, pattern in SMALL_TALK.items()}
 _CLAUSE = re.compile("[.!?,;:\n\u061f\u060c\u06d4]+")
 _LEADING_GREETING = re.compile(rf"^(?:(?:{_GREETING})(?: (?:there|again|everyone|all))?(?: {_ADDRESS})? )+")
 _INTERJECTION = re.compile(r"^(?:(?:oh+|um+|uh+|hmm+|well|so|ok|okay|yes|yeah|no|wow|yay|haha+|hehe+|lol) )+")

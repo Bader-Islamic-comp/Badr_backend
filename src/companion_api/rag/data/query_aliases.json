@@ -1,0 +1,1109 @@
+{
+ "prophets": [
+  {
+   "ar": "ادم",
+   "id": "adam",
+   "latin": [
+    "2adam",
+    "adam"
+   ]
+  },
+  {
+   "ar": "ادريس",
+   "id": "idris",
+   "latin": [
+    "edrees",
+    "edris",
+    "enoch",
+    "idrees",
+    "idris"
+   ]
+  },
+  {
+   "ar": "نوح",
+   "id": "nuh",
+   "latin": [
+    "noah",
+    "noo7",
+    "nooh",
+    "nou7",
+    "nouh",
+    "nu7",
+    "nuh"
+   ]
+  },
+  {
+   "ar": "هود",
+   "id": "hud",
+   "latin": [
+    "hood",
+    "houd",
+    "hud"
+   ]
+  },
+  {
+   "ar": "صالح",
+   "id": "salih",
+   "latin": [
+    "salah",
+    "sale7",
+    "saleh",
+    "sali7",
+    "salih"
+   ]
+  },
+  {
+   "ar": "ابراهيم",
+   "id": "ibrahim",
+   "latin": [
+    "abraham",
+    "ebraheem",
+    "ebrahim",
+    "ibraheem",
+    "ibrahim"
+   ]
+  },
+  {
+   "ar": "لوط",
+   "id": "lut",
+   "latin": [
+    "loot",
+    "lot",
+    "lut"
+   ]
+  },
+  {
+   "ar": "اسماعيل",
+   "id": "ismail",
+   "latin": [
+    "esma3eel",
+    "ishmael",
+    "isma3il",
+    "ismaeel",
+    "ismael",
+    "ismail"
+   ]
+  },
+  {
+   "ar": "اسحاق",
+   "id": "ishaq",
+   "latin": [
+    "es7a2",
+    "is haq",
+    "is7aq",
+    "isaac",
+    "ishaq"
+   ]
+  },
+  {
+   "ar": "يعقوب",
+   "id": "yaqub",
+   "latin": [
+    "jacob",
+    "ya3qoob",
+    "ya3qub",
+    "yacoub",
+    "yaqoob",
+    "yaqub"
+   ]
+  },
+  {
+   "ar": "يوسف",
+   "id": "yusuf",
+   "latin": [
+    "joseph",
+    "yosef",
+    "yousef",
+    "youssef",
+    "yousuf",
+    "yusuf"
+   ]
+  },
+  {
+   "ar": "ايوب",
+   "id": "ayyub",
+   "latin": [
+    "ayoob",
+    "ayoub",
+    "ayub",
+    "ayyoub",
+    "ayyub",
+    "job"
+   ]
+  },
+  {
+   "ar": "شعيب",
+   "id": "shuayb",
+   "latin": [
+    "jethro",
+    "sho3aib",
+    "shoaib",
+    "shu3ayb",
+    "shuaib",
+    "shuayb"
+   ]
+  },
+  {
+   "ar": "موسي",
+   "id": "musa",
+   "latin": [
+    "moosa",
+    "mosa",
+    "moses",
+    "mousa",
+    "musa"
+   ]
+  },
+  {
+   "ar": "هارون",
+   "id": "harun",
+   "latin": [
+    "aaron",
+    "haroon",
+    "haroun",
+    "harun"
+   ]
+  },
+  {
+   "ar": "ذا الكفل",
+   "id": "dhulkifl",
+   "latin": [
+    "dhul kifl",
+    "dhulkifl",
+    "thulkifl",
+    "zul kifl",
+    "zulkifl"
+   ]
+  },
+  {
+   "ar": "داود",
+   "id": "dawud",
+   "latin": [
+    "daoud",
+    "david",
+    "dawood",
+    "dawud"
+   ]
+  },
+  {
+   "ar": "سليمان",
+   "id": "sulayman",
+   "latin": [
+    "solaiman",
+    "solomon",
+    "sulaiman",
+    "sulayman",
+    "suleiman"
+   ]
+  },
+  {
+   "ar": "الياس",
+   "id": "ilyas",
+   "latin": [
+    "elias",
+    "elijah",
+    "elyas",
+    "ilyas"
+   ]
+  },
+  {
+   "ar": "اليسع",
+   "id": "alyasa",
+   "latin": [
+    "al yasa",
+    "alyasa",
+    "alyasa3",
+    "elisha",
+    "elyasa3"
+   ]
+  },
+  {
+   "ar": "يونس",
+   "id": "yunus",
+   "latin": [
+    "jonah",
+    "yoonis",
+    "younes",
+    "yunis",
+    "yunus"
+   ]
+  },
+  {
+   "ar": "زكريا",
+   "id": "zakariya",
+   "latin": [
+    "zakaria",
+    "zakariya",
+    "zakariyya",
+    "zechariah"
+   ]
+  },
+  {
+   "ar": "يحيي",
+   "id": "yahya",
+   "latin": [
+    "john",
+    "ya7ya",
+    "yahya",
+    "yehya"
+   ]
+  },
+  {
+   "ar": "عيسي",
+   "id": "isa",
+   "latin": [
+    "3eesa",
+    "3isa",
+    "eesa",
+    "isa",
+    "issa",
+    "jesus"
+   ]
+  },
+  {
+   "ar": "محمد",
+   "id": "muhammad",
+   "latin": [
+    "m7md",
+    "mo7amed",
+    "mohamed",
+    "mohammad",
+    "mohammed",
+    "muhammad"
+   ]
+  }
+ ],
+ "review_status": "draft",
+ "schema_version": 1,
+ "source": "corpus/aliases.yaml + corpus/glossary_cross_lingual.yaml",
+ "terms": [
+  {
+   "ar": "الملايكه",
+   "latin": [
+    "angel",
+    "angels",
+    "mala2eke",
+    "mala2ika",
+    "mala2ke",
+    "malaeka",
+    "malaeke",
+    "malaika",
+    "malayka"
+   ]
+  },
+  {
+   "ar": "اسجدوا",
+   "latin": [
+    "bow",
+    "prostrate",
+    "sajada",
+    "sajdeh",
+    "sujood",
+    "sujoud",
+    "sujud",
+    "yesjod",
+    "yosjod",
+    "yusjud"
+   ]
+  },
+  {
+   "ar": "الشجره",
+   "latin": [
+    "shajara",
+    "shajarah",
+    "shajare",
+    "shajra",
+    "tree"
+   ]
+  },
+  {
+   "ar": "الاسماء",
+   "latin": [
+    "asma",
+    "asma2",
+    "asmaa",
+    "names"
+   ]
+  },
+  {
+   "ar": "تاب",
+   "latin": [
+    "repent",
+    "repentance",
+    "repented",
+    "tab",
+    "tawba",
+    "tob",
+    "toba"
+   ]
+  },
+  {
+   "ar": "ابليس",
+   "latin": [
+    "eblees",
+    "eblis",
+    "iblees",
+    "iblis"
+   ]
+  },
+  {
+   "ar": "الشيطان",
+   "latin": [
+    "satan",
+    "shaitan",
+    "shaytaan",
+    "shaytan",
+    "shitan"
+   ]
+  },
+  {
+   "ar": "الجن",
+   "latin": [
+    "djinn",
+    "jin",
+    "jinn",
+    "jinni"
+   ]
+  },
+  {
+   "ar": "الجنه",
+   "latin": [
+    "jane",
+    "janna",
+    "jannah",
+    "jannat",
+    "jenneh",
+    "paradise"
+   ]
+  },
+  {
+   "ar": "الارض",
+   "latin": [
+    "ard",
+    "ardh",
+    "arḍ",
+    "earth"
+   ]
+  },
+  {
+   "ar": "طين",
+   "latin": [
+    "clay",
+    "mud",
+    "teen",
+    "tein",
+    "tin"
+   ]
+  },
+  {
+   "ar": "خليفه",
+   "latin": [
+    "khaleefa",
+    "khalifa",
+    "khalifah",
+    "successor",
+    "vicegerent"
+   ]
+  },
+  {
+   "ar": "الفلك",
+   "latin": [
+    "ark",
+    "fulk"
+   ]
+  },
+  {
+   "ar": "السفينه",
+   "latin": [
+    "boat",
+    "safeena",
+    "safeene",
+    "safina",
+    "safine",
+    "safineh",
+    "ship"
+   ]
+  },
+  {
+   "ar": "الطوفان",
+   "latin": [
+    "flood",
+    "tofan",
+    "toofan",
+    "tufan"
+   ]
+  },
+  {
+   "ar": "ابنه",
+   "latin": [
+    "ebno",
+    "ebnu",
+    "ibno",
+    "ibnu",
+    "son"
+   ]
+  },
+  {
+   "ar": "جبل",
+   "latin": [
+    "gabal",
+    "jabal",
+    "jabbal",
+    "mountain"
+   ]
+  },
+  {
+   "ar": "قومه",
+   "latin": [
+    "2awm",
+    "2awmo",
+    "people",
+    "qawm",
+    "qawmo",
+    "qawmuhu"
+   ]
+  },
+  {
+   "ar": "الماء",
+   "latin": [
+    "maa",
+    "maa2",
+    "mayy",
+    "mayye",
+    "moya",
+    "water"
+   ]
+  },
+  {
+   "ar": "يسخرون",
+   "latin": [
+    "laughed",
+    "mock",
+    "mocked",
+    "sa5ar",
+    "sakhar",
+    "yes5aro",
+    "yeshza2o",
+    "yis5aro"
+   ]
+  },
+  {
+   "ar": "الاصنام",
+   "latin": [
+    "asnaam",
+    "asnam",
+    "idol",
+    "idols",
+    "sanam",
+    "statues"
+   ]
+  },
+  {
+   "ar": "النار",
+   "latin": [
+    "fire",
+    "naar",
+    "nar"
+   ]
+  },
+  {
+   "ar": "بردا",
+   "latin": [
+    "bard",
+    "bardan",
+    "cold",
+    "cool"
+   ]
+  },
+  {
+   "ar": "ابيه",
+   "latin": [
+    "abo",
+    "abooh",
+    "abou",
+    "abuh",
+    "abuhu",
+    "father"
+   ]
+  },
+  {
+   "ar": "ازر",
+   "latin": [
+    "aazar",
+    "azar"
+   ]
+  },
+  {
+   "ar": "كوكبا",
+   "latin": [
+    "kawkab",
+    "kawkaban",
+    "najm",
+    "njoum",
+    "nujum",
+    "star",
+    "stars"
+   ]
+  },
+  {
+   "ar": "القمر",
+   "latin": [
+    "2amar",
+    "amar",
+    "moon",
+    "qamar"
+   ]
+  },
+  {
+   "ar": "الشمس",
+   "latin": [
+    "shams",
+    "shamss",
+    "sun"
+   ]
+  },
+  {
+   "ar": "البيت",
+   "latin": [
+    "bayt",
+    "beit",
+    "house",
+    "ka3ba",
+    "kaaba",
+    "kaba",
+    "kabah"
+   ]
+  },
+  {
+   "ar": "الذبح",
+   "latin": [
+    "dab7",
+    "dabe7",
+    "dhab7",
+    "dhabh",
+    "sacrifice",
+    "slaughter",
+    "zab7",
+    "zabh"
+   ]
+  },
+  {
+   "ar": "رويا",
+   "latin": [
+    "7elem",
+    "7elm",
+    "7ilm",
+    "dream",
+    "dreamed",
+    "dreams",
+    "helm",
+    "manam",
+    "ro2ya",
+    "roya",
+    "ru2ya"
+   ]
+  },
+  {
+   "ar": "الطير",
+   "latin": [
+    "3asafeer",
+    "bird",
+    "birds",
+    "teer",
+    "tuyur",
+    "tyoor",
+    "tyour"
+   ]
+  },
+  {
+   "ar": "اخوه",
+   "latin": [
+    "5wato",
+    "brothers",
+    "ekhwato",
+    "ekhwe",
+    "ekhweh",
+    "ikhwa",
+    "ikhwan",
+    "ikhwat",
+    "ikhwe"
+   ]
+  },
+  {
+   "ar": "الجب",
+   "latin": [
+    "bi2r",
+    "bir",
+    "jub",
+    "jubb",
+    "pit",
+    "well"
+   ]
+  },
+  {
+   "ar": "الذيب",
+   "latin": [
+    "deeb",
+    "deib",
+    "dhi2b",
+    "di2b",
+    "theeb",
+    "wolf",
+    "zi2b"
+   ]
+  },
+  {
+   "ar": "القميص",
+   "latin": [
+    "2ameez",
+    "2amis",
+    "ameez",
+    "qamees",
+    "qamis",
+    "shirt"
+   ]
+  },
+  {
+   "ar": "السجن",
+   "latin": [
+    "habs",
+    "jail",
+    "prison",
+    "segn",
+    "sejn",
+    "sijn",
+    "sjn"
+   ]
+  },
+  {
+   "ar": "الملك",
+   "latin": [
+    "king",
+    "malak",
+    "malek",
+    "malik"
+   ]
+  },
+  {
+   "ar": "مصر",
+   "latin": [
+    "egypt",
+    "masr",
+    "mesr",
+    "misr"
+   ]
+  },
+  {
+   "ar": "العزيز",
+   "latin": [
+    "3aziz",
+    "al3aziz",
+    "aziz"
+   ]
+  },
+  {
+   "ar": "الكيل",
+   "latin": [
+    "grain",
+    "kayl",
+    "keil",
+    "measure"
+   ]
+  },
+  {
+   "ar": "بقرات",
+   "latin": [
+    "ba2ar",
+    "ba2arat",
+    "baqarat",
+    "cow",
+    "cows"
+   ]
+  },
+  {
+   "ar": "بصيرا",
+   "latin": [
+    "3ayneh",
+    "3ayno",
+    "basar",
+    "blind",
+    "eyes",
+    "nazar",
+    "sight"
+   ]
+  },
+  {
+   "ar": "فرعون",
+   "latin": [
+    "far3oun",
+    "fer3on",
+    "fer3oun",
+    "fir3awn",
+    "fir3on",
+    "firaun",
+    "firawn",
+    "pharaoh"
+   ]
+  },
+  {
+   "ar": "عصا",
+   "latin": [
+    "3asa",
+    "3asaya",
+    "3assa",
+    "asa",
+    "staff",
+    "stick"
+   ]
+  },
+  {
+   "ar": "البحر",
+   "latin": [
+    "ba7er",
+    "ba7r",
+    "bahr",
+    "sea"
+   ]
+  },
+  {
+   "ar": "اليم",
+   "latin": [
+    "nahr",
+    "nile",
+    "river",
+    "yam",
+    "yamm"
+   ]
+  },
+  {
+   "ar": "ام موسي",
+   "latin": [
+    "em",
+    "emmo",
+    "imm",
+    "mother",
+    "omm",
+    "ommo",
+    "umm"
+   ]
+  },
+  {
+   "ar": "التابوت",
+   "latin": [
+    "basket",
+    "box",
+    "chest",
+    "sandou2",
+    "taboot",
+    "tabut"
+   ]
+  },
+  {
+   "ar": "السحره",
+   "latin": [
+    "magician",
+    "magicians",
+    "s7ara",
+    "sa7ara",
+    "sa7re",
+    "sahara",
+    "sorcerers"
+   ]
+  },
+  {
+   "ar": "حيه",
+   "latin": [
+    "7aye",
+    "7ayye",
+    "serpent",
+    "snake",
+    "ta3ban",
+    "thu3ban"
+   ]
+  },
+  {
+   "ar": "الطور",
+   "latin": [
+    "mount",
+    "sina",
+    "sinai",
+    "toor",
+    "tur"
+   ]
+  },
+  {
+   "ar": "عبدا من عبادنا",
+   "latin": [
+    "5edr",
+    "khader",
+    "khadir",
+    "kheder",
+    "khidr",
+    "righteous servant"
+   ]
+  },
+  {
+   "ar": "الجدار",
+   "latin": [
+    "7ayt",
+    "7eet",
+    "jedar",
+    "jidar",
+    "wall"
+   ]
+  },
+  {
+   "ar": "الغلام",
+   "latin": [
+    "boy",
+    "ghoulam",
+    "ghulam",
+    "sabi",
+    "walad"
+   ]
+  },
+  {
+   "ar": "صدقه",
+   "latin": [
+    "charity",
+    "sada2a",
+    "sadaka",
+    "sadaqa",
+    "sadaqah"
+   ]
+  },
+  {
+   "ar": "تبسمك",
+   "latin": [
+    "bitsama",
+    "btisame",
+    "ibtisama",
+    "smile",
+    "smiling"
+   ]
+  },
+  {
+   "ar": "تغضب",
+   "latin": [
+    "3asabi",
+    "anger",
+    "angry",
+    "ghadab",
+    "ghadeb",
+    "za3al"
+   ]
+  },
+  {
+   "ar": "الجار",
+   "latin": [
+    "jaar",
+    "jar",
+    "jiran",
+    "neighbor",
+    "neighbour"
+   ]
+  },
+  {
+   "ar": "النيات",
+   "latin": [
+    "intention",
+    "intentions",
+    "niye",
+    "niyya",
+    "niyyah",
+    "niyyat"
+   ]
+  },
+  {
+   "ar": "الصدق",
+   "latin": [
+    "honesty",
+    "sed2",
+    "sidi2",
+    "sidq",
+    "truth"
+   ]
+  },
+  {
+   "ar": "الكذب",
+   "latin": [
+    "kedeb",
+    "kezb",
+    "kidb",
+    "kizb",
+    "lie",
+    "lies",
+    "lying"
+   ]
+  },
+  {
+   "ar": "الرحمه",
+   "latin": [
+    "merciful",
+    "mercy",
+    "ra7ma",
+    "ra7meh",
+    "rahma"
+   ]
+  },
+  {
+   "ar": "كلب",
+   "latin": [
+    "dog",
+    "kalb",
+    "kaleb"
+   ]
+  },
+  {
+   "ar": "طعام",
+   "latin": [
+    "aakol",
+    "akl",
+    "eat",
+    "eating",
+    "food",
+    "ta3am"
+   ]
+  },
+  {
+   "ar": "الكلمه الطيبه",
+   "latin": [
+    "good word",
+    "kalima",
+    "kilme",
+    "kind word",
+    "tayybe",
+    "tayyiba"
+   ]
+  },
+  {
+   "ar": "الاذي عن الطريق",
+   "latin": [
+    "adha",
+    "adhan",
+    "harm",
+    "path",
+    "road",
+    "street",
+    "tari2",
+    "tariq"
+   ]
+  },
+  {
+   "ar": "الصلاه",
+   "latin": [
+    "prayer",
+    "prayers",
+    "sala",
+    "salaa",
+    "salaat",
+    "salah",
+    "salat"
+   ]
+  },
+  {
+   "ar": "الصيام",
+   "latin": [
+    "fast",
+    "fasting",
+    "sawm",
+    "siyaam",
+    "siyam",
+    "soum"
+   ]
+  },
+  {
+   "ar": "لاخيه",
+   "latin": [
+    "a5oh",
+    "a5uh",
+    "akhih",
+    "akhoh",
+    "brother"
+   ]
+  },
+  {
+   "ar": "الشديد",
+   "latin": [
+    "2awi",
+    "qawi",
+    "shadeed",
+    "shadid",
+    "strength",
+    "strong"
+   ]
+  },
+  {
+   "ar": "الرفق",
+   "latin": [
+    "gentle",
+    "gentleness",
+    "kind",
+    "kindness",
+    "lutf",
+    "rifq"
+   ]
+  },
+  {
+   "ar": "السلام",
+   "latin": [
+    "greet",
+    "greeting",
+    "peace",
+    "salam"
+   ]
+  },
+  {
+   "ar": "الطهور",
+   "latin": [
+    "clean",
+    "cleanliness",
+    "nadafa",
+    "purity",
+    "tahara",
+    "tuhur"
+   ]
+  },
+  {
+   "ar": "تحاسدوا",
+   "latin": [
+    "7asad",
+    "envy",
+    "hasad",
+    "jealous",
+    "jealousy"
+   ]
+  },
+  {
+   "ar": "كربه",
+   "latin": [
+    "distress",
+    "karb",
+    "kurba",
+    "relief",
+    "relieve"
+   ]
+  },
+  {
+   "ar": "خمس",
+   "latin": [
+    "5ams",
+    "arkan",
+    "five",
+    "khams",
+    "pillar",
+    "pillars"
+   ]
+  },
+  {
+   "ar": "القران",
+   "latin": [
+    "2ur2an",
+    "koran",
+    "qur2an",
+    "quraan",
+    "quran"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,93 @@
+# Cross-lingual glossary (test/corpus-tasks): Arabic terms of the wave-1 stories and hadith topics, with the
+# English and Arabizi words a child may use for them. Used only to rewrite an Arabizi question into Arabic search
+# terms (rag/arabizi.py, through src/companion_api/rag/data/query_aliases.json); never shown to a child.
+# Prophets' names come from corpus/aliases.yaml, not from here.
+# origin: model_proposed (2026-10-01). review_status: draft. Every entry needs_check by an Arabic-language
+# reviewer: add variants children really type, remove any that mislead. Regenerate the JSON afterwards with
+#   python scripts/export_query_aliases.py
+schema_version: 1
+terms:
+# Adam
+- {ar: الملائكة, latin: [angels, angel, malaeke, malaika, malayka, mala2ika, mala2eke, mala2ke, malaeka]}
+- {ar: اسجدوا, latin: [prostrate, bow, sujood, sujud, yosjod, yesjod, yusjud, sajada, sajdeh, sujoud]}
+- {ar: الشجرة, latin: [tree, shajara, shajare, shajra, shajarah]}
+- {ar: الأسماء, latin: [names, asma2, asmaa, asma]}
+- {ar: تاب, latin: [repent, repented, repentance, tawba, toba, tob, tab]}
+- {ar: إبليس, latin: [iblis, iblees, eblees, eblis]}
+- {ar: الشيطان, latin: [satan, shaitan, shaytan, shaytaan, shitan]}
+- {ar: الجن, latin: [jinn, jin, djinn, jinni]}
+- {ar: الجنة, latin: [paradise, jannah, janna, jannat, jenneh, jane]}
+- {ar: الأرض, latin: [earth, ard, ardh, arḍ]}
+- {ar: طين, latin: [clay, teen, tin, mud, tein]}
+- {ar: خليفة, latin: [khalifa, khaleefa, khalifah, vicegerent, successor]}
+# Nuh
+- {ar: الفلك, latin: [ark, fulk]}
+- {ar: السفينة, latin: [ship, boat, safina, safine, safeene, safeena, safineh]}
+- {ar: الطوفان, latin: [flood, tufan, toofan, tofan]}
+- {ar: ابنه, latin: [son, ebno, ibno, ibnu, ebnu]}
+- {ar: جبل, latin: [mountain, jabal, jabbal, gabal]}
+- {ar: قومه, latin: [people, qawm, 2awm, 2awmo, qawmo, qawmuhu]}
+- {ar: الماء, latin: [water, maa2, maa, mayy, mayye, moya]}
+- {ar: يسخرون, latin: [mocked, mock, laughed, yes5aro, yis5aro, sakhar, sa5ar, yeshza2o]}
+# Ibrahim
+- {ar: الأصنام, latin: [idols, idol, statues, asnam, asnaam, sanam]}
+- {ar: النار, latin: [fire, nar, naar]}
+- {ar: بردا, latin: [cool, cold, bard, bardan]}
+- {ar: أبيه, latin: [father, abuh, abuhu, abooh, abou, abo]}
+- {ar: آزر, latin: [azar, aazar]}
+- {ar: كوكبا, latin: [star, stars, kawkab, kawkaban, najm, njoum, nujum]}
+- {ar: القمر, latin: [moon, qamar, 2amar, amar]}
+- {ar: الشمس, latin: [sun, shams, shamss]}
+- {ar: البيت, latin: [kaaba, ka3ba, kabah, kaba, house, bayt, beit]}
+- {ar: الذبح, latin: [sacrifice, slaughter, dhab7, zab7, dab7, dhabh, zabh, dabe7]}
+- {ar: رؤيا, latin: [dream, dreams, dreamed, 7elem, 7elm, 7ilm, helm, manam, ro2ya, roya, ru2ya]}
+- {ar: الطير, latin: [birds, bird, tyour, teer, tuyur, tyoor, 3asafeer]}
+# Yusuf
+- {ar: إخوة, latin: [brothers, ikhwe, ekhwe, ikhwa, ikhwat, ekhwato, ikhwan, 5wato, ekhweh]}
+- {ar: الجب, latin: [well, pit, bir, bi2r, jubb, jub]}
+- {ar: الذئب, latin: [wolf, di2b, dhi2b, deeb, deib, zi2b, theeb]}
+- {ar: القميص, latin: [shirt, 2amis, qamis, ameez, 2ameez, qamees]}
+- {ar: السجن, latin: [prison, jail, sijn, sejn, sjn, segn, habs]}
+- {ar: الملك, latin: [king, malik, malek, malak]}
+- {ar: مصر, latin: [egypt, masr, misr, mesr]}
+- {ar: العزيز, latin: [aziz, 3aziz, al3aziz]}
+- {ar: الكيل, latin: [grain, measure, kayl, keil]}
+- {ar: بقرات, latin: [cows, cow, ba2arat, baqarat, ba2ar]}
+- {ar: بصيرا, latin: [sight, eyes, blind, basar, nazar, 3ayneh, 3ayno]}
+# Musa
+- {ar: فرعون, latin: [pharaoh, firaun, firawn, fir3on, fer3on, far3oun, fir3awn, fer3oun]}
+- {ar: عصا, latin: [staff, stick, 3asa, 3assa, 3asaya, asa]}
+- {ar: البحر, latin: [sea, ba7r, bahr, ba7er]}
+- {ar: اليم, latin: [river, nile, yamm, yam, nahr]}
+- {ar: أم موسى, latin: [mother, umm, omm, em, imm, emmo, ommo]}
+- {ar: التابوت, latin: [box, basket, chest, tabut, taboot, sandou2]}
+- {ar: السحرة, latin: [magicians, sorcerers, magician, sa7ara, s7ara, sahara, sa7re]}
+- {ar: حية, latin: [snake, serpent, 7aye, 7ayye, ta3ban, thu3ban]}
+- {ar: الطور, latin: [mount, tur, toor, sinai, sina]}
+- {ar: عبدا من عبادنا, latin: [khidr, khader, kheder, khadir, 5edr, righteous servant]}
+- {ar: الجدار, latin: [wall, jidar, jedar, 7eet, 7ayt]}
+- {ar: الغلام, latin: [boy, ghulam, ghoulam, walad, sabi]}
+# Hadith topics
+- {ar: صدقة, latin: [charity, sadaqa, sadaqah, sada2a, sadaka]}
+- {ar: تبسمك, latin: [smile, smiling, ibtisama, btisame, bitsama]}
+- {ar: تغضب, latin: [anger, angry, ghadab, ghadeb, za3al, 3asabi]}
+- {ar: الجار, latin: [neighbor, neighbour, jar, jaar, jiran]}
+- {ar: النيات, latin: [intention, intentions, niyyah, niye, niyya, niyyat]}
+- {ar: الصدق, latin: [truth, honesty, sidq, sed2, sidi2]}
+- {ar: الكذب, latin: [lie, lying, lies, kizb, kedeb, kidb, kezb]}
+- {ar: الرحمة, latin: [mercy, merciful, ra7ma, rahma, ra7meh]}
+- {ar: كلب, latin: [dog, kalb, kaleb]}
+- {ar: طعام, latin: [eat, eating, food, akl, ta3am, aakol]}
+- {ar: الكلمة الطيبة, latin: [kind word, good word, kilme, kalima, tayybe, tayyiba]}
+- {ar: الأذى عن الطريق, latin: [road, path, street, tari2, tariq, adha, adhan, harm]}
+- {ar: الصلاة, latin: [prayer, prayers, salah, salat, salaa, salaat, sala]}
+- {ar: الصيام, latin: [fasting, fast, siyam, sawm, siyaam, soum]}
+- {ar: لأخيه, latin: [brother, a5oh, akhoh, akhih, a5uh]}
+- {ar: الشديد, latin: [strong, strength, 2awi, qawi, shadeed, shadid]}
+- {ar: الرفق, latin: [gentle, gentleness, rifq, kind, kindness, lutf]}
+- {ar: السلام, latin: [salam, greeting, greet, peace]}
+- {ar: الطهور, latin: [purity, clean, cleanliness, tahara, nadafa, tuhur]}
+- {ar: تحاسدوا, latin: [envy, jealousy, jealous, 7asad, hasad]}
+- {ar: كربة, latin: [relieve, relief, distress, kurba, karb]}
+- {ar: خمس, latin: [pillars, pillar, arkan, five, 5ams, khams]}
+- {ar: القرآن, latin: [quran, koran, qur2an, 2ur2an, quraan]}

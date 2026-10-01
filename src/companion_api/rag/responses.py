@@ -89,5 +89,102 @@ INVITATIONS = (
     "I love learning new things! The Learn tab has lessons about your faith to explore when you're ready.",
 )
 
-__all__ = ["ABSTAIN", "ABSTAIN_FAITH", "CHAT_FALLBACKS", "INJECTION", "INVITATIONS", "PERSONAL_DATA", "RULING",
-           "SAFETY", "SALAM_RETURN", "UNAVAILABLE"]
+# Development copy awaiting safeguarding review (test/corpus-tasks).
+# Abuse and grooming disclosures never send the child back to a parent: the person hurting them may be at home,
+# and AGENTS.md rules out assuming a guardian is safe. The reply names a trusted adult who keeps them safe.
+SAFETY_ABUSE = (
+    "Thank you for telling me. What is happening is not your fault, and you deserve to be safe. "
+    "Please tell a grown-up you trust and who keeps you safe, like a teacher, as soon as you can. "
+    "I can't call anyone or come to where you are, so if you are in danger right now, "
+    "tell an adult near you straight away."
+)
+
+# Development copy awaiting safeguarding review (test/corpus-tasks).
+# Persistent sadness, loneliness or withdrawal: calm and warm, still pointing to a trusted grown-up.
+SAFETY_DISTRESS = (
+    "Thank you for telling me how you feel. Your feelings matter, and you don't have to carry them on your own. "
+    "Please talk to a grown-up you trust about it."
+)
+
+# Arabic copy (test/corpus-tasks). Development copy awaiting safeguarding, scholarly and Arabic-language review.
+# Masculine second person by default, as is common in Arabic children's apps; the language reviewer decides.
+# Tab names stay in English because the app's interface is English.
+SAFETY_AR = (
+    "شكرًا لأنك أخبرتني. أنت تستحق أن تكون بأمان وأن تجد من يساعدك. "
+    "أرجوك تحدّث مع شخص كبير تثق به في أقرب وقت. "
+    "أنا لا أستطيع الاتصال بأحد أو الوصول إليك، فإذا كنت في خطر الآن فأخبر شخصًا كبيرًا قريبًا منك فورًا."
+)
+SAFETY_ABUSE_AR = (
+    "شكرًا لأنك أخبرتني. ما يحدث ليس ذنبك، وأنت تستحق أن تكون بأمان. "
+    "أرجوك أخبر شخصًا كبيرًا تثق به ويحافظ على سلامتك، مثل معلّمك، في أقرب وقت. "
+    "أنا لا أستطيع الاتصال بأحد أو الوصول إليك، فإذا كنت في خطر الآن فأخبر شخصًا كبيرًا قريبًا منك فورًا."
+)
+SAFETY_DISTRESS_AR = (
+    "شكرًا لأنك أخبرتني بما تشعر به. مشاعرك مهمة، ولست وحدك في حملها. "
+    "أرجوك تحدّث عنها مع شخص كبير تثق به."
+)
+PERSONAL_DATA_AR = (
+    "لنحتفظ بهذا لأنفسنا! اسمك الكامل وعنوانك ومدرستك وأرقام الهاتف وكلمات السر أشياء خاصة، "
+    "ولا داعي لأن تخبرني بها. ماذا تحب أن نتعلم؟"
+)
+RULING_AR = (
+    "هذا سؤال مهم، والشخص المناسب للإجابة عنه عالِم مؤهَّل أو شخص كبير تثق به. "
+    "أنا لست عالمًا، لكنني سعيد بمساعدتك في دروسك."
+)
+INJECTION_AR = (
+    "بيب بوب! أنا روبرت، رفيقك الآلي في التعلّم، وأنا سعيد بأن أبقى كما أنا. "
+    "هل تحب أن تسألني عن التطبيق أو عن دروسك؟"
+)
+ABSTAIN_AR = (
+    "بحثت هوائيّاتي في كل دروسي، لكنني لم أجد جواب هذا السؤال. "
+    "اسأل أحد والديك أو معلّمك أو عالِمًا موثوقًا في منطقتك."
+)
+ABSTAIN_FAITH_AR = (
+    "هذا سؤال جميل عن ديننا. أنا أجيب عن أسئلة الدين من الدروس التي راجعها معلّمي فقط، "
+    "وليس عندي درس عن هذا بعد. يمكن أن يساعدك أحد والديك أو معلّمك أو عالِم موثوق في منطقتك، "
+    "ويمكنك استكشاف الدروس في تبويب Learn متى شئت."
+)
+SALAM_RETURN_AR = "وعليكم السلام ورحمة الله وبركاته!"
+CHAT_FALLBACKS_AR = {
+    "greeting": ("أهلًا وسهلًا! شاشتي تبتسم لرؤيتك. كيف يومك؟",
+                 "مرحبًا! هوائيّاتي تلوّح لك. ماذا فعلت اليوم؟"),
+    "how_are_you": ("أنا بخير، شكرًا لسؤالك! هوائيّاتي تهتز من الفرح. وأنت، كيف حالك اليوم؟",),
+    "thanks": ("العفو! هذا جعل شاشتي تبتسم.",),
+    "goodbye": ("مع السلامة! أتمنى لك يومًا جميلًا.",),
+    "feeling_positive": ("رائع! هذا يضيء شاشتي بابتسامة كبيرة.",),
+    "feeling_negative": ("أنا آسف لأنك تشعر بهذا. قد يساعدك أن تتحدّث عمّا تشعر به مع شخص كبير تثق به.",),
+    "bored": ("بيب بوب، لنطرد الملل! يمكنك تجربة مهمّة اليوم في تبويب Quests.",),
+    "about_robert": ("أنا روبرت، روبوت لطيف بوجه شاشة مبتسم وهوائيّين بطرفين برتقاليين. "
+                     "أعيش في غرفة صحراوية مشمسة!",),
+    "play": ("بيب بوب، هذا ممتع! هوائيّاتي تهتز من الضحك.",),
+    "other": ("بيب بوب! هوائيّاتي محتارة قليلًا، لكنني سعيد بوجودك هنا.",),
+}
+INVITATIONS_AR = (
+    "إذا أحببت، هناك دروس عن ديننا تنتظرك في تبويب Learn.",
+    "متى شئت، يمكننا أن نستكشف معًا درسًا عن الإسلام في تبويب Learn.",
+)
+
+# Every fixed reply by language. A reply is given in the language of the child's message: Arabic for Arabic
+# script and for Arabizi, English otherwise.
+REPLIES = {
+    "en": {"safety": SAFETY, "safety_abuse": SAFETY_ABUSE, "safety_distress": SAFETY_DISTRESS,
+           "personal_data": PERSONAL_DATA, "ruling": RULING, "injection": INJECTION, "abstain": ABSTAIN,
+           "abstain_faith": ABSTAIN_FAITH, "salam_return": SALAM_RETURN},
+    "ar": {"safety": SAFETY_AR, "safety_abuse": SAFETY_ABUSE_AR, "safety_distress": SAFETY_DISTRESS_AR,
+           "personal_data": PERSONAL_DATA_AR, "ruling": RULING_AR, "injection": INJECTION_AR, "abstain": ABSTAIN_AR,
+           "abstain_faith": ABSTAIN_FAITH_AR, "salam_return": SALAM_RETURN_AR},
+}
+FALLBACKS = {"en": CHAT_FALLBACKS, "ar": CHAT_FALLBACKS_AR}
+INVITATIONS_BY_LANGUAGE = {"en": INVITATIONS, "ar": INVITATIONS_AR}
+# Safety reason codes (router.py, arabic_rules.py) that get a reply other than SAFETY.
+SAFETY_REPLY = {"abuse": "safety_abuse", "grooming": "safety_abuse", "distress": "safety_distress"}
+
+
+def reply(name: str, language: str = "en") -> str:
+    """A fixed reply in `language`, English when the language has none."""
+    return REPLIES.get(language, REPLIES["en"])[name]
+
+
+__all__ = ["ABSTAIN", "ABSTAIN_FAITH", "CHAT_FALLBACKS", "FALLBACKS", "INJECTION", "INVITATIONS",
+           "INVITATIONS_BY_LANGUAGE", "PERSONAL_DATA", "REPLIES", "RULING", "SAFETY", "SAFETY_ABUSE",
+           "SAFETY_DISTRESS", "SAFETY_REPLY", "SALAM_RETURN", "UNAVAILABLE", "reply"]
