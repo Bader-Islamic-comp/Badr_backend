@@ -115,6 +115,13 @@ def main(argv=None) -> int:
     built_quran = ingest.quran_documents(segments, ayat, tafsir, surah_names, registry, prophets_by_ayah)
     built_hadith = ingest.hadith_documents(hadith_rows, clusters, links, registry)
     layer0 = built_quran.documents + built_hadith.documents
+    # test/corpus-tasks: Tafsir Ibn Kathir, when its sources were fetched (a candidate source: layer 0 only).
+    ibn_kathir_path = canonical / "tafsir/ibn-kathir.jsonl"
+    built_ibn_kathir = ingest.Built()
+    if ibn_kathir_path.is_file():
+        built_ibn_kathir = ingest.ibn_kathir_documents(_jsonl(ibn_kathir_path), surah_names, registry,
+                                                       prophets_by_ayah)
+        layer0 += built_ibn_kathir.documents
     _log("attaching generated retrieval questions (checked against sacred text)")
     generated = json.loads((base / "candidate/retrieval_questions.json").read_text(encoding="utf-8"))
     sacred = age_band.SacredIndex([row["text_simple"] for row in ayat_rows],
@@ -128,8 +135,9 @@ def main(argv=None) -> int:
         if doc["id"] in questions_by_doc:
             doc["generatedQuestions"] = questions_by_doc[doc["id"]]
     ingest.write_corpus(base / "layer0", "layer0", "Layer 0 reference text (development index)",
-                        "Quran (Tanzil), Tafsir al-Muyassar (candidate licence), Sahih al-Bukhari and Sahih Muslim "
-                        "cluster primaries. Draft, not reviewed, not for children.", layer0)
+                        "Quran (Tanzil), Tafsir al-Muyassar and Tafsir Ibn Kathir (candidate licences), Sahih "
+                        "al-Bukhari and Sahih Muslim cluster primaries. Draft, not reviewed, not for children.",
+                        layer0)
 
     _log("building corpus/wave1 (Wave 1 release candidate: 5 prophets + selected hadith, no tafsir)")
     wave_segments = {item.id for item in segments
@@ -159,7 +167,8 @@ def main(argv=None) -> int:
         "nawawi_links": {status: sum(1 for link in links.values() if link["status"] == status)
                          for status in ("linked", "needs_check", "not_linked")},
         "selection": selection_summary,
-        "skipped": {**built_quran.skipped, **built_hadith.skipped},
+        "skipped": {**built_quran.skipped, **built_hadith.skipped, **built_ibn_kathir.skipped},
+        "ibn_kathir_documents": len(built_ibn_kathir.documents),
         "long_hadith_with_parts": sum(1 for doc in built_hadith.documents if doc["units"][0]["parts"]),
         "wave1_prophet_segments": len(wave_segments), "wave1_hadith": len(chosen),
         "generated_questions": sum(len(doc["generatedQuestions"]) for doc in wave1),

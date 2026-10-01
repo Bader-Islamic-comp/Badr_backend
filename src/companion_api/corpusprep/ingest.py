@@ -106,6 +106,37 @@ def quran_documents(segments: list[Segment], ayat: dict, tafsir: dict, names: di
     return built
 
 
+def ibn_kathir_documents(records: list[dict], names: dict[int, str], registry: Registry,
+                         prophets: dict[tuple[int, int], dict]) -> Built:
+    """Layer 0 tafsir documents from Tafsir Ibn Kathir (test/corpus-tasks), one per section.
+
+    Units are the section's paragraphs without the editor's [[notes]]
+    (`ibn_kathir.display_text`); every unit cites the whole range the section
+    explains. Tier 1, scholarly explanation. The source is `candidate`, so a
+    release never admits these documents; they are for reviewers and the graph.
+    """
+    from . import ibn_kathir
+    built = Built()
+    for record in records:
+        s, first, last = record["surah"], record["from_ayah"], record["to_ayah"]
+        span = _span(first, last)
+        ref = f"quran:{s}:{first}" + (f"-{last}" if last != first else "")
+        units = [{"id": f"p{number}", "text": text, "reference": ref, "section": record["section_id"],
+                  "keepWithNext": False, "sourceRefs": [ref], "parts": []}
+                 for number, text in enumerate(ibn_kathir.paragraphs(record["text"]), 1)]
+        if not units:
+            built.skip("ibn_kathir_section_without_text")
+            continue
+        prophet = next((prophets[(s, ayah)] for ayah in range(first, last + 1) if (s, ayah) in prophets), None)
+        source_id = record["source_id"]
+        built.documents.append(_document(
+            f"tafsir-ibn-kathir-{s:03d}-{first:03d}-{last:03d}", f"تفسير ابن كثير {s}:{span}", "tafsir",
+            _source(registry, source_id, "Tafsir Ibn Kathir (Tafsir al-Quran al-Azim)"), units, tier=1,
+            contextHeader=f"تفسير ابن كثير — سورة {names[s]} — الآيات {span}",
+            prophetId=prophet["id"] if prophet else None, sourceIds=[source_id]))
+    return built
+
+
 def verbatim_parts(text: str) -> list[str]:
     """Contiguous excerpts of `text` at sentence (then comma) boundaries, about 45 words each."""
     if len(text.split()) <= LONG_HADITH_WORDS:

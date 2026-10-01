@@ -30,6 +30,14 @@ READING = {
     "alquran-cloud": (None, "Nothing assumed.",
                       "No licence or terms page (alquran.cloud/terms returned 404); the original publisher is the "
                       "King Fahd Complex.", "Legal question 3 (corpus-tasks.md, task 3)."),
+    "spa5k-tafsir-api": ("spa5k-tafsir-license",
+                         "The mirror's MIT licence covers its code only: nothing is assumed for the tafsir text.",
+                         "No licence or terms are stated for the digitised text, on the mirror or on the QUL "
+                         "resource page (qul.tarteel.ai/resources/tafsir/22, checked 2026-10-01). The work is "
+                         "classical (Ibn Kathir, d. 774 AH); the digital edition's editor (the [[notes]] cite a "
+                         "critical edition) and Tarteel may hold rights in it.",
+                         "May the digitised text be used for a development index and a knowledge graph, and on "
+                         "what terms for a release? (test/corpus-tasks)"),
     "fawazahmed0-hadith-api": ("fawazahmed0-license",
                                "Public-domain dedication of the repository: copy, modify and distribute for any purpose.",
                                "The repository does not name the upstream of its Arabic text, so the dedication may "

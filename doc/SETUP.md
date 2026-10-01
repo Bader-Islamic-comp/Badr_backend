@@ -13,7 +13,7 @@ they need several GB of models and hours of CPU. Run everything from the reposit
 | | minimum | notes |
 | --- | --- | --- |
 | Python | 3.10+ | tested with 3.11.8 |
-| Disk, core | ~0.5 GB | venv ~0.2 GB; `corpus/raw` 36 MB, `corpus/canonical` 33 MB, `corpus/layer0` 75 MB, `corpus/wave1` 1 MB, releases a few MB each |
+| Disk, core | ~0.5 GB | venv ~0.2 GB; `corpus/raw` 122 MB, `corpus/canonical` 57 MB, `corpus/layer0` 116 MB, `corpus/wave1` 1 MB, releases a few MB each (with Tafsir Ibn Kathir, test/corpus-tasks) |
 | Disk, embedding evaluation | +~8 GB | Hugging Face models: BGE-M3 2.2 GB, multilingual-e5-large 2.2 GB, bge-reranker-v2-m3 2.2 GB; Ollama `qwen3-embedding:0.6b` 0.64 GB; PyTorch wheel on top |
 | Memory | 1 GB core; **~4 GB free** per evaluation process | the corpus build peaks at ~0.5 GB; one float32 embedder or the reranker takes 3.3–3.5 GB |
 | Network | only for `fetch_sources.py` and model downloads | nothing else calls out |
@@ -51,8 +51,8 @@ sha256 of every file in `corpus/sources/registry.yaml` and `corpus/canonical/man
 download is verified byte for byte.
 
 ```bash
-.venv/bin/python scripts/fetch_sources.py     # ~16 s: downloads corpus/raw, verifies sha256, builds corpus/canonical
-.venv/bin/python scripts/build_corpus.py      # ~30 s: builds corpus/layer0 and corpus/wave1, validates and chunks them
+.venv/bin/python scripts/fetch_sources.py     # ~16 s (+~70 s for Ibn Kathir's 114 files, 86 MB, on first download): downloads corpus/raw, verifies sha256, builds corpus/canonical
+.venv/bin/python scripts/build_corpus.py      # ~30 s (~2-3 min with Ibn Kathir in layer 0): builds corpus/layer0 and corpus/wave1, validates and chunks them
 ```
 
 `fetch_sources.py` exits 1 if a verification fails and 2 if a source changed upstream (never

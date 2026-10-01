@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 from ..rag import normalize
-from . import hadith, quran, rasm
+from . import hadith, ibn_kathir, quran, rasm
 from .fetch import raw_path
 from .registry import Registry
 
@@ -54,6 +54,14 @@ def build_quran(registry: Registry, raw_root: Path, canonical: Path) -> tuple[di
                                                   uthmani.keys(), "alquran-cloud-muyassar")
     files["tafsir/alquran-cloud-muyassar.jsonl"] = _write_jsonl(
         canonical / "tafsir" / "alquran-cloud-muyassar.jsonl", tafsir)
+    if ibn_kathir.available(registry):
+        # test/corpus-tasks: Tafsir Ibn Kathir, one record per section (consecutive ayat sharing one explanation).
+        texts = {}
+        for surah in range(1, 115):
+            texts.update(ibn_kathir.parse_surah(raw(ibn_kathir.source_id(surah)), surah))
+        sections, ibn_kathir_summary = ibn_kathir.sections(texts, uthmani.keys())
+        files["tafsir/ibn-kathir.jsonl"] = _write_jsonl(canonical / "tafsir" / "ibn-kathir.jsonl", sections)
+        tafsir_summary = {**tafsir_summary, "ibn_kathir": ibn_kathir_summary}
     return files, verification, tafsir_summary
 
 

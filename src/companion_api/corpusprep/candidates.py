@@ -25,7 +25,9 @@ def parse_quran_ref(ref: str) -> tuple[int, int, int]:
 
 
 def _search(text: str) -> str:
-    return f" {normalize.search_text(text)} "
+    # Aliases and source maps are checked against Quran text, so both sides take the Quran's rasm map (norm-v3):
+    # the simple text spells داوود where an alias may say داود.
+    return f" {normalize.search_text(text, quranic=True)} "
 
 
 def check_aliases(data: dict, simple: dict[tuple[int, int], str]) -> tuple[dict, dict]:

@@ -248,3 +248,1843 @@ sources:
   numbering_system: not applicable
   status: pending_legal
   notes: Licence text only; no corpus content.
+- source_id: ibn-kathir-ar-001
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 1
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/1.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:34+00:00'
+  sha256: fd19ee9a637ced5ea2fec1ace934ded0129f0a2f8d24629932781fc492b519a2
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-002
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 2
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/2.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:35+00:00'
+  sha256: 80e3f95e33620cdda7fab759200dba5c3f137330f69b84d368bbfc5a1931c7c1
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-003
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 3
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/3.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:37+00:00'
+  sha256: b5eb91315c51e67c9eb59d38aca2c09ca567feeb0016589c28168fcea4950b4c
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-004
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 4
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/4.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:38+00:00'
+  sha256: 8da78466525f9e27d4c74ae84cae6f1a75c576fff49718fb95e2f5afce7ce2d1
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-005
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 5
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/5.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:39+00:00'
+  sha256: 56fdef87e741bf892d79baa111d5ec7b300e3d3a5172ad3234adb96e024fbeaf
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-006
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 6
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/6.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:40+00:00'
+  sha256: c93f54b558ba79bf8629744be0856500911f3b76898c1ff837b5a8c90e16c958
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-007
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 7
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/7.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:40+00:00'
+  sha256: 67b29ecf8d80302fd7a9373c4d45f9ec06cb3a620fdf1dca7321c6e452a92c22
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-008
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 8
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/8.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:41+00:00'
+  sha256: 0768e672bdf304c77406d605ea56025223a543d10a7982a96d165b6d73d176b7
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-009
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 9
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/9.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:42+00:00'
+  sha256: b2051a79003a4de6969f5064d2d91ac9ab90582786af1964125d9286abe4cccd
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-010
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 10
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/10.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:42+00:00'
+  sha256: bcb8815b33b09baf78f4f3d4d31b05c484862f656d762a810be980e7d4455be0
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-011
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 11
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/11.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:43+00:00'
+  sha256: 2c98c10205aa61210df79e5d53102da533d3105a9bf261c59272fb4c7afea2da
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-012
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 12
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/12.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:43+00:00'
+  sha256: 0c3b9d013d146875775c9dac0813cf28b2a0628c36e4d143bf9d4c31a2b009f4
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-013
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 13
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/13.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:44+00:00'
+  sha256: e67177d307deb6a533ec27e96a17b13bb2a0d60d249f6ae9e1e0860be5e3e6ff
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-014
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 14
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/14.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:45+00:00'
+  sha256: d6a6c722a6eb598c033793337e7418d7ef5f9644db1fb3ad6dac86b47c5881fe
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-015
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 15
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/15.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:45+00:00'
+  sha256: 1a0f30a778b159a6f8fce7d43a59c56eb568780494b02f5e519105dfa0fe0251
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-016
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 16
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/16.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:46+00:00'
+  sha256: d20d622e885950d710eea07537d795a0776724d4d99f308da778697e12f1dd7a
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-017
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 17
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/17.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:46+00:00'
+  sha256: 3baa58337c6985d14a6dcb5d66d8ad5f035dc09e961a264795df0e32d22a07ca
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-018
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 18
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/18.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:47+00:00'
+  sha256: 54340d7e75b19d119ac68104e6c6b5388fa358730758fd59b7f9f0304aa55382
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-019
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 19
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/19.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:48+00:00'
+  sha256: d2d348f3c5e16951ff31cb9abc32377512bbb2d2ddd3783304076c4ec31c0c87
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-020
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 20
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/20.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:48+00:00'
+  sha256: f5f6c0ee4dd31b3873803191fabdb3a8d994d95bc1d04591a3beb0d4f59d65d6
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-021
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 21
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/21.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:49+00:00'
+  sha256: 81f7f64c5ead8ac70c46ea8c60e700e9726a9078e13cf4c83bb61d3b820d7cea
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-022
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 22
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/22.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:49+00:00'
+  sha256: ce48a1b9ffd28f72b049dec27c3255e5e845ead1f6ecb5bc95434320e5e0f41a
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-023
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 23
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/23.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:50+00:00'
+  sha256: 116de8b10bd40e52b4daedfb95ae0db67e622f913f127bfff42cbf0ba5f62a66
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-024
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 24
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/24.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:51+00:00'
+  sha256: c0b955a49b0a6620ec4f04fb024dd7d1247f5d1e433a3f0e95f6498f0c80005e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-025
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 25
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/25.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:51+00:00'
+  sha256: 4265f007d9e56673a188c09e43e83db68d4bc6109105b9328946f4d123ea53a8
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-026
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 26
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/26.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:52+00:00'
+  sha256: 942d78115bc58d7da5ca40befbe3fb1e6a76cfe6f2bc81da1f09ef2bfb41321e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-027
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 27
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/27.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:53+00:00'
+  sha256: 3bade923b739dcf9094293c8d88ebab232911ac051b006e497111d06c7719a8b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-028
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 28
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/28.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:53+00:00'
+  sha256: 986398a4d6ad8284e1db52da6d19838756276dc7977eef434eff8a3102b2d9bd
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-029
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 29
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/29.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:54+00:00'
+  sha256: 5dd2b3839e58535ea7504e4931c8623a60da268923874b72496776e7970a7848
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-030
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 30
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/30.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:54+00:00'
+  sha256: 7b380ec49d8a2b14a8d5aa82dab493d640e3a4a87ca4c6ec16e8ce6043934b6b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-031
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 31
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/31.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:55+00:00'
+  sha256: 51a81dc059fda8052ec87c2a1d4a640d03dd05e90a7d3161bc3454960e192c82
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-032
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 32
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/32.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:55+00:00'
+  sha256: d236c9de409e05ee7e77035c1d546479a89c2f8f32dc58aea98e47109ede04f8
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-033
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 33
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/33.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:56+00:00'
+  sha256: d3c965780c336c62d0f8c3b87fc4551aa719f881590a32a359425c95c6670be5
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-034
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 34
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/34.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:57+00:00'
+  sha256: e5d358fe87255f9eb4bed06687ea41a4a25d5d3215eae589731dbd88845558c5
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-035
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 35
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/35.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:57+00:00'
+  sha256: 4f121feac77933c9b2ecf957f2d5901b78c4d46316d6ef309071874e5fb5fd7d
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-036
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 36
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/36.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:58+00:00'
+  sha256: 4ddca14937b818c260055be7218e03e87104a1fc78918de618c1f79867f1d27d
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-037
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 37
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/37.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:58+00:00'
+  sha256: 880da651b5fc9e9b3e4ba620ff5f1071a7b95e6cc646cfe6dfa607f93f8369d4
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-038
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 38
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/38.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:29:59+00:00'
+  sha256: b0b45709a2c388d34ea47fd19f951403b9340c87ee3d142c9d54e89a7f0fc041
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-039
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 39
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/39.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:00+00:00'
+  sha256: ea78c2bc8659ff4a2e7e899e34871cb3129e3e6a33c0a9b575fac8403d89352b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-040
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 40
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/40.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:00+00:00'
+  sha256: c8863711b93447d365d40bf212b2ef567ac6afcf6753c79b297fb2c817847304
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-041
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 41
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/41.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:01+00:00'
+  sha256: a0e3d575974be7ab654d4f747c130fe3b351ba82695a4b47938b83880ae17b2b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-042
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 42
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/42.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:01+00:00'
+  sha256: e40d236a61f2f4af361c6d8ac223c64eb55661de540571c49475b525f31c5ce4
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-043
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 43
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/43.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:02+00:00'
+  sha256: 1553966113af6da3c2c2231478bf9b13ee11c7d0ca9f2a5f44c10f9935ffd1a4
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-044
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 44
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/44.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:02+00:00'
+  sha256: f278a34895d320e1bd3acf4c19da7095308724e27a1334e4593fa8e978018fc6
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-045
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 45
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/45.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:03+00:00'
+  sha256: 94ef6b87bb81d4134952e7959caed6323d28ef0fc0b8ea140bd6ed3890dcf305
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-046
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 46
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/46.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:04+00:00'
+  sha256: 1c6f14ee4b104c5012752fb4f49bebf535b2a6058cfd2674eee25516f7a403fe
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-047
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 47
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/47.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:05+00:00'
+  sha256: b21dc682d8b8a67ab146c2a650771f265668f4405593791cb7374355687dddd9
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-048
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 48
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/48.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:05+00:00'
+  sha256: f2197ebb88f88fe0b1c8f2bb9e302a32f8c628b3733589058b64219c270d1546
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-049
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 49
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/49.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:06+00:00'
+  sha256: 8099881f5a3b45dc38f7394dbc1ff782fe18abbbededfc6c040c2079c54162d8
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-050
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 50
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/50.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:06+00:00'
+  sha256: 65cc9acc862d88c5b3070cd05809f511fa16d82fbce7ef75ec60d64a0e179baf
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-051
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 51
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/51.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:07+00:00'
+  sha256: 4b9fa75faa2f0256280274b74caa53f9e4a2e0134bc58630d835b8b506978ab4
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-052
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 52
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/52.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:07+00:00'
+  sha256: 45a3a95844e4d8602328ea4665ea483f288ba67054db0a842eed6c14041985b0
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-053
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 53
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/53.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:08+00:00'
+  sha256: ddfefe411892ff564b72520deecbcfb05cdd70df5788752ba1794b63e5f7ef82
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-054
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 54
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/54.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:08+00:00'
+  sha256: 71cf7b07fca64d761730ec2661b11d5bf0f90f1a3b83fac473a5be76ed978a7e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-055
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 55
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/55.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:09+00:00'
+  sha256: 9ab3e70044e77453e229483e31f3f9ce21d304b46677041288ecf276ea7b4f80
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-056
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 56
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/56.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:10+00:00'
+  sha256: 1ad26319f84788877dc45250b5a3ef20b77e48fd96b12cdb0865e1f040601b60
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-057
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 57
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/57.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:11+00:00'
+  sha256: 9c64044c6bf4f2ccc3567a825773491aa9f20a0192ec754125021ddb8721252b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-058
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 58
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/58.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:11+00:00'
+  sha256: 86e748a0e5aa94d1ac9be8d8eb2217d431b13b8110b0a1c317823b5e10b00a80
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-059
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 59
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/59.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:12+00:00'
+  sha256: af1dcc5514ef2c6d787fcd64c30dec34a45d36c27bb1cd7e3c72a70d262e8089
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-060
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 60
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/60.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:12+00:00'
+  sha256: 393c4c9723da147a44bba0d7516df89ddc8ea386fb42c26544984d9cda5ee4ba
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-061
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 61
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/61.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:13+00:00'
+  sha256: 09acac32ea6cbf66fd00b89fb31e52215a1d836cc4865bbf1dae0940715cd2eb
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-062
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 62
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/62.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:13+00:00'
+  sha256: 9f72c3c3c6dec83e28f9213c9b6c0a468008cba99df367d018f0f7af987f31c7
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-063
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 63
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/63.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:14+00:00'
+  sha256: a2f31112caabf74a12ef34b61bd30e3b1d900ddf4ff30e17264c77ce1b6a6aa4
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-064
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 64
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/64.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:14+00:00'
+  sha256: 192690007a5e3ad35b1e348be9d9f5c611ae75874711c3bf083792a33455742c
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-065
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 65
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/65.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:15+00:00'
+  sha256: b4a32339fac6e624113ec0ec1b3cdd30f83e3589ff512e2b7fc7b59f3b119b1e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-066
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 66
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/66.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:15+00:00'
+  sha256: 9b138ddfac8be0de4d2719c18cc7183d021b8a8a9010c951e17f371a1dade71e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-067
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 67
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/67.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:16+00:00'
+  sha256: 13a95e26ce177530d3826237843cd66cf986eb1cf8746fd5369089299a0aa922
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-068
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 68
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/68.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:16+00:00'
+  sha256: c46c9b739c947cde8c25fcb621bd0226a54a5b8aa1d31fcbd5640b7930a8dd07
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-069
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 69
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/69.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:17+00:00'
+  sha256: 033bf69c75de8f3df91fb7fd029e7056e0b9221c4ec34580bdcae360306f2f78
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-070
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 70
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/70.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:17+00:00'
+  sha256: fec43cba5683e53af42f3b0a27cbce4fc48d36a278861cc92b6c644ca0ecb29b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-071
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 71
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/71.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:18+00:00'
+  sha256: 7e9912fe0c63601c8d91268cfb7c7747927d203ddf8acab28da918ec9b4ed62e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-072
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 72
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/72.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:18+00:00'
+  sha256: 59dafeab1e39c01ba75dfcdcfa1a49ac837df78437d022fa009ea3f3c31d9b8c
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-073
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 73
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/73.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:19+00:00'
+  sha256: 0ff99c16e86832fc85edf8d05c0f11d262fee0ff8ef1fb3453d46f2a49301986
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-074
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 74
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/74.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:20+00:00'
+  sha256: 32eb231395701ad6dd1551dfb878fc2b02a61f6382a5fee263beb590601bd006
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-075
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 75
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/75.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:20+00:00'
+  sha256: 7a1bb1e17a83fa5607a4dc622dd8bb0e2b44f18e44f214f0b46368012df2df5d
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-076
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 76
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/76.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:21+00:00'
+  sha256: e9abb6d18af54e99c6ca86884dc7d79f5e1c00cf85809aeae9262ba2f66b9722
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-077
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 77
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/77.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:21+00:00'
+  sha256: cd0fab0faa6abdd74beeb474db3a242cfb08718f1ed53b2d5dc02e7e157b88a1
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-078
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 78
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/78.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:22+00:00'
+  sha256: 70c74d1f8975abbb6ee846aa324c6f84fadb35ad7492bff7c66be1db3267b00f
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-079
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 79
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/79.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:23+00:00'
+  sha256: 7e561db1e3db3ceec7e4ad08a8dea5723d4ac0b095a6844abe240e034bae1ef7
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-080
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 80
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/80.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:23+00:00'
+  sha256: f9e4b59be7c694cd898d1f93bc7d276de91906b9b84271c0ac758da9bc9ddd97
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-081
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 81
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/81.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:24+00:00'
+  sha256: 56f55c89933e39d6629b32cf98d8497d13552d412a6111e5000f52727ce40b6d
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-082
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 82
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/82.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:25+00:00'
+  sha256: b50403f8f311dc07d70638723c20931b73fb0752944714a3d6ab498422988983
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-083
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 83
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/83.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:26+00:00'
+  sha256: 4f98228625148ce95c24bbee990d31260bd22e0b3c7039e6d75c9947f1c08cfa
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-084
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 84
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/84.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:26+00:00'
+  sha256: 9f70d12c505abe430d0e4dcabc68f12b1257060e7470011463a514cebed60bd6
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-085
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 85
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/85.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:27+00:00'
+  sha256: 90dcaade3114f8f6da2e0e8762d8e29105c11dd1967b8a1eeedfee06a1430d36
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-086
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 86
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/86.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:27+00:00'
+  sha256: 7095c6086477089b4428be9a314923cacbcd33054b56f2cfac9debb7f0b3e395
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-087
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 87
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/87.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:28+00:00'
+  sha256: 31736c149e9451ef65b358c397f4b1d274e9aec3a5617b8faba51dd41c40a997
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-088
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 88
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/88.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:28+00:00'
+  sha256: 6cc0a5db2b94e431f3df7efde003518e67e22268d35aa5f76d31f985a9946430
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-089
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 89
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/89.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:29+00:00'
+  sha256: 5caef4c8e176266b5d0dbb0904864ec6d46b93bb843a2f8d64768c7d048b7fcc
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-090
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 90
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/90.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:29+00:00'
+  sha256: d523390e92407e44833a4b7987930f6d267304589f2aa4ec7c557b2818675f31
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-091
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 91
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/91.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:30+00:00'
+  sha256: 03b7ee0233149bb186909ef9dfc5962b901ada69aefcbca6de333b45118fa374
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-092
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 92
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/92.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:30+00:00'
+  sha256: 0e2f9e99fc54ac71ffcbcf65f8b0cce58b05c4090a953483840d94df519cfab2
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-093
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 93
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/93.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:30+00:00'
+  sha256: e7bc3e659eddcaec4b7d77d2930e73921d5de9659b31a4b0c288ac3b58d4fc4d
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-094
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 94
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/94.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:31+00:00'
+  sha256: 1dff41b5f54c3d2610915d64be9c394ed2a8bb4a4939289e08c4e9f707e05193
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-095
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 95
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/95.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:31+00:00'
+  sha256: 7e415ebd0f42a7db211de1cd1fb9f47bef5304563852070829fdbbe8fd5c2563
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-096
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 96
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/96.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:32+00:00'
+  sha256: 035340be68e2dd67da214f2872ea101591940fa7827a4bc2c23491d78924fbac
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-097
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 97
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/97.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:32+00:00'
+  sha256: 687846307ff49655be6dc7efae7f0c65e3edccd8d25b25d4a96e4f3bdca003de
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-098
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 98
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/98.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:33+00:00'
+  sha256: 47761d73b4a7f67df86a118d0519927e0614085223c704b96043b6f93feea0fb
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-099
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 99
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/99.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:33+00:00'
+  sha256: 28d434d41a2d20bf5d71b59ddefe05d7d1aae08192edb87f1cefcd5cdfe74007
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-100
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 100
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/100.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:34+00:00'
+  sha256: f9c82f920e04cbd3fc6020a73b3778a9aa9572dae07e2171968bf6694dbeabc7
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-101
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 101
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/101.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:34+00:00'
+  sha256: ffa48c0976d8dacf12b66e91e4a8f0e2a4a8eec1bece6a1d5f7b3896c332b23b
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-102
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 102
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/102.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:35+00:00'
+  sha256: 4c8751c5cb619e6329b6a2370e52244e713b2c064402caa3fd1f31fdd36ead71
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-103
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 103
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/103.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:35+00:00'
+  sha256: 61cb31b3c39a9a9c6a905ba55f0cd89470a0faf571cbefa35a9fb48fd72819c0
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-104
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 104
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/104.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:36+00:00'
+  sha256: 7e1cc01ae3348f5e9f821a97354fc3a74da47bde0d272461975e831aa828d3e1
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-105
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 105
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/105.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:36+00:00'
+  sha256: 499a7a637ea85dc66e82ca9c93c81ed696497f08c70023741b6d15ff0b33bfd2
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-106
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 106
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/106.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:36+00:00'
+  sha256: 6210f213ee6fb5b3cde7b9d7506e7f636d927b3344e898ba30e11aab0e7eedb2
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-107
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 107
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/107.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:37+00:00'
+  sha256: d4f6ec63fb28a41cd3374071e87f1d8559e8ec4f2333a914a250e3bcd4c8aece
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-108
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 108
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/108.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:37+00:00'
+  sha256: bb378f851598afdf4bebe8b88777d74a9d046758c321e229854ed68d6f7b06fd
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-109
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 109
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/109.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:38+00:00'
+  sha256: 0c42b87324629b355b54bf9b3f69d07af73264e43eabe80cf1ec68739d83d7f1
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-110
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 110
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/110.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:38+00:00'
+  sha256: 3a95b4263f7e375e9118b753447da54952160a71a46f345be1df09c99cb1b178
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-111
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 111
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/111.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:39+00:00'
+  sha256: 447a468b098b686e6092c09fdc95921437aa70e3da4d8ee57d5c1d9adbb6ea84
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-112
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 112
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/112.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:39+00:00'
+  sha256: 0350535c8bf66e84202258872eb47446b6644d6274153c69caf12b31907f081e
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-113
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 113
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/113.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:40+00:00'
+  sha256: ac484b9ce99757d1f8b474252f5da1063ab77f923ae77d96166a7ecf031689d6
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: ibn-kathir-ar-114
+  format: json
+  dataset: spa5k-tafsir-api
+  role: tafsir
+  title: Tafsir Ibn Kathir (Arabic), surah 114
+  edition: spa5k/tafsir_api v1.2.1 (commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23), edition ar-tafsir-ibn-kathir, from QUL resource 22
+  publisher: Ibn Kathir (d. 774 AH), original work; digitised by Tarteel QUL (qul.tarteel.ai); mirrored by spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/tafsir/ar-tafsir-ibn-kathir/114.json
+  license: Not stated for the tafsir text (the mirror's code is MIT)
+  license_url: https://qul.tarteel.ai/resources/tafsir/22
+  terms_summary: The mirror's MIT licence covers its code. Neither the mirror nor the QUL resource page states terms for the tafsir text (checked 2026-10-01).
+  retrieved_at: '2026-10-01T13:30:40+00:00'
+  sha256: f28e871f2adf657b4b360591c86405c71eca5c9db3ff14cf4caa10b378eb5169
+  numbering_system: surah:ayah (QUL ayah keys)
+  status: candidate
+  notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+- source_id: spa5k-tafsir-license
+  format: txt
+  dataset: spa5k-tafsir-api
+  role: licence_text
+  title: tafsir_api LICENSE file
+  edition: tafsir_api commit 9ae590abdaaa38462f4f91cc141903aa6f72cc23
+  publisher: spa5k/tafsir_api (GitHub)
+  url: https://raw.githubusercontent.com/spa5k/tafsir_api/9ae590abdaaa38462f4f91cc141903aa6f72cc23/LICENSE
+  license: MIT (code)
+  license_url: https://opensource.org/license/mit
+  terms_summary: The licence text itself, kept so the rights table can quote it verbatim.
+  retrieved_at: '2026-10-01T13:30:41+00:00'
+  sha256: 92f3c7ee3a04599ab2327052570bc94a82ebf1fdd3d0e8cf5c9e2c3a9282b279
+  numbering_system: not applicable
+  status: pending_legal
+  notes: Licence text only; no corpus content.

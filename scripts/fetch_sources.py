@@ -73,6 +73,10 @@ def main(argv=None) -> int:
           f"(per-surah counts match {', '.join(quran_info['per_surah_checked_against'])})")
     print(f"tafsir alquran-cloud-muyassar: {tafsir_info['records']} records, "
           f"{tafsir_info['missing_ayat']} ayat missing, {tafsir_info['empty']} empty")
+    if "ibn_kathir" in tafsir_info:
+        info = tafsir_info["ibn_kathir"]
+        print(f"tafsir ibn-kathir: {info['ayat']} ayat in {info['sections']} sections, {info['missing_ayat']} missing, "
+              f"{info['words']} words, {info['editor_notes']} editor notes")
     for info in hadith_info:
         print(f"hadith {info['collection']}: {info['records']} records, {info['primary_empty_text']} empty in "
               f"primary, statuses {info['statuses']}, eligible {info['eligible']}")

@@ -1,6 +1,6 @@
 {
   "chunker": "chunk-v2",
-  "normalizer": "norm-v2",
+  "normalizer": "norm-v3",
   "segments": {
     "count": 1054,
     "max_ayat": 8,
@@ -69,29 +69,30 @@
   "skipped": {
     "cluster_member_not_primary": 828
   },
+  "ibn_kathir_documents": 1911,
   "long_hadith_with_parts": 2053,
   "wave1_prophet_segments": 144,
   "wave1_hadith": 40,
   "generated_questions": 552,
   "layer0": {
-    "documents": 16220,
-    "chunks": 28560,
-    "parent_chunks": 16766,
+    "documents": 18131,
+    "chunks": 38614,
+    "parent_chunks": 26820,
     "child_chunks": 11794,
     "by_content_type": {
       "hadith": 19673,
       "quran": 7287,
-      "tafsir": 1600
+      "tafsir": 11654
     },
-    "warnings": 532,
+    "warnings": 1136,
     "errors": 0,
     "parent_words": {
       "max": 1921,
-      "median": 61
+      "median": 87
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 9.3
+    "seconds": 102.1
   },
   "wave1": {
     "documents": 184,
@@ -110,6 +111,6 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 0.2
+    "seconds": 1.0
   }
 }
