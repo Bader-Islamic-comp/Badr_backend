@@ -53,6 +53,7 @@ download is verified byte for byte.
 ```bash
 .venv/bin/python scripts/fetch_sources.py     # ~16 s (+~70 s for Ibn Kathir's 114 files, 86 MB, on first download): downloads corpus/raw, verifies sha256, builds corpus/canonical
 .venv/bin/python scripts/build_corpus.py      # ~30 s (~2-3 min with Ibn Kathir in layer 0): builds corpus/layer0 and corpus/wave1, validates and chunks them
+.venv/bin/python scripts/build_graph.py       # ~17 s: the knowledge graph (corpus/graph/) and its review report (doc/knowledge-graph.md)
 ```
 
 `fetch_sources.py` exits 1 if a verification fails and 2 if a source changed upstream (never

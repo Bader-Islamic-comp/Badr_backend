@@ -22,3 +22,5 @@ corpus/wave1/
 reports/retrieval/cache/
 # Contains Quran and hadith text copied from corpus/canonical; regenerate with scripts/build_decision_packages.py
 doc/decisions/04-content-review.md
+# Knowledge graph build output (test/corpus-tasks); rebuild with scripts/build_graph.py
+corpus/graph/
