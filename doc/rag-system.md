@@ -774,3 +774,9 @@ reviewed English content (licensed translations), which is a corpus decision, no
 
 **What these checks cannot do.** The judge is the same model that wrote the answer: a second line, not an
 independent reviewer. None of this replaces the scholarly review of the corpus and of the evaluation sets.
+
+**Arabic function words (norm-v3).** The first answers over the Arabic corpus failed the support check largely
+on words that state nothing: the Arabic stopword list had 12 entries against about 50 English ones, and the
+model framed facts with "كما ورد في المصدر". `normalize.ARABIC_FUNCTION_WORDS` adds common function words and
+the citation-framing words; the faith prompt asks for the source's own words and no framing. "ذكر" stays a
+content word, because it is also dhikr.

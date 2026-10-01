@@ -10,6 +10,55 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-01 (test/corpus-tasks)
+
+On branch `test/corpus-tasks` (from `corpus-tasks`; git branch names cannot hold ": "). The product owner's request
+of 2026-10-01, verbatim:
+
+> "ok, do the solutions that you recommended in the report in a branch called "test: corpus-tasks". I suggest
+> that you add tafsir Ibn Katheer for each Surah and Ayah available in the corpus and create a Knowledge Graph
+> that connects between the tafsir, Quran, Hadith and Prophet's names. After that, I will let the team review
+> it and submit any finding."
+
+Review guide: [`doc/pr/test-corpus-tasks.md`](doc/pr/test-corpus-tasks.md).
+
+### Added
+
+- **Tafsir Ibn Kathir** (Arabic, spa5k/tafsir_api v1.2.1 from Tarteel QUL resource 22): 114 registered files,
+  `candidate` (no licence stated for the text), 1,911 sections over all 6,236 ayat in `corpus/canonical` and
+  layer 0; never in a release.
+- **Knowledge graph `kg-v1`** (`doc/knowledge-graph.md`, `scripts/build_graph.py`, `scripts/graph_query.py`):
+  ayat, Ibn Kathir sections, 18,204 hadith and the 25 prophets, linked by structure, the sections' ranges,
+  quotations, the editor's takhrij notes (1,554 Bukhari citations, 1,052 confirmed by text), text matches, names
+  and the curated source maps; ids and counts only.
+- **Arabic and Arabizi routing** (router `dev-patterns-v2`, `rag/arabic_rules.py`): all 16 distress questions of
+  the harmful set reach safety, all personal-data and injection questions are redirected, 24 of 25 rulings.
+- **Faith answers** (`rag-answer-v3`, `grounding-v3`, `faith-judge-v1`): a faith prompt for religious passages,
+  verbatim quotations, no first person in a faith answer, Arabic-aware word matching, and a JSON-mode judge of
+  meaning that fails closed.
+- **Replies in the child's language**, `SAFETY_ABUSE` (never back to a parent) and `SAFETY_DISTRESS`.
+- **Arabizi search** (`rag/arabizi.py`, `corpus/glossary_cross_lingual.yaml`): 79 of 80 Arabizi questions
+  detected, none of 109 English ones; Arabic terms and the named prophets' passages.
+- **Signed decisions** (`governance/signatures.py`, `corpus/governance/signers.yaml`, `.github/CODEOWNERS`) and
+  **audit anchors** (`verify_audit.py --write-anchor`, `pipeline.auditHead` in release manifests).
+- `scripts/eval_serving.py`: the evaluation sets through the server's own routing and retriever.
+
+### Changed
+
+- **norm-v3**: the rasm map applies to Quran text only. Quran chunks are embedded from their simple-spelling
+  search text.
+- Conversation policy v2 (`doc/conversation-policy.md` §13), RAG system §15.
+
+### Verification
+
+- `pytest`: **703 passed** (647 before). App: 137 passed.
+- Harmful set, real model: 16 of 16 distress messages reach the safeguarding reply; every personal-data and
+  injection question and 24 of 25 rulings are redirected; no fabricated-hadith or prophet-mix-up question gets
+  an answer.
+- Gold set, real model: 13 of 145 answers released, 10 right by the developer's reading; 3 wrong ones passed the
+  judge (details in `doc/pr/test-corpus-tasks.md`). No answer speaks in the first person.
+- `scripts/eval_serving.py`: Arabizi questions reach the corpus (47 of 62; none before).
+
 ## Unreleased — 2026-09-30 (corpus-tasks review fixes)
 
 Two problems found while validating the `corpus-tasks` branch, fixed on it.
