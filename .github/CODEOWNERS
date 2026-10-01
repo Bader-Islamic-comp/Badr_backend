@@ -1,0 +1,6 @@
+# test/corpus-tasks: the files that decide who may approve content and licences need a code owner's review.
+# Replace the placeholder team with the governance owner's GitHub handle (or a team), then turn on
+# "Require review from Code Owners" in the main branch's protection rule (a repository setting).
+/corpus/governance/signers.yaml     @Bader-Islamic-comp/governance
+/corpus/governance/reviewers.yaml   @Bader-Islamic-comp/governance
+/doc/decisions/decisions.yaml       @Bader-Islamic-comp/governance

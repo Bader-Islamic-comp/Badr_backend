@@ -20,7 +20,7 @@ import re
 import yaml
 
 from ..corpusprep import registry as registry_module
-from . import audit, review
+from . import audit, review, signatures
 
 GOVERNANCE_OWNER = "Mousa al-Rashdan"
 PIPELINE_OWNER = "Momen Alhamza"
@@ -43,6 +43,17 @@ class Paths:
     registry: Path
     drafts: Path
     known_items: frozenset
+    # test/corpus-tasks: with `signers` set, every new decision must be committed and SSH-signed by the person it
+    # names (signatures.py); `repo` is the git checkout holding the decisions file.
+    signers: Path | None = None
+    repo: Path | None = None
+
+
+def signature_problems(paths: Paths, entries: list[dict]) -> dict[str, list[str]]:
+    """decision_id -> signature problems; empty when signatures are not required or all are good."""
+    if paths.signers is None or not entries:
+        return {}
+    return signatures.check(paths.decisions, entries, paths.signers, paths.repo or paths.decisions.parent)
 
 
 def kind_of(item_id: str) -> str:
@@ -126,6 +137,8 @@ def apply(paths: Paths) -> dict:
     ids = [entry.get("decision_id") for entry in entries]
     if len(ids) != len(set(ids)):
         problems["decisions"] = ["decision_id values must be unique"]
+    for decision_id, found in signature_problems(paths, new).items():
+        problems.setdefault(decision_id, []).extend(found)
     if problems:
         raise DecisionError("refused, nothing applied:\n" + "\n".join(
             f"  {key}: {'; '.join(value)}" for key, value in problems.items()))

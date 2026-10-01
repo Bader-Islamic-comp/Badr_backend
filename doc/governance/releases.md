@@ -25,3 +25,8 @@ python scripts/rollback.py --actor "NAME" --reason "why" --quarantine # and neve
   this file. `releases/release_history.json` is the promotion stack; rollback pops it and verifies the
   target before switching. `releases/quarantined.json` lists releases that are refused even by pointer.
 - Every build, promotion, rollback and quarantine is an audit event in `releases/audit.jsonl`.
+
+**Audit anchors (test/corpus-tasks).** Each release manifest records `pipeline.auditHead`, the head
+(`seq`, `hash`) of `releases/audit.jsonl` when it was built. A release directory is read-only, so
+`scripts/verify_audit.py` checks the trail against every manifest's anchor and reports events removed after an
+anchor or a trail rewritten before it, which the hash chain alone cannot see.

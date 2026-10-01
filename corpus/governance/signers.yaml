@@ -1,0 +1,11 @@
+# Signing keys for decisions (test/corpus-tasks, governance/signatures.py). A decision in
+# doc/decisions/decisions.yaml applies only when every line of it was committed in a commit SSH-signed by
+# the key registered here for the person in its decided_by. Adding a key is how a person becomes able to
+# decide, so this file is under code-owner review (.github/CODEOWNERS). Empty until the governance owner
+# registers the keys of the people named in doc/decisions/README.md.
+#
+# - name: <full name, exactly as in decided_by>
+#   principal: <an id without spaces, e.g. an email address>
+#   key: ssh-ed25519 AAAA... (one line, the public key)
+schema_version: 1
+signers: []

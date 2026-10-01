@@ -96,6 +96,9 @@ def build(corpus_dir: Path, releases_root: Path, release_id: str, *, registry_pa
         "canonicalManifestSha256": (sha256(Path(canonical_manifest).read_bytes()).hexdigest()
                                     if canonical_manifest and Path(canonical_manifest).is_file() else None),
         "gitCommit": git_commit(repo_root or Path(corpus_dir)), "policyVersion": policy_version,
+        # The release audit trail's head before this build: an anchor no later rewrite of audit.jsonl can move,
+        # because a release directory is read-only (scripts/verify_audit.py checks it).
+        "auditHead": audit.head(Path(releases_root) / AUDIT),
         "excludedDocuments": excluded, "corpusDir": Path(corpus_dir).name,
     }
     review = {"approved": sum(d.review.status == "approved" for d in kept),

@@ -47,11 +47,40 @@ def _read(path: Path) -> list[dict]:
     return events
 
 
-def verify(path: Path) -> Verification:
+def head(path: Path) -> dict | None:
+    """The last event's `{"seq", "hash"}`: an anchor to keep outside the file (test/corpus-tasks).
+
+    A hash chain shows an edit, an insertion or a reordering, but not lost final
+    events or a whole file rewritten consistently. An anchor kept elsewhere (a
+    committed anchor file, a release manifest) closes both: `verify` then needs
+    the trail to reach that event with that hash.
+    """
+    events = _read(Path(path))
+    return {"seq": events[-1]["seq"], "hash": events[-1]["hash"]} if events else None
+
+
+def verify(path: Path, anchors=()) -> Verification:
+    """The chain checked end to end, and against every anchor (`head` values recorded earlier)."""
     try:
         events = _read(Path(path))
     except AuditError as error:
         return Verification(False, 0, str(error))
+    result = _verify_chain(events)
+    if not result.ok:
+        return result
+    for anchor in anchors:
+        if not anchor:
+            continue
+        seq, digest = anchor.get("seq"), anchor.get("hash")
+        if not isinstance(seq, int) or seq > len(events):
+            return Verification(False, len(events), f"the trail ends at event {len(events)} but an anchor records "
+                                                    f"event {seq}: events were removed")
+        if events[seq - 1]["hash"] != digest:
+            return Verification(False, len(events), f"event {seq} does not match its anchor: the trail was rewritten")
+    return result
+
+
+def _verify_chain(events: list[dict]) -> Verification:
     previous = GENESIS
     for number, event in enumerate(events, 1):
         if set(event) != set(FIELDS) | {"hash"}:
