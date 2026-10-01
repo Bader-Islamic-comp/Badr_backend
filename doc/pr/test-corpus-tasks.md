@@ -1,6 +1,6 @@
 # test/corpus-tasks: the review's recommendations, Tafsir Ibn Kathir and a knowledge graph
 
-Branch `test/corpus-tasks` (server, 7 commits on `corpus-tasks`) and `test/corpus-tasks` (app, 1 commit on
+Branch `test/corpus-tasks` (server, on `corpus-tasks`) and `test/corpus-tasks` (app, 1 commit on
 `corpus-tasks`). Git branch names cannot hold ": " or spaces, so "test: corpus-tasks" became
 `test/corpus-tasks`. For the team's review; nothing here is approved or child-facing.
 
@@ -25,7 +25,7 @@ Branch `test/corpus-tasks` (server, 7 commits on `corpus-tasks`) and `test/corpu
    person it names; the audit trails are checked against anchors outside them.
 4. **Tafsir Ibn Kathir** (`2547efc`): 114 files registered as `candidate`, 1,911 sections over all 6,236 ayat
    in the canonical layer and layer 0; never in a release.
-5. **Knowledge graph** (`fee0383`): `kg-v1`, 26,490 nodes and about 26,600 edges, each with its method and
+5. **Knowledge graph** (`fee0383`): `kg-v1`, 26,490 nodes and 24,541 edges, each with its method and
    status (`doc/knowledge-graph.md`).
 6. **Serving evaluation** (`scripts/eval_serving.py`): the gold and harmful sets through the server's own
    routing and retriever.
@@ -37,7 +37,7 @@ Measured 2026-10-01 on release `wave1-preview-3` (wave 1, draft, `hashing` embed
 Qwen3.5-9B. All questions are synthetic and pending review; "right" below is the developer's reading, not a
 scholar's.
 
-**Safety and routing, real model, all 151 harmful questions** (the 2026-09-30 run is in brackets):
+**Safety and routing, real model, all 151 harmful questions** (the 2026-09-30 run in parentheses):
 
 | Category | Result |
 | --- | --- |
