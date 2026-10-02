@@ -1,10 +1,11 @@
-"""Build the corpus knowledge graph (`kg-v1`): nodes and typed edges between the Quran, Tafsir Ibn Kathir, hadith
+"""Build the corpus knowledge graph (`kg-v2`): nodes and typed edges between the Quran, the tafsir books, hadith
 and the prophets, from the canonical files (doc/knowledge-graph.md).
 
 Nodes                                  Edges (source -> target)
   surah:12                               IN_SURAH          ayah -> surah
   quran:12:4          (ayah)             EXPLAINS          tafsir section -> ayah        (the ayat it explains)
   ibn-kathir:12:4-6   (tafsir section)   QUOTES_AYAH       tafsir section | hadith -> ayah (a quotation found in the text)
+  tabari:12:4         (tafsir section of a Quranpedia book; kg-v2 links it by EXPLAINS only)
   bukhari:13, muslim:45, nawawi40:13 ... CITES_HADITH      tafsir section -> hadith      (editor's takhrij note, text match)
   prophet:yusuf                          MENTIONS_PROPHET  ayah | tafsir section | hadith -> prophet
                                          STORY_IN          prophet -> ayah               (the curated source maps)
@@ -24,10 +25,12 @@ import re
 
 import yaml
 
-from ..corpusprep import ibn_kathir
+from ..corpusprep import ibn_kathir, quranpedia
 from ..rag import normalize
 
-GRAPH_VERSION = "kg-v1"
+# kg-v2 (test/corpus-tasks): the Quranpedia tafsir books as sections with EXPLAINS edges (source_id and
+# package_rule on node and edge), English translation coverage and the King Fahd Complex check on ayah nodes.
+GRAPH_VERSION = "kg-v2"
 QUOTE_GRAM = 5             # words per n-gram when finding a Quran quotation
 MIN_QUOTED_AYAH_WORDS = 6  # shorter ayat are formulas that recur everywhere
 MIN_AYAH_COVERAGE = 0.6    # share of an ayah's n-grams found in the text
@@ -77,6 +80,7 @@ class Graph:
     nodes: dict[str, dict] = field(default_factory=dict)
     edges: dict[tuple[str, str, str], dict] = field(default_factory=dict)
     unresolved: list[dict] = field(default_factory=list)
+    translations: dict[str, dict] = field(default_factory=dict)  # source_id -> coverage (kg-v2)
 
     def node(self, node_id: str, kind: str, **attrs) -> None:
         self.nodes.setdefault(node_id, {"id": node_id, "type": kind}).update(attrs)
@@ -252,11 +256,17 @@ def build(corpus: Path, surah_names: dict[int, str] | None = None) -> Graph:
     canonical = corpus / "canonical"
     ayat_rows = _jsonl(canonical / "quran/ayat.jsonl")
     ayat = {(row["surah"], row["ayah"]): row["text_normalized"] for row in ayat_rows}
+    translated = _translations(graph, canonical)
     for surah in sorted({surah for surah, _ in ayat}):
         graph.node(f"surah:{surah}", "surah", number=surah,
                    **({"name_ar": surah_names[surah]} if surah_names and surah in surah_names else {}))
-    for (surah, ayah), text in ayat.items():
-        graph.node(f"quran:{surah}:{ayah}", "ayah", surah=surah, ayah=ayah, words=len(text.split()))
+    for row in ayat_rows:
+        surah, ayah = row["surah"], row["ayah"]
+        extra = {"kfc_check": row["kfc_check"]} if "kfc_check" in row else {}
+        if graph.translations:
+            extra["translations"] = sorted(translated.get((surah, ayah), ()))
+        graph.node(f"quran:{surah}:{ayah}", "ayah", surah=surah, ayah=ayah, words=len(ayat[(surah, ayah)].split()),
+                   **extra)
         graph.edge("IN_SURAH", f"quran:{surah}:{ayah}", f"surah:{surah}", method="structure", status="exact")
 
     prophets = load_prophets(corpus / "aliases.yaml")
@@ -306,26 +316,76 @@ def build(corpus: Path, surah_names: dict[int, str] | None = None) -> Graph:
     _clusters(graph, corpus)
     _selection(graph, corpus)
 
+    rules = _package_rules(corpus)
     tafsir_path = canonical / "tafsir/ibn-kathir.jsonl"
     if tafsir_path.is_file():
         index = HadithIndex({hid: toks for hid, toks in hadith_texts.items() if hid.split(":")[0] in ("bukhari",
                                                                                                       "muslim")})
         for record in _jsonl(tafsir_path):
-            _tafsir_section(graph, record, quran_index, index, text_names)
+            _tafsir_section(graph, record, quran_index, index, text_names, rules.get(record["source_id"]))
+    for book in quranpedia.TAFSIR_BOOKS:
+        path = canonical / book.canonical_name
+        if path.is_file():
+            _book_sections(graph, book, _jsonl(path))
     return graph
 
 
+def _package_rules(corpus: Path) -> dict[str, str]:
+    """source_id -> package_rule from the registry (how a source stands against the reference package)."""
+    path = Path(corpus) / "sources/registry.yaml"
+    if not path.is_file():
+        return {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return {source["source_id"]: source["package_rule"] for source in data.get("sources") or []
+            if source.get("package_rule")}
+
+
+def _translations(graph: Graph, canonical: Path) -> dict[tuple[int, int], set[str]]:
+    """(surah, ayah) -> the English translations that give it (a record not labelled for another ayah)."""
+    covered: dict[tuple[int, int], set[str]] = defaultdict(set)
+    for translation in quranpedia.TRANSLATIONS:
+        path = canonical / f"translations/{translation.source_id}.jsonl"
+        if not path.is_file():
+            continue
+        count = 0
+        for row in _jsonl(path):
+            if row.get("text") and not row.get("label_mismatch"):
+                covered[(row["surah"], row["ayah"])].add(translation.slug)
+                count += 1
+        graph.translations[translation.source_id] = {"ayat": count, "content_type": translation.content_type}
+    return covered
+
+
+def _book_sections(graph: Graph, book, records: list[dict]) -> None:
+    """One `tafsir_section` node per range a Quranpedia book explains (its passages on that range together)."""
+    sections: dict[str, list[dict]] = {}
+    for record in records:
+        if quranpedia.usable_record(record):
+            sections.setdefault(record["section_id"], []).append(record)
+    for section, items in sections.items():
+        first = items[0]
+        rule = first.get("package_rule")
+        graph.node(section, "tafsir_section", surah=first["surah"], from_ayah=first["from_ayah"],
+                   to_ayah=first["to_ayah"], words=sum(item["words"] for item in items), passages=len(items),
+                   source_id=book.source_id, package_rule=rule, book=book.slug)
+        for ayah in range(first["from_ayah"], first["to_ayah"] + 1):
+            graph.edge("EXPLAINS", section, f"quran:{first['surah']}:{ayah}", method="passage_range", status="exact",
+                       source_id=book.source_id, package_rule=rule)
+
+
 def _tafsir_section(graph: Graph, record: dict, quran_index: QuranIndex, index: HadithIndex,
-                    names: NameMatcher) -> None:
+                    names: NameMatcher, package_rule: str | None = None) -> None:
     section = record["section_id"]
     surah, first, last = record["surah"], record["from_ayah"], record["to_ayah"]
     notes = ibn_kathir.editor_notes(record["text"])
     tokens = _tokens(ibn_kathir.display_text(record["text"]))
     graph.node(section, "tafsir_section", surah=surah, from_ayah=first, to_ayah=last, words=record["words"],
-               editor_notes=len(notes), source_id=record["source_id"])
+               editor_notes=len(notes), source_id=record["source_id"], package_rule=package_rule,
+               book="ibn-kathir")
     own = {(surah, ayah) for ayah in range(first, last + 1)}
     for key in own:
-        graph.edge("EXPLAINS", section, f"quran:{key[0]}:{key[1]}", method="section_range", status="exact")
+        graph.edge("EXPLAINS", section, f"quran:{key[0]}:{key[1]}", method="section_range", status="exact",
+                   source_id=record["source_id"], package_rule=package_rule)
     for (s, a), coverage in quran_index.quoted(tokens).items():
         if (s, a) not in own:
             graph.edge("QUOTES_AYAH", section, f"quran:{s}:{a}", method="ngram", status="needs_check",
@@ -426,8 +486,22 @@ def stats(graph: Graph) -> dict:
     cites = [edge for edge in graph.edges.values() if edge["type"] == "CITES_HADITH"]
     editor = [edge for edge in cites if "editor_note" in edge.get("method", "") and edge["target"].startswith("bukhari:")]
     muslim = [edge for edge in cites if "editor_note" in edge.get("method", "") and edge["target"].startswith("muslim:")]
+    books: dict[str, dict] = {}
+    for node in graph.nodes.values():
+        if node["type"] == "tafsir_section":
+            entry = books.setdefault(node.get("book") or "", {"package_rule": node.get("package_rule"),
+                                                              "sections": 0, "ayat": set(), "words": 0})
+            entry["sections"] += 1
+            entry["words"] += node.get("words") or 0
+            entry["ayat"].update((node["surah"], ayah) for ayah in range(node["from_ayah"], node["to_ayah"] + 1))
+    tafsir_books = {book: {"package_rule": entry["package_rule"], "sections": entry["sections"],
+                           "ayat_explained": len(entry["ayat"]), "words": entry["words"]}
+                    for book, entry in sorted(books.items())}
+    kfc = Counter(node["kfc_check"] for node in graph.nodes.values() if node["type"] == "ayah" and "kfc_check" in node)
     return {"nodes": dict(sorted(by_type.items())), "edges": dict(sorted(edges.items())),
             "edges_by_method_status": dict(sorted(methods.items())), "per_prophet": per_prophet,
+            "tafsir_books": tafsir_books, "translations": dict(sorted(graph.translations.items())),
+            "kfc_check": dict(sorted(kfc.items())),
             "editor_citations": {"bukhari_linked": len(editor),
                                  "bukhari_text_confirmed": sum(1 for e in editor if e["status"] == "text_confirmed"),
                                  "bukhari_also_found_by_text": sum(1 for e in editor if "text_match" in e["method"]),

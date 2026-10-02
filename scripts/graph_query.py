@@ -1,9 +1,10 @@
-"""Look up the knowledge graph (kg-v1) for review: what is linked to a prophet, an ayah, a hadith or a tafsir section.
+"""Look up the knowledge graph (kg-v2) for review: what is linked to a prophet, an ayah, a hadith or a tafsir section.
 
     python scripts/graph_query.py prophet yusuf
     python scripts/graph_query.py ayah 12:4
     python scripts/graph_query.py hadith bukhari:3395
     python scripts/graph_query.py section ibn-kathir:12:4-6
+    python scripts/graph_query.py section tabari:12:4          a Quranpedia book's section (<book>:<surah>:<ayat>)
     python scripts/graph_query.py ... --text      also print the text of each linked item (first 160 characters)
 
 Reads corpus/graph/ (build it with scripts/build_graph.py) and, with --text, the local canonical files. The text is
@@ -15,7 +16,7 @@ import sys
 
 import _common  # noqa: F401
 from _common import ROOT
-from companion_api.corpusprep import ibn_kathir
+from companion_api.corpusprep import ibn_kathir, quranpedia
 
 CORPUS = ROOT / "corpus"
 GRAPH = CORPUS / "graph"
@@ -33,6 +34,12 @@ def _texts() -> dict[str, str]:
     tafsir = canonical / "tafsir/ibn-kathir.jsonl"
     if tafsir.is_file():
         texts.update({r["section_id"]: ibn_kathir.display_text(r["text"]) for r in _jsonl(tafsir)})
+    for book in quranpedia.TAFSIR_BOOKS:  # kg-v2: a section is a book's passages on one range, in order
+        path = canonical / book.canonical_name
+        if path.is_file():
+            for record in _jsonl(path):
+                if quranpedia.usable_record(record):
+                    texts[record["section_id"]] = (texts.get(record["section_id"], "") + " " + record["text"]).strip()
     return texts
 
 
@@ -59,7 +66,9 @@ def main(argv=None) -> int:
         print(f"{node}: not in the graph")
         return 1
     texts = _texts() if show_text else {}
-    print(node)
+    attributes = next((row for row in _jsonl(GRAPH / "nodes.jsonl") if row["id"] == node), {})
+    print(node + ("  [" + ", ".join(f"{k}={v}" for k, v in attributes.items() if k not in ("id", "type")) + "]"
+                  if attributes else ""))
     for direction, groups, key in (("->", out, "target"), ("<-", into, "source")):
         for edge_type, items in sorted(groups.items()):
             print(f"  {direction} {edge_type} ({len(items)})")

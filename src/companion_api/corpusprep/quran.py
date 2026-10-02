@@ -79,10 +79,14 @@ def verify(uthmani: dict, simple: dict, references: dict[str, dict[int, int]]) -
     return {"surahs": len(counts), "ayat": len(uthmani), "per_surah_checked_against": sorted(references)}
 
 
-def ayat_records(uthmani: dict, simple: dict, uthmani_id: str, simple_id: str) -> list[dict]:
+def ayat_records(uthmani: dict, simple: dict, uthmani_id: str, simple_id: str,
+                 checks: dict[tuple[int, int], dict] | None = None) -> list[dict]:
+    """One record per ayah. `checks` adds metadata per ayah (test/corpus-tasks: `kfc_check`, the comparison
+    with the King Fahd Complex text); it never changes a text field."""
     return [{"surah": surah, "ayah": ayah, "text_uthmani": uthmani[(surah, ayah)],
              "text_simple": simple[(surah, ayah)], "text_normalized": normalize.search_text(simple[(surah, ayah)]),
-             "normalizer": normalize.VERSION, "source_id": uthmani_id, "text_simple_source_id": simple_id}
+             "normalizer": normalize.VERSION, "source_id": uthmani_id, "text_simple_source_id": simple_id,
+             **(checks or {}).get((surah, ayah), {})}
             for surah, ayah in sorted(uthmani)]
 
 

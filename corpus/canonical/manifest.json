@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_sha256": "9d30183e5077ea4eadd7720a9e8c6ab0824b9cea2fbcd611a6f97422864fc391",
+  "registry_sha256": "57768433e3c8243b58df4349a684951ff26ab636583fc7eed2347dc2ed1992e3",
   "normalizer": "norm-v3",
   "sources": {
     "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",
@@ -183,7 +183,7 @@
       "records": 1896
     },
     "quran/ayat.jsonl": {
-      "sha256": "0be43a927a6006d4697319affc11302fccf46fba7e31f5f7e8a9d9fba2a9550a",
+      "sha256": "6048043880bbd84a972b22f6c3fd7925610fab2fcf773206e92099eda47eb83c",
       "records": 6236
     },
     "tafsir/alquran-cloud-muyassar.jsonl": {
@@ -193,6 +193,74 @@
     "tafsir/ibn-kathir.jsonl": {
       "sha256": "b635d1096bbb313e80665fea73a60d3780038f8ef0cde4fba4f484dbb8ff0219",
       "records": 1911
+    },
+    "tafsir/quranpedia-abu-ubayda-majaz.jsonl": {
+      "sha256": "ce01d57a5706d06e0915d4b978f3306d348a5ea79b99f4db30d2c3d2df5de09f",
+      "records": 913
+    },
+    "tafsir/quranpedia-farra-maani.jsonl": {
+      "sha256": "388db17709446544ea61fe27c0d9c8c37bc7b86cfb5af182caf9cbf614b3b0f1",
+      "records": 1317
+    },
+    "tafsir/quranpedia-ibn-qutayba-gharib.jsonl": {
+      "sha256": "417324590a297796e6a7252996f4cf9d1405ea89fb43cf3d3eab30b9e5e40d14",
+      "records": 468
+    },
+    "tafsir/quranpedia-malik.jsonl": {
+      "sha256": "e764e96e47bbf8e71413a4428c42a339accbc55592d0e315f8be4ebacad8b24f",
+      "records": 587
+    },
+    "tafsir/quranpedia-mujahid.jsonl": {
+      "sha256": "1166640fb8f1f47029960e734c43d02ac877c471df87efb29ceb6dffe3dc7cc0",
+      "records": 2234
+    },
+    "tafsir/quranpedia-mukhtasar.jsonl": {
+      "sha256": "fbafffa973d173fb3b279bc363a51cf40eff04d0e1e61ee50db657104d752022",
+      "records": 6236
+    },
+    "tafsir/quranpedia-nasai.jsonl": {
+      "sha256": "8e287d8672967b7fe728cb09f6da997035a1b7d43e514f0ebc576334659f0e94",
+      "records": 448
+    },
+    "tafsir/quranpedia-saadi.jsonl": {
+      "sha256": "38e341175dec108b27589657505a8b808eedcf4a6fd604b7f9422f715d76fdb9",
+      "records": 2184
+    },
+    "tafsir/quranpedia-sahih-masbur.jsonl": {
+      "sha256": "1762314457b9a892c650dd01f5971f1fda082468a2b8aad6a92e501356ce2645",
+      "records": 2187
+    },
+    "tafsir/quranpedia-shafii.jsonl": {
+      "sha256": "37a81565b9d367210446ce352cb11706d61c194daa08a80391991f216f506cd3",
+      "records": 302
+    },
+    "tafsir/quranpedia-sufyan-thawri.jsonl": {
+      "sha256": "729834c49656819e74b521c874ff3d975947015e9b1a24adbd50b7421efc2016",
+      "records": 606
+    },
+    "tafsir/quranpedia-tabari.jsonl": {
+      "sha256": "204a988e6c49438d98fdc5e6849f694767eaffe461281bcd7e9c53ec52e372b0",
+      "records": 14581
+    },
+    "tafsir/quranpedia-yahya-ibn-sallam.jsonl": {
+      "sha256": "8750d980ffe0d7496327a5885f55dca635f1ea964d0f2fc5ca199e36ef1a5330",
+      "records": 1883
+    },
+    "translations/quranpedia-en-hilali-khan.jsonl": {
+      "sha256": "2d23093284f3306cd8e8969f46ac61172fe687ea917992d02c1af664c67f4554",
+      "records": 6236
+    },
+    "translations/quranpedia-en-mukhtasar.jsonl": {
+      "sha256": "8aad59085ea4655c342ebc6efea5764696b9a9aceebbaa66547cf17396deff3e",
+      "records": 6236
+    },
+    "translations/quranpedia-en-ruwwad.jsonl": {
+      "sha256": "d2912111a649a5751ffbef10d868c4fc165b1f3799e21a06c9313683fb95d41d",
+      "records": 6236
+    },
+    "translations/quranpedia-en-sahih-international.jsonl": {
+      "sha256": "9c7bfb3713a50391e1ea1eabc150d77eebcdadaa75f2d39843cc21f42b2fef08",
+      "records": 6236
     }
   },
   "quran": {
@@ -200,6 +268,8 @@
     "ayat": 6236,
     "per_surah_checked_against": [
       "qurancom-chapters",
+      "quranpedia-mushaf-hafs",
+      "quranpedia-mushaf-hafs-text",
       "tanzil-quran-metadata"
     ],
     "rasm_map": {
@@ -208,6 +278,33 @@
       "entries": 750,
       "agreement_before": 0.905,
       "agreement_after": 0.9752
+    },
+    "kfc_comparison": {
+      "compare_version": "kfc-compare-v1",
+      "uthmani": {
+        "ours": "tanzil-quran-uthmani",
+        "reference": "quranpedia-mushaf-hafs-text",
+        "statuses": {
+          "identical": 40,
+          "identical_after_normalization": 5796,
+          "identical_except_hamza": 285,
+          "basmala_prefixed": 112,
+          "differs": 3
+        },
+        "per_surah_counts_match": true
+      },
+      "simple": {
+        "ours": "tanzil-quran-simple",
+        "reference": "quranpedia-mushaf-hafs",
+        "statuses": {
+          "identical": 0,
+          "identical_after_normalization": 6118,
+          "identical_except_hamza": 0,
+          "basmala_prefixed": 112,
+          "differs": 6
+        },
+        "per_surah_counts_match": true
+      }
     }
   },
   "tafsir": {
@@ -307,5 +404,635 @@
       "secondary_source": null,
       "pairing": null
     }
-  ]
+  ],
+  "quranpedia": {
+    "translations": {
+      "quranpedia-en-hilali-khan": {
+        "package_rule": "listed",
+        "content_type": "quran_translation",
+        "book_id": 1948,
+        "book": {
+          "name": "الترجمة الإنجليزية",
+          "short_name": "الترجمة الإنجليزية - هلالي-خان",
+          "type": "translations",
+          "language": "en",
+          "category": "ترجمات القرآن",
+          "author": null,
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": "محمد تقي الدين الهلالي",
+          "edition": "",
+          "publisher": "مجمع الملك فهد",
+          "publish_year": null,
+          "parts": 1
+        },
+        "name": "الترجمة الإنجليزية",
+        "ayat": 6236,
+        "missing_ayat": 0,
+        "words": 200839,
+        "with_footnotes": 718,
+        "labels_removed": 6236,
+        "label_mismatch": []
+      },
+      "quranpedia-en-sahih-international": {
+        "package_rule": "listed",
+        "content_type": "quran_translation",
+        "book_id": 1947,
+        "book": {
+          "name": "الترجمة الإنجليزية - صحيح انترناشونال",
+          "short_name": "الترجمة الإنجليزية - صحيح انترناشونال",
+          "type": "translations",
+          "language": "en",
+          "category": "ترجمات القرآن",
+          "author": "المنتدى الإسلامي",
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": null,
+          "edition": "",
+          "publisher": "المنتدى الاسلامي",
+          "publish_year": null,
+          "parts": 1
+        },
+        "name": "الترجمة الإنجليزية - صحيح انترناشونال",
+        "ayat": 6236,
+        "missing_ayat": 0,
+        "words": 161244,
+        "with_footnotes": 1612,
+        "labels_removed": 6236,
+        "label_mismatch": []
+      },
+      "quranpedia-en-ruwwad": {
+        "package_rule": "listed",
+        "content_type": "quran_translation",
+        "book_id": 27811,
+        "book": {
+          "name": "الترجمة الإنجليزية - مركز رواد الترجمة",
+          "short_name": "الترجمة الإنجليزية - مركز رواد الترجمة",
+          "type": "translations",
+          "language": "en",
+          "category": "ترجمات القرآن",
+          "author": null,
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "name": "الترجمة الإنجليزية - مركز رواد الترجمة",
+        "ayat": 6236,
+        "missing_ayat": 0,
+        "words": 151200,
+        "with_footnotes": 0,
+        "labels_removed": 0,
+        "label_mismatch": []
+      },
+      "quranpedia-en-mukhtasar": {
+        "package_rule": "borderline",
+        "content_type": "tafsir_translation",
+        "book_id": 27824,
+        "book": {
+          "name": "الترجمة الإنجليزية للمختصر في تفسير القرآن الكريم",
+          "short_name": "الترجمة الإنجليزية للمختصر في تفسير القرآن الكريم",
+          "type": "translations",
+          "language": "en",
+          "category": "ترجمات القرآن",
+          "author": null,
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "name": "الترجمة الإنجليزية للمختصر في تفسير القرآن الكريم",
+        "ayat": 6236,
+        "missing_ayat": 0,
+        "words": 318333,
+        "with_footnotes": 0,
+        "labels_removed": 6162,
+        "label_mismatch": [
+          "quran:2:3",
+          "quran:3:4",
+          "quran:4:66",
+          "quran:4:67",
+          "quran:4:98",
+          "quran:11:54",
+          "quran:14:49",
+          "quran:23:55",
+          "quran:26:68",
+          "quran:26:108",
+          "quran:26:109",
+          "quran:26:110",
+          "quran:26:126",
+          "quran:26:127",
+          "quran:26:131",
+          "quran:26:140",
+          "quran:26:145",
+          "quran:26:147",
+          "quran:26:150",
+          "quran:26:159",
+          "quran:26:164",
+          "quran:26:175",
+          "quran:28:62",
+          "quran:36:4",
+          "quran:36:26",
+          "quran:37:22",
+          "quran:37:165",
+          "quran:37:171",
+          "quran:37:172",
+          "quran:42:1",
+          "quran:42:49",
+          "quran:54:17",
+          "quran:54:21",
+          "quran:54:22",
+          "quran:54:32",
+          "quran:55:13",
+          "quran:55:16",
+          "quran:55:18",
+          "quran:55:21",
+          "quran:55:23",
+          "quran:55:25",
+          "quran:55:28",
+          "quran:55:30",
+          "quran:55:32",
+          "quran:55:34",
+          "quran:55:36",
+          "quran:55:38",
+          "quran:55:40",
+          "quran:55:42",
+          "quran:55:45",
+          "quran:55:47",
+          "quran:55:49",
+          "quran:55:51",
+          "quran:55:53",
+          "quran:55:55",
+          "quran:55:57",
+          "quran:55:59",
+          "quran:55:61",
+          "quran:55:63",
+          "quran:55:65",
+          "quran:55:67",
+          "quran:55:69",
+          "quran:55:71",
+          "quran:55:73",
+          "quran:55:75",
+          "quran:56:90",
+          "quran:77:15",
+          "quran:83:9",
+          "quran:84:2",
+          "quran:84:24",
+          "quran:84:25",
+          "quran:109:3"
+        ]
+      }
+    },
+    "tafsir": {
+      "quranpedia-tafsir-mujahid": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 269,
+        "book": {
+          "name": "تفسير مجاهد",
+          "short_name": "تفسير آدم بن أبي إياس",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "كتب التفسير",
+          "author": "مجاهد بن جبر",
+          "author_full": "أبو الحجاج مجاهد بن جبر التابعي المكي القرشي المخزومي",
+          "mohaqeq": "محمد عبد السلام أبو النيل",
+          "translator": null,
+          "edition": "الأولى، 1410 ه - 1989 م",
+          "publisher": "دار الفكر الإسلامي الحديثة، مصر",
+          "publish_year": null,
+          "parts": "1"
+        },
+        "dump_version": "2026-08-10",
+        "records": 2234,
+        "usable_records": 2229,
+        "sections": 1537,
+        "ayat_covered": 1537,
+        "surahs_covered": 112,
+        "words": 81656,
+        "multi_ayah_records": 0,
+        "with_footnotes": 0,
+        "quran_quotes_marked": 2319,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {
+          "out_of_place": 5
+        }
+      },
+      "quranpedia-tafsir-sufyan-thawri": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 27758,
+        "book": {
+          "name": "تفسير سفيان الثوري",
+          "short_name": null,
+          "type": "tafsir",
+          "language": "ar",
+          "category": "التفسير",
+          "author": "عبد الله سفيان بن سعيد بن مسروق الثوري الكوفي",
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 606,
+        "usable_records": 606,
+        "sections": 606,
+        "ayat_covered": 634,
+        "surahs_covered": 49,
+        "words": 23162,
+        "multi_ayah_records": 21,
+        "with_footnotes": 0,
+        "quran_quotes_marked": 884,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {}
+      },
+      "quranpedia-tafsir-yahya-ibn-sallam": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 27766,
+        "book": {
+          "name": "تفسير يحيى بن سلام",
+          "short_name": null,
+          "type": "tafsir",
+          "language": null,
+          "category": "التفسير",
+          "author": "يحيى بن سلام",
+          "author_full": "يحيى بن سلام بن أبي ثعلبة، التيمي بالولاء، من تيم ربيعة، البصري ثم الإفريقي القيرواني",
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 1883,
+        "usable_records": 1880,
+        "sections": 1880,
+        "ayat_covered": 1880,
+        "surahs_covered": 21,
+        "words": 170756,
+        "multi_ayah_records": 0,
+        "with_footnotes": 1456,
+        "quran_quotes_marked": 6948,
+        "numbering_in_surah": 1883,
+        "numbering_from_record": 0,
+        "flags": {
+          "empty": 3
+        }
+      },
+      "quranpedia-tafsir-malik": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 27765,
+        "book": {
+          "name": "تفسير الإمام مالك",
+          "short_name": null,
+          "type": "tafsir",
+          "language": null,
+          "category": "التفسير",
+          "author": "مالك بن أنس",
+          "author_full": "أبو عبد الله مالك بن أنس الأصبحي المدني",
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 587,
+        "usable_records": 587,
+        "sections": 587,
+        "ayat_covered": 587,
+        "surahs_covered": 96,
+        "words": 58174,
+        "multi_ayah_records": 0,
+        "with_footnotes": 570,
+        "quran_quotes_marked": 1293,
+        "numbering_in_surah": 585,
+        "numbering_from_record": 0,
+        "flags": {}
+      },
+      "quranpedia-tafsir-shafii": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 27767,
+        "book": {
+          "name": "تفسير الشافعي",
+          "short_name": null,
+          "type": "tafsir",
+          "language": null,
+          "category": "التفسير",
+          "author": "الشافعي",
+          "author_full": "الشافعي أبو عبد الله محمد بن إدريس بن العباس بن عثمان بن شافع بن عبد المطلب بن عبد مناف المطلبي القرشي المكي",
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 302,
+        "usable_records": 302,
+        "sections": 302,
+        "ayat_covered": 302,
+        "surahs_covered": 64,
+        "words": 119430,
+        "multi_ayah_records": 0,
+        "with_footnotes": 271,
+        "quran_quotes_marked": 1551,
+        "numbering_in_surah": 301,
+        "numbering_from_record": 0,
+        "flags": {}
+      },
+      "quranpedia-tafsir-farra-maani": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 351,
+        "book": {
+          "name": "معاني القرآن للفراء",
+          "short_name": "معاني القرآن للفراء",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "ألفاظ القرآن",
+          "author": "الفراء",
+          "author_full": "أبو زكريا يحيى بن زياد بن عبد الله بن منظور الديلمي الفراء",
+          "mohaqeq": "أحمد يوسف نجاتي",
+          "translator": null,
+          "edition": "الأولى",
+          "publisher": "دار المصرية للتأليف والترجمة - مصر",
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 1317,
+        "usable_records": 1317,
+        "sections": 777,
+        "ayat_covered": 1400,
+        "surahs_covered": 112,
+        "words": 243515,
+        "multi_ayah_records": 359,
+        "with_footnotes": 1197,
+        "quran_quotes_marked": 0,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {}
+      },
+      "quranpedia-tafsir-abu-ubayda-majaz": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 348,
+        "book": {
+          "name": "مجاز القرآن",
+          "short_name": "مجاز القرآن",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "ألفاظ القرآن",
+          "author": "أبو عبيدة معمر بن المثنى",
+          "author_full": "أبو عبيدة معمر بن المثنى التيمى البصري",
+          "mohaqeq": "محمد فؤاد سزگين",
+          "translator": null,
+          "edition": "1381",
+          "publisher": "مكتبة الخانجى - القاهرة",
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 913,
+        "usable_records": 846,
+        "sections": 657,
+        "ayat_covered": 4782,
+        "surahs_covered": 105,
+        "words": 91108,
+        "multi_ayah_records": 734,
+        "with_footnotes": 678,
+        "quran_quotes_marked": 0,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {
+          "out_of_place": 67
+        }
+      },
+      "quranpedia-tafsir-ibn-qutayba-gharib": {
+        "package_rule": "in_rule",
+        "layer0": true,
+        "book_id": 341,
+        "book": {
+          "name": "غريب القرآن",
+          "short_name": "غريب القرآن لابن قتيبة",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "ألفاظ القرآن",
+          "author": "ابن قتيبة الدِّينَوري",
+          "author_full": "أبو محمد عبد الله بن مسلم بن قتيبة الدينَوَريّ",
+          "mohaqeq": "سعيد اللحام",
+          "translator": null,
+          "edition": "",
+          "publisher": "",
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 468,
+        "usable_records": 434,
+        "sections": 391,
+        "ayat_covered": 4046,
+        "surahs_covered": 112,
+        "words": 56002,
+        "multi_ayah_records": 317,
+        "with_footnotes": 200,
+        "quran_quotes_marked": 0,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {
+          "out_of_place": 34
+        }
+      },
+      "quranpedia-tafsir-tabari": {
+        "package_rule": "borderline",
+        "layer0": true,
+        "book_id": 4,
+        "book": {
+          "name": "جامع البيان في تأويل آي القرآن",
+          "short_name": "الطبري",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "كتب التفسير",
+          "author": "الطبري",
+          "author_full": "أبو جعفر محمد بن جرير بن يزيد الطبري",
+          "mohaqeq": "أحمد شاكر",
+          "translator": null,
+          "edition": "الأولى، 1420 ه - 2000 م",
+          "publisher": "مؤسسة الرسالة",
+          "publish_year": null,
+          "parts": " 24"
+        },
+        "dump_version": "2026-08-10",
+        "records": 14581,
+        "usable_records": 14456,
+        "sections": 3731,
+        "ayat_covered": 6231,
+        "surahs_covered": 114,
+        "words": 2907453,
+        "multi_ayah_records": 3800,
+        "with_footnotes": 9117,
+        "quran_quotes_marked": 5070,
+        "numbering_in_surah": 4,
+        "numbering_from_record": 0,
+        "flags": {
+          "out_of_place": 125
+        }
+      },
+      "quranpedia-tafsir-nasai": {
+        "package_rule": "borderline",
+        "layer0": true,
+        "book_id": 27759,
+        "book": {
+          "name": "تفسير النسائي",
+          "short_name": null,
+          "type": "tafsir",
+          "language": "ar",
+          "category": "التفسير",
+          "author": "النسائي",
+          "author_full": "أبو عبد الرحمن أحمد بن شعيب بن علي الخراساني، النسائي",
+          "mohaqeq": null,
+          "translator": null,
+          "edition": null,
+          "publisher": null,
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 448,
+        "usable_records": 448,
+        "sections": 448,
+        "ayat_covered": 590,
+        "surahs_covered": 106,
+        "words": 68986,
+        "multi_ayah_records": 46,
+        "with_footnotes": 0,
+        "quran_quotes_marked": 1126,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {}
+      },
+      "quranpedia-tafsir-sahih-masbur": {
+        "package_rule": "borderline",
+        "layer0": true,
+        "book_id": 305,
+        "book": {
+          "name": "الصحيح المسبور من التفسير بالمأثور",
+          "short_name": "الصحيح المسبور",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "كتب التفسير",
+          "author": "حكمت بشير ياسين",
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": null,
+          "edition": "الأولى ، 1420 ه - 1999 م",
+          "publisher": "دار المآثر للنشر والتوزيع والطباعة- المدينة النبوية",
+          "publish_year": "1420 - 1999",
+          "parts": " 4"
+        },
+        "dump_version": "2026-08-10",
+        "records": 2187,
+        "usable_records": 2119,
+        "sections": 1742,
+        "ayat_covered": 1742,
+        "surahs_covered": 113,
+        "words": 574539,
+        "multi_ayah_records": 0,
+        "with_footnotes": 0,
+        "quran_quotes_marked": 0,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {
+          "out_of_place": 68
+        }
+      },
+      "quranpedia-tafsir-mukhtasar": {
+        "package_rule": "outside_rule",
+        "layer0": false,
+        "book_id": 2003,
+        "book": {
+          "name": "المختصر في تفسير القرآن الكريم",
+          "short_name": "اللغة العربية - المختصر في تفسير القرآن الكريم",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "كتب التفسير",
+          "author": "مركز تفسير للدراسات القرآنية",
+          "author_full": null,
+          "mohaqeq": null,
+          "translator": null,
+          "edition": "",
+          "publisher": "مركز تفسير للدراسات القرآنية",
+          "publish_year": null,
+          "parts": 1
+        },
+        "dump_version": "2026-08-10",
+        "records": 6236,
+        "usable_records": 6236,
+        "sections": 6236,
+        "ayat_covered": 6236,
+        "surahs_covered": 114,
+        "words": 190303,
+        "multi_ayah_records": 0,
+        "with_footnotes": 0,
+        "quran_quotes_marked": 2,
+        "numbering_in_surah": 0,
+        "numbering_from_record": 0,
+        "flags": {}
+      },
+      "quranpedia-tafsir-saadi": {
+        "package_rule": "outside_rule",
+        "layer0": false,
+        "book_id": 3,
+        "book": {
+          "name": "تيسير الكريم الرحمن",
+          "short_name": "تفسير السعدي",
+          "type": "tafsir",
+          "language": "ar",
+          "category": "كتب التفسير",
+          "author": "السعدي",
+          "author_full": "أبو عبد الله، عبد الرحمن بن ناصر بن عبد الله بن ناصر بن حمد آل سعدي",
+          "mohaqeq": "عبد الرحمن بن معلا اللويحق",
+          "translator": null,
+          "edition": "الأولى 1420ه -2000 م",
+          "publisher": "مؤسسة الرسالة",
+          "publish_year": null,
+          "parts": "1"
+        },
+        "dump_version": "2026-08-10",
+        "records": 2184,
+        "usable_records": 2156,
+        "sections": 2006,
+        "ayat_covered": 6236,
+        "surahs_covered": 114,
+        "words": 609845,
+        "multi_ayah_records": 1394,
+        "with_footnotes": 752,
+        "quran_quotes_marked": 19240,
+        "numbering_in_surah": 9,
+        "numbering_from_record": 0,
+        "flags": {
+          "out_of_place": 28
+        }
+      }
+    }
+  }
 }

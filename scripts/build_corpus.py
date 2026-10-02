@@ -18,8 +18,8 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from companion_api.corpusprep import age_band, candidates, cluster, ingest, quran, registry as registry_module  # noqa: E402
-from companion_api.corpusprep.segments import load_metadata, segment, verify_cover  # noqa: E402
+from companion_api.corpusprep import age_band, candidates, cluster, ingest, quran, quranpedia, registry as registry_module  # noqa: E402,E501
+from companion_api.corpusprep.segments import load_metadata, load_transliterated_names, segment, verify_cover  # noqa: E402,E501
 from companion_api.rag.chunking import VERSION as CHUNKER, chunk_documents  # noqa: E402
 from companion_api.rag.corpus import load_corpus, word_count  # noqa: E402
 from companion_api.rag import normalize  # noqa: E402
@@ -105,7 +105,8 @@ def main(argv=None) -> int:
     candidates.save_yaml(base / "candidate/hadith_selection.yaml", header, selection)
 
     _log("segmenting the Quran")
-    surah_names, rukus = load_metadata(next((base / "raw/tanzil-quran-metadata").glob("*.xml")))
+    metadata_path = next((base / "raw/tanzil-quran-metadata").glob("*.xml"))
+    surah_names, rukus = load_metadata(metadata_path)
     counts = quran.per_surah(ayat)
     words = {key: len(row["text_uthmani"].split()) for key, row in ayat.items()}
     segments = segment(counts, rukus, words)
@@ -122,6 +123,34 @@ def main(argv=None) -> int:
         built_ibn_kathir = ingest.ibn_kathir_documents(_jsonl(ibn_kathir_path), surah_names, registry,
                                                        prophets_by_ayah)
         layer0 += built_ibn_kathir.documents
+    # test/corpus-tasks: Quranpedia English translations and the tafsir books the package's rule admits or that
+    # the organizers must rule on (in_rule, borderline); candidate sources, so layer 0 only, never wave 1.
+    registered = {source["source_id"] for source in registry.sources}
+    names_en = load_transliterated_names(metadata_path)
+    latin = {entry["id"]: (entry.get("latin") or [entry["id"].title()])[0] for entry in aliases["prophets"]}
+    prophets_en = {key: {**value, "latin": latin.get(value["id"])} for key, value in prophets_by_ayah.items()}
+    quranpedia_docs, quranpedia_skipped = {}, {}
+    for translation in quranpedia.TRANSLATIONS:
+        path = canonical / f"translations/{translation.source_id}.jsonl"
+        if translation.source_id in registered and path.is_file():
+            _log(f"building English documents: {translation.source_id}")
+            translated = {(row["surah"], row["ayah"]): row for row in _jsonl(path)}
+            built = ingest.translation_documents(segments, translated, translation, names_en, registry, prophets_en)
+            layer0 += built.documents
+            quranpedia_docs[translation.source_id] = len(built.documents)
+            quranpedia_skipped.update(built.skipped)
+    for book in quranpedia.TAFSIR_BOOKS:
+        path = canonical / book.canonical_name
+        if book.source_id not in registered or not path.is_file():
+            continue
+        if registry.get(book.source_id).get("package_rule") not in quranpedia.LAYER0_RULES:
+            continue  # outside the package's rule: canonical only, for comparison
+        _log(f"building tafsir documents: {book.source_id}")
+        built = ingest.quranpedia_tafsir_documents(segments, _jsonl(path), book, surah_names, registry,
+                                                   prophets_by_ayah)
+        layer0 += built.documents
+        quranpedia_docs[book.source_id] = len(built.documents)
+        quranpedia_skipped.update(built.skipped)
     _log("attaching generated retrieval questions (checked against sacred text)")
     generated = json.loads((base / "candidate/retrieval_questions.json").read_text(encoding="utf-8"))
     sacred = age_band.SacredIndex([row["text_simple"] for row in ayat_rows],
@@ -136,7 +165,9 @@ def main(argv=None) -> int:
             doc["generatedQuestions"] = questions_by_doc[doc["id"]]
     ingest.write_corpus(base / "layer0", "layer0", "Layer 0 reference text (development index)",
                         "Quran (Tanzil), Tafsir al-Muyassar and Tafsir Ibn Kathir (candidate licences), Sahih "
-                        "al-Bukhari and Sahih Muslim cluster primaries. Draft, not reviewed, not for children.",
+                        "al-Bukhari and Sahih Muslim cluster primaries, and from Quranpedia (candidate) English "
+                        "translations of the meanings and the tafsir books of the reference package's rule "
+                        "(in_rule and borderline). Draft, not reviewed, not for children.",
                         layer0)
 
     _log("building corpus/wave1 (Wave 1 release candidate: 5 prophets + selected hadith, no tafsir)")
@@ -167,8 +198,10 @@ def main(argv=None) -> int:
         "nawawi_links": {status: sum(1 for link in links.values() if link["status"] == status)
                          for status in ("linked", "needs_check", "not_linked")},
         "selection": selection_summary,
-        "skipped": {**built_quran.skipped, **built_hadith.skipped, **built_ibn_kathir.skipped},
+        "skipped": {**built_quran.skipped, **built_hadith.skipped, **built_ibn_kathir.skipped,
+                    **quranpedia_skipped},
         "ibn_kathir_documents": len(built_ibn_kathir.documents),
+        "quranpedia_documents": quranpedia_docs,
         "long_hadith_with_parts": sum(1 for doc in built_hadith.documents if doc["units"][0]["parts"]),
         "wave1_prophet_segments": len(wave_segments), "wave1_hadith": len(chosen),
         "generated_questions": sum(len(doc["generatedQuestions"]) for doc in wave1),

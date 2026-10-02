@@ -13,9 +13,9 @@ they need several GB of models and hours of CPU. Run everything from the reposit
 | | minimum | notes |
 | --- | --- | --- |
 | Python | 3.10+ | tested with 3.11.8 |
-| Disk, core | ~0.5 GB | venv ~0.2 GB; `corpus/raw` 122 MB, `corpus/canonical` 57 MB, `corpus/layer0` 116 MB, `corpus/wave1` 1 MB, releases a few MB each (with Tafsir Ibn Kathir, test/corpus-tasks) |
+| Disk, core | ~0.8 GB | venv ~0.2 GB; `corpus/raw` 154 MB, `corpus/canonical` 144 MB, `corpus/layer0` 231 MB, `corpus/wave1` 1 MB, `corpus/graph` 20 MB, releases a few MB each (with Tafsir Ibn Kathir and the Quranpedia dumps, test/corpus-tasks) |
 | Disk, embedding evaluation | +~8 GB | Hugging Face models: BGE-M3 2.2 GB, multilingual-e5-large 2.2 GB, bge-reranker-v2-m3 2.2 GB; Ollama `qwen3-embedding:0.6b` 0.64 GB; PyTorch wheel on top |
-| Memory | 1 GB core; **~4 GB free** per evaluation process | the corpus build peaks at ~0.5 GB; one float32 embedder or the reranker takes 3.3–3.5 GB |
+| Memory | 2 GB core; **~4 GB free** per evaluation process | the corpus build peaks at ~1.1 GB with the Quranpedia books in layer 0; one float32 embedder or the reranker takes 3.3–3.5 GB |
 | Network | only for `fetch_sources.py` and model downloads | nothing else calls out |
 | Ollama | optional | only for `--ollama qwen3-embedding:0.6b` in the evaluation; tested with 0.22.1 |
 
@@ -24,7 +24,7 @@ they need several GB of models and hours of CPU. Run everything from the reposit
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -e '.[test]' -c constraints-dev.txt
-.venv/bin/python -m pytest -q          # 634 passed, no corpus data needed
+.venv/bin/python -m pytest -q          # 735 passed, no corpus data needed
 ```
 
 The examples below use `.venv/bin/python`; on Windows use `.venv/Scripts/python.exe`.
@@ -51,15 +51,26 @@ sha256 of every file in `corpus/sources/registry.yaml` and `corpus/canonical/man
 download is verified byte for byte.
 
 ```bash
-.venv/bin/python scripts/fetch_sources.py     # ~16 s (+~70 s for Ibn Kathir's 114 files, 86 MB, on first download): downloads corpus/raw, verifies sha256, builds corpus/canonical
-.venv/bin/python scripts/build_corpus.py      # ~30 s (~2-3 min with Ibn Kathir in layer 0): builds corpus/layer0 and corpus/wave1, validates and chunks them
-.venv/bin/python scripts/build_graph.py       # ~17 s: the knowledge graph (corpus/graph/) and its review report (doc/knowledge-graph.md)
+.venv/bin/python scripts/fetch_sources.py     # ~20 s (+~70 s for Ibn Kathir's 114 files, 86 MB, and the Quranpedia dumps, 32 MB, on first download): downloads corpus/raw, verifies sha256, builds corpus/canonical
+.venv/bin/python scripts/build_corpus.py      # ~4-5 min (layer 0 holds the Quranpedia books and translations): builds corpus/layer0 and corpus/wave1, validates and chunks them
+.venv/bin/python scripts/build_graph.py       # ~19 s: the knowledge graph (corpus/graph/) and its review report (doc/knowledge-graph.md)
 ```
+
+`fetch_sources.py` also builds, from the Quranpedia dumps of the reference package (test/corpus-tasks, all
+`candidate`): the English translations in `corpus/canonical/translations/` (one record per ayah), the 13 tafsir
+books in `corpus/canonical/tafsir/quranpedia-<book>.jsonl` (one record per passage), and the comparison of the
+Tanzil Quran text with the King Fahd Complex text: `corpus/reports/quran_text_comparison.md` and `.json`
+(counts, references and word positions, in git), `quran_text_comparison_details.jsonl` (the differing words,
+not in git) and a `kfc_check` field on every record of `corpus/canonical/quran/ayat.jsonl`. A per-surah ayah
+count that differs from Quranpedia's mushafs fails the run. `build_corpus.py` puts the translations and the
+in_rule and borderline tafsir books into layer 0 only; wave 1 never takes a candidate source. (The timings,
+sizes and memory of these three commands were measured on 2026-10-02 on Windows 10 with Python 3.10 and
+16 GB RAM, after the Quranpedia dumps were added.)
 
 `fetch_sources.py` exits 1 if a verification fails and 2 if a source changed upstream (never
 silently accepted); `--refresh` re-downloads everything to check the sources, `--record` is only for
 registering a new source. After a clean build, `git status` shows only the timing fields in
-`corpus/reports/ingest_summary.json`; the canonical manifest is identical.
+`corpus/reports/ingest_summary.json`; the canonical manifest and the comparison report are identical.
 
 ## 4. Releases and rollback
 
@@ -136,7 +147,7 @@ The last three regenerate files and accept no `--help`; their output is determin
 ## 7. Tests
 
 ```bash
-.venv/bin/python -m pytest -q                              # whole suite, ~6 s
+.venv/bin/python -m pytest -q                              # whole suite, ~15 s
 .venv/bin/python -m pytest -q tests/test_no_child_content.py
 ```
 

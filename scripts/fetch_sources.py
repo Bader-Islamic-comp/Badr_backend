@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from companion_api.corpusprep import build, fetch, registry as registry_module  # noqa: E402
 from companion_api.corpusprep.quran import QuranError  # noqa: E402
+from companion_api.corpusprep.quranpedia import QuranpediaError  # noqa: E402
 
 
 def main(argv=None) -> int:
@@ -72,13 +73,18 @@ def main(argv=None) -> int:
         return 0
 
     try:
-        files, quran_info, tafsir_info = build.build_quran(registry, args.raw_dir, args.canonical_dir)
-    except QuranError as error:
+        files, quran_info, tafsir_info = build.build_quran(registry, args.raw_dir, args.canonical_dir,
+                                                           reports=args.reports_dir)
+        # test/corpus-tasks: Quranpedia English translations and tafsir books (candidate sources).
+        quranpedia_files, quranpedia_info = build.build_quranpedia(registry, args.raw_dir, args.canonical_dir)
+    except (QuranError, QuranpediaError) as error:
         print(f"FAILED: {error}", file=sys.stderr)
         return 1
+    files.update(quranpedia_files)
     hadith_files, hadith_info, discrepancies = build.build_hadith(registry, args.raw_dir, args.canonical_dir)
     files.update(hadith_files)
-    manifest = build.write_manifest(args.canonical_dir, registry, files, quran_info, tafsir_info, hadith_info)
+    manifest = build.write_manifest(args.canonical_dir, registry, files, quran_info, tafsir_info, hadith_info,
+                                    quranpedia_info)
     report = build.write_report(args.reports_dir, registry, hadith_info, discrepancies)
     build.write_mapping(args.reports_dir, registry, args.raw_dir, args.canonical_dir)
 
@@ -90,6 +96,19 @@ def main(argv=None) -> int:
         info = tafsir_info["ibn_kathir"]
         print(f"tafsir ibn-kathir: {info['ayat']} ayat in {info['sections']} sections, {info['missing_ayat']} missing, "
               f"{info['words']} words, {info['editor_notes']} editor notes")
+    if "kfc_comparison" in quran_info:
+        for name in ("uthmani", "simple"):
+            item = quran_info["kfc_comparison"][name]
+            print(f"quran {name} vs {item['reference']}: " + ", ".join(
+                f"{status} {count}" for status, count in item["statuses"].items()))
+        print(f"  details: {args.reports_dir / 'quran_text_comparison.md'}")
+    for source_id, info in quranpedia_info.get("translations", {}).items():
+        print(f"translation {source_id}: {info['ayat']} ayat, {info['missing_ayat']} missing, {info['words']} words, "
+              f"{info['with_footnotes']} with footnotes, {len(info['label_mismatch'])} labelled for another ayah")
+    for source_id, info in quranpedia_info.get("tafsir", {}).items():
+        print(f"tafsir {source_id} ({info['package_rule']}{', layer 0' if info['layer0'] else ''}): "
+              f"{info['usable_records']} passages in {info['sections']} sections, {info['ayat_covered']} ayat, "
+              f"{info['words']} words, flags {info['flags']}")
     for info in hadith_info:
         print(f"hadith {info['collection']}: {info['records']} records, {info['primary_empty_text']} empty in "
               f"primary, statuses {info['statuses']}, eligible {info['eligible']}")

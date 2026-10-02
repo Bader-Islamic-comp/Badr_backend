@@ -25,7 +25,10 @@ UNIT_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 KINDS = ("passage", "answer")
 LANGUAGES = ("en", "ar")
 AGE_BANDS = ("5-6", "7-9", "10-11", "12-14")
-CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh")
+# quran_translation / tafsir_translation (test/corpus-tasks): an English translation of the meanings of the Quran,
+# and a translated tafsir. Neither is the Quran: the rasm map (norm-v3) applies to `quran` only.
+CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh",
+                 "quran_translation", "tafsir_translation")
 SYNTHETIC_CONTENT_TYPES = ("app_help", "orientation")
 REVIEW_STATUSES = ("draft", "approved")
 ANSWER_TYPES = ("unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety", "chat")
@@ -579,10 +582,11 @@ def parse_document(data, file: str, lines: dict | None = None) -> tuple[Document
                 check.error(f"source.{key}", "is required for real (non-synthetic) content")
     if content_type == "hadith" and not grading:
         check.error("grading", "is required for hadith: record the grading and who graded it")
-    if content_type == "quran":
+    if content_type in ("quran", "quran_translation"):
         for unit in units:
             if not unit.reference and not unit.source_refs:
-                check.error(f"units[{unit.id}].reference", "is required for quran: every verse needs its reference")
+                check.error(f"units[{unit.id}].reference",
+                            f"is required for {content_type}: every verse needs its reference")
     if synthetic is True and source is not None and not source.work:
         check.warning("source.work", "is empty, so citations will show the document title instead of a source name")
     # §7: the app refuses a whole reply whose source title or reference is too long to show,

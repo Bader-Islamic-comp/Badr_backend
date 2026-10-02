@@ -37,8 +37,8 @@ Acquisition: downloaded (`scripts/fetch_sources.py`), crawled (`scripts/crawl_ja
 
 | source | title | status | acquisition | basis |
 | --- | --- | --- | --- | --- |
-| `quranpedia-mushaf-hafs` | Mushaf Hafs (Quranpedia) | candidate | downloaded | Reference package (20/3/1448), Quran: the Quranic text in its rasm as on quranpedia.net |
-| `quranpedia-mushaf-hafs-text` | Mushaf Hafs, plain-text edition (Quranpedia) | candidate | downloaded | Reference package (20/3/1448), Quran: the Quranic text as on quranpedia.net |
+| `quranpedia-mushaf-hafs` | Mushaf Hafs (Quranpedia) | candidate | downloaded | Reference package (20/3/1448), Quran: the King Fahd Complex print as on quranpedia.net (pages as printed; the dump's text field is in standard spelling, not the Uthmani rasm) |
+| `quranpedia-mushaf-hafs-text` | Mushaf Hafs, plain-text edition (Quranpedia) | candidate | downloaded | Reference package (20/3/1448), Quran: the Quranic text in its rasm (the King Fahd Complex's Uthmani Hafs text) as on quranpedia.net |
 | `quranpedia-surahs` | Surah information (114 surahs) | candidate | downloaded | Reference package (20/3/1448), Quran (quranpedia.net) |
 | `quranpedia-topics-index` | Quranic topics index | candidate | downloaded | Reference package (20/3/1448), Quran (quranpedia.net) |
 | `quranpedia-topics` | Topics of every ayah | candidate | downloaded | Reference package (20/3/1448), Quran (quranpedia.net) |

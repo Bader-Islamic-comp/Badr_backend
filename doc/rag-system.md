@@ -126,7 +126,9 @@ corpus/<corpus-id>/
   `units`).
 - `language`: `en` or `ar` for now. `ageBands`: any of `5-6`, `7-9`, `10-11`, `12-14`.
 - `contentType`: `app_help`, `orientation`, `lesson`, `story`, `quran`,
-  `tafsir`, `hadith`, `dua`, `fiqh`.
+  `tafsir`, `hadith`, `dua`, `fiqh`, `quran_translation` (an English translation
+  of the meanings) and `tafsir_translation` (a translated tafsir); the last two
+  are never `quran`, so the rasm map does not apply to them.
 - **Units are atomic.** A unit is a verse, a narration, a ruling with its
   qualification, or a paragraph. The chunker never splits one, never crosses a
   `section` boundary, and never separates a unit marked `keepWithNext` from the

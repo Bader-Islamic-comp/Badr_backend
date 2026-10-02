@@ -29,7 +29,8 @@ from .types import RELEASE_ID, SCHEMA_VERSION, Chunk, ReleaseManifest
 MANIFEST, CHUNKS, VECTORS = "manifest.json", "chunks.jsonl", "vectors.f32"
 # The only content a release may index (doc/corpus-tasks.md task 15): registered reference and reviewed
 # content, or synthetic app help. Never conversation text, child utterances or anything about a child.
-INDEXABLE_CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh")
+INDEXABLE_CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh",
+                           "quran_translation", "tafsir_translation")
 SYNTHETIC_CONTENT_TYPES = ("app_help", "orientation")
 BLOCKED_SOURCE_STATUSES = ("candidate", "rejected")
 
