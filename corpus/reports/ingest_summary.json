@@ -118,7 +118,7 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 178.9
+    "seconds": 172.2
   },
   "wave1": {
     "documents": 184,
@@ -137,6 +137,6 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 0.7
+    "seconds": 1.0
   }
 }
