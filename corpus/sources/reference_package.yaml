@@ -12,11 +12,26 @@
 #                           around. The data has to come from the organizers or the publisher.
 #               manual      robots.txt disallows automated downloads; a person downloads the file
 #               reference   used by people to verify, not copied into the corpus
+# registry:     registry ids; `prefix-001..114` stands for every zero-padded id in the range.
+#
+# Further sections, after the rows:
+#   rulings         the organizers' written answers about the package (format below). A registry source whose
+#                   package_rule is outside_rule, borderline or not_listed may become `cleared` only when a ruling
+#                   here admits it; scripts/check_reference_package.py fails otherwise. A ruling is necessary, not
+#                   sufficient: clearing stays a signed governance decision (doc/decisions/README.md).
+#   standard        the package's binding output standard (page 5), clause by clause, mapped to the files that
+#                   implement it, with the gaps found. The check fails when a cited file does not exist.
+#   levels          the package's content levels (page 2) mapped to Robert's routes.
+#   open_questions  what to ask the organizers.
+# doc/governance/reference-package.md is generated from this file and the registry:
+#   python scripts/check_reference_package.py --write
 schema_version: 1
 package:
   title: المرجعية والحزمة العلمية والبيانات
   version: 20/3/1448
   permission: Organizers' permission for participants, reported 2026-10-02; written confirmation pending
+  # Where the written confirmation is kept once received (a file under doc/governance/organizers/ or a message id).
+  permission_evidence: null
 rows:
   - field: الموضوعات الدعوية والمحتوى الإسلامي
     sources:
@@ -37,10 +52,17 @@ rows:
       - name: Quranpedia (mushaf Hafs, King Fahd Complex print)
         url: https://quranpedia.net
         acquisition: downloaded
-        registry: [quranpedia-mushaf-hafs, quranpedia-mushaf-hafs-text, quranpedia-mushafs-index, quranpedia-surahs]
+        registry: [quranpedia-mushaf-hafs, quranpedia-mushaf-hafs-text, quranpedia-mushafs-index, quranpedia-surahs,
+          quranpedia-topics-index, quranpedia-topics]
       - name: Quranpedia translations (English)
         acquisition: downloaded
         registry: [quranpedia-en-hilali-khan, quranpedia-en-sahih-international, quranpedia-en-ruwwad]
+      - name: Tanzil Quran text (Uthmani and simple), already in the corpus
+        url: https://tanzil.net
+        acquisition: downloaded
+        registry: [tanzil-quran-uthmani, tanzil-quran-simple]
+        why: Not named by the package (not_listed); the development corpus displays it, and it is kept to be
+          cross-checked against Quranpedia's Hafs text. Whether it may stay on screen is open question Q7.
   - field: التفسير
     rule: Islamic sources of the first three Hijri centuries, or dorar.net/tafseer. Distinguish the mufassir's
       words from the Quranic text.
@@ -71,6 +93,15 @@ rows:
     rule: Sahih hadith of the two Sahihs, and others only after their authenticity is checked (dorar.net/hadith or
       approved editions on shamela.ws). No hadith is attributed without a source and an approved grading in the data.
     sources:
+      - name: Sahih al-Bukhari and Sahih Muslim, already in the corpus
+        acquisition: downloaded
+        registry: [fawazahmed0-ara-bukhari, fawazahmed0-ara-muslim, mhashim6-bukhari, mhashim6-muslim]
+        why: In the rule (graded sahih by the collection rule); the second source (islamware) cross-checks the text.
+          corpus/reports/hadith_dorar_check.csv is a sample for people to verify on Dorar or a Shamela edition.
+      - name: An-Nawawi's Forty, Riyad as-Salihin, al-Adab al-Mufrad, already in the corpus
+        acquisition: downloaded
+        registry: [fawazahmed0-ara-nawawi, ahmedbaset-nawawi40, ahmedbaset-riyadussalihin, ahmedbaset-adab-mufrad]
+        why: Conditional - no grading in the data, so every record is ineligible until one is (open question Q6).
       - name: الموسوعة الحديثية - الدرر السنية
         url: https://dorar.net/hadith
         acquisition: blocked
@@ -114,4 +145,267 @@ rows:
         registry: [jamharah-dictionary-entries]
       - name: The package's own glossary sample (page 7)
         acquisition: reference
-standard: doc/governance/reference-package.md
+        why: Its ten terms, English equivalents and usage rules (paraphrased) are in corpus/glossary_cross_lingual.yaml
+          with origin package_page_7.
+document: doc/governance/reference-package.md
+
+# The organizers' rulings. None received yet. Format:
+#   - ruling_id: R-001
+#     sources: [quranpedia-tafsir-tabari]       registry ids the ruling covers (ranges allowed)
+#     question: what was asked
+#     answer: admitted | admitted_with_conditions | not_admitted
+#     conditions: required with admitted_with_conditions
+#     by: who answered for the organizers, and their role
+#     date: YYYY-MM-DD
+#     evidence: where the written answer is kept (a file under doc/governance/organizers/ or a message id)
+rulings: []
+
+# Page 5: the binding output standard. `files` are repository paths (checked to exist); paths in backquotes
+# inside the text are checked too. Gaps are stated as found on test/corpus-tasks (2026-10-02).
+standard:
+  - clause: 1
+    title: Reliability and attribution
+    rule: Every shar'i statement, quotation or ruling shown can be traced to its source; nothing is attributed to a
+      reference that does not contain it; the shar'i text is kept apart from generated explanation; the reply says
+      when the information is insufficient.
+    implemented:
+      - text: Faith questions are answered only from the corpus, never from model memory; a faith topic never
+          reaches the chat persona, and the persona never sees retrieved passages.
+        files: [doc/conversation-policy.md, src/companion_api/rag/service.py, src/companion_api/rag/chat.py]
+      - text: The faith prompt allows only the numbered sources, a citation after every sentence, third-person
+          narration, and quotations copied word for word inside « ».
+        files: [src/companion_api/rag/prompts.py]
+      - text: grounding-v3 releases an answer only when every sentence is attributed to a cited passage that holds
+          most of its words, and refuses a quotation that is not word for word in a cited passage (`misquoted`).
+        files: [src/companion_api/rag/grounding.py]
+      - text: The faith judge withholds an answer whose cited passages tell a different scene or teaching or do not
+          say what the answer says; any "no", unreadable verdict or error withholds it.
+        files: [src/companion_api/rag/judge.py]
+      - text: Every answer returns its sources (passage id, title, work and reference). Sacred text is copied verbatim
+          from sha256-pinned registered sources, and a hadith document must carry a grading.
+        files: [src/companion_api/rag/service.py, corpus/sources/registry.yaml, scripts/fetch_sources.py,
+          src/companion_api/rag/corpus.py]
+      - text: With nothing adequate, Robert says he has no checked lesson about it and refers the child to a parent,
+          a teacher or a qualified local scholar (`ABSTAIN_FAITH`).
+        files: [src/companion_api/rag/responses.py]
+    gaps:
+      - The sources returned with an answer carry the work and reference but not the hadith's grading, which stays
+        in the passage metadata; the glossary rule for الحديث ("state its grading when used as evidence") is not met
+        in the reply.
+      - Generated retelling is told apart from quoted text only by the « » marks and the source list; nothing labels
+        the retelling as generated (the app's display was not checked here).
+      - The judge is the same model that wrote the answer. On 2026-10-01 three wrong answers passed it
+        (`doc/pr/test-corpus-tasks.md`).
+  - clause: 2
+    title: The settled and the disputed (qat'i and ijtihad)
+    rule: Disputed matters are never presented as settled; a difference is mentioned as far as the context needs,
+      without overwhelming the reader.
+    implemented:
+      - text: Ruling, madhhab and sect questions are redirected before any model call (English, Arabic, Arabizi).
+        files: [src/companion_api/rag/router.py, src/companion_api/rag/arabic_rules.py]
+      - text: Fiqh differences, creed controversies and sectarian topics are outside the corpus's scope; a family's
+          madhhab is never inferred.
+        files: [doc/governance/scope.md, AGENTS.md]
+      - text: A corpus document records whether its matter is common or differs (`madhhabScope`).
+        files: [src/companion_api/rag/corpus.py]
+    gaps:
+      - "`madhhabScope` is recorded but not used: retrieval filters by language and age band only, and no reply says
+        that scholars differ (src/companion_api/rag/retriever.py)."
+      - The board's policy for recognised differences is undecided (doc/architecture.md §6.5; scope.md, decisions
+        needed).
+  - clause: 3
+    title: No independent fatwa
+    rule: No personal fatwa or ruling on a matter that needs the facts or specialist judgement; refer, or ask for
+      clarification.
+    implemented:
+      - text: The router's ruling category (halal and haram, fatwa, the validity of worship, "will Allah accept",
+          madhhab) gives the fixed RULING reply, which names a qualified scholar or a trusted grown-up.
+        files: [src/companion_api/rag/router.py, src/companion_api/rag/arabic_rules.py,
+          src/companion_api/rag/responses.py]
+      - text: Both prompts forbid rulings and authority claims; output checks refuse "my fatwa", "I am a scholar" and
+          the like (`authority_claim`).
+        files: [src/companion_api/rag/prompts.py, src/companion_api/rag/grounding.py]
+      - text: Robert is not an imam, a scholar, a mufti or a teacher of rulings.
+        files: [doc/robert-persona.md]
+    gaps:
+      - Detection is by keywords. A personal case asked without ruling words reaches the faith path (which answers
+        only from a verified passage); on 2026-10-01, 1 of 25 ruling questions abstained instead of being redirected.
+      - Level د asks for general information and a referral; Robert gives the referral only.
+  - clause: 4
+    title: Resisting hallucination
+    rule: With no adequate reference or low confidence, abstain, hedge or refer rather than give an undocumented
+      answer.
+    implemented:
+      - text: Weak retrieval evidence gives the faith abstention before any generation; the model replies
+          NOT_IN_SOURCES when the passages do not answer; any verification failure, judge "no" or error abstains.
+        files: [src/companion_api/rag/retriever.py, src/companion_api/rag/service.py, src/companion_api/rag/prompts.py]
+      - text: Only immutable releases are served; a candidate or rejected source never enters a release, and the
+          published channel needs approved content from cleared sources.
+        files: [src/companion_api/rag/release.py, doc/governance/releases.md]
+    gaps:
+      - Support is checked lexically and meaning by the same model; there is no reranker; abstention is measured on
+        synthetic questions only.
+  - clause: 5
+    title: Da'wah quality
+    rule: Consider the reader's background, level, language and context; foundations before details; correct, clear
+      and well presented, without harmful oversimplification.
+    implemented:
+      - text: Answers for ages 7 to 11 in at most three short sentences of simple words; respectful and gentle on
+          faith, with no jokes.
+        files: [src/companion_api/rag/prompts.py, doc/robert-persona.md]
+      - text: No frightening detail, no isra'iliyyat, no depiction of prophets, companions or angels.
+        files: [doc/governance/scope.md]
+      - text: Age-band versions of each document are drafted for review.
+        files: [scripts/age_band.py]
+      - text: Invitations to a faith lesson carry no guilt, pressure or reward.
+        files: [doc/conversation-policy.md, src/companion_api/rag/responses.py]
+    gaps:
+      - No child content has been reviewed yet (layer 2 is templates and drafts), and the curriculum order
+        ("foundations before details") is an open decision (doc/architecture.md §18).
+  - clause: 6
+    title: Translation and localisation
+    rule: Keep the shar'i meaning of terms; respect the cultural context without changing the content to please the
+      audience.
+    implemented:
+      - text: Replies are given in the child's language (Arabic for Arabic script and Arabizi); faith answers come
+          from the Arabic corpus, and English ones would need licensed, reviewed translations.
+        files: [src/companion_api/rag/service.py, doc/conversation-policy.md]
+      - text: The cross-lingual glossary records each term's Jamharah dictionary entry and, for the package's ten
+          sample terms, the package's English equivalent and usage rule.
+        files: [corpus/glossary_cross_lingual.yaml, scripts/crawl_jamharah.py]
+    gaps:
+      - The glossary only rewrites Arabizi searches; it does not yet govern the wording of answers.
+      - Where Jamharah's English heading differs from the package's equivalent, the board has to choose; the
+        package's is recorded as the one to use.
+      - All Arabic copy awaits review by native speakers.
+  - clause: 7
+    title: Transparency
+    rule: Disclose that this is an AI-supported tool when the user may think they are dealing with a human
+      specialist.
+    implemented:
+      - text: Robert is a robot character who never claims to be a person; chat replies that do are refused
+          (`human_claim`).
+        files: [doc/robert-persona.md, src/companion_api/rag/chat.py]
+      - text: The fixed replies say he answers faith questions only from lessons his teachers checked and that he is
+          not a scholar.
+        files: [src/companion_api/rag/responses.py]
+    gaps:
+      - No reply or notice says that answers are produced by an AI model; a robot character is not the same
+        disclosure. A parent-facing notice is not in this repository.
+  - clause: 8
+    title: Privacy
+    rule: Collect personal or sensitive data only as needed and under a stated policy; never draw unnecessary
+      religious conclusions about the user.
+    implemented:
+      - text: Personal data (names, addresses, schools, phone numbers, passwords) is redirected before any model
+          call, and the persona never asks for personal details (`personal_details`).
+        files: [src/companion_api/rag/router.py, src/companion_api/rag/responses.py, src/companion_api/rag/chat.py]
+      - text: Logs carry versions and outcome codes only, never the question, passages or answer; the small-talk
+          intent (a feeling) is never logged; a turn stores only the finished answer.
+        files: [src/companion_api/rag/service.py, doc/conversation-policy.md, src/companion_api/store.py]
+      - text: No child content reaches the vector store, and a family's madhhab is never inferred.
+        files: [src/companion_api/rag/release.py, tests/test_no_child_content.py, AGENTS.md]
+    gaps:
+      - There is no written privacy policy in this repository ("a stated policy"); consent, retention and deletion
+        flows are a Phase 0 gate (doc/architecture.md §8, §14), and the development store is an in-memory
+        prototype (doc/development-boundary.md).
+
+# Page 2: the content levels and how Robert handles each.
+levels:
+  - level: أ
+    name: Settled foundational information
+    package: Quran, approved sahih hadith, the pillars of Islam and iman, basic seerah, ethics and values, stable
+      introductory information. A direct answer documented by its source.
+    robert: The faith path (doc/conversation-policy.md §2, step 3) - a reviewed answer word for word, or a grounded
+      answer over Quran and Bukhari/Muslim passages with a citation per sentence, its sources listed and the faith
+      judge passed; otherwise the faith abstention.
+    answer_types: [reviewed_answer, grounded, abstained]
+    gap: The corpus is a draft and no release is approved for children; whether the Tanzil text may be displayed
+      (the package names the King Fahd Complex text or quranpedia.net) is open.
+  - level: ب
+    name: Explanation, definition and reasoning
+    package: Concepts, comparisons, the objectives of the shari'a, intellectual questions and general doubts. An
+      answer from approved material that shows its reference, avoiding certainty where difference is possible.
+    robert: The same grounded path, only where reviewed explanatory material exists (tafsir, child content). Every
+      tafsir source is a candidate today, so these questions abstain.
+    answer_types: [grounded, abstained]
+    gap: No hedged wording for matters where difference is possible; the Bayyinat questions (doubts) serve only as
+      test questions.
+  - level: ج
+    name: Disputed or highly sensitive
+    package: Fiqh differences, detailed creed, contested history and questions that need a specialist. A restricted
+      answer from approved material, or a statement that a difference exists, or a referral.
+    robert: Ruling, madhhab and sect questions take the ruling route (`redirected`, RULING). Other disputed topics
+      are outside the corpus (doc/governance/scope.md), so the faith path abstains with a referral.
+    answer_types: [redirected, abstained]
+    gap: No reply says that a difference exists; detection rests on keywords or on the corpus not holding the topic.
+  - level: د
+    name: Fatwa or a personal case
+    package: A ruling on an individual case, the validity of a person's contract or worship, family disputes, legal
+      or medical matters with a shar'i effect. No independent ruling; general information and a referral.
+    robert: Validity and "will Allah accept" patterns take the ruling route (`redirected`); distress, abuse and
+      parents fighting take the safety routes (SAFETY_DISTRESS, SAFETY_ABUSE); personal data is redirected.
+    answer_types: [redirected, safety]
+    gap: A referral only, with no general information.
+  - level: out of scope
+    name: Outside the package's scope
+    package: Personal fatwas, judging persons or groups, private disputes, rulings built on unverified individual
+      facts.
+    robert: Fatwas and sects take the ruling route; private disputes reach the safety distress reply when a
+      distress pattern matches.
+    answer_types: [redirected, safety, abstained]
+    gap: There is no fixed route for judging a person or a group ("is my uncle a kafir?"); it is a faith topic and
+      goes to the faith path, which answers only when a passage and the judge verify it.
+
+open_questions:
+  - id: Q1
+    topic: Tafsir outside the rule as written
+    question: The tafsir rule admits sources of the first three Hijri centuries or dorar.net/tafseer. Tafsir Ibn
+      Kathir (d. 774 AH) and al-Tafsir al-Muyassar (King Fahd Complex, 1419 AH) are in the development corpus
+      (candidate), and al-Sa'di and al-Mukhtasar were downloaded for comparison. May any of them be used, for
+      example al-Muyassar's plain meaning for children, or must they stay out of every release?
+    sources: [ibn-kathir-ar-001..114, alquran-cloud-muyassar, quranpedia-tafsir-saadi, quranpedia-tafsir-mukhtasar]
+  - id: Q2
+    topic: Borderline tafsir
+    question: Does "the first three centuries" admit al-Tabari (d. 310 AH) and al-Nasa'i's tafsir (d. 303 AH), whose
+      authors died early in the fourth century but transmit the earlier generations' reports? Does it admit
+      al-Sahih al-Masbur (1420 AH), a modern compilation of graded early reports? Is the English al-Mukhtasar,
+      listed on quranpedia.net as a translation, covered by the Quran row's "translations on quranpedia.net"?
+    sources: [quranpedia-tafsir-tabari, quranpedia-tafsir-nasai, quranpedia-tafsir-sahih-masbur, quranpedia-en-mukhtasar]
+  - id: Q3
+    topic: Access to Dorar's data
+    question: dorar.net refuses scripted requests (Cloudflare 403), so its tafsir, hadith, creed and ethics
+      encyclopedias cannot be fetched; we do not work around the block. Can the organizers provide exports or
+      arrange them with Dorar? The request is drafted in doc/governance/data-request.md.
+  - id: Q4
+    topic: Quranpedia's licence
+    question: Quranpedia's licence says that translations and contemporary works remain the property of their authors
+      and publishers. Does the organizers' permission cover the three English translations, al-Mukhtasar (Arabic
+      and English), al-Sa'di and al-Sahih al-Masbur? The licence also asks every copy to be kept current
+      (/api/v1/changes); may a release pin one reviewed dump version?
+    sources: [quranpedia-en-hilali-khan, quranpedia-en-sahih-international, quranpedia-en-ruwwad,
+      quranpedia-en-mukhtasar, quranpedia-tafsir-mukhtasar, quranpedia-tafsir-saadi, quranpedia-tafsir-sahih-masbur]
+  - id: Q5
+    topic: The permission in writing
+    question: The project owner reported the organizers' permission to use the package's sources on 2026-10-02.
+      Please confirm it in writing, so that it can be recorded with the governance decisions.
+  - id: Q6
+    topic: Hadith outside the two Sahihs
+    question: An-Nawawi's Forty, Riyad as-Salihin and al-Adab al-Mufrad have no grading in our data. Is a grading
+      from Dorar's hadith encyclopedia, with the grader's name, the "approved grading" the package requires? Which
+      numbering of Sahih Muslim should references use (Abdul-Baqi's)?
+    sources: [fawazahmed0-ara-nawawi, ahmedbaset-riyadussalihin, ahmedbaset-adab-mufrad]
+  - id: Q7
+    topic: The Quran text on screen
+    question: The package names the King Fahd Complex text or quranpedia.net. The development corpus displays
+      Tanzil's Uthmani text (Hafs), which is to be cross-checked against Quranpedia's Hafs text. Is Tanzil
+      acceptable on screen once the two agree, or should the displayed text be Quranpedia's?
+    sources: [tanzil-quran-uthmani, tanzil-quran-simple, quranpedia-mushaf-hafs]
+  - id: Q8
+    topic: Jamharah and the page-7 glossary
+    question: Where the Jamharah dictionary's English heading differs from the package's sample glossary, which one
+      governs? For التوحيد Jamharah gives "Monotheism", while the package gives "Tawhid / Oneness of God" and warns
+      against a translation that suggests mere numerical oneness; for الدعوة Jamharah gives "Invitation" (the
+      package "Da'wah / Invitation to Islam"); for السنة Jamharah's entry defines the fiqh sense (an act rewarded
+      when done), the package the Prophet's guidance and way. The package's equivalents are used for now.
+    sources: [jamharah-dictionary-entries]

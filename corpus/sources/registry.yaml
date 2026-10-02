@@ -2855,8 +2855,8 @@ sources:
   license: 'Not stated (the site: free benefit for every Muslim)'
   license_url: null
   terms_summary: No licence or API found. The challenge organizers granted participants permission to use the reference package's sources (reported 2026-10-02; written confirmation pending).
-  retrieved_at: null
-  sha256: null
+  retrieved_at: '2026-10-02T08:36:03+00:00'
+  sha256: 26a3db1a85db94a5fab870da3ee2392a80eebe28a96126d31cf965de72a6e633
   numbering_system: term
   status: candidate
   notes: Candidate data from the challenge's reference package (translation and terms row). Crawled politely (robots.txt allows the dictionary; at least 5 s between requests). Unreviewed; never in a release until governance changes its status.

@@ -1104,6 +1104,99 @@
     "quraan",
     "quran"
    ]
+  },
+  {
+   "ar": "الاسلام",
+   "latin": [
+    "eslam",
+    "islaam",
+    "islam"
+   ]
+  },
+  {
+   "ar": "التوحيد",
+   "latin": [
+    "oneness of god",
+    "tauhid",
+    "tawheed",
+    "tawhid"
+   ]
+  },
+  {
+   "ar": "العباده",
+   "latin": [
+    "3ebade",
+    "3ibada",
+    "3ibadah",
+    "ibada",
+    "ibadah",
+    "worship"
+   ]
+  },
+  {
+   "ar": "النبوه",
+   "latin": [
+    "nboweh",
+    "nobowa",
+    "nubuwah",
+    "nubuwwa",
+    "nubuwwah",
+    "prophethood"
+   ]
+  },
+  {
+   "ar": "الوحي",
+   "latin": [
+    "revelation",
+    "wa7i",
+    "wa7y",
+    "wahi",
+    "wahy"
+   ]
+  },
+  {
+   "ar": "الشريعه",
+   "latin": [
+    "sharee3a",
+    "shari3a",
+    "sharia",
+    "shariah"
+   ]
+  },
+  {
+   "ar": "الحديث",
+   "latin": [
+    "7adeeth",
+    "7adith",
+    "hadeeth",
+    "hadis",
+    "hadith"
+   ]
+  },
+  {
+   "ar": "السنه",
+   "latin": [
+    "sunna",
+    "sunnah",
+    "sunneh"
+   ]
+  },
+  {
+   "ar": "الفتوي",
+   "latin": [
+    "fatawa",
+    "fatwa",
+    "fatwah"
+   ]
+  },
+  {
+   "ar": "الدعوه",
+   "latin": [
+    "da3wa",
+    "da3wah",
+    "da3weh",
+    "dawah"
+   ]
   }
  ]
 }
