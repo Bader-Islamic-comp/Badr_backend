@@ -20,7 +20,7 @@ from companion_api.rag.corpus import load_corpus
 
 EVAL = ROOT / "corpus/eval"
 VARIANTS = ("msa", "gulf", "levantine", "egyptian", "misspelled", "arabizi", "english_transliteration")
-ROUTES = ("abstain", "redirect", "safety", "refuse")
+ROUTES = ("abstain", "redirect", "safety", "refuse", "disclose")
 
 
 def main() -> int:

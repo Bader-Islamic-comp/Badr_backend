@@ -571,3 +571,108 @@ intents:
     misspelled: مين المسلم الي الناس بيسلمو من لسانة وايدة
     arabizi: meen el muslim elli el nas byeslamo mn lsano w edo?
     english_transliteration: Who is a true Muslim in the hadith about the tongue and the hand?
+# --- Serving checks (test/corpus-tasks-serving, 2026-10-02) -----------------------------------------
+# Written by the model for the post-generation checks: scene (another episode of the same story),
+# addressee (whom a quotation speaks to), answered (how many, how long, when), Arabizi faith routing,
+# and the organizers' page-6 test cases the Wave 1 corpus can answer. Synthetic, pending approval.
+- id: yusuf-11
+  refs: [quran:12:58-60]
+  notes: Scene check. On the brothers' first visit to Egypt Yusuf asked them to bring their brother from their father; not the well scene.
+  q:
+    msa: ماذا طلب يوسف من إخوته عندما جاؤوا إلى مصر أول مرة؟
+    gulf: وش طلب يوسف من إخوانه لما جوا مصر أول مرة؟
+    arabizi: shu talab yusuf mn ekhwto lama ijo 3ala masr awwal marra?
+    english_transliteration: What did Yusuf ask his brothers for when they first came to Egypt?
+- id: yusuf-12
+  refs: [quran:12:80-82]
+  notes: Scene check. When they came back without their youngest brother, they were told to tell their father that his son had stolen; not the wolf story of 12:16-18.
+  q:
+    msa: ماذا قال الإخوة لأبيهم لما رجعوا من مصر بدون أخيهم الصغير؟
+    levantine: شو قالوا الإخوة لأبوهم لما رجعوا من مصر بلا أخوهم الصغير؟
+    arabizi: shu 2alo ekhwet yusuf la abuhom lama rij3o mn masr bdoon 5ayyon el zghir?
+    english_transliteration: What did the brothers tell their father when they came back from Egypt without their youngest brother?
+- id: ibrahim-09
+  refs: [quran:14:35-37]
+  notes: Addressee check. Ibrahim's prayer for Makkah is addressed to his Lord, not to his father or his people.
+  q:
+    msa: بماذا دعا إبراهيم ربه لمكة وذريته؟
+    egyptian: إبراهيم دعا ربنا بإيه لمكة وولاده؟
+    arabizi: shu da3a ibrahim rabbo la makka w wlado?
+    english_transliteration: What did Ibrahim ask his Lord for Makkah and his children?
+- id: nuh-07
+  refs: [quran:11:42-43]
+  notes: Addressee check. Nuh called to his son to board with them; the son answered he would take refuge on a mountain.
+  q:
+    msa: ماذا قال نوح لابنه قبل أن يأتي الموج؟
+    gulf: وش قال نوح لولده قبل لا يجي الموج؟
+    arabizi: shu 2al noo7 la ibno 2abl ma yiji el moj?
+    english_transliteration: What did Nuh say to his son before the waves came?
+- id: yusuf-13
+  refs: [quran:12:87]
+  notes: Addressee check. Yaqub told his sons to go and look for Yusuf and his brother and not to lose hope in Allah's mercy.
+  q:
+    msa: ماذا قال يعقوب لأبنائه عندما أرسلهم يبحثون عن يوسف وأخيه؟
+    levantine: شو قال يعقوب لولاده لما بعتهم يدوروا على يوسف وأخوه؟
+    english_transliteration: What did Yaqub tell his sons when he sent them to look for Yusuf and his brother?
+- id: yusuf-14
+  refs: [quran:12:4]
+  notes: Answered check. Yusuf saw eleven stars, the sun and the moon; an answer must give the number.
+  q:
+    msa: كم كوكبًا رأى يوسف في منامه؟
+    levantine: قديش نجمة شاف يوسف بمنامه؟
+    arabizi: kam najme shaf yusuf bel manam? w 2adeish kawkab?
+    english_transliteration: How many stars did Yusuf see in his dream?
+- id: yusuf-15
+  refs: [quran:12:42]
+  notes: Answered check. Yusuf stayed in prison for some years (بضع سنين); an answer must give that duration.
+  q:
+    msa: كم سنة بقي يوسف في السجن؟
+    gulf: كم سنة قعد يوسف في السجن؟
+    arabizi: 2adeish sane dal yusuf bel sijn?
+    english_transliteration: How many years did Yusuf stay in prison?
+- id: yusuf-16
+  refs: [quran:12:16]
+  notes: Answered check (time). The brothers came to their father in the evening, weeping.
+  q:
+    msa: متى جاء إخوة يوسف إلى أبيهم يبكون؟
+    egyptian: إخوات يوسف جم لأبوهم إمتى وهم بيعيطوا؟
+    arabizi: emta ijo ekhwet yusuf la abuhom w hene 3am yebko?
+    english_transliteration: When did Yusuf's brothers come to their father crying?
+- id: ibrahim-10
+  refs: [quran:2:260]
+  notes: Answered check. Ibrahim was told to take four birds; an answer must give the number.
+  q:
+    msa: كم طيرًا أخذ إبراهيم ليرى كيف يحيي الله الموتى؟
+    egyptian: إبراهيم خد كام طير عشان يشوف ربنا بيحيي الموتى إزاي؟
+    arabizi: kam tayr a5ad ibrahim yshoof kif allah bi7yi el mawta?
+    english_transliteration: How many birds did Ibrahim take to see how Allah brings the dead to life?
+- id: musa-11
+  refs: [quran:7:142]
+  notes: Answered check. Allah appointed for Musa thirty nights and completed them with ten, forty nights in all.
+  q:
+    msa: كم ليلة واعد الله موسى؟
+    levantine: قديش ليلة واعد الله موسى؟
+    arabizi: kam leile wa3ad allah mousa?
+    english_transliteration: How many nights did Allah appoint for Musa?
+- id: page6-kaaba
+  refs: [quran:2:125-127]
+  notes: Organizers' case 1, adapted. Correct the misconception gently, without rebuke - worship is for Allah alone; the Kaaba is the House Ibrahim and Ismail raised for those who worship Allah. Wave 1 holds 2:124-133 only; the qibla verses (2:142-150) are not in the corpus, so a fuller answer needs them.
+  q:
+    msa: لماذا يعبد المسلمون الكعبة؟
+    levantine: ليش المسلمين بيعبدوا الكعبة؟
+    arabizi: leish el muslimin bi3bdo el ka3ba?
+    english_transliteration: Why do Muslims worship the Kaaba?
+- id: page6-sabr
+  refs: [quran:12:18, quran:12:83]
+  notes: Organizers' case 12, adapted. A question with an Islamic term (sabr jamil, beautiful patience) in another language; understand the term in context (Yaqub's patience), never a literal translation.
+  q:
+    msa: ما معنى الصبر الجميل في قصة يعقوب؟
+    arabizi: shu ya3ni sabr jameel b 2esset ya3qoob?
+    english_transliteration: What does sabr jameel mean in the story of Yaqub?
+- id: page6-one-god
+  refs: [quran:6:78-79, quran:21:56]
+  notes: Organizers' case 7, adapted. For a child who never heard the word tawhid - in plain words first (Ibrahim turned to the One who created the heavens and the earth), then the term; the corpus has no definition, so nothing beyond the passages.
+  q:
+    msa: ماذا يعني أن نعبد إلهًا واحدًا كما قال إبراهيم؟
+    levantine: شو يعني نعبد إله واحد متل ما قال إبراهيم؟
+    english_transliteration: What does it mean to worship only one God, like Ibrahim said?
