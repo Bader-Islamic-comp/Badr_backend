@@ -24,3 +24,6 @@ reports/retrieval/cache/
 doc/decisions/04-content-review.md
 # Knowledge graph build output (test/corpus-tasks); rebuild with scripts/build_graph.py
 corpus/graph/
+# The words that differ between the Tanzil and King Fahd Complex Quran texts (third-party text);
+# regenerate with scripts/fetch_sources.py
+corpus/reports/quran_text_comparison_details.jsonl

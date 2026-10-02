@@ -2443,7 +2443,7 @@ sources:
   status: candidate
   notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest's 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.
   package_rule: listed
-  package_basis: 'Reference package (20/3/1448), Quran: the Quranic text in its rasm as on quranpedia.net'
+  package_basis: 'Reference package (20/3/1448), Quran: the King Fahd Complex print as on quranpedia.net (pages as printed; the dump''s text field is in standard spelling, not the Uthmani rasm)'
   acquisition: download
 - source_id: quranpedia-mushaf-hafs-text
   format: json.gz
@@ -2462,7 +2462,7 @@ sources:
   status: candidate
   notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest's 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.
   package_rule: listed
-  package_basis: 'Reference package (20/3/1448), Quran: the Quranic text as on quranpedia.net'
+  package_basis: 'Reference package (20/3/1448), Quran: the Quranic text in its rasm (the King Fahd Complex''s Uthmani Hafs text) as on quranpedia.net'
   acquisition: download
 - source_id: quranpedia-surahs
   format: json.gz
