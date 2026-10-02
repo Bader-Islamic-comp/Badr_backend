@@ -26,6 +26,20 @@ _SPAN_WINDOW = 3  # a primary entry may be split over up to this many neighbours
 COMPARE_VERSION = "crosscheck-norm-v1"
 
 SAHIH_COLLECTIONS = {"bukhari": "Sahih al-Bukhari", "muslim": "Sahih Muslim"}
+# The grading basis of the two Sahihs: the collection rule (doc/governance/source-policy.md, criterion 4) is the
+# challenge's reference package's own hadith rule (corpus/sources/reference_package.yaml, row «الحديث النبوي»).
+# Recorded in every record's `grader`; it changes no record's eligibility. Hadith outside the two Sahihs stay
+# ungraded and ineligible until a grading from Dorar or an approved edition is in the data.
+PACKAGE_HADITH_RULE = "reference package 20/3/1448, hadith: «الأحاديث الصحيحة من الصحيحين»"
+
+
+def grader(collection: str) -> str | None:
+    """Who or what grades a record of `collection` sahih, or None when nothing does."""
+    if collection not in SAHIH_COLLECTIONS:
+        return None
+    return f"collection rule: {SAHIH_COLLECTIONS[collection]}; {PACKAGE_HADITH_RULE}"
+
+
 NUMBERING = {"fawazahmed0": "sunnah.com", "ahmedbaset": "sunnah.com", "mhashim6": "islamware"}
 
 
@@ -212,7 +226,7 @@ def records(collection: str, primary: Parsed, primary_id: str, secondary_id: str
             "collection": collection, "number": entry.number, "numbering_system": NUMBERING[dataset],
             "narrator": entry.narrator, "arabic_text": entry.text,
             "grading": "sahih" if sahih else None,
-            "grader": f"collection rule: {SAHIH_COLLECTIONS[collection]}" if sahih else None,
+            "grader": grader(collection),
             "source_ids": [primary_id] + ([secondary_id] if secondary_id and match else []),
             "crosscheck_status": status,
             "crosscheck": ({"source_id": secondary_id, "number": match[0], "similarity": round(match[1], 3),

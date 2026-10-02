@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_sha256": "245de570e557b096b9d4ab86080b3ef69cdebb4762524ec9b3bcf6e97d411636",
+  "registry_sha256": "9d30183e5077ea4eadd7720a9e8c6ab0824b9cea2fbcd611a6f97422864fc391",
   "normalizer": "norm-v3",
   "sources": {
     "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",
@@ -132,7 +132,34 @@
     "ibn-kathir-ar-112": "0350535c8bf66e84202258872eb47446b6644d6274153c69caf12b31907f081e",
     "ibn-kathir-ar-113": "ac484b9ce99757d1f8b474252f5da1063ab77f923ae77d96166a7ecf031689d6",
     "ibn-kathir-ar-114": "f28e871f2adf657b4b360591c86405c71eca5c9db3ff14cf4caa10b378eb5169",
-    "spa5k-tafsir-license": "92f3c7ee3a04599ab2327052570bc94a82ebf1fdd3d0e8cf5c9e2c3a9282b279"
+    "spa5k-tafsir-license": "92f3c7ee3a04599ab2327052570bc94a82ebf1fdd3d0e8cf5c9e2c3a9282b279",
+    "quranpedia-license": "784d33f90a3159d685d9a66e6460389e7d4595f0b7e2f2be98bf0eca041fd75b",
+    "quranpedia-manifest": "28caa52af911825cbf287bf7eca50f2ad68625e7ac04ca13b6a4f39304e5cb2f",
+    "quranpedia-books-index": "79c533069c3c8e68ee010f6d27b43bd3c95a044539ec38803aa883b33be359cf",
+    "quranpedia-mushafs-index": "bb682f0aa3885012aae5f50955a4ab6c4f6ea615ab75542c99af301053bb4120",
+    "quranpedia-mushaf-hafs": "b857c58206d219d1af333fc3eb8359c30e8b07c7386f88692efcb0744dd98fe8",
+    "quranpedia-mushaf-hafs-text": "af546911a592c7b8a5a35b668c0f885d7b37b52536c5032bd6fb2b42c5819f33",
+    "quranpedia-surahs": "9aab54c591e3432672f04ed7a66b21d23d62cc2f396022f9b1e3431ba4ad1b7a",
+    "quranpedia-topics-index": "567f709a2315026e963238b203688a7ec5e17612f7c727884e6a55b013ee82e0",
+    "quranpedia-topics": "3d5dd54a96b8778452f2fa0f0e6b96a64b908c9f3f29990413a0223f13886f18",
+    "quranpedia-en-hilali-khan": "514db28e78166a8218a825526ac03ff7a80ddb1c13ea43ce1070b145fba688b4",
+    "quranpedia-en-sahih-international": "8c08a8332fae34788f556e5d13a78fe45f68f607cf7a2dabd6596a7fad573978",
+    "quranpedia-en-ruwwad": "5bd75450f7abeb04bab1532fd0563cf8620d46abf28bd459775dcdad47899477",
+    "quranpedia-en-mukhtasar": "4790ae49369d80d40c63ed8f197c0d6db909bcee23d63288fb12159cab4eccdc",
+    "quranpedia-tafsir-mujahid": "4c7f850f74be464b922e31695b73869f45000d2b79a619746cb75919c9c27946",
+    "quranpedia-tafsir-sufyan-thawri": "60cfe99ca65e57230cb32f05684021c1e2d439ca1cdf33408fe5b648d9d2233c",
+    "quranpedia-tafsir-yahya-ibn-sallam": "c068c1ffbcb519bc5c8d85325592aeaee65c6a21937c94584d43d8a170546bfb",
+    "quranpedia-tafsir-malik": "67aff960464d88e78ab259d15f23a157d4ed9f8b4870052412d7295ca366b07c",
+    "quranpedia-tafsir-shafii": "560b954a092761c6eafd34ae735854a0fbc32e7df7aba4d1cfb4cc599eeebef3",
+    "quranpedia-tafsir-farra-maani": "428fe2de13b3a0d2b89f0b197c9df3b9d22ab4fc3c5e667e96c879edaec7849d",
+    "quranpedia-tafsir-abu-ubayda-majaz": "396205dc6742bfa7a760f1d0ac9566dc34212bbf5c321834a2dfc2d7d36ccab4",
+    "quranpedia-tafsir-ibn-qutayba-gharib": "0f566aa46be740ddda299c6d3d978199af54f71ce4a1c17c6ee080fd2e20664a",
+    "quranpedia-tafsir-tabari": "ea7132febfe16c40247388ca37716aee05e1d320f6c470f70f784c2f2051b966",
+    "quranpedia-tafsir-nasai": "b57c49bcc5e114f8ac646c2ebb057b0b49221e22ffbbf96935c0fd879468a7fa",
+    "quranpedia-tafsir-sahih-masbur": "f06230977593e563927d00b6487b522d872de02bbe2456833eb01320d19c9a9a",
+    "quranpedia-tafsir-mukhtasar": "18fee5e926e9e81c071d2485535793bca4e62dfa532414b6310dc1d9ec63a5c1",
+    "quranpedia-tafsir-saadi": "2d76f729e3b0671aa9c11c25fb3880942941c4af70ab331dac16766591428c34",
+    "jamharah-dictionary-entries": "26a3db1a85db94a5fab870da3ee2392a80eebe28a96126d31cf965de72a6e633"
   },
   "files": {
     "hadith/adab_mufrad.jsonl": {
@@ -140,11 +167,11 @@
       "records": 1326
     },
     "hadith/bukhari.jsonl": {
-      "sha256": "8ea859ae06d2e1b197dbfddd24ca90c7a1bf57613785dbdc754e637ff4adb2b6",
+      "sha256": "81c72d621b68b14228c562b92b6b792080e47b5e26e7b5759838143e4d07d91f",
       "records": 7580
     },
     "hadith/muslim.jsonl": {
-      "sha256": "7b86f194a2b13fa5f7884273d79a16899fd2c77d1c471aeee1af994865d4ef8d",
+      "sha256": "79e6752ca8dfb78e4574db5f96ec8b25dd80ad5db061e67cf497efa8635f81e4",
       "records": 7360
     },
     "hadith/nawawi40.jsonl": {
