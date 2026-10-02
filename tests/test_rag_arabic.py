@@ -171,7 +171,7 @@ def test_religious_passages_get_the_faith_prompt_and_the_judge(release):
     result = service(release, generator).answer("أين وصل القارب الكبير بعد المطر؟")
     assert result.answer_type == "grounded" and result.citations == ("story-boat#1",)
     assert generator.modes == ["text", "json"] and generator.systems[0] == FAITH_SYSTEM
-    assert result.provenance["judge"] == "faith-judge-v1" and result.provenance["promptVersion"] == "rag-answer-v3"
+    assert result.provenance["judge"] == "faith-judge-v1" and result.provenance["promptVersion"] == "rag-answer-v4"
 
 
 @pytest.mark.parametrize("verdict, error, reason", [

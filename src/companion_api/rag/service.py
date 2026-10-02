@@ -22,6 +22,12 @@ gets the faith prompt (rag-answer-v3), the first-person and quotation checks
 Arabic small talk gets reviewed Arabic copy, because the persona prompt and its
 checks are English only.
 
+conversation-policy-v3 (test/corpus-tasks-serving): a verified faith answer
+passes the post-generation checks (`checks.py`: first person, faith terms,
+answered, addressee, scene, translation, then the judge), each recorded in
+provenance; and an English question over English translations of the
+meanings gets the English faith prompt (rag-answer-v4).
+
 Provenance (release, model, prompt, retriever, verifier, embedder, chat prompt
 and chat checker versions) travels with every result and is logged once per
 answer on `companion_api.rag`. The question, the passages, the answer and the
@@ -35,19 +41,22 @@ import random
 from time import perf_counter
 from typing import NamedTuple
 
-from . import arabizi, chat, judge, normalize, router
+from . import arabizi, chat, checks, judge, normalize, router
+from .ayahs import AyahIndex
+from .checks import CheckResult
 from .embeddings import embedder_for
 from .generator import OpenAICompatibleGenerator
-from .grounding import DECLINE, MAX_CHARS, VERIFIER_VERSION, Segment, first_person, verify
+from .grounding import MAX_CHARS, VERIFIER_VERSION, Segment, verify
 from .prompts import PROMPT_VERSION, build_messages, is_faith_passage
 from .release import ReleaseError, load_release
 from .responses import FALLBACKS, INVITATIONS_BY_LANGUAGE, SAFETY_REPLY, reply
+from .scene import load_episodes
 from .retriever import RETRIEVER_VERSION, Candidate, HybridRetriever, Retrieval, RetrieverError
 from .types import Chunk, Generator
 
 logger = logging.getLogger("companion_api.rag")
 
-POLICY_VERSION = "conversation-policy-v2"
+POLICY_VERSION = "conversation-policy-v3"
 INVITATION_RATE = 1 / 3  # conversation-policy §8: at most about one chat reply in three
 # A difficult feeling deserves kindness, not a nudge, and a goodbye is a goodbye.
 NO_INVITATION = frozenset({"feeling_negative", "goodbye"})
@@ -93,6 +102,8 @@ class AnswerResult:
     reason: str = ""
     # The grounded prompt's verdict when it ran ("ok" or its failure code), even when the persona then answered.
     grounding: str = ""
+    # The post-generation checks a faith answer went through, in order (checks.py); empty otherwise.
+    checks: tuple[CheckResult, ...] = ()
 
     @property
     def citations(self) -> tuple[str, ...]:
@@ -125,6 +136,10 @@ class AnswerService:
         # Chooses fallback lines and invitations; injectable so tests are deterministic.
         self.rng = rng or random.Random()
         identity = retriever.embedder.identity
+        # The release's ayahs one by one (the scene check) and the episode map of the stories.
+        self.ayahs = AyahIndex(chunk for chunk in retriever.release.chunks
+                               if retriever.include_drafts or chunk.servable)
+        self.verifier = checks.Verifier(load_episodes(), self.ayahs)
         self.provenance = {
             "releaseId": retriever.release.manifest.release_id,
             "model": generator.model,
@@ -137,6 +152,7 @@ class AnswerService:
             "chatChecker": chat.CHAT_CHECKER_VERSION,
             "judge": judge.JUDGE_VERSION,
             "router": router.ROUTER_VERSION,
+            "checks": checks.CHECKS_VERSION,
         }
 
     def _result(self, answer_type: str, text: str, reason: str, segments: tuple[Segment, ...] | None = None,
@@ -259,29 +275,26 @@ class AnswerService:
         language = reply_language(text)
         # The prompt follows the best passage: the faith prompt when it is religious text (Quran, tafsir, hadith).
         # A faith question over app-help passages keeps the app-help prompt, where Robert speaking as "I" is right.
-        output = self.generator.complete(build_messages(text, passages, faith=is_faith_passage(passages[0])),
-                                         max_tokens=self.max_tokens)
+        output = self.generator.complete(build_messages(text, passages, faith=is_faith_passage(passages[0]),
+                                                        language=language), max_tokens=self.max_tokens)
         grounding = verify(output, passages)
         if grounding.ok:
             released = " ".join(segment.text for segment in grounding.segments)
             by_id = {chunk.id: chunk for chunk in passages}
             cited = [by_id[chunk_id] for chunk_id in
                      dict.fromkeys(chunk_id for segment in grounding.segments for chunk_id in segment.citations)]
-            # Whatever the prompt, an answer that cites religious text is a faith answer: no first person outside
-            # a quotation (grounding-v3), and the judge must pass it (judge.py).
-            religious = any(is_faith_passage(chunk) for chunk in cited)
-            if religious and first_person(released):
-                return replace(self._abstain_faith("grounding:first_person", language), grounding="first_person")
-            if faith or religious:
-                # A question that named a faith term must also be answered in those terms (§2 step 3).
-                problem = _unanswered_faith(text, released, cited) if router.is_faith_topic(text) else None
-                if problem is None and religious:
-                    problem = judge.judge(self.generator, text, released, cited)
+            # Whatever the prompt, an answer that cites religious text is a faith answer: it passes every
+            # post-generation check, the faith judge last (checks.py).
+            results: tuple[CheckResult, ...] = ()
+            if faith or any(is_faith_passage(chunk) for chunk in cited):
+                answer = checks.Answer(text, released, grounding.segments, tuple(cited), router.is_faith_topic(text))
+                results, problem = self.verifier.run(answer, self.generator)
                 if problem is not None:
-                    return replace(self._abstain_faith(problem, language), grounding=problem)
+                    return replace(self._abstain_faith(problem, language),
+                                   grounding=problem.removeprefix("grounding:"), checks=results)
             result = self._result("grounded", released, "grounded", grounding.segments,
                                   tuple(Source.of(chunk) for chunk in cited))
-            return replace(result, grounding="ok")
+            return replace(result, grounding="ok", checks=results)
         failure = str(grounding.failure)
         if faith:
             result = self._abstain_faith("grounding:" + failure, language)
@@ -374,29 +387,10 @@ class AnswerService:
             fields["outcome"] = result.reason
         if result.grounding and result.grounding != "ok":
             fields["grounding"] = result.grounding
+        if result.checks:
+            fields["checks"] = checks.summary(result.checks)
+            fields["checks_version"] = self.provenance["checks"]
         logger.info("rag_answer %s", json.dumps(fields, sort_keys=True), extra={"rag": fields})
-
-
-def _unanswered_faith(question: str, answer: str, cited: list[Chunk]) -> str | None:
-    """Why a verified answer on a faith topic is not an answer from the corpus, or None (§2 step 3).
-
-    Found on the real model: "Hi Robert! What is Ramadan?" drew "I am a learning
-    companion ... so I cannot answer about what Ramadan is [1]", and "Tell me a
-    story about the prophets" drew "I am not an imam or a scholar, so for
-    questions about prophets, please ask a parent [4]". Both pass the lexical
-    support check, because every word is in passages about Robert. So a decline
-    is refused, and the answer and the passages it cites must both mention the
-    question's own faith terms (any faith term when the question has none of
-    its own, such as "What does alhamdulillah mean?").
-    """
-    if DECLINE.search(router.matchable(answer)):
-        return "declined"
-    wanted = router.faith_words(question)
-    for text in (answer, " ".join(chunk.text for chunk in cited)):
-        found = router.faith_words(text)
-        if not (found & wanted if wanted else found):
-            return "off_topic"
-    return None
 
 
 def _language_or_english(text: str) -> str:

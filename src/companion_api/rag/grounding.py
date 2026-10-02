@@ -18,6 +18,12 @@ paraphrase with attached clitics ("للملائكة" for "الملائكة") is 
 looser matching is only acceptable with the two new checks and the faith judge
 (`judge.py`) in place.
 
+grounding-v4 (test/corpus-tasks-serving) reads a quotation in curly single
+quotes (‘…’) too, so an English quotation of a translation of the meanings is
+held word for word to its passage whatever quotation marks the model uses. The
+checks after verification (first person, faith terms, answered, addressee,
+scene, translation, judge) are `checks.py`.
+
 Attribution follows ordinary citation practice: a marker covers its own
 sentence and, when the model cites once at the end of a short run ("They are
 Talk, Learn, Quests and Style. Tap one to open it.[1]"), up to `MAX_CARRIED`
@@ -35,7 +41,7 @@ from .prompts import NOT_IN_SOURCES
 from .router import matchable
 from .types import Chunk
 
-VERIFIER_VERSION = "grounding-v3"
+VERIFIER_VERSION = "grounding-v4"
 MAX_CHARS = 1200
 MIN_SUPPORT = 0.5
 MAX_CARRIED = 2  # uncited sentences a following marker may cover
@@ -90,7 +96,7 @@ DECLINE = re.compile(
 
 
 # Quoted spans: guillemets, straight and curly double quotes, and the Quranic ornate parentheses.
-_QUOTES = re.compile('«([^»]+)»|"([^"]+)"|“([^”]+)”|﴿([^﴾]+)﴾|﴾([^﴿]+)﴿')
+_QUOTES = re.compile('«([^»]+)»|"([^"]+)"|“([^”]+)”|‘([^’]+)’|﴿([^﴾]+)﴾|﴾([^﴿]+)﴿')
 # First-person words a faith answer must not use outside a quotation: Robert narrates, he never speaks as
 # Allah, an angel or a prophet. Arabic verbs in the first person are left to the faith judge.
 FIRST_PERSON = frozenset({"i", "me", "my", "mine", "myself", "im", "ive",
