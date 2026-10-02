@@ -179,6 +179,69 @@ FAITH_AR = (
     "|يصلي|نصلي|اصلي|يصوم|نصوم|اصوم|ذكر الله"
 )
 
+# Faith in Arabizi (dev-patterns-v3, conversation-policy §15). Read only when the message is Arabizi
+# (`arabizi.is_arabizi`), so English words that collide with them ("aye", "salle", "ajr") are never read this
+# way. On the 2026-10-01 run, 8 of 62 Arabizi faith questions ("shu 2esset el 3ejl...", "fi 7adith 3an...")
+# named no term the English and Arabic lists know, found nothing to search with and got the puzzled chat line.
+# Conservative like the rest: "2esset" (story) counts, because the stories Robert tells are faith stories.
+# Not "aya" or "malak" (girls' names), "iman" (a name), "nar" (fire), "madine" (a city), or a prophet's name alone.
+PROPHET_NAMES_ARABIZI = (
+    "adam|2adam|nooh|noo7|nou7|nu7|nuh|nouh|ibrahim|ebrahim|ibraheem|ebraheem|ibrahem|yusuf|yousef|yusif|"
+    "yousif|youssef|yousuf|yosef|ya3qoub|ya3qoob|ya3qub|ya3koub|yaqoub|yacoub|mousa|musa|moussa|mosa|moosa|"
+    "haroun|haroon|harun|dawood|dawud|daoud|dawod|sulaiman|suleiman|sleiman|solaiman|3isa|3eesa|3eisa|issa|isa|"
+    "yunus|younes|younis|yonus|ayyoub|ayoub|ayyub|zakariya|zakaria|zakariyya|ya7ya|yahya|hood|hud|saleh|sale7|"
+    "sali7|shu3aib|shoaib|sho3aib|lut|loot|lout|ismail|isma3il|esma3il|isma3eel|is7a2|is7aq|ishaq|idris|edrees|"
+    "idrees|mo7ammad|mohammad|muhammad|m7ammad|mhammad|mu7ammad|mo7amad|a7mad|ahmad|maryam|mariam|luqman|lo2man")
+FAITH_ARABIZI = (
+    "rabbna|rabbena|rabna|rabbuna|el rab|alrab|nabi|el nabi|elnabi|nabiy|anbiya|anbya2|rasool|rasoul|rasul|rusul|"
+    "7adith|7adis|7adees|7adeeth|a7adith|a7adees|ahadith|hadis|2or2an|2ur2an|qor2an|qur2an|qoran|2uran|"
+    "sura|soura|surat|sooret|souret|ayeh|aayeh|ayet|ayat|aayat|"
+    "salat|sala2|salah|salli|sallei|salleit|sallet|bsalli|nsalli|ysalli|tsalli|asalli|salawat|"
+    "wudu|wudu2|wodoo2|wdoo2|wudoo2|woudou2|wodou2|tawadda|twadda|tayammum|"
+    "siyam|syam|seyam|sawm|soum|siam|sayem|sayme|sa2em|sa2me|bsoum|nsoum|ysoum|asoum|ramadan|ramadhan|ramdan|"
+    "rmadan|3eid|el 3id|so7oor|s7oor|iftar|ftour|"
+    "zakat|zaka|zakah|sada2a|sadaqa|sadaka|sad2a|sada2at|"
+    "7ajj|7aj|3omra|3umra|omra|ka3ba|ka3be|kaaba|makka|mekka|makke|tawaf|masjid|masjed|masajed|jame3|"
+    "jenne|janne|jannah|jannat|jenna|jahannam|jahanam|jehennam|akhira|el akhra|2iyame|qiyama|yom el din|"
+    "mala2ike|malaeke|malaike|mala2eke|malayke|malayeke|mala2ika|malaika|mala2ke|malayka|jibril|jebril|jibreel|"
+    "jebreel|iblees|iblis|eblis|shaytan|shaitan|sheitan|shei6an|shay6an|shayateen|jinn|jinni|"
+    "fer3on|fir3on|fer3own|fir3awn|far3oun|fara3ne|bani israeel|bani isra2eel|bani israil|bani esra2il|"
+    "bani israel|tawheed|tawhid|taw7eed|taw7id|shirk|kufr|kafir|kafer|kuffar|"
+    "du3a|do3a|doaa|du3a2|do3a2|ad3ye|ad3ia|dhikr|zikr|thikr|tasbee7|tasbi7|istighfar|esteghfar|isteghfar|"
+    "3ibade|3ebade|3ibada|3abad|3abado|3abadu|yi3bod|ya3bod|ne3bod|n3bod|"
+    "ajr|thawab|7asanat|7asane|7asanet|sa7aba|sahaba|sa7abe|sa7abi|sahabi|seera|sunna|sunneh|"
+    "mo3jize|mo3jizat|mu3jiza|mu3jizat|wa7i|wahy|wa7y|"
+    "2esset|2essat|2issat|2isset|qissat|qesset|qissa|2issa|2ussa|2osset|2ossa|"
+    f"(?:7ekayet|7ikayet|sayyidna|sayyedna|seedna|sidna|sayedna|2awm|qawm|2om|ekhwet|ekhwat|emm|omm|ibn|"
+    f"emra2et|mart) (?:el )?(?:nabi )?(?:{PROPHET_NAMES_ARABIZI})"
+    f"|(?:{PROPHET_NAMES_ARABIZI}) (?:3alayh|3aleih|3alei|3alayhi|alayh|aleih|3leh|3aleh) (?:el |al |es)?salam"
+)
+
+# Asking whether Robert is a person, a scholar or a religious authority (conversation-policy §16): answered with
+# an honest fixed reply that he is a robot learning companion, never by the persona or the corpus.
+DISCLOSURE_EN = (
+    r"(?:are|r) (?:you|u) (?:a |an |the )?(?:real |actual |living )?(?:person|human|human being|man|woman|"
+    r"people|grown ?up|adult|alive|real|scholar|sheikh|shaykh|shaikh|imam|mufti|alim|aalim|mullah|maulana|"
+    r"teacher|ustadh|ustad|religious (?:teacher|leader|authority|scholar)|prophet|angel|robot|bot|ai|machine|"
+    r"computer|chatbot|program)\b(?: or (?:a |an )?\w+(?: \w+)?)?"
+    r"|(?:am i|is this|are we) (?:talking|chatting|speaking|writing) (?:to|with) (?:a |an )?(?:real )?(?:person|"
+    r"human|people|robot|bot|ai|machine|computer|scholar|sheikh|imam)"
+    r"|(?:who|what) am i (?:talking|chatting|speaking) (?:to|with)"
+    r"|is (?:this|it) (?:a )?(?:real )?(?:person|human|robot|bot|computer)"
+)
+DISCLOSURE_AR = (
+    r"(?:هل )?(?:انت|انتا|إنت) (?:ال)?(?:شيخ|عالم|امام|مفتي|داعيه|استاذ|معلم|مدرس|انسان|بشر|بني ادم|شخص|"
+    r"رجل|راجل|حقيقي|روبوت|انسان حقيقي|شخص حقيقي|ذكاء اصطناعي|برنامج|كمبيوتر|الي)"
+    r"|(?:انت|انتا) (?:روبوت|انسان|شخص) (?:ولا|ام|او) (?:روبوت|انسان|شخص|بشر)"
+    r"|(?:هل )?(?:اكلم|بكلم|احكي مع|بحكي مع|اتكلم مع|عم بحكي مع) (?:انسان|شخص|بشر|روبوت|شيخ|حد حقيقي)"
+    r"|(?:مين|من) (?:اللي|الذي) (?:بيكلمني|يكلمني|بكلمه|اكلمه|بحكي معه|احكي معه|يرد علي|بيرد علي)"
+)
+DISCLOSURE_ARABIZI = (
+    r"(?:enta|inta|ente|inte|enti|inti) (?:sheikh|shei5|shee5|she5|imam|mufti|3alim|3aalem|ustaz|ustaaz|mo3allem|"
+    r"insan|ensan|bani adam|bani 2adam|ins|robot|7a2i2i|7a2ee2i|haqiqi|shakhs|zalame|rajol|ai)"
+    r"|(?:3am |3m )?(?:b7ki|ba7ki|bi7ki|ahki|a7ki) (?:ma3|m3) (?:insan|ensan|robot|7ada 7a2i2i|shakhs)"
+)
+
 # Courtesy formulas, removed before the faith check like their Latin forms in router.py.
 SALAM_AR = ("(?:ال)?سلام عليكم(?: ورحمه الله)?(?: وبركاته)?|وعليكم (?:ال)?سلام(?: ورحمه الله)?(?: وبركاته)?"
             "|عليكم (?:ال)?سلام")

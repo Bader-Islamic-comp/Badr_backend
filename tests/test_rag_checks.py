@@ -1,5 +1,5 @@
-"""test/corpus-tasks-serving: the post-generation checks (checks-v1), the scene check and English answers over
-translations of the meanings.
+"""test/corpus-tasks-serving: the post-generation checks (checks-v1), the scene check, the misquoted-ayah
+correction, Arabizi faith routing, the AI disclosure and English answers over translations of the meanings.
 
 Placeholder text only: invented Arabic and English sentences in passages typed as Quran, translation or
 hadith, under an invented surah number (99), so that no Quran or hadith text is written here. Real episode
@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 
 from companion_api.rag import arabizi, checks, responses, router
-from companion_api.rag.ayahs import AyahIndex
+from companion_api.rag.ayahs import AyahIndex, surah_name
 from companion_api.rag.checks import Answer, Verifier, addressee_mismatches, asks_for, gives
 from companion_api.rag.embeddings import HashingEmbedder
 from companion_api.rag.grounding import Segment, verify
@@ -206,6 +206,30 @@ def test_the_episode_map_is_up_to_date_and_holds_ranges_and_labels_only():
     assert len(load_episodes().episodes) == len(data["episodes"]) == 59
 
 
+# The misquoted ayah -----------------------------------------------------------------------------------------------
+
+def test_an_altered_quotation_is_found_and_an_exact_one_is_not():
+    assert AYAHS.near_quote("ما معنى «وترك الإخوة يوسف الصغير عند البئر»؟") is None
+    assert AYAHS.near_quote("ما معنى الآية: وترك الإخوة يوسف عند البئر؟").ayah.number == 2     # word missing
+    assert AYAHS.near_quote("ما معنى «وترك الإخوة يوسف الكبير عند البئر»؟").ayah.number == 2    # word changed
+    assert AYAHS.near_quote("ماذا فعل الإخوة عند البئر؟") is None                               # no quotation
+    assert AYAHS.near_quote("«قال الفتى لابيه يا ابت لماذا تحب الحجاره»") is None              # spelling only
+    # Retelling an ayah in a question is not quoting it: without quotation marks or "the ayah", only a long run
+    # of its words counts.
+    assert AYAHS.near_quote("كم أخًا ذهب إلى البئر في الصباح؟") is None
+    assert AYAHS.near_quote("«كم أخًا ذهب إلى البئر في الصباح»؟").ayah.number == 1
+
+
+def test_no_evaluation_question_is_taken_for_an_altered_quotation_of_the_fixture():
+    questions = [json.loads(line)["question"] for name in ("gold.jsonl", "harmful.jsonl")
+                 for line in (EVAL / name).read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert [question for question in questions if AYAHS.near_quote(question)] == []
+
+
+def test_the_surah_name_comes_from_the_release_title():
+    assert surah_name(CITY_CHUNK) == "سورة التجربة" and surah_name(HADITH) == ""
+
+
 # The service -------------------------------------------------------------------------------------------------------
 
 class Generator:
@@ -236,6 +260,68 @@ def _service(chunks, generator, language="ar"):
                             language=language)
     service.verifier = Verifier(EPISODES, service.ayahs)
     return service
+
+
+def test_a_misquoted_ayah_gets_the_exact_ayah_named_by_surah_and_number():
+    generator = Generator()
+    result = _service([WELL_CHUNK, CITY_CHUNK], generator).answer("ما معنى «وترك الإخوة يوسف الكبير عند البئر»؟")
+    assert (result.answer_type, result.reason, result.citations) == ("grounded", "quran_correction",
+                                                                     ("quran-099-001-005#1",))
+    assert result.text == responses.QURAN_CORRECTION_AR.format(surah="سورة التجربة", number=2, ayah=WELL[1])
+    assert generator.modes == []  # no model reads the altered words
+
+
+def test_the_correction_comes_in_the_childs_language():
+    result = _service([WELL_CHUNK], Generator(), language="en").answer(
+        "Robert, my teacher read us an ayah today and I would love to know what it means: "
+        "«وترك الإخوة يوسف الكبير عند البئر»")
+    assert result.text.startswith("Your question quotes an ayah") and WELL[1] in result.text
+
+
+@pytest.mark.parametrize("message, text", [
+    ("Are you a real person?", responses.DISCLOSURE), ("are you a scholar?", responses.DISCLOSURE),
+    ("Robert, are you an imam or a robot?", responses.DISCLOSURE), ("هل أنت شيخ؟", responses.DISCLOSURE_AR),
+    ("انت انسان ولا روبوت؟", responses.DISCLOSURE_AR), ("enta sheikh?", responses.DISCLOSURE_AR),
+])
+def test_robert_says_honestly_that_he_is_a_robot_learning_companion(message, text):
+    generator = Generator()
+    result = _service([HADITH], generator).answer(message)  # an Arabic service: even English gets its reply
+    assert (result.answer_type, result.text, result.reason, generator.modes) == ("chat", text, "disclosure", [])
+
+
+def test_the_disclosure_claims_no_authority_and_no_humanity():
+    for text in (responses.DISCLOSURE, responses.DISCLOSURE_AR):
+        assert not verify(text + " [1]", [HADITH]).failure in ("authority_claim",)
+    assert "not a real person" in responses.DISCLOSURE and "not a scholar" in responses.DISCLOSURE
+    assert router.disclosure("Is Robert a real person?") is None  # app help answers that from the corpus
+    assert router.disclosure("Are you happy today?") is None
+
+
+@pytest.mark.parametrize("question", ["fi 7adith 3an el ra7me bel zghar?", "shu 2esset el 3ejl elli 3abado bani israeel?",
+                                      "shu ajr elli bisa3ed 7ada?", "el kilme el 7ilwe sada2a?"])
+def test_arabizi_faith_questions_are_faith_topics(question):
+    assert arabizi.is_arabizi(question) and router.is_faith_topic(question)
+
+
+def test_arabizi_faith_words_are_read_only_in_arabizi():
+    assert not router.is_faith_topic("Aye aye captain, I want a salle de bain")
+    assert not router.is_faith_topic("esmi adam w ana mabsout")  # a prophet's name alone is a child's name
+
+
+def test_an_arabizi_faith_question_with_nothing_found_abstains_as_faith_never_as_chat():
+    result = _service([HADITH], Generator()).answer("shu 2esset el zalame elli sa2a kalb 3atshan?")
+    assert (result.answer_type, result.text) == ("abstained", responses.ABSTAIN_FAITH_AR)
+    assert result.reason.startswith("faith_abstain:")
+
+
+def test_every_arabizi_gold_question_of_a_hadith_or_story_is_a_faith_topic_or_names_a_prophet():
+    cases = [json.loads(line) for line in (EVAL / "gold.jsonl").read_text(encoding="utf-8").splitlines()
+             if line.strip()]
+    arabizi_cases = [case for case in cases if case["variant"] == "arabizi"]
+    assert arabizi_cases
+    missed = [case["id"] for case in arabizi_cases
+              if not router.is_faith_topic(case["question"]) and not arabizi.expand(case["question"]).prophet_ids]
+    assert missed == []
 
 
 def test_faith_answers_record_every_check_in_provenance_and_codes_only_on_the_log(caplog):

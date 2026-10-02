@@ -25,8 +25,11 @@ checks are English only.
 conversation-policy-v3 (test/corpus-tasks-serving): a verified faith answer
 passes the post-generation checks (`checks.py`: first person, faith terms,
 answered, addressee, scene, translation, then the judge), each recorded in
-provenance; and an English question over English translations of the
-meanings gets the English faith prompt (rag-answer-v4).
+provenance; a question asking whether Robert is a person or a scholar gets an
+honest fixed reply (§16); a question quoting an ayah with altered words gets
+the exact ayah from the release (§14); Arabizi faith terms make a faith topic
+(§15); and an English question over English translations of the meanings gets
+the English faith prompt (rag-answer-v4).
 
 Provenance (release, model, prompt, retriever, verifier, embedder, chat prompt
 and chat checker versions) travels with every result and is logged once per
@@ -42,7 +45,7 @@ from time import perf_counter
 from typing import NamedTuple
 
 from . import arabizi, chat, checks, judge, normalize, router
-from .ayahs import AyahIndex
+from .ayahs import AyahIndex, surah_name
 from .checks import CheckResult
 from .embeddings import embedder_for
 from .generator import OpenAICompatibleGenerator
@@ -114,8 +117,8 @@ class AnswerResult:
 class Plan:
     """What `prepare` decided before any model call (conversation-policy §2).
 
-    `route` names the step that decided: fixed, language, faith, exact,
-    small_talk or retrieval. `step` is "done" when `result` is final,
+    `route` names the step that decided: fixed, disclosure, language,
+    quran_check, faith, exact, small_talk or retrieval. `step` is "done" when `result` is final,
     "generate" for the grounded prompt and "chat" for the persona.
     """
     route: str
@@ -136,7 +139,7 @@ class AnswerService:
         # Chooses fallback lines and invitations; injectable so tests are deterministic.
         self.rng = rng or random.Random()
         identity = retriever.embedder.identity
-        # The release's ayahs one by one (the scene check) and the episode map of the stories.
+        # The release's ayahs one by one (a misquoted ayah, the scene check) and the episode map of the stories.
         self.ayahs = AyahIndex(chunk for chunk in retriever.release.chunks
                                if retriever.include_drafts or chunk.servable)
         self.verifier = checks.Verifier(load_episodes(), self.ayahs)
@@ -203,10 +206,19 @@ class AnswerService:
         fixed = self._route(text)
         if fixed is not None:
             return Plan("fixed", fixed)
+        # "Are you a real person?", "هل أنت شيخ؟": an honest fixed reply in any service language, before the faith
+        # step, because the question names a faith word ("sheikh") without asking about faith (§16).
+        disclosed = router.disclosure(text)
+        if disclosed is not None:
+            return Plan("disclosure", self._result("chat", reply("disclosure", disclosed), "disclosure"))
         language = reply_language(text)
         if language != self.language:
             # The corpus holds this service's language only; the abstention is in the child's language.
             return Plan("language", self._abstain("language_mismatch", language))
+        # An ayah quoted with altered words gets the exact ayah, never an answer built on the altered text (§14).
+        corrected = self._quran_correction(text, language)
+        if corrected is not None:
+            return Plan("quran_check", corrected)
         where = {"language": self.language, "age_band": self.age_band}
         # An Arabizi question is searched with Arabic terms, narrowed to the prophets it names.
         query, prophets = text, ()
@@ -244,6 +256,18 @@ class AnswerService:
         # A religious best passage makes it a faith answer, whatever words the question used.
         faith = is_faith_passage(retrieval.candidates[0].chunk)
         return Plan("retrieval", None, retrieval, "generate", faith=faith)
+
+    def _quran_correction(self, text: str, language: str) -> AnswerResult | None:
+        near = self.ayahs.near_quote(text)
+        if near is None:
+            return None
+        ayah, chunk = near.ayah, near.ayah.chunk
+        surah = surah_name(chunk) or ("سورة" if language == "ar" else "Surah") + f" {ayah.surah}"
+        corrected = reply("quran_correction", language).format(surah=surah, number=ayah.number, ayah=ayah.text)
+        if len(corrected) > MAX_CHARS:  # never cut an ayah: name it instead
+            corrected = reply("quran_correction_named", language).format(surah=surah, number=ayah.number)
+        return self._result("grounded", corrected, "quran_correction", (Segment(corrected, (chunk.id,)),),
+                            (Source.of(chunk),))
 
     def answer(self, text: str) -> AnswerResult:
         """The full path. Never raises."""
