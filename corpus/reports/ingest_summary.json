@@ -67,32 +67,58 @@
     "needs_check": 0
   },
   "skipped": {
-    "cluster_member_not_primary": 828
+    "cluster_member_not_primary": 828,
+    "mukhtasar_labelled_for_another_ayah": 72,
+    "mujahid_record_not_usable": 5,
+    "yahya-ibn-sallam_record_not_usable": 3,
+    "abu-ubayda-majaz_record_not_usable": 67,
+    "ibn-qutayba-gharib_record_not_usable": 34,
+    "tabari_record_not_usable": 125,
+    "sahih-masbur_record_not_usable": 68
   },
   "ibn_kathir_documents": 1911,
+  "quranpedia_documents": {
+    "quranpedia-en-hilali-khan": 1054,
+    "quranpedia-en-sahih-international": 1054,
+    "quranpedia-en-ruwwad": 1054,
+    "quranpedia-en-mukhtasar": 1054,
+    "quranpedia-tafsir-mujahid": 811,
+    "quranpedia-tafsir-sufyan-thawri": 387,
+    "quranpedia-tafsir-yahya-ibn-sallam": 323,
+    "quranpedia-tafsir-malik": 419,
+    "quranpedia-tafsir-shafii": 200,
+    "quranpedia-tafsir-farra-maani": 641,
+    "quranpedia-tafsir-abu-ubayda-majaz": 533,
+    "quranpedia-tafsir-ibn-qutayba-gharib": 377,
+    "quranpedia-tafsir-tabari": 1042,
+    "quranpedia-tafsir-nasai": 351,
+    "quranpedia-tafsir-sahih-masbur": 906
+  },
   "long_hadith_with_parts": 2053,
   "wave1_prophet_segments": 144,
   "wave1_hadith": 40,
   "generated_questions": 552,
   "layer0": {
-    "documents": 18131,
-    "chunks": 38614,
-    "parent_chunks": 26820,
-    "child_chunks": 11794,
+    "documents": 28337,
+    "chunks": 108236,
+    "parent_chunks": 73062,
+    "child_chunks": 35174,
     "by_content_type": {
       "hadith": 19673,
       "quran": 7287,
-      "tafsir": 11654
+      "quran_translation": 22447,
+      "tafsir": 51000,
+      "tafsir_translation": 7829
     },
-    "warnings": 1136,
+    "warnings": 1954,
     "errors": 0,
     "parent_words": {
-      "max": 1921,
-      "median": 87
+      "max": 2042,
+      "median": 110
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 102.1
+    "seconds": 178.9
   },
   "wave1": {
     "documents": 184,
@@ -111,6 +137,6 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 1.0
+    "seconds": 0.7
   }
 }

@@ -36,6 +36,11 @@ def load_metadata(path: Path) -> tuple[dict[int, str], list[tuple[int, int]]]:
     return names, rukus
 
 
+def load_transliterated_names(path: Path) -> dict[int, str]:
+    """{surah: transliterated name} ("Al-Baqara"), for the English documents' headers."""
+    return {int(sura.get("index")): sura.get("tname") for sura in ET.parse(path).getroot().iter("sura")}
+
+
 def _split(ayat: list[int], words: dict[int, int], budget: int) -> list[list[int]]:
     parts = max(1, ceil(len(ayat) / MAX_AYAT))
     while True:

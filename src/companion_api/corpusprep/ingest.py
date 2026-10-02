@@ -11,6 +11,10 @@ is; ids, headers and references are generated from metadata.
              is the segment's chunk; the source is `candidate`, so it is development-only
     Hadith   one document per cluster primary (Bukhari/Muslim); a narration is one unit,
              never split; one over 80 words also gets verbatim `parts` (child chunks)
+    English  (test/corpus-tasks) one document per Quran segment and translation, units are ayat,
+             `parentChunk` is the Arabic segment's chunk; candidate sources, layer 0 only
+    Tafsir books (test/corpus-tasks, Quranpedia) one document per Quran segment and book, units are
+             the paragraphs of each passage (a passage is a `section`, so a chunk never mixes two)
 """
 from dataclasses import dataclass, field
 import json
@@ -46,8 +50,9 @@ def _source(registry: Registry, source_id: str, work: str) -> dict:
             "translator": None, "license": entry["license"], "checksum": entry["sha256"]}
 
 
-def _document(doc_id: str, title: str, content_type: str, source: dict, units: list[dict], **v2) -> dict:
-    data = {"schemaVersion": 2, "id": doc_id, "kind": "passage", "title": title, "language": "ar",
+def _document(doc_id: str, title: str, content_type: str, source: dict, units: list[dict], language: str = "ar",
+              **v2) -> dict:
+    data = {"schemaVersion": 2, "id": doc_id, "kind": "passage", "title": title, "language": language,
             "ageBands": AGE_BANDS, "contentType": content_type, "madhhab": [], "curriculumPolicy": CURRICULUM,
             "synthetic": False, "source": source, "grading": v2.pop("grading", None),
             "review": {"status": "draft", "reviewer": None, "approvedOn": None, "supersedes": None}}
@@ -134,6 +139,116 @@ def ibn_kathir_documents(records: list[dict], names: dict[int, str], registry: R
             _source(registry, source_id, "Tafsir Ibn Kathir (Tafsir al-Quran al-Azim)"), units, tier=1,
             contextHeader=f"تفسير ابن كثير — سورة {names[s]} — الآيات {span}",
             prophetId=prophet["id"] if prophet else None, sourceIds=[source_id]))
+    return built
+
+
+def _translation_source(registry: Registry, source_id: str, translator: str) -> dict:
+    entry = registry.get(source_id)
+    return {"work": entry["title"][:200], "edition": entry["edition"][:200], "publisher": entry["publisher"][:200],
+            "translator": translator, "license": entry["license"], "checksum": entry["sha256"]}
+
+
+def translation_documents(segments: list[Segment], records: dict[tuple[int, int], dict], translation,
+                          names_en: dict[int, str], registry: Registry,
+                          prophets: dict[tuple[int, int], dict]) -> Built:
+    """Layer 0 English documents for one Quranpedia translation (test/corpus-tasks), mirroring the Arabic Quran
+    segment documents: the same segments, one unit per ayah, `parentChunk` the Arabic segment's chunk.
+
+    A translation of the meanings is not the Quran: tier 1 (an explanation), contentType `quran_translation`
+    (al-Mukhtasar's English: `tafsir_translation`), and the header says it is a translation. An ayah whose
+    record is labelled for another ayah (`label_mismatch`) is left out. One text for several consecutive ayat
+    is kept once and cites every ayah, as for al-Muyassar. The source is `candidate`: never in a release.
+    """
+    built = Built()
+    source = _translation_source(registry, translation.source_id, translation.translator)
+    tafsir = translation.content_type == "tafsir_translation"
+    for item in segments:
+        keys = [(item.surah, ayah) for ayah in range(item.first, item.last + 1)]
+        units, seen = [], {}
+        for s, ayah in keys:
+            record = records.get((s, ayah))
+            if record is None:
+                built.skip(f"{translation.slug}_missing_for_ayah")
+                continue
+            if record["label_mismatch"]:
+                built.skip(f"{translation.slug}_labelled_for_another_ayah")
+                continue
+            ref = f"quran:{s}:{ayah}"
+            if record["text"] in seen:
+                seen[record["text"]]["sourceRefs"].append(ref)
+                continue
+            unit = {"id": f"a{ayah}", "text": record["text"], "reference": ref, "section": item.id,
+                    "keepWithNext": False, "sourceRefs": [ref], "parts": []}
+            seen[record["text"]] = unit
+            units.append(unit)
+        if not units:
+            continue
+        prophet = next((prophets[key] for key in keys if key in prophets), None)
+        span = _span(item.first, item.last)
+        where = f"Surah {names_en[item.surah]} ({item.surah}), ayat {span}"
+        suffix = f"{item.surah:03d}-{item.first:03d}-{item.last:03d}"
+        if tafsir:
+            doc_id = f"tafsir-en-{translation.slug}-{suffix}"
+            title = f"Al-Mukhtasar fi Tafsir al-Quran {item.surah}:{span} — English translation"
+            header = (f"Al-Mukhtasar tafsir, English translation ({translation.name}) — explains {where}; not "
+                      "the words of the Quran")
+        else:
+            doc_id = f"quran-en-{translation.slug}-{suffix}"
+            title = f"The Quran {item.surah}:{span} — English translation of the meanings ({translation.name})"
+            header = (f"English translation of the meanings ({translation.name}) — {where} — a translation, not "
+                      "the Arabic Quran")
+        if prophet:
+            header = f"The story of the Prophet {prophet.get('latin') or prophet['id'].title()} — " + header
+        built.documents.append(_document(
+            doc_id, title, translation.content_type, source, units, language="en", tier=1, contextHeader=header,
+            prophetId=prophet["id"] if prophet else None, sourceIds=[translation.source_id],
+            parentChunk=f"{item.id}#1", children="units"))
+    return built
+
+
+def quranpedia_tafsir_documents(segments: list[Segment], records: list[dict], book, names: dict[int, str],
+                                registry: Registry, prophets: dict[tuple[int, int], dict]) -> Built:
+    """Layer 0 Arabic documents for one Quranpedia tafsir book (test/corpus-tasks), one per Quran segment.
+
+    A passage goes to the segment of its first ayah; its paragraphs are the units, all citing the passage's
+    whole range, and the passage is the unit `section`, so a chunk never mixes two passages. Title and header
+    name the book and its author, so the mufassir's words are never taken for the Quran (the book's own Quran
+    quotations keep their ﴿ ﴾). Tier 1, `parentChunk` the segment's Quran chunk, as for al-Muyassar. Records
+    flagged empty or out of place are left out. The source is `candidate`: never in a release.
+    """
+    from .quranpedia import usable_record
+    built = Built()
+    entry = registry.get(book.source_id)
+    source = {"work": entry["title"][:200], "edition": entry["edition"][:200], "publisher": entry["publisher"][:200],
+              "translator": None, "license": entry["license"], "checksum": entry["sha256"]}
+    segment_of = {(item.surah, ayah): item for item in segments for ayah in range(item.first, item.last + 1)}
+    grouped: dict[str, list[dict]] = {}
+    for record in records:
+        if not usable_record(record):
+            built.skip(f"{book.slug}_record_not_usable")
+            continue
+        grouped.setdefault(segment_of[(record["surah"], record["from_ayah"])].id, []).append(record)
+    for item in segments:
+        group = grouped.get(item.id)
+        if not group:
+            continue
+        units = []
+        for number, record in enumerate(group, 1):
+            first, last = record["from_ayah"], record["to_ayah"]
+            ref = f"quran:{record['surah']}:{first}" + (f"-{last}" if last != first else "")
+            units += [{"id": f"r{number}p{index}", "text": paragraph, "reference": ref, "section": record["record_id"],
+                       "keepWithNext": False, "sourceRefs": [ref], "parts": []}
+                      for index, paragraph in enumerate((p for p in record["text"].split("\n") if p.strip()), 1)]
+        first, last = min(r["from_ayah"] for r in group), max(r["to_ayah"] for r in group)
+        span = _span(first, last)
+        keys = [(item.surah, ayah) for ayah in range(first, last + 1)]
+        prophet = next((prophets[key] for key in keys if key in prophets), None)
+        built.documents.append(_document(
+            f"tafsir-{book.slug}-{item.surah:03d}-{item.first:03d}-{item.last:03d}",
+            f"{book.title_ar} {item.surah}:{span}", "tafsir", source, units, tier=1,
+            contextHeader=f"{book.title_ar} — {book.author_ar} ({book.era_ar}) — سورة {names[item.surah]} — "
+                          f"الآيات {span}",
+            prophetId=prophet["id"] if prophet else None, sourceIds=[book.source_id], parentChunk=f"{item.id}#1"))
     return built
 
 

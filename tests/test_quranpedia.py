@@ -1,4 +1,5 @@
-"""Quranpedia dumps (corpusprep/quranpedia.py) and the Quran text comparison (corpusprep/quran_compare.py).
+"""Quranpedia dumps (corpusprep/quranpedia.py), the Quran text comparison (corpusprep/quran_compare.py) and the
+layer 0 documents built from them (ingest.translation_documents, ingest.quranpedia_tafsir_documents).
 
 Arabic and English words here are placeholders, not Quran, tafsir or translation text. Combining marks are
 built with chr() so the source shows which code point each test uses.
@@ -8,8 +9,11 @@ import json
 
 import pytest
 
-from companion_api.corpusprep import build, quran_compare as qc, quranpedia as qp
+from companion_api.corpusprep import build, ingest, quran_compare as qc, quranpedia as qp
 from companion_api.corpusprep.registry import Registry
+from companion_api.corpusprep.segments import Segment
+from companion_api.rag.chunking import chunk_document
+from companion_api.rag.corpus import parse_document
 
 FATHA, DAMMA, KASRA, SUKUN, SHADDA = chr(0x064E), chr(0x064F), chr(0x0650), chr(0x0652), chr(0x0651)
 KFC_SUKUN, OPEN_TANWEEN, PAUSE = chr(0x06E1), chr(0x0656), chr(0x06DA)
@@ -248,3 +252,80 @@ def test_build_quranpedia_writes_canonical_translations_and_tafsir(tmp_path):
     [record] = [json.loads(line) for line in (canonical / "tafsir/quranpedia-mujahid.jsonl").read_text(
         encoding="utf-8").splitlines()]
     assert record["record_id"] == "mujahid:2:1-2/1" and record["text"] == "شرح"
+
+
+# --- documents ------------------------------------------------------------------------------------------
+
+def _registry():
+    source = {"title": "Work title", "edition": "e", "publisher": "p", "license": "test", "sha256": "0" * 64}
+    return Registry(None, "", [dict(source, source_id=sid) for sid in
+                               (SAHIH.source_id, MUKHTASAR.source_id, MUJAHID.source_id)])
+
+
+def _translation_record(surah, ayah, text, mismatch=False):
+    return {"surah": surah, "ayah": ayah, "text": text, "label_mismatch": mismatch}
+
+
+def test_translation_documents_mirror_the_quran_segments():
+    records = {(1, 1): _translation_record(1, 1, "First placeholder."),
+               (1, 2): _translation_record(1, 2, "Second placeholder."),
+               (1, 3): _translation_record(1, 3, "Words of another ayah.", mismatch=True)}
+    built = ingest.translation_documents([Segment(1, 1, 3)], records, SAHIH, {1: "Al-Faatiha"}, _registry(),
+                                         {(1, 2): {"id": "adam", "name": "آدم", "latin": "Adam"}})
+    [data] = built.documents
+    assert data["id"] == "quran-en-sahih-international-001-001-003" and data["language"] == "en"
+    assert data["contentType"] == "quran_translation" and data["tier"] == 1 and data["prophetId"] == "adam"
+    assert data["title"] == "The Quran 1:1–3 — English translation of the meanings (Saheeh International)"
+    assert data["contextHeader"].startswith("The story of the Prophet Adam — English translation of the meanings")
+    assert data["parentChunk"] == "quran-001-001-003#1" and data["sourceIds"] == [SAHIH.source_id]
+    assert [unit["reference"] for unit in data["units"]] == ["quran:1:1", "quran:1:2"]
+    assert data["source"]["translator"] == "Saheeh International"
+    assert built.skipped == {"sahih-international_labelled_for_another_ayah": 1}
+    document, issues = parse_document(data, "d.json")
+    assert document is not None, [str(issue) for issue in issues]
+    assert {chunk.content_type for chunk in chunk_document(document)} == {"quran_translation"}
+
+
+def test_the_mukhtasar_english_is_a_tafsir_translation_citing_every_ayah_of_a_shared_text():
+    records = {(1, ayah): _translation_record(1, ayah, "One explanation.") for ayah in (1, 2)}
+    [data] = ingest.translation_documents([Segment(1, 1, 2)], records, MUKHTASAR, {1: "Al-Faatiha"}, _registry(),
+                                          {}).documents
+    assert data["id"] == "tafsir-en-mukhtasar-001-001-002" and data["contentType"] == "tafsir_translation"
+    assert data["units"][0]["sourceRefs"] == ["quran:1:1", "quran:1:2"] and "not the words of the Quran" in \
+        data["contextHeader"]
+    document, issues = parse_document(data, "d.json")
+    assert document is not None, [str(issue) for issue in issues]
+
+
+def test_quranpedia_tafsir_documents_name_the_book_and_keep_passages_apart():
+    passages = [{"surah": 1, "first": 1, "last": 2, "text": "فقرة أولى\nفقرة ثانية", "footnotes": "", "quran_quotes": 0,
+                 "part": "1", "page": 1, "numbering": "global", "flags": []},
+                {"surah": 1, "first": 2, "last": 2, "text": "شرح آخر", "footnotes": "", "quran_quotes": 0,
+                 "part": "1", "page": 2, "numbering": "global", "flags": []},
+                {"surah": 1, "first": 3, "last": 3, "text": "مقدمة", "footnotes": "", "quran_quotes": 0,
+                 "part": "1", "page": 0, "numbering": "global", "flags": ["out_of_place"]}]
+    records, _ = qp.tafsir_records(passages, MUJAHID, "in_rule")
+    built = ingest.quranpedia_tafsir_documents([Segment(1, 1, 3)], records, MUJAHID, {1: "الفاتحة"}, _registry(), {})
+    [data] = built.documents
+    assert data["id"] == "tafsir-mujahid-001-001-003" and data["title"] == "تفسير مجاهد 1:1–2"
+    assert data["contextHeader"] == "تفسير مجاهد — مجاهد بن جبر (ت 104 هـ) — سورة الفاتحة — الآيات 1–2"
+    assert data["tier"] == 1 and data["parentChunk"] == "quran-001-001-003#1"
+    assert [(u["id"], u["section"], u["sourceRefs"]) for u in data["units"]] == [
+        ("r1p1", "mujahid:1:1-2/1", ["quran:1:1-2"]), ("r1p2", "mujahid:1:1-2/1", ["quran:1:1-2"]),
+        ("r2p1", "mujahid:1:2/1", ["quran:1:2"])]
+    assert built.skipped == {"mujahid_record_not_usable": 1}
+    document, issues = parse_document(data, "d.json")
+    assert document is not None, [str(issue) for issue in issues]
+    assert [chunk.unit_ids for chunk in chunk_document(document)] == [("r1p1", "r1p2"), ("r2p1",)]
+
+
+def test_quran_translation_units_need_a_reference():
+    data = {"schemaVersion": 2, "id": "quran-en-x-001-001-001", "kind": "passage", "title": "t", "language": "en",
+            "ageBands": ["7-9"], "contentType": "quran_translation", "madhhab": [], "curriculumPolicy": "c",
+            "synthetic": False, "source": {"work": "w", "edition": "e", "publisher": "p", "translator": "t",
+                                           "license": "l", "checksum": None},
+            "grading": None, "review": {"status": "draft", "reviewer": None, "approvedOn": None, "supersedes": None},
+            "units": [{"id": "a1", "text": "Placeholder words.", "reference": None, "section": None,
+                       "keepWithNext": False}]}
+    document, issues = parse_document(data, "d.json")
+    assert document is None and any("every verse needs its reference" in issue.message for issue in issues)
