@@ -49,6 +49,30 @@ READING = {
     "ahmedbaset-hadith-json": (None, "Nothing assumed.",
                                "No licence file in the repository; the data is described as scraped from sunnah.com, "
                                "whose terms were not retrieved.", "Legal question 4 (corpus-tasks.md, task 3)."),
+    # Reference package datasets (test/corpus-tasks, 2026-10-02). The organizers' permission to use the package's
+    # sources is reported, not yet in writing: it is not a clearance (doc/governance/reference-package.md).
+    "quranpedia-dumps": ("quranpedia-license",
+                         "Use inside apps, websites and research tools, with no attribution required; republishing "
+                         "the data, in full or in part, as a downloadable dataset requires crediting Quranpedia.net "
+                         "with a link and the dump's version. The organizers' permission to use the reference "
+                         "package's sources was reported on 2026-10-02 (written confirmation pending).",
+                         "The licence keeps translations and contemporary works the property of their authors and "
+                         "publishers: the three English translations (Hilali and Khan, Saheeh International, "
+                         "Ruwwad), al-Mukhtasar (Arabic and English), al-Sa'di and al-Sahih al-Masbur need their "
+                         "publishers' terms or the organizers' confirmation that the permission covers them. It asks "
+                         "every copy to be kept current, which a sha256-pinned release does not do by itself. Word "
+                         "morphology (GPL) and i'rab (MIT) fields, where a file carries them, are under their own "
+                         "licences.",
+                         "Does the organizers' permission cover the translations and contemporary works, and may a "
+                         "release pin one reviewed dump version? (reference package, open questions Q4 and Q5)"),
+    "jamharah": (None,
+                 "Nothing assumed beyond the organizers' reported permission. The site's footer says the right to "
+                 "benefit from the content belongs to every Muslim; no licence or API terms were found.",
+                 "Whether that statement and the permission cover keeping dictionary entries in an offline, "
+                 "reviewed corpus. Only the entries for the glossary's terms are kept, outside git; the glossary "
+                 "records entry ids, links and short English headings only.",
+                 "May the dictionary's entries and English headings be used in a release, and with what credit? "
+                 "(reference package, translation and terms row)"),
 }
 
 
@@ -65,6 +89,13 @@ def _terms(key: str | None, registry) -> str:
     return f"Quoted verbatim from {origin}:\n\n```text\n{text.strip()}\n```"
 
 
+def _rules(sources: list[dict]) -> list[tuple[str, int]]:
+    rules: dict[str, int] = {}
+    for source in sources:
+        rules[source.get("package_rule") or "none"] = rules.get(source.get("package_rule") or "none", 0) + 1
+    return list(rules.items())
+
+
 def main() -> int:
     registry = registry_module.load(REGISTRY)
     lines = ["# Rights clearance (draft)", "",
@@ -72,10 +103,13 @@ def main() -> int:
              "`corpus/sources/registry.yaml`; do not edit by hand. **Clearance status of every source: "
              "`pending_legal`.** The \"allowed\" and \"unclear\" columns are a draft reading to help the legal "
              "review, not legal advice. Registry `status` (`pending_legal` / `candidate`) says only whether "
-             "terms were found.", "", "## Summary", "",
-             "| source | registry status | licence | clearance |", "| --- | --- | --- | --- |"]
+             "terms were found. The package rule is the source's standing against the challenge's reference package "
+             "(`doc/governance/reference-package.md`); the organizers' permission it reflects is reported, not yet in "
+             "writing, and is not a clearance.", "", "## Summary", "",
+             "| source | registry status | package rule | licence | clearance |", "| --- | --- | --- | --- | --- |"]
     for source in registry.sources:
-        lines.append(f"| `{source['source_id']}` | {source['status']} | {source['license']} | pending_legal |")
+        lines.append(f"| `{source['source_id']}` | {source['status']} | {source.get('package_rule') or '—'} | "
+                     f"{source['license']} | pending_legal |")
     datasets: dict[str, list[dict]] = {}
     for source in registry.sources:
         datasets.setdefault(source["dataset"], []).append(source)
@@ -84,6 +118,7 @@ def main() -> int:
         lines += ["", f"## {dataset}", "",
                   "Sources: " + ", ".join(f"`{s['source_id']}`" for s in sources) + ".", "",
                   f"- **Licence:** {sources[0]['license']} ({sources[0]['license_url'] or 'no licence URL'})",
+                  "- **Package rule:** " + ", ".join(f"{rule} ({count})" for rule, count in _rules(sources)),
                   f"- **Allowed (draft reading):** {allowed}",
                   f"- **Unclear:** {unclear}",
                   f"- **Open legal question:** {question}",
