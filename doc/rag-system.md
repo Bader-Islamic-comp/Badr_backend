@@ -831,7 +831,7 @@ whose ranges hold its ayahs.
 Neither rule decides which scene was asked; each refuses only on positive evidence of another scene.
 Measured: on the 13 released answers both wrong-scene answers fail (ibrahim-04-msa on rule 1, yusuf-04-gulf on
 rule 2) and the 10 right ones pass; on the gold set, every (question, expected passage) pair of the six Arabic
-variants passes (560 pairs before this branch's new intents, 0 failures; 100 hadith pairs not applicable).
+variants passes (603 pairs with this branch's new intents, 0 failures; 100 hadith pairs not applicable).
 Quranpedia topics were read and are not used: they are thematic rather than narrative (12:60-61 carry none), and
 topic 3719 joins 12:16 with 12:63, the very scenes rule 2 must separate. No index built from them exists in the
 repository or in a release.
