@@ -38,6 +38,19 @@ def main(argv=None) -> int:
     print(f"fetching {len(registry.sources)} sources", file=sys.stderr)
     changed, recorded = [], False
     for source in registry.sources:
+        acquisition = source.get("acquisition", "download")
+        if acquisition != "download":
+            # Crawled or manually downloaded: never fetched from `url` here, only verified when present.
+            target = fetch.raw_path(args.raw_dir, source)
+            if not target.is_file() or source["sha256"] is None:
+                print(f"  skipped  {source['source_id']}  ({acquisition}: not present or not recorded yet)",
+                      file=sys.stderr)
+                continue
+            if fetch.digest(target) != source["sha256"]:
+                changed.append(f"{source['source_id']}: local {acquisition} file does not match the registry")
+                continue
+            print(f"  cached   {source['source_id']}  {source['sha256']}", file=sys.stderr)
+            continue
         try:
             _, action = fetch.ensure(source, args.raw_dir, record=args.record, refresh=args.refresh,
                                      timeout=args.timeout)

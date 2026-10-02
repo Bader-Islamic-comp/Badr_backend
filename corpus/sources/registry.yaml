@@ -6,6 +6,8 @@
 # Nothing here is cleared: every licence decision belongs to governance, not to this file.
 # sha256 and retrieved_at are written by `scripts/fetch_sources.py --record` on first
 # download and verified on every later run; a changed file fails the run.
+# package_rule / package_basis: how the source stands against the challenge's reference package
+# (corpus/sources/reference_package.yaml); acquisition: download (default), crawl or manual.
 schema_version: 1
 sources:
 - source_id: tanzil-quran-uthmani
@@ -24,6 +26,8 @@ sources:
   numbering_system: surah:ayah, Hafs/Kufan count (6236)
   status: pending_legal
   notes: Canonical display text. Open legal question - is a search-only normalized copy (text_normalized) a prohibited change or a permitted derived file? Notice is kept in corpus/canonical/quran/NOTICE.txt.
+  package_rule: not_listed
+  package_basis: 'Reference package (20/3/1448), Quran: names the King Fahd Complex text or quranpedia.net; Tanzil is kept and cross-checked against Quranpedia''s Hafs text'
 - source_id: tanzil-quran-simple
   format: txt
   dataset: tanzil-quran
@@ -40,6 +44,8 @@ sources:
   numbering_system: surah:ayah, Hafs/Kufan count (6236)
   status: pending_legal
   notes: Simple (imla'i) script, used for search only, never displayed in place of the Uthmani text.
+  package_rule: not_listed
+  package_basis: 'Reference package (20/3/1448), Quran: search spelling only, cross-checked against Quranpedia'
 - source_id: tanzil-quran-metadata
   format: xml
   dataset: tanzil-quran
@@ -56,6 +62,8 @@ sources:
   numbering_system: sura index 1-114 with ayas count
   status: candidate
   notes: Used only as the standard per-surah ayah count for verification; no text from it is stored. Licence for the metadata file is not stated.
+  package_rule: not_applicable
+  package_basis: Metadata
 - source_id: qurancom-chapters
   format: json
   dataset: qurancom-api
@@ -72,6 +80,8 @@ sources:
   numbering_system: chapter id 1-114 with verses_count
   status: candidate
   notes: Independent second check of per-surah ayah counts only; no text used. API responses can change, which fails the sha256 check by design.
+  package_rule: not_applicable
+  package_basis: Metadata
 - source_id: alquran-cloud-muyassar
   format: json
   dataset: alquran-cloud
@@ -88,6 +98,8 @@ sources:
   numbering_system: surah:ayah (numberInSurah), 6236 entries
   status: candidate
   notes: Licence unclear, so it must not enter any release until the original publisher's redistribution terms are confirmed. Fetched through a mirror, not from the publisher.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: a contemporary tafsir (King Fahd Complex, 1419 AH), neither of the first three centuries nor Dorar'
 - source_id: fawazahmed0-ara-bukhari
   format: json
   dataset: fawazahmed0-hadith-api
@@ -104,6 +116,8 @@ sources:
   numbering_system: sunnah.com-style hadithnumber (decimal sub-numbers such as 402.2)
   status: pending_legal
   notes: Upstream origin of the Arabic text is not documented by the repository; open question for rights review.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), hadith: the two Sahihs; text to verify against Dorar or a Shamela edition'
 - source_id: fawazahmed0-ara-muslim
   format: json
   dataset: fawazahmed0-hadith-api
@@ -120,6 +134,8 @@ sources:
   numbering_system: sunnah.com-style hadithnumber
   status: pending_legal
   notes: Some entries have empty text; they are reported, not filled from another source.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), hadith: the two Sahihs; text to verify against Dorar or a Shamela edition'
 - source_id: fawazahmed0-ara-nawawi
   format: json
   dataset: fawazahmed0-hadith-api
@@ -136,6 +152,8 @@ sources:
   numbering_system: hadith 1-42 (sunnah.com nawawi40 order)
   status: pending_legal
   notes: No grading field in the source; the takhrij sentence sits inside the text.
+  package_rule: conditional
+  package_basis: 'Reference package (20/3/1448), hadith: only with a source and an approved grading in the data; none recorded'
 - source_id: mhashim6-bukhari
   format: csv
   dataset: mhashim6-open-hadith-data
@@ -152,6 +170,8 @@ sources:
   numbering_system: islamware numbering (7008 entries), differs from sunnah.com
   status: pending_legal
   notes: Independent upstream (islamware), used to cross-check text only. Share-alike obligations are an open legal question.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), hadith: the two Sahihs (second source for the cross-check)'
 - source_id: mhashim6-muslim
   format: csv
   dataset: mhashim6-open-hadith-data
@@ -168,6 +188,8 @@ sources:
   numbering_system: islamware numbering, differs from sunnah.com
   status: pending_legal
   notes: Independent upstream (islamware), used to cross-check text only.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), hadith: the two Sahihs (second source for the cross-check)'
 - source_id: ahmedbaset-nawawi40
   format: json
   dataset: ahmedbaset-hadith-json
@@ -184,6 +206,8 @@ sources:
   numbering_system: idInBook 1-42 (sunnah.com order)
   status: candidate
   notes: Licence unclear, so used only to cross-check nawawi40; its text is not stored as primary. Likely shares an upstream with fawazahmed0, so it is not fully independent.
+  package_rule: conditional
+  package_basis: 'Reference package (20/3/1448), hadith: only with a source and an approved grading in the data; none recorded'
 - source_id: ahmedbaset-riyadussalihin
   format: json
   dataset: ahmedbaset-hadith-json
@@ -200,6 +224,8 @@ sources:
   numbering_system: idInBook (sunnah.com Riyad as-Salihin order)
   status: candidate
   notes: Only source found for this collection; licence unclear and no grading field, so every record is ineligible for release.
+  package_rule: conditional
+  package_basis: 'Reference package (20/3/1448), hadith: only with a source and an approved grading in the data; none recorded'
 - source_id: ahmedbaset-adab-mufrad
   format: json
   dataset: ahmedbaset-hadith-json
@@ -216,6 +242,8 @@ sources:
   numbering_system: idInBook (sunnah.com Al-Adab Al-Mufrad order)
   status: candidate
   notes: Only source found for this collection; licence unclear and no grading field, so every record is ineligible for release.
+  package_rule: conditional
+  package_basis: 'Reference package (20/3/1448), hadith: only with a source and an approved grading in the data; none recorded'
 - source_id: fawazahmed0-license
   format: txt
   dataset: fawazahmed0-hadith-api
@@ -232,6 +260,8 @@ sources:
   numbering_system: not applicable
   status: pending_legal
   notes: Licence text only; no corpus content.
+  package_rule: not_applicable
+  package_basis: Licence text
 - source_id: mhashim6-license
   format: txt
   dataset: mhashim6-open-hadith-data
@@ -248,6 +278,8 @@ sources:
   numbering_system: not applicable
   status: pending_legal
   notes: Licence text only; no corpus content.
+  package_rule: not_applicable
+  package_basis: Licence text
 - source_id: ibn-kathir-ar-001
   format: json
   dataset: spa5k-tafsir-api
@@ -264,6 +296,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-002
   format: json
   dataset: spa5k-tafsir-api
@@ -280,6 +314,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-003
   format: json
   dataset: spa5k-tafsir-api
@@ -296,6 +332,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-004
   format: json
   dataset: spa5k-tafsir-api
@@ -312,6 +350,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-005
   format: json
   dataset: spa5k-tafsir-api
@@ -328,6 +368,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-006
   format: json
   dataset: spa5k-tafsir-api
@@ -344,6 +386,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-007
   format: json
   dataset: spa5k-tafsir-api
@@ -360,6 +404,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-008
   format: json
   dataset: spa5k-tafsir-api
@@ -376,6 +422,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-009
   format: json
   dataset: spa5k-tafsir-api
@@ -392,6 +440,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-010
   format: json
   dataset: spa5k-tafsir-api
@@ -408,6 +458,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-011
   format: json
   dataset: spa5k-tafsir-api
@@ -424,6 +476,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-012
   format: json
   dataset: spa5k-tafsir-api
@@ -440,6 +494,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-013
   format: json
   dataset: spa5k-tafsir-api
@@ -456,6 +512,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-014
   format: json
   dataset: spa5k-tafsir-api
@@ -472,6 +530,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-015
   format: json
   dataset: spa5k-tafsir-api
@@ -488,6 +548,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-016
   format: json
   dataset: spa5k-tafsir-api
@@ -504,6 +566,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-017
   format: json
   dataset: spa5k-tafsir-api
@@ -520,6 +584,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-018
   format: json
   dataset: spa5k-tafsir-api
@@ -536,6 +602,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-019
   format: json
   dataset: spa5k-tafsir-api
@@ -552,6 +620,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-020
   format: json
   dataset: spa5k-tafsir-api
@@ -568,6 +638,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-021
   format: json
   dataset: spa5k-tafsir-api
@@ -584,6 +656,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-022
   format: json
   dataset: spa5k-tafsir-api
@@ -600,6 +674,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-023
   format: json
   dataset: spa5k-tafsir-api
@@ -616,6 +692,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-024
   format: json
   dataset: spa5k-tafsir-api
@@ -632,6 +710,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-025
   format: json
   dataset: spa5k-tafsir-api
@@ -648,6 +728,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-026
   format: json
   dataset: spa5k-tafsir-api
@@ -664,6 +746,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-027
   format: json
   dataset: spa5k-tafsir-api
@@ -680,6 +764,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-028
   format: json
   dataset: spa5k-tafsir-api
@@ -696,6 +782,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-029
   format: json
   dataset: spa5k-tafsir-api
@@ -712,6 +800,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-030
   format: json
   dataset: spa5k-tafsir-api
@@ -728,6 +818,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-031
   format: json
   dataset: spa5k-tafsir-api
@@ -744,6 +836,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-032
   format: json
   dataset: spa5k-tafsir-api
@@ -760,6 +854,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-033
   format: json
   dataset: spa5k-tafsir-api
@@ -776,6 +872,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-034
   format: json
   dataset: spa5k-tafsir-api
@@ -792,6 +890,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-035
   format: json
   dataset: spa5k-tafsir-api
@@ -808,6 +908,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-036
   format: json
   dataset: spa5k-tafsir-api
@@ -824,6 +926,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-037
   format: json
   dataset: spa5k-tafsir-api
@@ -840,6 +944,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-038
   format: json
   dataset: spa5k-tafsir-api
@@ -856,6 +962,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-039
   format: json
   dataset: spa5k-tafsir-api
@@ -872,6 +980,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-040
   format: json
   dataset: spa5k-tafsir-api
@@ -888,6 +998,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-041
   format: json
   dataset: spa5k-tafsir-api
@@ -904,6 +1016,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-042
   format: json
   dataset: spa5k-tafsir-api
@@ -920,6 +1034,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-043
   format: json
   dataset: spa5k-tafsir-api
@@ -936,6 +1052,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-044
   format: json
   dataset: spa5k-tafsir-api
@@ -952,6 +1070,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-045
   format: json
   dataset: spa5k-tafsir-api
@@ -968,6 +1088,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-046
   format: json
   dataset: spa5k-tafsir-api
@@ -984,6 +1106,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-047
   format: json
   dataset: spa5k-tafsir-api
@@ -1000,6 +1124,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-048
   format: json
   dataset: spa5k-tafsir-api
@@ -1016,6 +1142,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-049
   format: json
   dataset: spa5k-tafsir-api
@@ -1032,6 +1160,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-050
   format: json
   dataset: spa5k-tafsir-api
@@ -1048,6 +1178,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-051
   format: json
   dataset: spa5k-tafsir-api
@@ -1064,6 +1196,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-052
   format: json
   dataset: spa5k-tafsir-api
@@ -1080,6 +1214,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-053
   format: json
   dataset: spa5k-tafsir-api
@@ -1096,6 +1232,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-054
   format: json
   dataset: spa5k-tafsir-api
@@ -1112,6 +1250,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-055
   format: json
   dataset: spa5k-tafsir-api
@@ -1128,6 +1268,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-056
   format: json
   dataset: spa5k-tafsir-api
@@ -1144,6 +1286,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-057
   format: json
   dataset: spa5k-tafsir-api
@@ -1160,6 +1304,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-058
   format: json
   dataset: spa5k-tafsir-api
@@ -1176,6 +1322,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-059
   format: json
   dataset: spa5k-tafsir-api
@@ -1192,6 +1340,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-060
   format: json
   dataset: spa5k-tafsir-api
@@ -1208,6 +1358,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-061
   format: json
   dataset: spa5k-tafsir-api
@@ -1224,6 +1376,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-062
   format: json
   dataset: spa5k-tafsir-api
@@ -1240,6 +1394,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-063
   format: json
   dataset: spa5k-tafsir-api
@@ -1256,6 +1412,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-064
   format: json
   dataset: spa5k-tafsir-api
@@ -1272,6 +1430,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-065
   format: json
   dataset: spa5k-tafsir-api
@@ -1288,6 +1448,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-066
   format: json
   dataset: spa5k-tafsir-api
@@ -1304,6 +1466,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-067
   format: json
   dataset: spa5k-tafsir-api
@@ -1320,6 +1484,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-068
   format: json
   dataset: spa5k-tafsir-api
@@ -1336,6 +1502,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-069
   format: json
   dataset: spa5k-tafsir-api
@@ -1352,6 +1520,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-070
   format: json
   dataset: spa5k-tafsir-api
@@ -1368,6 +1538,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-071
   format: json
   dataset: spa5k-tafsir-api
@@ -1384,6 +1556,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-072
   format: json
   dataset: spa5k-tafsir-api
@@ -1400,6 +1574,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-073
   format: json
   dataset: spa5k-tafsir-api
@@ -1416,6 +1592,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-074
   format: json
   dataset: spa5k-tafsir-api
@@ -1432,6 +1610,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-075
   format: json
   dataset: spa5k-tafsir-api
@@ -1448,6 +1628,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-076
   format: json
   dataset: spa5k-tafsir-api
@@ -1464,6 +1646,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-077
   format: json
   dataset: spa5k-tafsir-api
@@ -1480,6 +1664,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-078
   format: json
   dataset: spa5k-tafsir-api
@@ -1496,6 +1682,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-079
   format: json
   dataset: spa5k-tafsir-api
@@ -1512,6 +1700,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-080
   format: json
   dataset: spa5k-tafsir-api
@@ -1528,6 +1718,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-081
   format: json
   dataset: spa5k-tafsir-api
@@ -1544,6 +1736,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-082
   format: json
   dataset: spa5k-tafsir-api
@@ -1560,6 +1754,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-083
   format: json
   dataset: spa5k-tafsir-api
@@ -1576,6 +1772,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-084
   format: json
   dataset: spa5k-tafsir-api
@@ -1592,6 +1790,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-085
   format: json
   dataset: spa5k-tafsir-api
@@ -1608,6 +1808,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-086
   format: json
   dataset: spa5k-tafsir-api
@@ -1624,6 +1826,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-087
   format: json
   dataset: spa5k-tafsir-api
@@ -1640,6 +1844,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-088
   format: json
   dataset: spa5k-tafsir-api
@@ -1656,6 +1862,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-089
   format: json
   dataset: spa5k-tafsir-api
@@ -1672,6 +1880,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-090
   format: json
   dataset: spa5k-tafsir-api
@@ -1688,6 +1898,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-091
   format: json
   dataset: spa5k-tafsir-api
@@ -1704,6 +1916,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-092
   format: json
   dataset: spa5k-tafsir-api
@@ -1720,6 +1934,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-093
   format: json
   dataset: spa5k-tafsir-api
@@ -1736,6 +1952,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-094
   format: json
   dataset: spa5k-tafsir-api
@@ -1752,6 +1970,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-095
   format: json
   dataset: spa5k-tafsir-api
@@ -1768,6 +1988,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-096
   format: json
   dataset: spa5k-tafsir-api
@@ -1784,6 +2006,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-097
   format: json
   dataset: spa5k-tafsir-api
@@ -1800,6 +2024,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-098
   format: json
   dataset: spa5k-tafsir-api
@@ -1816,6 +2042,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-099
   format: json
   dataset: spa5k-tafsir-api
@@ -1832,6 +2060,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-100
   format: json
   dataset: spa5k-tafsir-api
@@ -1848,6 +2078,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-101
   format: json
   dataset: spa5k-tafsir-api
@@ -1864,6 +2096,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-102
   format: json
   dataset: spa5k-tafsir-api
@@ -1880,6 +2114,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-103
   format: json
   dataset: spa5k-tafsir-api
@@ -1896,6 +2132,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-104
   format: json
   dataset: spa5k-tafsir-api
@@ -1912,6 +2150,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-105
   format: json
   dataset: spa5k-tafsir-api
@@ -1928,6 +2168,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-106
   format: json
   dataset: spa5k-tafsir-api
@@ -1944,6 +2186,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-107
   format: json
   dataset: spa5k-tafsir-api
@@ -1960,6 +2204,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-108
   format: json
   dataset: spa5k-tafsir-api
@@ -1976,6 +2222,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-109
   format: json
   dataset: spa5k-tafsir-api
@@ -1992,6 +2240,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-110
   format: json
   dataset: spa5k-tafsir-api
@@ -2008,6 +2258,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-111
   format: json
   dataset: spa5k-tafsir-api
@@ -2024,6 +2276,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-112
   format: json
   dataset: spa5k-tafsir-api
@@ -2040,6 +2294,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-113
   format: json
   dataset: spa5k-tafsir-api
@@ -2056,6 +2312,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: ibn-kathir-ar-114
   format: json
   dataset: spa5k-tafsir-api
@@ -2072,6 +2330,8 @@ sources:
   numbering_system: surah:ayah (QUL ayah keys)
   status: candidate
   notes: Licence for the digitised text is unclear, so it must not enter any release until the publisher's redistribution terms are confirmed. Used for the knowledge graph and reviewers only.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: Ibn Kathir died in 774 AH; neither of the first three centuries nor Dorar'
 - source_id: spa5k-tafsir-license
   format: txt
   dataset: spa5k-tafsir-api
@@ -2088,3 +2348,518 @@ sources:
   numbering_system: not applicable
   status: pending_legal
   notes: Licence text only; no corpus content.
+  package_rule: not_applicable
+  package_basis: Licence text
+- source_id: quranpedia-license
+  format: txt
+  dataset: quranpedia-dumps
+  role: licence_text
+  title: Quranpedia dumps LICENSE.md
+  edition: dump version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/LICENSE.md
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:54+00:00'
+  sha256: 784d33f90a3159d685d9a66e6460389e7d4595f0b7e2f2be98bf0eca041fd75b
+  numbering_system: not applicable
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: not_applicable
+  package_basis: Licence text
+  acquisition: download
+- source_id: quranpedia-manifest
+  format: json
+  dataset: quranpedia-dumps
+  role: metadata
+  title: Quranpedia dumps manifest
+  edition: dump version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/manifest.json
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:54+00:00'
+  sha256: 28caa52af911825cbf287bf7eca50f2ad68625e7ac04ca13b6a4f39304e5cb2f
+  numbering_system: not applicable
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: not_applicable
+  package_basis: Per-file sha256 and versions of the dumps
+  acquisition: download
+- source_id: quranpedia-books-index
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: metadata
+  title: Quranpedia books index (authors, editions, publishers)
+  edition: Quranpedia dump books.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/books.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 79c533069c3c8e68ee010f6d27b43bd3c95a044539ec38803aa883b33be359cf
+  numbering_system: not applicable
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: not_applicable
+  package_basis: Edition metadata for the tafsir and translation books
+  acquisition: download
+- source_id: quranpedia-mushafs-index
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: metadata
+  title: Quranpedia mushafs index
+  edition: Quranpedia dump mushafs-index.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/mushafs-index.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: bb682f0aa3885012aae5f50955a4ab6c4f6ea615ab75542c99af301053bb4120
+  numbering_system: not applicable
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: not_applicable
+  package_basis: Which mushaf each file holds
+  acquisition: download
+- source_id: quranpedia-mushaf-hafs
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: quran_text
+  title: Mushaf Hafs (Quranpedia)
+  edition: Quranpedia dump mushafs-1.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/mushafs-1.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:58:33+00:00'
+  sha256: b857c58206d219d1af333fc3eb8359c30e8b07c7386f88692efcb0744dd98fe8
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest's 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.
+  package_rule: listed
+  package_basis: 'Reference package (20/3/1448), Quran: the Quranic text in its rasm as on quranpedia.net'
+  acquisition: download
+- source_id: quranpedia-mushaf-hafs-text
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: quran_text
+  title: Mushaf Hafs, plain-text edition (Quranpedia)
+  edition: Quranpedia dump mushafs-2.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/mushafs-2.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:58:33+00:00'
+  sha256: af546911a592c7b8a5a35b668c0f885d7b37b52536c5032bd6fb2b42c5819f33
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest's 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.
+  package_rule: listed
+  package_basis: 'Reference package (20/3/1448), Quran: the Quranic text as on quranpedia.net'
+  acquisition: download
+- source_id: quranpedia-surahs
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: metadata
+  title: Surah information (114 surahs)
+  edition: Quranpedia dump surahs.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/surahs.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 9aab54c591e3432672f04ed7a66b21d23d62cc2f396022f9b1e3431ba4ad1b7a
+  numbering_system: surah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: listed
+  package_basis: Reference package (20/3/1448), Quran (quranpedia.net)
+  acquisition: download
+- source_id: quranpedia-topics-index
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: quran_topics
+  title: Quranic topics index
+  edition: Quranpedia dump topics-index.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/topics-index.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 567f709a2315026e963238b203688a7ec5e17612f7c727884e6a55b013ee82e0
+  numbering_system: topic id
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: listed
+  package_basis: Reference package (20/3/1448), Quran (quranpedia.net)
+  acquisition: download
+- source_id: quranpedia-topics
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: quran_topics
+  title: Topics of every ayah
+  edition: Quranpedia dump topics.json.gz, version 2026-10-02
+  publisher: Quranpedia.net
+  url: https://api.quranpedia.net/dumps/topics.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 3d5dd54a96b8778452f2fa0f0e6b96a64b908c9f3f29990413a0223f13886f18
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: listed
+  package_basis: Reference package (20/3/1448), Quran (quranpedia.net)
+  acquisition: download
+- source_id: quranpedia-en-hilali-khan
+  format: json
+  dataset: quranpedia-dumps
+  role: quran_translation
+  title: The Noble Quran, English translation of the meanings (Hilali and Khan)
+  edition: Quranpedia translation book 1948 (dump version 2026-10-02)
+  publisher: King Fahd Complex for the Printing of the Holy Quran, via Quranpedia.net
+  url: https://api.quranpedia.net/translation-books/1948.json
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:57+00:00'
+  sha256: 514db28e78166a8218a825526ac03ff7a80ddb1c13ea43ce1070b145fba688b4
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: listed
+  package_basis: 'Reference package (20/3/1448), Quran: translations of the King Fahd Complex'
+  acquisition: download
+- source_id: quranpedia-en-sahih-international
+  format: json
+  dataset: quranpedia-dumps
+  role: quran_translation
+  title: Saheeh International, English translation of the meanings
+  edition: Quranpedia translation book 1947 (dump version 2026-10-02)
+  publisher: Al-Muntada al-Islami (Saheeh International), via Quranpedia.net
+  url: https://api.quranpedia.net/translation-books/1947.json
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:57+00:00'
+  sha256: 8c08a8332fae34788f556e5d13a78fe45f68f607cf7a2dabd6596a7fad573978
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: listed
+  package_basis: 'Reference package (20/3/1448), Quran: translations on quranpedia.net'
+  acquisition: download
+- source_id: quranpedia-en-ruwwad
+  format: json
+  dataset: quranpedia-dumps
+  role: quran_translation
+  title: English translation of the meanings, Ruwwad Translation Center
+  edition: Quranpedia translation book 27811 (dump version 2026-10-02)
+  publisher: Ruwwad Translation Center (IslamHouse.com), via Quranpedia.net
+  url: https://api.quranpedia.net/translation-books/27811.json
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:58+00:00'
+  sha256: 5bd75450f7abeb04bab1532fd0563cf8620d46abf28bd459775dcdad47899477
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: listed
+  package_basis: 'Reference package (20/3/1448), Quran: translations on quranpedia.net'
+  acquisition: download
+- source_id: quranpedia-en-mukhtasar
+  format: json
+  dataset: quranpedia-dumps
+  role: tafsir_translation
+  title: English translation of al-Mukhtasar fi Tafsir al-Quran al-Karim
+  edition: Quranpedia translation book 27824 (dump version 2026-10-02)
+  publisher: Tafsir Center for Quranic Studies, via Quranpedia.net
+  url: https://api.quranpedia.net/translation-books/27824.json
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:59+00:00'
+  sha256: 4790ae49369d80d40c63ed8f197c0d6db909bcee23d63288fb12159cab4eccdc
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: borderline
+  package_basis: 'Reference package (20/3/1448): listed on quranpedia.net as a translation, but its content is a contemporary tafsir'
+  acquisition: download
+- source_id: quranpedia-tafsir-mujahid
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Tafsir Mujahid
+  edition: Quranpedia dump tafsir-book-269.json.gz, version 2026-10-02
+  publisher: Mujahid ibn Jabr (d. 104 AH); ed. Muhammad Abd al-Salam Abu al-Nil; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-269.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 4c7f850f74be464b922e31695b73869f45000d2b79a619746cb75919c9c27946
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries'
+  acquisition: download
+- source_id: quranpedia-tafsir-sufyan-thawri
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Tafsir Sufyan al-Thawri
+  edition: Quranpedia dump tafsir-book-27758.json.gz, version 2026-10-02
+  publisher: Sufyan al-Thawri (d. 161 AH); via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-27758.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 60cfe99ca65e57230cb32f05684021c1e2d439ca1cdf33408fe5b648d9d2233c
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries'
+  acquisition: download
+- source_id: quranpedia-tafsir-yahya-ibn-sallam
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Tafsir Yahya ibn Sallam
+  edition: Quranpedia dump tafsir-book-27766.json.gz, version 2026-10-02
+  publisher: Yahya ibn Sallam (d. 200 AH); via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-27766.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: c068c1ffbcb519bc5c8d85325592aeaee65c6a21937c94584d43d8a170546bfb
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries'
+  acquisition: download
+- source_id: quranpedia-tafsir-malik
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Tafsir al-Imam Malik (compiled)
+  edition: Quranpedia dump tafsir-book-27765.json.gz, version 2026-10-02
+  publisher: Malik ibn Anas (d. 179 AH); a later compilation of his statements; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-27765.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 67aff960464d88e78ab259d15f23a157d4ed9f8b4870052412d7295ca366b07c
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries; compiled from his works'
+  acquisition: download
+- source_id: quranpedia-tafsir-shafii
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Tafsir al-Shafi'i (compiled)
+  edition: Quranpedia dump tafsir-book-27767.json.gz, version 2026-10-02
+  publisher: al-Shafi'i (d. 204 AH); a later compilation of his statements; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-27767.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 560b954a092761c6eafd34ae735854a0fbc32e7df7aba4d1cfb4cc599eeebef3
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries; compiled from his works'
+  acquisition: download
+- source_id: quranpedia-tafsir-farra-maani
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Ma'ani al-Quran
+  edition: Quranpedia dump tafsir-book-351.json.gz, version 2026-10-02
+  publisher: al-Farra (d. 207 AH); ed. Ahmad Yusuf Najati; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-351.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 428fe2de13b3a0d2b89f0b197c9df3b9d22ab4fc3c5e667e96c879edaec7849d
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries (language)'
+  acquisition: download
+- source_id: quranpedia-tafsir-abu-ubayda-majaz
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Majaz al-Quran
+  edition: Quranpedia dump tafsir-book-348.json.gz, version 2026-10-02
+  publisher: Abu Ubayda Ma'mar ibn al-Muthanna (d. 209 AH); ed. Fuat Sezgin; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-348.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 396205dc6742bfa7a760f1d0ac9566dc34212bbf5c321834a2dfc2d7d36ccab4
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries (language)'
+  acquisition: download
+- source_id: quranpedia-tafsir-ibn-qutayba-gharib
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Gharib al-Quran
+  edition: Quranpedia dump tafsir-book-341.json.gz, version 2026-10-02
+  publisher: Ibn Qutayba (d. 276 AH); via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-341.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 0f566aa46be740ddda299c6d3d978199af54f71ce4a1c17c6ee080fd2e20664a
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: in_rule
+  package_basis: 'Reference package (20/3/1448), tafsir: sources of the first three Hijri centuries (word meanings)'
+  acquisition: download
+- source_id: quranpedia-tafsir-tabari
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Jami' al-Bayan (Tafsir al-Tabari)
+  edition: Quranpedia dump tafsir-book-4.json.gz, version 2026-10-02
+  publisher: al-Tabari (d. 310 AH); ed. Ahmad Shakir, Mu'assasat al-Risala; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-4.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: ea7132febfe16c40247388ca37716aee05e1d320f6c470f70f784c2f2051b966
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: borderline
+  package_basis: 'Reference package (20/3/1448), tafsir rule: the author died in 310 AH, ten years into the fourth century; the organizers decide'
+  acquisition: download
+- source_id: quranpedia-tafsir-nasai
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Tafsir al-Nasa'i
+  edition: Quranpedia dump tafsir-book-27759.json.gz, version 2026-10-02
+  publisher: al-Nasa'i (d. 303 AH); via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-27759.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: b57c49bcc5e114f8ac646c2ebb057b0b49221e22ffbbf96935c0fd879468a7fa
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: borderline
+  package_basis: 'Reference package (20/3/1448), tafsir rule: the author died in 303 AH; the organizers decide'
+  acquisition: download
+- source_id: quranpedia-tafsir-sahih-masbur
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: al-Sahih al-Masbur min al-Tafsir bil-Ma'thur
+  edition: Quranpedia dump tafsir-book-305.json.gz, version 2026-10-02
+  publisher: Hikmat Bashir Yasin (compiler), Dar al-Ma'athir, 1420 AH; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-305.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: f06230977593e563927d00b6487b522d872de02bbe2456833eb01320d19c9a9a
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: borderline
+  package_basis: 'Reference package (20/3/1448), tafsir rule: authenticated reports of the first generations, compiled and graded in 1420 AH; the organizers decide'
+  acquisition: download
+- source_id: quranpedia-tafsir-mukhtasar
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: al-Mukhtasar fi Tafsir al-Quran al-Karim
+  edition: Quranpedia dump tafsir-book-2003.json.gz, version 2026-10-02
+  publisher: Tafsir Center for Quranic Studies (contemporary); via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-2003.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 18fee5e926e9e81c071d2485535793bca4e62dfa532414b6310dc1d9ec63a5c1
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: a contemporary tafsir, neither of the first three centuries nor Dorar'
+  acquisition: download
+- source_id: quranpedia-tafsir-saadi
+  format: json.gz
+  dataset: quranpedia-dumps
+  role: tafsir
+  title: Taysir al-Karim al-Rahman (Tafsir al-Sa'di)
+  edition: Quranpedia dump tafsir-book-3.json.gz, version 2026-10-02
+  publisher: Abd al-Rahman al-Sa'di (d. 1376 AH); ed. al-Luwayhiq; via Quranpedia.net
+  url: https://api.quranpedia.net/dumps/tafsir-book-3.json.gz
+  license: Quranpedia dumps licence (LICENSE.md)
+  license_url: https://api.quranpedia.net/dumps/LICENSE.md
+  terms_summary: 'Quranpedia dumps licence (manifest version 2026-10-02, LICENSE.md): use inside apps needs no attribution; republishing the data as a downloadable dataset requires crediting Quranpedia.net with a link and the dump version. Content is continuously corrected upstream (re-sync via /api/v1/changes). The challenge organizers granted participants permission to use the reference package''s sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance decision).'
+  retrieved_at: '2026-10-02T07:57:52+00:00'
+  sha256: 2d76f729e3b0671aa9c11c25fb3880942941c4af70ab331dac16766591428c34
+  numbering_system: surah:ayah
+  status: candidate
+  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status.
+  package_rule: outside_rule
+  package_basis: 'Reference package (20/3/1448), tafsir rule: a fourteenth-century tafsir, neither of the first three centuries nor Dorar'
+  acquisition: download
+- source_id: jamharah-dictionary-entries
+  format: json
+  dataset: jamharah
+  role: glossary
+  title: Jamharah dictionary entries for the glossary's terms (الجمهرة - مفردات المحتوى الإسلامي)
+  edition: Entries fetched by scripts/crawl_jamharah.py (one snapshot file; the digest is of the snapshot)
+  publisher: Osool Center (مركز أصول), islamic-content.com
+  url: https://islamic-content.com/dictionary
+  license: 'Not stated (the site: free benefit for every Muslim)'
+  license_url: null
+  terms_summary: No licence or API found. The challenge organizers granted participants permission to use the reference package's sources (reported 2026-10-02; written confirmation pending).
+  retrieved_at: null
+  sha256: null
+  numbering_system: term
+  status: candidate
+  notes: Candidate data from the challenge's reference package (translation and terms row). Crawled politely (robots.txt allows the dictionary; at least 5 s between requests). Unreviewed; never in a release until governance changes its status.
+  package_rule: listed
+  package_basis: 'Reference package (20/3/1448), translation and terms: islamic-content.com/dictionary'
+  acquisition: crawl

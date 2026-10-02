@@ -1,0 +1,117 @@
+# The challenge's reference package and how each listed source stands in this repository.
+#
+# Package: «المرجعية والحزمة العلمية والبيانات» (المنتج العلمي لمتطلبات ما قبل التحدي - تحدي الذكاء الاصطناعي في
+# خدمة المحتوى الإسلامي), version 20/3/1448. The organizers granted participants permission to use the listed
+# sources (reported by the project owner on 2026-10-02; the written confirmation is to be attached to a governance
+# decision). Registry entries (corpus/sources/registry.yaml) carry `package_rule` and `package_basis`; this file
+# covers the package's list itself, including sources that are not downloaded.
+#
+# acquisition:  downloaded  files in the registry, fetched by scripts/fetch_sources.py
+#               crawled     assembled by a crawl script that records its digest in the registry
+#               blocked     the site refuses scripted access (Cloudflare "you have been blocked"); not worked
+#                           around. The data has to come from the organizers or the publisher.
+#               manual      robots.txt disallows automated downloads; a person downloads the file
+#               reference   used by people to verify, not copied into the corpus
+schema_version: 1
+package:
+  title: المرجعية والحزمة العلمية والبيانات
+  version: 20/3/1448
+  permission: Organizers' permission for participants, reported 2026-10-02; written confirmation pending
+rows:
+  - field: الموضوعات الدعوية والمحتوى الإسلامي
+    sources:
+      - name: المستودع الدعوي الرقمي
+        url: https://dawa.center
+        acquisition: reference
+        why: A repository for da'wah workers (files in about 205 languages), not a children's corpus; robots.txt
+          disallows automated downloads.
+      - name: الجمهرة - موسوعة مفردات المحتوى الإسلامي
+        url: https://islamic-content.com
+        acquisition: crawled
+        registry: [jamharah-dictionary-entries]
+        why: Only the dictionary entries for the glossary's terms are taken (see the translation row).
+  - field: القرآن الكريم
+    rule: The Quranic text in its rasm and the approved text, with approved translations (King Fahd Complex,
+      its translations, or those on quranpedia.net); make sure the ayat are transmitted faithfully.
+    sources:
+      - name: Quranpedia (mushaf Hafs, King Fahd Complex print)
+        url: https://quranpedia.net
+        acquisition: downloaded
+        registry: [quranpedia-mushaf-hafs, quranpedia-mushaf-hafs-text, quranpedia-mushafs-index, quranpedia-surahs]
+      - name: Quranpedia translations (English)
+        acquisition: downloaded
+        registry: [quranpedia-en-hilali-khan, quranpedia-en-sahih-international, quranpedia-en-ruwwad]
+  - field: التفسير
+    rule: Islamic sources of the first three Hijri centuries, or dorar.net/tafseer. Distinguish the mufassir's
+      words from the Quranic text.
+    sources:
+      - name: Tafsirs of the first three centuries on Quranpedia
+        acquisition: downloaded
+        registry: [quranpedia-tafsir-mujahid, quranpedia-tafsir-sufyan-thawri, quranpedia-tafsir-yahya-ibn-sallam,
+          quranpedia-tafsir-malik, quranpedia-tafsir-shafii, quranpedia-tafsir-farra-maani,
+          quranpedia-tafsir-abu-ubayda-majaz, quranpedia-tafsir-ibn-qutayba-gharib]
+      - name: Borderline, for the organizers to rule on
+        acquisition: downloaded
+        registry: [quranpedia-tafsir-tabari, quranpedia-tafsir-nasai, quranpedia-tafsir-sahih-masbur,
+          quranpedia-en-mukhtasar]
+      - name: موسوعة التفسير - الدرر السنية
+        url: https://dorar.net/tafseer
+        acquisition: blocked
+        why: Best fit for children (overall meaning per scene, who says what to whom, lessons), but dorar.net
+          returns Cloudflare 403 to scripted requests. Ask the organizers or Dorar (support@dorar.net) for an export.
+    not_taken:
+      - name: تنوير المقباس من تفسير ابن عباس
+        why: Its attribution to Ibn Abbas runs through al-Kalbi and is rejected by hadith scholars.
+      - name: تفسير مقاتل بن سليمان
+        why: Within the period, but Muqatil is severely criticized by hadith scholars; left for the scholarly board.
+      - name: تفسير ابن أبي حاتم, تفسير ابن المنذر
+        why: Authors died in 327 and 318 AH, after the first three centuries.
+    already_present_outside_rule: [alquran-cloud-muyassar, ibn-kathir-ar-001..114]
+  - field: الحديث النبوي
+    rule: Sahih hadith of the two Sahihs, and others only after their authenticity is checked (dorar.net/hadith or
+      approved editions on shamela.ws). No hadith is attributed without a source and an approved grading in the data.
+    sources:
+      - name: الموسوعة الحديثية - الدرر السنية
+        url: https://dorar.net/hadith
+        acquisition: blocked
+        why: Its API (dorar_api.json) returns narrator, scholar, book, number and grading, but scripted requests get
+          Cloudflare 403. Needed to grade hadith outside the two Sahihs and to verify texts.
+      - name: المكتبة الشاملة
+        url: https://shamela.ws
+        acquisition: reference
+        why: Approved editions for people to verify against; its terms grant no reuse rights.
+  - field: العقيدة والتعريف بالإسلام
+    rule: Sources of the first three centuries, or dorar.net/aqeeda; follow the Companions and their followers.
+    sources:
+      - name: الموسوعة العقدية - الدرر السنية
+        url: https://dorar.net/aqeeda
+        acquisition: blocked
+  - field: الفقه العام
+    rule: An approved book of one of the four schools, or dorar.net/feqhia; never a personal fatwa or automatic tarjih.
+    sources:
+      - name: الموسوعة الفقهية - الدرر السنية
+        url: https://dorar.net/feqhia
+        acquisition: blocked
+        why: Robert gives no rulings to children (rulings are redirected), so fiqh is not ingested.
+  - field: السيرة والتاريخ
+    rule: Sources of the first three centuries, or dorar.net/history; established events, with caution where needed.
+    sources:
+      - name: الموسوعة التاريخية - الدرر السنية
+        url: https://dorar.net/history
+        acquisition: blocked
+  - field: الشبهات والأسئلة المتكررة
+    sources:
+      - name: بينات - أسئلة وأجوبة عن الإسلام (Osool Center, 1445 AH)
+        url: https://dawa.center/file/7937
+        acquisition: manual
+        why: dawa.center's robots.txt disallows automated downloads. Written for adults; used for test questions.
+  - field: الترجمة والمصطلحات
+    rule: Preferred over machine translation for sensitive Islamic terms.
+    sources:
+      - name: الجمهرة - مفردات المحتوى الإسلامي (dictionary)
+        url: https://islamic-content.com/dictionary
+        acquisition: crawled
+        registry: [jamharah-dictionary-entries]
+      - name: The package's own glossary sample (page 7)
+        acquisition: reference
+standard: doc/governance/reference-package.md
