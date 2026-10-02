@@ -91,8 +91,8 @@ def test_every_deterministic_check_runs_in_order_and_the_judge_last():
     judge = Judge()
     results, failure = Verifier(EPISODES, AYAHS).run(
         answer("ماذا قال الإخوة لأبيهم عند البئر؟", "قال الإخوة يا أبانا ذهبنا نلعب.", [WELL_CHUNK]), judge)
-    assert [result.name for result in results] == ["first_person", "faith_terms", "answered", "addressee", "scene",
-                                                   "translation", "judge"]
+    assert [result.name for result in results] == ["first_person", "faith_terms", "answered", "numbers", "addressee",
+                                                   "scene", "translation", "judge"]
     assert failure is None and judge.calls == 1 and all(result.status == "pass" for result in results)
     assert checks.summary(results)["faith_terms"] == "pass:not_applicable"
 
@@ -134,6 +134,31 @@ def test_an_answer_must_give_a_number_a_duration_or_a_time():
     assert gives("They came back after the sun had set.", "time") and gives("رجعوا بعد أن غابت الشمس.", "time")
     assert not gives("دعا ربه أن يغفر له.", "quantity") and not gives("He prayed to his Lord.", "quantity")
     assert not gives("رجعوا بعد أن غابت الشمس.", "quantity")
+
+
+# numbers (checks-v2) -------------------------------------------------------------------------------------------
+
+def test_counts_reads_digits_and_number_words_but_not_references():
+    assert checks.counts("بقي الفتى في المدينة تسع سنوات") == {9}
+    assert checks.counts("بقي فيهم ألف سنة إلا خمسين عاما") == {1000, 50}
+    assert checks.counts("He stayed there a thousand years less fifty.") == {1000, 50}
+    assert checks.counts("ذهبوا بضع سنين") == set()                      # "a few" states no count
+    assert checks.counts("في الآية 42 من سورة التجربة، ورواه البخاري 6116") == set()
+    assert checks.counts("الفهم والفهم") == set()                        # not "الف" with a pronoun
+
+
+def test_a_count_the_cited_passages_do_not_state_fails():
+    few = _chunk("quran-099-011-011#1", "فلبث الفتى في المدينة بضع سنين", refs=["quran:99:11"])
+    thousand = _chunk("quran-099-012-012#1", "فلبث فيهم ألف سنة إلا خمسين عاما", refs=["quran:99:12"])
+
+    def numbers(text, cited):
+        return checks.check_numbers(Answer("كم سنة؟", text, (Segment(text, (cited.id,)),), (cited,), True))
+
+    assert numbers("بقي الفتى في المدينة تسع سنوات.", few).reason == "numbers:not_in_sources"
+    assert numbers("بقي الفتى في المدينة بضع سنين.", few).status == checks.PASS
+    assert numbers("لبث فيهم ألف سنة إلا خمسين عاما.", thousand).status == checks.PASS
+    assert numbers("لبث فيهم 950 سنة.", thousand).reason == "numbers:not_in_sources"   # implied, not stated
+    assert numbers("قال النبي الكلمة الطيبة صدقة.", HADITH).reason == checks.NOT_APPLICABLE
 
 
 # addressee -----------------------------------------------------------------------------------------------------
@@ -334,7 +359,7 @@ def test_faith_answers_record_every_check_in_provenance_and_codes_only_on_the_lo
     assert (result.answer_type, result.reason) == ("abstained", "faith_abstain:answered:no_quantity")
     assert {check.name: check.status for check in result.checks}["answered"] == "fail"
     line = json.loads(caplog.records[-1].getMessage().split(" ", 1)[1])
-    assert line["checks"]["answered"] == "fail:answered:no_quantity" and line["checks_version"] == "checks-v1"
+    assert line["checks"]["answered"] == "fail:answered:no_quantity" and line["checks_version"] == "checks-v2"
     assert "الصباح" not in caplog.text and "البئر" not in caplog.text
 
 

@@ -801,7 +801,7 @@ reason code, or `unavailable` when the data it needs is missing (recorded, never
 not withhold the answer). Every deterministic check runs and is recorded; the model judge runs last, and only
 when all of them passed, so a failure never costs a model call. The first failure in order is the faith
 abstention's reason (`faith_abstain:<reason>`). Results reach `AnswerResult.checks` and the log line
-(`"checks": {"answered": "pass", "scene": "fail:scene:absent_person", …}`, `"checks_version": "checks-v1"`):
+(`"checks": {"answered": "pass", "scene": "fail:scene:absent_person", …}`, `"checks_version": "checks-v2"`):
 names and codes, never text. App-help answers do not go through it, as before.
 
 | # | Check | Applies to | Fails (reason) when |
@@ -809,10 +809,11 @@ names and codes, never text. App-help answers do not go through it, as before.
 | 1 | `first_person` | answers citing religious text | "I" outside a quotation (`grounding:first_person`, as before) |
 | 2 | `faith_terms` | faith topics | a decline (`declined`), or neither the answer nor its passages use the question's faith terms (`off_topic`); conversation-policy §3.1, unchanged except that an Arabizi question's terms are read through its Arabic search terms |
 | 3 | `answered` | questions asking how many, how much, how long (كم، قديش، كام، kam, 2adeish, how many/long) or when (متى، إمتى، emta, a clause-initial "when") | the answer holds no number (digits or number words) and no duration (`answered:no_quantity`); for "when", also no time of day and no time clause (`answered:no_time`) |
-| 4 | `addressee` | a quotation framed as said to someone (لأبيه، لقومه، لربه، لابنه، لإخوته، للملك، لفرعون; "said to his father") | the quotation's own vocative names someone else: «رَبِّ/ربنا/اللهم» Allah, «يا أبت/يابت/يا أبانا» a father, «يا قوم/يقوم» a people, «يا بني/يبني» a son, «يا أيها الملأ» a council, «يا موسى» Musa; "O my Lord", "O my father"… (`addressee:mismatch`). Either side unknown: pass |
-| 5 | `scene` | answers citing Quran passages inside the Wave 1 episode map | another episode (`scene:other_episode`) or a scene defined by someone's absence (`scene:absent_person`), below; `unavailable` when the map is missing or the cited ayahs lie outside every mapped episode; hadith: not applicable |
-| 6 | `translation` | a sentence quoting a cited translation of the meanings | it does not say it is a translation (`translation:unframed`) or does not name it (`translation:unnamed`) |
-| 7 | `judge` | answers citing religious text | `faith-judge-v1`, unchanged (`judge:<field>`) |
+| 4 | `numbers` (checks-v2) | answers citing religious text | the answer states a count (digits or a number word; surah, ayah and hadith numbers excepted; "one", "once" and «بضع» state none) that its cited passages do not state (`numbers:not_in_sources`). Added after the 2026-10-02 run released "nine years in prison" over 12:42, which says «بِضْعَ سِنِينَ»; a count the passages only imply (950 from «أَلْفَ سَنَةٍ إِلَّا خَمْسِينَ») fails too |
+| 5 | `addressee` | a quotation framed as said to someone (لأبيه، لقومه، لربه، لابنه، لإخوته، للملك، لفرعون; "said to his father") | the quotation's own vocative names someone else: «رَبِّ/ربنا/اللهم» Allah, «يا أبت/يابت/يا أبانا» a father, «يا قوم/يقوم» a people, «يا بني/يبني» a son, «يا أيها الملأ» a council, «يا موسى» Musa; "O my Lord", "O my father"… (`addressee:mismatch`). Either side unknown: pass |
+| 6 | `scene` | answers citing Quran passages inside the Wave 1 episode map | another episode (`scene:other_episode`) or a scene defined by someone's absence (`scene:absent_person`), below; `unavailable` when the map is missing or the cited ayahs lie outside every mapped episode; hadith: not applicable |
+| 7 | `translation` | a sentence quoting a cited translation of the meanings | it does not say it is a translation (`translation:unframed`) or does not name it (`translation:unnamed`) |
+| 8 | `judge` | answers citing religious text | `faith-judge-v1`, unchanged (`judge:<field>`) |
 
 **The scene check's decision rule** (`scene.py`). Episodes come from the Wave 1 source maps, exported with
 English labels to `rag/data/episodes.json` by `scripts/export_episodes.py` (59 ranges of 5 prophets: ranges
@@ -872,7 +873,7 @@ the other 10 pass every check; the 8 Arabizi questions that got the chat line no
 | --- | --- | --- |
 | Prompt | `rag-answer-v4` | `FAITH_SYSTEM_EN` for English answers over translations; Arabic unchanged |
 | Verifier | `grounding-v4` | quotations in curly single quotes are held word for word too |
-| Checks | `checks-v1` | the pipeline above (provenance `checks`, log `checks` and `checks_version`) |
+| Checks | `checks-v2` | the pipeline above (provenance `checks`, log `checks` and `checks_version`) |
 | Router | `dev-patterns-v3` | Arabizi faith terms; the AI-disclosure detector; «إنسانًا», «تنحسب», «بنو إسرائيل» |
 | Policy | `conversation-policy-v3` | disclosure, misquoted-ayah correction, the checks (conversation-policy §14-16) |
 | Judge | `faith-judge-v1` | unchanged, now the last check |

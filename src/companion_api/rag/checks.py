@@ -18,6 +18,7 @@ existed before keep their old spelling (`grounding:first_person`, `declined`, `o
 | `first_person` | answers citing religious text | Robert speaks as "I" outside a quotation |
 | `faith_terms` | questions naming a faith term | the answer declines, or neither it nor its passages use the question's faith terms |
 | `answered` | questions asking how many, how long or when | the answer holds no number, duration or time |
+| `numbers` | answers citing religious text (checks-v2) | the answer states a count its passages do not state |
 | `addressee` | a quotation framed as said to someone | its own vocative names someone else («رَبِّ» after "لأبيه") |
 | `scene` | answers citing Quran passages of a mapped story | they come from another episode (scene.py) |
 | `translation` | quotations of a translation of the meanings | the sentence does not present it as a named translation |
@@ -36,7 +37,7 @@ from .prompts import is_faith_passage, is_translation, translation_name
 from .scene import Episodes, check_scene
 from .types import Chunk, Generator
 
-CHECKS_VERSION = "checks-v1"
+CHECKS_VERSION = "checks-v2"
 PASS, FAIL, UNAVAILABLE = "pass", "fail", "unavailable"
 NOT_APPLICABLE = "not_applicable"
 
@@ -178,6 +179,67 @@ def check_answered(answer: Answer) -> CheckResult:
     if wanted is None:
         return _passed("answered", NOT_APPLICABLE)
     return _passed("answered") if gives(answer.text, wanted) else _failed("answered", f"answered:no_{wanted}")
+
+
+# numbers: a count in a faith answer is one its passages give (checks-v2) ------------------------------------
+#
+# The 2026-10-02 run released "Yusuf stayed nine years in prison" over 12:42, which says «بِضْعَ سِنِينَ» (a few
+# years): `answered` saw a number and the judge passed it. A count the answer states must now be in the cited
+# passages, as a word or in digits; a count the passages only imply (950 from «أَلْفَ سَنَةٍ إِلَّا خَمْسِينَ») is
+# not stated by them, so it fails too, and the child gets the abstention rather than an untraceable number.
+# "One", "once", "times" and "a few" state no count and are not read; nor are surah and ayah numbers.
+_COUNT_AR = {
+    "اثنان": 2, "اثنين": 2, "اثنتان": 2, "اثنتين": 2, "اثنا": 2, "اثني": 2, "مرتين": 2, "ثلاث": 3, "ثلاثه": 3,
+    "اربع": 4, "اربعه": 4, "خمس": 5, "خمسه": 5, "ست": 6, "سته": 6, "سبع": 7, "سبعه": 7, "ثمان": 8, "ثماني": 8,
+    "ثمانيه": 8, "تسع": 9, "تسعه": 9, "عشر": 10, "عشره": 10, "عشرون": 20, "عشرين": 20, "ثلاثون": 30, "ثلاثين": 30,
+    "اربعون": 40, "اربعين": 40, "خمسون": 50, "خمسين": 50, "ستون": 60, "ستين": 60, "سبعون": 70, "سبعين": 70,
+    "ثمانون": 80, "ثمانين": 80, "تسعون": 90, "تسعين": 90, "ميه": 100, "مايه": 100, "مئه": 100, "مييه": 100,
+    "مئتين": 200, "مايتين": 200, "الف": 1000, "الفا": 1000, "الاف": 1000, "الوف": 1000, "الفين": 2000,
+    "مليون": 10 ** 6, "نصف": 0.5, "ثلث": "1/3", "ربع": "1/4",
+}
+_COUNT_EN = {
+    "two": 2, "twice": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+    "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+    "eighteen": 18, "nineteen": 19, "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60,
+    "seventy": 70, "eighty": 80, "ninety": 90, "hundred": 100, "hundreds": 100, "thousand": 1000,
+    "thousands": 1000, "million": 10 ** 6, "half": 0.5,
+}
+_EASTERN_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789")
+_REFERENCE = re.compile(r"\d+\s*[:：]\s*\d+(?:\s*[-–]\s*\d+)?|"
+                        r"(?:الآية|الآيه|آية|آيه|الايه|ايه|الآيات|الايات|سورة|سوره|البخاري|مسلم|حديث|الحديث|رقم|"
+                        r"ayah|ayat|verse|verses|surah|bukhari|muslim|hadith|number|no\.)\s*(?:رقم\s*)?\d+",
+                        re.IGNORECASE)
+_COUNT_PREFIXES = ("وال", "بال", "فال", "و", "ف", "ب", "ل")
+
+
+def _count_forms(token: str) -> set[str]:
+    """The token and the token without one leading clitic ("والف" -> "الف"). Trailing pronouns are not
+    stripped: "الفهم" (understanding) is not "الف" (a thousand)."""
+    return {token} | {token[len(prefix):] for prefix in _COUNT_PREFIXES
+                      if token.startswith(prefix) and len(token) - len(prefix) >= 2}
+
+
+def counts(text: str) -> set:
+    """The counts a text states: digits (surah, ayah and hadith numbers left out) and number words, as values."""
+    plain = _REFERENCE.sub(" ", text.translate(_EASTERN_DIGITS))
+    found: set = {int(digits) for digits in re.findall(r"\d+", plain)}
+    for token in router.matchable(plain).split():
+        for form in _count_forms(token):
+            if form in _COUNT_AR:
+                found.add(_COUNT_AR[form])
+        if token in _COUNT_EN:
+            found.add(_COUNT_EN[token])
+    return found
+
+
+def check_numbers(answer: Answer) -> CheckResult:
+    if not answer.religious:
+        return _passed("numbers", NOT_APPLICABLE)
+    stated = counts(answer.text)
+    if not stated:
+        return _passed("numbers", NOT_APPLICABLE)
+    given = counts(" ".join(chunk.text for chunk in answer.cited))
+    return _passed("numbers") if stated <= given else _failed("numbers", "numbers:not_in_sources")
 
 
 # addressee: a quotation said "to his father" must speak to a father ---------------------------------------
@@ -364,8 +426,8 @@ class Verifier:
 
     @property
     def deterministic(self) -> tuple[Callable[[Answer], CheckResult], ...]:
-        return (check_first_person, check_faith_terms, check_answered, check_addressee, self.check_scene,
-                check_translation)
+        return (check_first_person, check_faith_terms, check_answered, check_numbers, check_addressee,
+                self.check_scene, check_translation)
 
     def run(self, answer: Answer, generator: Generator | None) -> tuple[tuple[CheckResult, ...], str | None]:
         """Every result in order, and the first failure's reason (None when the answer may be released)."""

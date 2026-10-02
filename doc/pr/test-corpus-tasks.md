@@ -4,6 +4,57 @@ Branch `test/corpus-tasks` (server, on `corpus-tasks`) and `test/corpus-tasks` (
 `corpus-tasks`). Git branch names cannot hold ": " or spaces, so "test: corpus-tasks" became
 `test/corpus-tasks`. For the team's review; nothing here is approved or child-facing.
 
+## Reference package (2026-10-02)
+
+The challenge's reference package «المرجعية والحزمة العلمية والبيانات» (20/3/1448) lists the approved sources and
+a binding output standard; the organizers allowed participants to use the sources (reported by the product owner,
+written confirmation pending). Three agents built this increment in parallel branches, merged here. Everything new
+is `candidate`: nothing reaches a release until governance decides.
+
+| Owner | Look at | Decide |
+| --- | --- | --- |
+| Governance owner | `doc/governance/reference-package.md` (open questions Q1–Q8, the rulings format), `doc/governance/data-request.md`, the Quranpedia and Jamharah rows of `doc/governance/rights-clearance.md` | Send the data request (Dorar is closed to scripts); record the organizers' rulings and the written permission |
+| Scholarly board | `corpus/reports/quran_text_comparison.md`; the borderline tafsirs (al-Tabari d. 310 AH, al-Nasa'i, al-Sahih al-Masbur, al-Mukhtasar's English); `scripts/graph_query.py ayah 2:30`; the page-7 terms and `sense: differs/unclear` marks in `corpus/glossary_cross_lingual.yaml`; `corpus/reports/hadith_dorar_check.csv` (verify 100 hadith by hand) | Switch the displayed Quran text to the King Fahd Complex text? Stop showing the opening basmala inside ayah 1 of 112 surahs; the 3 word-division ayat |
+| Safeguarding (native speaker) | `DISCLOSURE*` and `QURAN_CORRECTION*` copy in `rag/responses.py`; the Arabizi and disclosure patterns in `rag/arabic_rules.py` | Approve or rewrite the new copy |
+| Pipeline owner | `rag/checks.py`, `rag/scene.py`, `rag/ayahs.py`, `rag/data/episodes.json` (our own source-map ranges and labels only), `scripts/replay_checks.py`, `FAITH_SYSTEM_EN` in `rag/prompts.py` | Whether the deterministic checks and their thresholds are right; how English is served (one service is one language today) |
+
+**Results.**
+- Replay of the 13 answers released on 2026-10-01: the 3 wrong ones now fail a check (`answered:no_quantity`,
+  `addressee:mismatch`, `scene:absent_person`) and the 10 right ones pass.
+- No Arabizi gold question reaches casual chat (8 before), and all 10 "are you a person or a sheikh?" questions
+  get the disclosure.
+- Misquote probes: 0 of 130 exact quotations and 0 of 539 eval questions wrongly corrected; 119 of 130 altered
+  quotations caught.
+- Tests: 824 passed.
+- Real model (Qwen3.5-9B, 2026-10-02):
+  - Arabic, the same 145 questions as before: 12 released, 11 right (before: 13 and 10). The three earlier misses
+    are withheld; one new wrong answer (yusuf-07-msa).
+  - Arabic, 27 new questions: 6 released, 2 right. The wrong ones: yusuf-15 (a number not in the source, now
+    withheld by `checks-v2` `numbers`), yusuf-12 (wrong scene), yusuf-13 (meaning inverted), page6-sabr
+    (non-answer).
+  - English, first time: 8 of 75 released, 5 right, 1 out of order, 2 wrong. It was measured on a scratch
+    release; translations stay `candidate`.
+  - Safety, both languages: distress 16/16, personal data 15/15, injection 20/20, rulings 24/25 (+1 abstained),
+    disclosure 10/10; no fabricated hadith answered.
+  - The remaining wrong answers are errors of meaning that only a stronger judge or human review would catch:
+    the case for a second-family judge model (doc/governance/reference-package.md, gap 4).
+
+**Known limits.**
+- The scene check covers the five Wave 1 stories; the answered check accepts any number, not only the right one;
+  misquote detection reads Arabic ayat only.
+- English translations keep their footnote markers (e.g. "[582]") inside the text.
+- Layer 0 is 2.8 times larger (about 231 MB, 4 minutes to build).
+- Gaps of the page-5 standard listed in `doc/governance/reference-package.md`: no grading in returned sources, no
+  "scholars differ" reply, no AI notice in answers, no written privacy policy, no route for judging people or
+  groups.
+
+```bash
+python scripts/fetch_sources.py && python scripts/build_corpus.py && python scripts/build_graph.py
+python scripts/check_reference_package.py
+python scripts/replay_checks.py <recorded gen_eval jsonl>
+python scripts/eval_serving.py releases/<wave1 release>
+```
+
 ## What to review, by owner
 
 | Owner | Look at | Why |
