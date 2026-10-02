@@ -1,0 +1,69 @@
+# English labels for the Wave 1 source-map episodes (test/corpus-tasks-serving).
+# Written by the model (Claude, 2026-10-02) from the Arabic `topic` of each range in
+# corpus/candidate/prophets/*_source_map.yaml, so that the scene check (src/companion_api/rag/scene.py)
+# can read English questions. Our own wording, no Quran text. review_status: draft, like the maps.
+# Keys are "<prophet_id> <ref>" exactly as in the source maps. scripts/export_episodes.py refuses a key
+# that is not a range of the maps, and lists every range that has no English label.
+schema_version: 1
+origin: model_proposed
+review_status: draft
+labels:
+  adam quran:2:30-39: the successor on earth, the angels bowing and the descent to earth
+  adam quran:7:11-25: the angels bowing, Iblis and eating from the tree
+  adam quran:15:26-43: creation from clay and Iblis refusing to bow
+  adam quran:17:61-65: Iblis refusing to bow
+  adam quran:18:50: Iblis was one of the jinn
+  adam quran:20:115-123: the promise, forgetting and repentance
+  adam quran:38:71-85: creation, bowing and Iblis refusing
+  ibrahim quran:2:124-133: leadership, building the Kaaba and the advice to his sons
+  ibrahim quran:2:258-260: the argument with the king and the birds brought back to life
+  ibrahim quran:3:65-68: the religion of Ibrahim
+  ibrahim quran:6:74-83: the star, the moon and the sun, and the proof that God is one
+  ibrahim quran:11:69-76: the good news of Ishaq
+  ibrahim quran:14:35-41: the prayer for Makkah and his children
+  ibrahim quran:15:51-60: the guests of Ibrahim
+  ibrahim quran:19:41-50: talking with his father
+  ibrahim quran:21:51-73: breaking the idols and the fire
+  ibrahim quran:26:69-89: talking with his people and his prayer
+  ibrahim quran:29:16-27: calling his people and being saved from the fire
+  ibrahim quran:37:83-113: the idols, the fire and the sacrifice
+  ibrahim quran:51:24-37: the honoured guests of Ibrahim
+  ibrahim quran:60:4: the good example
+  musa quran:28:3-13: his birth and being put into the river
+  musa quran:28:14-28: leaving for Madyan
+  musa quran:28:29-35: the fire, Allah speaking to him and his mission
+  musa quran:20:9-36: Allah speaking to him and the signs of the staff and the hand
+  musa quran:20:37-54: the earlier favour and going to Pharaoh
+  musa quran:20:55-76: the magicians
+  musa quran:20:77-98: leaving Egypt and the calf
+  musa quran:26:10-68: Pharaoh, the magicians and the parting of the sea
+  musa quran:7:103-137: the signs, the magicians and being saved
+  musa quran:7:138-162: the Children of Israel after being saved, and the appointed meeting
+  musa quran:10:75-92: Pharaoh and the drowning
+  musa quran:2:49-61: the favours given to the Children of Israel
+  musa quran:2:67-73: the cow
+  musa quran:18:60-82: Musa and the righteous servant
+  musa quran:27:7-14: the fire and the signs
+  musa quran:40:23-46: the believer from Pharaoh's family
+  musa quran:44:17-33: leaving and being saved
+  musa quran:79:15-26: the story of Musa and Pharaoh
+  nuh quran:7:59-64: calling his people, their denial and being saved
+  nuh quran:10:71-73: trusting Allah and being saved in the ship
+  nuh quran:11:25-49: calling his people, building the ship, the flood and his son
+  nuh quran:21:76-77: the answered prayer and being saved
+  nuh quran:23:23-30: calling his people and building the ship
+  nuh quran:26:105-122: calling his people and their denial
+  nuh quran:29:14-15: how long he called his people, and being saved
+  nuh quran:37:75-82: his call to Allah and being saved
+  nuh quran:54:9-17: the denial and the flood
+  nuh quran:71:1-28: calling his people night and day
+  yusuf quran:12:4-6: the dream
+  yusuf quran:12:7-18: the brothers and the well
+  yusuf quran:12:19-22: the travellers and the house of al-Aziz
+  yusuf quran:12:23-34: the test and patience
+  yusuf quran:12:35-42: prison and explaining dreams
+  yusuf quran:12:43-57: the king's dream and leaving prison
+  yusuf quran:12:58-82: the brothers come to Egypt
+  yusuf quran:12:83-98: Yaqub's sadness and the meeting
+  yusuf quran:12:99-101: the family together and the dream come true
+  yusuf quran:40:34: Yusuf mentioned in Surah Ghafir
