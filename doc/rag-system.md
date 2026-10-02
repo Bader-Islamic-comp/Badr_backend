@@ -75,6 +75,9 @@ a third-party provider is what the provider due-diligence gate decides.
 | `service.py` | runtime | `AnswerService`: route → retrieve → generate → verify, and casual chat |
 | `evaluate.py` | runtime | `python -m companion_api.rag.evaluate` eval harness |
 | `ask.py` | runtime | `python -m companion_api.rag.ask` operator console |
+| `checks.py` | runtime | the post-generation checks on faith answers, in order, judge last (§16) |
+| `scene.py` | runtime | the scene check over the Wave 1 episode map, `data/episodes.json` (§16) |
+| `ayahs.py` | runtime | a release's ayahs one by one; questions quoting an ayah with altered words (§16) |
 
 Outside the package: `config.py` reads the §9 settings and `require_rag`
 validates them; `store.py` holds the §6.5 queue and turn states; `schemas.py`
@@ -782,3 +785,101 @@ on words that state nothing: the Arabic stopword list had 12 entries against abo
 model framed facts with "كما ورد في المصدر". `normalize.ARABIC_FUNCTION_WORDS` adds common function words and
 the citation-framing words; the faith prompt asks for the source's own words and no framing. "ذكر" stays a
 content word, because it is also dhikr.
+
+## 16. The verification pipeline (test/corpus-tasks-serving, 2026-10-02)
+
+The 2026-10-01 run (Qwen3.5-9B, release `wave1-preview-3`, 145 Arabic-script gold questions) released 13
+answers; 3 were wrong and every one had passed grounding-v3 and the faith judge: a quote from the wrong scene
+(yusuf-04-gulf: 12:63, the return from Egypt, for the wolf story of 12:16-18), a prayer to Allah framed as words
+to a father (ibrahim-04-msa: «رَبِّ…» after "قال إبراهيم لأبيه"), and an answer with no duration to
+"how long did Nuh call his people" (nuh-01-arabizi). And 8 of 62 Arabizi faith questions got the puzzled chat
+line. This branch adds a verification pipeline of small, named checks, mostly deterministic, around the judge.
+
+**Shape.** After grounding passes (§6.4), a faith answer (a faith topic, or any answer citing religious text)
+goes through `checks.Verifier.run`: a list of independent checks, each returning `pass`, `fail` with a fixed
+reason code, or `unavailable` when the data it needs is missing (recorded, never counted as a pass, and it does
+not withhold the answer). Every deterministic check runs and is recorded; the model judge runs last, and only
+when all of them passed, so a failure never costs a model call. The first failure in order is the faith
+abstention's reason (`faith_abstain:<reason>`). Results reach `AnswerResult.checks` and the log line
+(`"checks": {"answered": "pass", "scene": "fail:scene:absent_person", …}`, `"checks_version": "checks-v1"`):
+names and codes, never text. App-help answers do not go through it, as before.
+
+| # | Check | Applies to | Fails (reason) when |
+| --- | --- | --- | --- |
+| 1 | `first_person` | answers citing religious text | "I" outside a quotation (`grounding:first_person`, as before) |
+| 2 | `faith_terms` | faith topics | a decline (`declined`), or neither the answer nor its passages use the question's faith terms (`off_topic`); conversation-policy §3.1, unchanged except that an Arabizi question's terms are read through its Arabic search terms |
+| 3 | `answered` | questions asking how many, how much, how long (كم، قديش، كام، kam, 2adeish, how many/long) or when (متى، إمتى، emta, a clause-initial "when") | the answer holds no number (digits or number words) and no duration (`answered:no_quantity`); for "when", also no time of day and no time clause (`answered:no_time`) |
+| 4 | `addressee` | a quotation framed as said to someone (لأبيه، لقومه، لربه، لابنه، لإخوته، للملك، لفرعون; "said to his father") | the quotation's own vocative names someone else: «رَبِّ/ربنا/اللهم» Allah, «يا أبت/يابت/يا أبانا» a father, «يا قوم/يقوم» a people, «يا بني/يبني» a son, «يا أيها الملأ» a council, «يا موسى» Musa; "O my Lord", "O my father"… (`addressee:mismatch`). Either side unknown: pass |
+| 5 | `scene` | answers citing Quran passages inside the Wave 1 episode map | another episode (`scene:other_episode`) or a scene defined by someone's absence (`scene:absent_person`), below; `unavailable` when the map is missing or the cited ayahs lie outside every mapped episode; hadith: not applicable |
+| 6 | `translation` | a sentence quoting a cited translation of the meanings | it does not say it is a translation (`translation:unframed`) or does not name it (`translation:unnamed`) |
+| 7 | `judge` | answers citing religious text | `faith-judge-v1`, unchanged (`judge:<field>`) |
+
+**The scene check's decision rule** (`scene.py`). Episodes come from the Wave 1 source maps, exported with
+English labels to `rag/data/episodes.json` by `scripts/export_episodes.py` (59 ranges of 5 prophets: ranges
+and our own draft labels only; a test fails when it is out of date). A cited passage belongs to the episodes
+whose ranges hold its ayahs.
+
+1. *Another episode.* The question's words that name episodes of the cited prophet's story (key words of their
+   labels; not a word every episode of that prophet shares, not a generic label word such as «الدعوة» or
+   «النجاة», not the prophet's own name) point to those episodes. A passage in one of them passes. A passage
+   outside all of them fails only when one of those words names a person of the story (a father, brother, son,
+   mother or wife, the magicians, Pharaoh, the king, Iblis, another prophet; Yaqub counts as "father" in Yusuf's
+   story) and that person appears neither in the cited ayahs, nor within two ayahs of them, nor in their
+   episode's label. Objects and actions only point («الفلك» tells «السفينة» in another surah).
+2. *The absent person.* A question that defines its scene by someone's absence («بدون يوسف», "without his
+   brother", "bdoon yusuf") must be answered from ayahs that name that person: the ayahs the answer draws on (the
+   ayah holding a quotation, else the ayah sharing most words with the sentence) and two on each side.
+
+Neither rule decides which scene was asked; each refuses only on positive evidence of another scene.
+Measured: on the 13 released answers both wrong-scene answers fail (ibrahim-04-msa on rule 1, yusuf-04-gulf on
+rule 2) and the 10 right ones pass; on the gold set, every (question, expected passage) pair of the six Arabic
+variants passes (603 pairs with this branch's new intents, 0 failures; 100 hadith pairs not applicable).
+Quranpedia topics were read and are not used: they are thematic rather than narrative (12:60-61 carry none), and
+topic 3719 joins 12:16 with 12:63, the very scenes rule 2 must separate. No index built from them exists in the
+repository or in a release.
+
+**Misquoted ayahs.** `ayahs.AyahIndex` splits a release's Quran chunks back into ayahs (units joined by a blank
+line, one `quran:S:A` per unit). Before the faith step, `near_quote` aligns the question (or each quoted span)
+word by word with the ayahs sharing its words (Smith-Waterman over search tokens; a looser spelling form drops
+alef and hamza and joins a vocative "يا" to its noun, so spelling never counts as a change). A near quote needs
+at least 4 agreeing words, 3 of them content words, covering 60% of the aligned span on each side, and at least
+one word changed, missing or added inside it; without quotation marks or a quoting phrase ("قال تعالى", "الآية",
+"the ayah"), 7 agreeing words. An exact quote, whole or partial, is never corrected. The reply quotes the exact
+ayah from the release, named by surah (the release's title) and number, in the child's language
+(`responses.QURAN_CORRECTION[_AR]`; an ayah too long for one reply is named, never cut): answer type `grounded`,
+reason `quran_correction`, the ayah's chunk as its source, and no model reads the altered words. Measured on 130
+probes built in memory from `wave1-preview-3` (never written): exact quotes corrected 0, a replaced word
+corrected 119, a dropped word 119 (the misses are spans of particles); evaluation questions corrected 0 of 539.
+
+**English answers over translations of the meanings.** `quran_translation` and `tafsir_translation` are faith
+content (`prompts.FAITH_CONTENT`). An English question over them gets `FAITH_SYSTEM_EN` (rag-answer-v4): the
+sources carry `translation="<name>"` from their source label, and the prompt presents a translation as a named
+translation of the meanings ("In the translation of the meanings (Saheeh International): "…" [1]"), never as
+the words of the Quran or of Allah, in the third person. Quotations are held word for word to the translation
+passage (`misquoted`, which grounding-v4 extends to curly single quotes), and the `translation` check holds the
+framing. Arabic answers keep `FAITH_SYSTEM`. `release.INDEXABLE_CONTENT_TYPES` must also admit the two types
+before such a release can be written (the layer-0 translations work owns that file's change).
+
+**Replay.** `python scripts/replay_checks.py RECORDED.jsonl [RELEASE]` runs every deterministic check over the
+answers a real model released in a recorded run (a local file, never committed), reports the judge
+`unavailable`, and shows where the other recorded questions are routed now. On the 2026-10-01 run:
+nuh-01-arabizi fails `answered`, ibrahim-04-msa fails `addressee` and `scene`, yusuf-04-gulf fails `scene`;
+the other 10 pass every check; the 8 Arabizi questions that got the chat line now take the faith route.
+
+**Versions.**
+
+| Piece | Version | What changed |
+| --- | --- | --- |
+| Prompt | `rag-answer-v4` | `FAITH_SYSTEM_EN` for English answers over translations; Arabic unchanged |
+| Verifier | `grounding-v4` | quotations in curly single quotes are held word for word too |
+| Checks | `checks-v1` | the pipeline above (provenance `checks`, log `checks` and `checks_version`) |
+| Router | `dev-patterns-v3` | Arabizi faith terms; the AI-disclosure detector; «إنسانًا», «تنحسب», «بنو إسرائيل» |
+| Policy | `conversation-policy-v3` | disclosure, misquoted-ayah correction, the checks (conversation-policy §14-16) |
+| Judge | `faith-judge-v1` | unchanged, now the last check |
+| Retriever, normalizer | `hybrid-rrf-v2`, `norm-v3` | unchanged |
+
+**What this cannot do.** The checks are lexical and rule-based: the scene rules act only on episode words, people
+and absence, inside the five Wave 1 stories, so a wrong scene told with the same people goes on to the judge.
+"answered" accepts any number or duration, not only the right one. The near-quote detector reads Arabic ayahs
+only (not a misquoted translation, not Arabizi). The episode map is model-proposed draft data, like the source
+maps. None of this replaces the scholarly review of the corpus and of the evaluation sets.

@@ -164,15 +164,53 @@ INVITATIONS_AR = (
     "متى شئت، يمكننا أن نستكشف معًا درسًا عن الإسلام في تبويب Learn.",
 )
 
+# Development copy awaiting safeguarding and scholarly review (test/corpus-tasks-serving).
+# "Are you a real person?", "هل أنت شيخ؟": Robert says honestly what he is (conversation-policy §16; the
+# organizers' standard asks for disclosure whenever a child might think they talk to a person or a specialist).
+DISCLOSURE = (
+    "I'm Robert, a robot learning companion: a computer program, not a real person. "
+    "I'm not a scholar, an imam or a sheikh, so I don't give rulings; I share lessons that my teachers have "
+    "checked. For anything important, please ask a parent, a teacher or a qualified local scholar."
+)
+DISCLOSURE_AR = (
+    "أنا روبرت، رفيق آلي للتعلّم: برنامج حاسوب ولست إنسانًا. "
+    "ولست عالمًا ولا إمامًا ولا شيخًا، فلا أعطي أحكامًا ولا فتاوى، وإنما أشاركك دروسًا راجعها معلّمي. "
+    "وفي الأمور المهمة اسأل أحد والديك أو معلّمك أو عالِمًا موثوقًا في منطقتك."
+)
+
+# Development copy awaiting scholarly review (test/corpus-tasks-serving).
+# A question that quotes an ayah with altered words (conversation-policy §14; the organizers' test case 11): the
+# exact ayah from the release, named by surah and ayah, gently, and nothing built on the altered words. {ayah}
+# is the release's text, {surah} the surah's name as the release titles it, {number} the ayah's number.
+QURAN_CORRECTION = (
+    "Your question quotes an ayah, but a few of its words are a little different. In {surah}, ayah {number}, "
+    "it reads: «{ayah}». If you like, you can ask me about it again with these words."
+)
+QURAN_CORRECTION_AR = (
+    "في سؤالك كلمات من آية، لكن بعضها جاء مختلفًا قليلًا عن نصّها. نصّ الآية {number} من {surah}: «{ayah}». "
+    "وإن أحببت فاسألني عنها مرة أخرى بهذه الكلمات."
+)
+# When the ayah is too long to quote in one reply: named only, never cut.
+QURAN_CORRECTION_NAMED = (
+    "Your question quotes an ayah, but a few of its words are a little different. It is ayah {number} of "
+    "{surah}; you can read its exact words in the mushaf with a grown-up."
+)
+QURAN_CORRECTION_NAMED_AR = (
+    "في سؤالك كلمات من آية، لكن بعضها جاء مختلفًا قليلًا عن نصّها. هي الآية {number} من {surah}، "
+    "ويمكنك أن تقرأ نصّها في المصحف مع أحد الكبار."
+)
+
 # Every fixed reply by language. A reply is given in the language of the child's message: Arabic for Arabic
 # script and for Arabizi, English otherwise.
 REPLIES = {
     "en": {"safety": SAFETY, "safety_abuse": SAFETY_ABUSE, "safety_distress": SAFETY_DISTRESS,
            "personal_data": PERSONAL_DATA, "ruling": RULING, "injection": INJECTION, "abstain": ABSTAIN,
-           "abstain_faith": ABSTAIN_FAITH, "salam_return": SALAM_RETURN},
+           "abstain_faith": ABSTAIN_FAITH, "salam_return": SALAM_RETURN, "disclosure": DISCLOSURE,
+           "quran_correction": QURAN_CORRECTION, "quran_correction_named": QURAN_CORRECTION_NAMED},
     "ar": {"safety": SAFETY_AR, "safety_abuse": SAFETY_ABUSE_AR, "safety_distress": SAFETY_DISTRESS_AR,
            "personal_data": PERSONAL_DATA_AR, "ruling": RULING_AR, "injection": INJECTION_AR, "abstain": ABSTAIN_AR,
-           "abstain_faith": ABSTAIN_FAITH_AR, "salam_return": SALAM_RETURN_AR},
+           "abstain_faith": ABSTAIN_FAITH_AR, "salam_return": SALAM_RETURN_AR, "disclosure": DISCLOSURE_AR,
+           "quran_correction": QURAN_CORRECTION_AR, "quran_correction_named": QURAN_CORRECTION_NAMED_AR},
 }
 FALLBACKS = {"en": CHAT_FALLBACKS, "ar": CHAT_FALLBACKS_AR}
 INVITATIONS_BY_LANGUAGE = {"en": INVITATIONS, "ar": INVITATIONS_AR}
@@ -185,6 +223,7 @@ def reply(name: str, language: str = "en") -> str:
     return REPLIES.get(language, REPLIES["en"])[name]
 
 
-__all__ = ["ABSTAIN", "ABSTAIN_FAITH", "CHAT_FALLBACKS", "FALLBACKS", "INJECTION", "INVITATIONS",
+__all__ = ["ABSTAIN", "ABSTAIN_FAITH", "CHAT_FALLBACKS", "DISCLOSURE", "DISCLOSURE_AR", "FALLBACKS", "INJECTION",
+           "INVITATIONS", "QURAN_CORRECTION", "QURAN_CORRECTION_AR",
            "INVITATIONS_BY_LANGUAGE", "PERSONAL_DATA", "REPLIES", "RULING", "SAFETY", "SAFETY_ABUSE",
            "SAFETY_DISTRESS", "SAFETY_REPLY", "SALAM_RETURN", "UNAVAILABLE", "reply"]

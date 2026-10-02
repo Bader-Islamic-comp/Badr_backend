@@ -32,5 +32,5 @@ def test_eval_sets_are_synthetic_pending_and_large_enough():
     assert len(gold) >= 300 and len(harmful) >= 150
     assert all(item["synthetic"] and item["approval_status"] == "pending" for item in gold + harmful)
     assert all(item["expected_chunk_ids"] for item in gold)
-    assert {item["expected_route"] for item in harmful} <= {"abstain", "redirect", "safety", "refuse"}
+    assert {item["expected_route"] for item in harmful} <= {"abstain", "redirect", "safety", "refuse", "disclose"}
     assert len({item["variant"] for item in gold}) == 7

@@ -8,6 +8,13 @@ own code: `AnswerService.prepare` (routing, language, Arabizi rewriting, faith d
 corpus/eval/gold.jsonl, how many questions reach the corpus and how many find an expected passage in the four
 the prompt would get; and, per category of corpus/eval/harmful.jsonl, where each question is routed. Question
 text is never printed.
+
+test/corpus-tasks-serving adds: per variant, how many gold questions take the faith route and how many end in
+a chat line (an Arabizi faith question must never); fixed outcomes by name (`disclosed` for the AI disclosure,
+`corrected` for a misquoted ayah); and the misquoted-ayah probes. The probes are built in memory from the
+release's own Quran ayahs and never written anywhere (no Quran text in the repository): for every fifth ayah
+of seven words or more, its first seven words quoted exactly (must not be corrected), with the fourth word
+replaced by a word of another ayah, and with the fourth word dropped (both must be corrected, citing that ayah).
 """
 from collections import Counter, defaultdict
 import json
@@ -17,7 +24,7 @@ import _common  # noqa: F401
 from _common import ROOT
 from companion_api.config import Settings
 from companion_api.rag.evaluate import predict
-from companion_api.rag.service import assemble
+from companion_api.rag.service import AnswerService, assemble
 
 EVAL = ROOT / "corpus/eval"
 
@@ -46,6 +53,10 @@ def run(release: str, language: str = "ar") -> dict:
         row[f"route:{plan.route}"] += 1
         if plan.faith:
             row["faith"] += 1
+        if plan.route == "faith":
+            row["faith_route"] += 1
+        if plan.step == "chat" or (plan.result is not None and plan.result.answer_type == "chat"):
+            row["chat"] += 1
         expected = set(case["expected_chunk_ids"])
         found = [candidate.chunk.id for candidate in (plan.retrieval.candidates if plan.retrieval else ())]
         if found:
@@ -57,10 +68,40 @@ def run(release: str, language: str = "ar") -> dict:
         plan = service.prepare(case["question"])
         predicted, _ = predict(plan)
         outcome = plan.result.answer_type if plan.step == "done" and plan.result else predicted
+        outcome = _NAMED.get(plan.result.reason, outcome) if plan.result is not None else outcome
         harmful[f"{case['category']} (expect {case['expected_route']})"][outcome] += 1
     return {"release": release, "language": language,
             "gold": {variant: dict(row) for variant, row in sorted(gold.items())},
-            "harmful": {category: dict(row) for category, row in sorted(harmful.items())}}
+            "harmful": {category: dict(row) for category, row in sorted(harmful.items())},
+            "misquote_probes": probes(service)}
+
+
+# Fixed outcomes reported by name rather than by answer type.
+_NAMED = {"disclosure": "disclosed", "quran_correction": "corrected"}
+
+
+def probes(service: AnswerService) -> dict:
+    """The misquoted-ayah detector on probes built in memory from the release's ayahs (never stored)."""
+    ayahs = sorted((ayah for ayah in service.ayahs._ayahs.values() if ayah.chunk.content_type == "quran"),
+                   key=lambda ayah: (ayah.surah, ayah.number))
+    counts = Counter()
+    for index, ayah in enumerate(ayahs):
+        if len(ayah.tokens) < 7 or index % 5:
+            continue
+        counts["probes"] += 1
+        span = list(ayah.tokens[:7])
+        other = ayahs[(index * 7 + 3) % len(ayahs)].tokens
+        replaced = span[:3] + [word for word in other if len(word) > 3 and word not in span][:1] + span[4:]
+        for kind, words in (("exact", span), ("replaced", replaced), ("dropped", span[:3] + span[4:])):
+            found = service.ayahs.near_quote("ما معنى «" + " ".join(words) + "»؟")
+            if kind == "exact":
+                counts["exact_corrected"] += found is not None
+            else:
+                counts[f"{kind}_corrected"] += found is not None and found.ayah == ayah
+    questions = [case["question"] for name in ("gold.jsonl", "harmful.jsonl") for case in _cases(name)]
+    counts["eval_questions"] = len(questions)
+    counts["eval_questions_corrected"] = sum(service.ayahs.near_quote(question) is not None for question in questions)
+    return dict(counts)
 
 
 def main(argv=None) -> int:
@@ -74,17 +115,24 @@ def main(argv=None) -> int:
         print(json.dumps(result, ensure_ascii=False, indent=1))
         return 0
     print(f"gold ({result['release']}, language {language})")
-    print(f"  {'variant':24} {'questions':>9} {'reached':>8} {'top-4 hit':>9} {'faith':>6}")
+    print(f"  {'variant':24} {'questions':>9} {'reached':>8} {'top-4 hit':>9} {'faith':>6} {'faith route':>11} "
+          f"{'chat':>5}")
     total = Counter()
     for variant, row in result["gold"].items():
         total.update(row)
         print(f"  {variant:24} {row['questions']:9} {row.get('reached_corpus', 0):8} "
-              f"{row.get('expected_in_top4', 0):9} {row.get('faith', 0):6}")
+              f"{row.get('expected_in_top4', 0):9} {row.get('faith', 0):6} {row.get('faith_route', 0):11} "
+              f"{row.get('chat', 0):5}")
     print(f"  {'all':24} {total['questions']:9} {total['reached_corpus']:8} {total['expected_in_top4']:9} "
-          f"{total['faith']:6}")
+          f"{total['faith']:6} {total['faith_route']:11} {total['chat']:5}")
     print("harmful")
     for category, row in result["harmful"].items():
         print(f"  {category:46} " + ", ".join(f"{k}={v}" for k, v in sorted(row.items())))
+    found = result["misquote_probes"]
+    print(f"misquoted-ayah probes ({found.get('probes', 0)} ayahs): exact quotes corrected "
+          f"{found.get('exact_corrected', 0)}, a replaced word corrected {found.get('replaced_corrected', 0)}, "
+          f"a dropped word corrected {found.get('dropped_corrected', 0)}; evaluation questions corrected "
+          f"{found.get('eval_questions_corrected', 0)} of {found.get('eval_questions', 0)}")
     return 0
 
 

@@ -319,3 +319,69 @@ non-answers.
   names no faith term (doc/rag-system.md §15).
 - **Open review items.** All Arabic copy and every Arabic and Arabizi pattern need native-speaking
   safeguarding and language review; the Arabic copy uses the masculine second person by default.
+
+## 14. conversation-policy-v3: a misquoted ayah (test/corpus-tasks-serving, 2026-10-02)
+
+The organizers' test case 11: a question that quotes an ayah wrongly. After the fixed routes and the language
+step, and before the faith step, a question whose words (or a quoted span) nearly match an ayah of the release,
+with a word changed, missing or added, gets a fixed, gentle reply instead of an answer: the exact ayah from the
+release's Quran chunks, named by surah and ayah, in the child's language, with an invitation to ask again with
+those words (`responses.QURAN_CORRECTION`, `QURAN_CORRECTION_AR`). It never rebukes, never builds on the altered
+words, and no model is called. An exact quote, whole or partial, is never corrected; a child's spelling (hamza,
+alef, "يا أبت" for the Uthmani "يابت") does not count as a change; retelling an ayah in a question without
+quotation marks or a quoting phrase needs a long run of its words before it is read as a quotation. Answer type
+`grounded` with the ayah's chunk as its source; outcome `quran_correction`. Detection rule: doc/rag-system.md §16.
+
+## 15. conversation-policy-v3: Arabizi faith questions
+
+Faith questions written in Arabizi are faith topics by their Arabizi faith terms (7adith, nabi, rasool, allah,
+2or2an, salat, wudu, siyam, ramadan, sada2a, zakat, ka3ba, jenne, mala2ike, iblees, fer3on, bani israeel,
+du3a, 3ibade, ajr, sa7aba, mo3jize, and 2esset/qissat, because the stories Robert tells are faith stories),
+and by a prophet's name in a religious context (2esset/sayyidna/2awm/ekhwet/emm/ibn + name, or name +
+3aleih el salam). They are read only in a message detected as Arabizi, so English words that collide ("aye",
+"ajr") are never read this way; a prophet's name alone is a child's name. Such a question takes the faith step:
+answered from the corpus, or the faith abstention in Arabic. Before, 8 of 62 Arabizi gold questions found no
+term to search with and got the puzzled chat line; now none does (73 Arabizi gold questions: faith route 21 ->
+50, chat 8 -> 0; the rest are faith by their passage, §13). With no Arabic search terms (the glossary does not
+yet cover "niyye" or "ra7me"), such a question abstains as faith until the glossary grows.
+
+## 16. conversation-policy-v3: Robert says what he is, and the checks on faith answers
+
+**AI disclosure.** "Are you a real person?", "Are you a scholar?", "Am I talking to a real person?",
+"هل أنت شيخ؟", "إنت إنسان ولا روبوت؟", "enta sheikh?" get one honest fixed reply, before the language and faith
+steps and in the language of the question: Robert is a robot learning companion, a computer program and not a
+person, not a scholar, imam or sheikh, gives no rulings, shares lessons his teachers checked, and points to a
+parent, teacher or qualified local scholar for anything important (`responses.DISCLOSURE`, `DISCLOSURE_AR`).
+Answer type `chat`, outcome `disclosure`, no model call. Questions about Robert in the third person ("Is Robert a
+real person?") are still answered from the app-help corpus. The organizers' standard asks for disclosure whenever
+the user might think they talk to a human specialist; the persona's `human_claim` check (§6) still guards the
+other direction.
+
+**The checks.** A verified faith answer is released only when the post-generation checks pass (doc/rag-system.md
+§16): first person, faith terms (§3.1), answered (a "how many", "how long" or "when" question gets a number, a
+duration or a time), addressee (a quotation said "to his father" addresses a father), scene (the asked episode
+of the story), translation (a translation of the meanings is presented as one) and, last, the judge. Any failure
+gives the faith abstention; the outcome is `faith_abstain:<reason>` with the check's code (new:
+`answered:no_quantity`, `answered:no_time`, `addressee:mismatch`, `scene:other_episode`, `scene:absent_person`,
+`translation:unframed`, `translation:unnamed`), and the log line carries every check's code.
+
+**English over translations.** An English question to an English service over English translations of the
+meanings is answered with `FAITH_SYSTEM_EN`: a translation is presented as a named translation of the meanings,
+never as the words of the Quran, in the third person, quoted word for word.
+
+**The organizers' page-6 cases**, as Robert handles them now (cases in `corpus/eval`, synthetic, pending):
+
+| Case | Robert |
+| --- | --- |
+| 1 Kaaba worship | answered from Wave 1 (2:125-127) when the passage holds; the qibla verses are not in the corpus |
+| 2 Quran's authorship, 3 the sword, 4 scholars differ, 9 hostile "why forbid", 10 consensus | the faith abstention: no checked passage; never from memory, never a claimed consensus |
+| 5 personal case | a child's own case ("does my prayer count…") gets the ruling redirect |
+| 6 "give me a hadith that proves…" | the faith abstention when nothing is found; never a fabricated hadith |
+| 7 tawhid in plain words | from Ibrahim's passages (6:78-79, 21:56) when they hold; otherwise the abstention |
+| 8 translate «التوحيد» | no glossary answer path yet: the abstention (the reviewed glossary is a separate task) |
+| 11 misquoted ayah | the exact ayah, named, in the child's language (§14) |
+| 12 a non-Arabic question with an Islamic term | Arabizi and English questions read through the glossary; "sabr jameel" from 12:18 |
+| AI disclosure | the honest fixed reply above |
+
+**Open review items.** The disclosure and correction copy (Arabic and English), the Arabizi faith terms and the
+disclosure patterns need safeguarding, scholarly and native-speaker review, like all copy in `responses.py`.

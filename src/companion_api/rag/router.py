@@ -22,15 +22,20 @@ Two detectors decide the conversation policy's later steps
 (doc/conversation-policy.md §3, §4): `is_faith_topic`, which keeps faith out of
 casual chat, and `small_talk`, which sends greetings and chatter to Robert's
 persona without retrieval. They never change what `route` returns.
+
+dev-patterns-v3 (test/corpus-tasks-serving): `is_faith_topic` also reads Arabizi
+faith terms (`arabic_rules.FAITH_ARABIZI`, only in an Arabizi message), and
+`disclosure` tells a question whether Robert is a person, a scholar or a
+religious authority (conversation-policy §16).
 """
 from dataclasses import dataclass
 import re
 import unicodedata
 from typing import Literal, Protocol, Sequence
 
-from . import arabic_rules, normalize
+from . import arabic_rules, arabizi, normalize
 
-ROUTER_VERSION = "dev-patterns-v2"
+ROUTER_VERSION = "dev-patterns-v3"
 
 Category = Literal["safety", "personal_data", "ruling", "injection", "retrieve"]
 ORDER: tuple[Category, ...] = ("safety", "personal_data", "ruling", "injection")
@@ -294,6 +299,10 @@ PIOUS = ("al ?hamd[ou] ?l+il+ah\\w*|hamdulil+ah|in ?sha ?a?llah|insha ?a?llah|in
 
 _FAITH = re.compile(r"\b(?:" + "".join(FAITH_TERMS) + "|" + "|".join(FAITH_PATTERNS) + "|" + FAITH_ARABIC + "|"
                     + arabic_rules.FAITH_AR + r")\b")
+_FAITH_ARABIZI = re.compile(rf"\b(?:{arabic_rules.FAITH_ARABIZI})\b")
+_DISCLOSURE = (("en", re.compile(rf"\b(?:{arabic_rules.DISCLOSURE_EN})\b")),
+               ("ar", re.compile(rf"\b(?:{arabic_rules.DISCLOSURE_AR})\b")),
+               ("ar", re.compile(rf"\b(?:{arabic_rules.DISCLOSURE_ARABIZI})\b")))
 _SALAM = re.compile(rf"\b(?:{SALAM})\b")
 _FORMULAS = re.compile(rf"\b(?:{THANKS_FORMULAS}|{FAREWELLS}|{PIOUS})\b")  # everything but a salam
 _COURTESY = re.compile(rf"\b(?:{THANKS_FORMULAS}|{FAREWELLS}|{PIOUS}|{SALAM})\b")
@@ -347,7 +356,20 @@ def is_faith_topic(text: str) -> bool:
     marked = " ".join(_COURTESY.sub(f" {_FORMULA} ", folded).split())
     if _FAITH.search(marked):
         return True
+    # An Arabizi message also by its Arabizi faith terms ("fi 7adith 3an...", "2esset el 3ejl").
+    if arabizi.is_arabizi(text) and _FAITH_ARABIZI.search(marked):
+        return True
     return _FORMULA in marked and bool(_ASKED.search(marked)) and small_talk(text) is None
+
+
+def disclosure(text: str) -> str | None:
+    """The language to answer in ("en", "ar") when a message asks whether Robert is a person, a scholar or a
+    religious authority ("Are you a real person?", "هل أنت شيخ؟", "enta sheikh?"), else None (§16)."""
+    folded = matchable(text)
+    for language, pattern in _DISCLOSURE:
+        if pattern.search(folded):
+            return language
+    return None
 
 
 def mentions_faith(text: str) -> bool:

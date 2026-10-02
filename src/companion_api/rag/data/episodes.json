@@ -1,0 +1,597 @@
+{
+ "episodes": [
+  {
+   "first": 30,
+   "label_ar": "الاستخلاف وسجود الملائكة والهبوط",
+   "label_en": "the successor on earth, the angels bowing and the descent to earth",
+   "last": 39,
+   "prophet": "adam",
+   "ref": "quran:2:30-39",
+   "surah": 2,
+   "verification": "ok"
+  },
+  {
+   "first": 11,
+   "label_ar": "السجود وإبليس والأكل من الشجرة",
+   "label_en": "the angels bowing, Iblis and eating from the tree",
+   "last": 25,
+   "prophet": "adam",
+   "ref": "quran:7:11-25",
+   "surah": 7,
+   "verification": "ok"
+  },
+  {
+   "first": 26,
+   "label_ar": "الخلق من صلصال وإباء إبليس",
+   "label_en": "creation from clay and Iblis refusing to bow",
+   "last": 43,
+   "prophet": "adam",
+   "ref": "quran:15:26-43",
+   "surah": 15,
+   "verification": "needs_check"
+  },
+  {
+   "first": 61,
+   "label_ar": "إباء إبليس",
+   "label_en": "Iblis refusing to bow",
+   "last": 65,
+   "prophet": "adam",
+   "ref": "quran:17:61-65",
+   "surah": 17,
+   "verification": "needs_check"
+  },
+  {
+   "first": 50,
+   "label_ar": "إبليس كان من الجن",
+   "label_en": "Iblis was one of the jinn",
+   "last": 50,
+   "prophet": "adam",
+   "ref": "quran:18:50",
+   "surah": 18,
+   "verification": "ok"
+  },
+  {
+   "first": 115,
+   "label_ar": "العهد والنسيان والتوبة",
+   "label_en": "the promise, forgetting and repentance",
+   "last": 123,
+   "prophet": "adam",
+   "ref": "quran:20:115-123",
+   "surah": 20,
+   "verification": "ok"
+  },
+  {
+   "first": 71,
+   "label_ar": "الخلق والسجود وإباء إبليس",
+   "label_en": "creation, bowing and Iblis refusing",
+   "last": 85,
+   "prophet": "adam",
+   "ref": "quran:38:71-85",
+   "surah": 38,
+   "verification": "needs_check"
+  },
+  {
+   "first": 124,
+   "label_ar": "الإمامة وبناء البيت والوصية",
+   "label_en": "leadership, building the Kaaba and the advice to his sons",
+   "last": 133,
+   "prophet": "ibrahim",
+   "ref": "quran:2:124-133",
+   "surah": 2,
+   "verification": "ok"
+  },
+  {
+   "first": 258,
+   "label_ar": "المحاجة وإحياء الموتى",
+   "label_en": "the argument with the king and the birds brought back to life",
+   "last": 260,
+   "prophet": "ibrahim",
+   "ref": "quran:2:258-260",
+   "surah": 2,
+   "verification": "ok"
+  },
+  {
+   "first": 65,
+   "label_ar": "ملة إبراهيم",
+   "label_en": "the religion of Ibrahim",
+   "last": 68,
+   "prophet": "ibrahim",
+   "ref": "quran:3:65-68",
+   "surah": 3,
+   "verification": "needs_check"
+  },
+  {
+   "first": 74,
+   "label_ar": "النظر في الكواكب وحجة التوحيد",
+   "label_en": "the star, the moon and the sun, and the proof that God is one",
+   "last": 83,
+   "prophet": "ibrahim",
+   "ref": "quran:6:74-83",
+   "surah": 6,
+   "verification": "ok"
+  },
+  {
+   "first": 69,
+   "label_ar": "البشرى بإسحاق",
+   "label_en": "the good news of Ishaq",
+   "last": 76,
+   "prophet": "ibrahim",
+   "ref": "quran:11:69-76",
+   "surah": 11,
+   "verification": "ok"
+  },
+  {
+   "first": 35,
+   "label_ar": "الدعاء لمكة والذرية",
+   "label_en": "the prayer for Makkah and his children",
+   "last": 41,
+   "prophet": "ibrahim",
+   "ref": "quran:14:35-41",
+   "surah": 14,
+   "verification": "ok"
+  },
+  {
+   "first": 51,
+   "label_ar": "ضيف إبراهيم",
+   "label_en": "the guests of Ibrahim",
+   "last": 60,
+   "prophet": "ibrahim",
+   "ref": "quran:15:51-60",
+   "surah": 15,
+   "verification": "needs_check"
+  },
+  {
+   "first": 41,
+   "label_ar": "الحوار مع أبيه",
+   "label_en": "talking with his father",
+   "last": 50,
+   "prophet": "ibrahim",
+   "ref": "quran:19:41-50",
+   "surah": 19,
+   "verification": "ok"
+  },
+  {
+   "first": 51,
+   "label_ar": "تحطيم الأصنام والنار",
+   "label_en": "breaking the idols and the fire",
+   "last": 73,
+   "prophet": "ibrahim",
+   "ref": "quran:21:51-73",
+   "surah": 21,
+   "verification": "ok"
+  },
+  {
+   "first": 69,
+   "label_ar": "الحوار مع قومه والدعاء",
+   "label_en": "talking with his people and his prayer",
+   "last": 89,
+   "prophet": "ibrahim",
+   "ref": "quran:26:69-89",
+   "surah": 26,
+   "verification": "ok"
+  },
+  {
+   "first": 16,
+   "label_ar": "الدعوة والنجاة من النار",
+   "label_en": "calling his people and being saved from the fire",
+   "last": 27,
+   "prophet": "ibrahim",
+   "ref": "quran:29:16-27",
+   "surah": 29,
+   "verification": "needs_check"
+  },
+  {
+   "first": 83,
+   "label_ar": "الأصنام والنار والذبح",
+   "label_en": "the idols, the fire and the sacrifice",
+   "last": 113,
+   "prophet": "ibrahim",
+   "ref": "quran:37:83-113",
+   "surah": 37,
+   "verification": "ok"
+  },
+  {
+   "first": 24,
+   "label_ar": "ضيف إبراهيم المكرمين",
+   "label_en": "the honoured guests of Ibrahim",
+   "last": 37,
+   "prophet": "ibrahim",
+   "ref": "quran:51:24-37",
+   "surah": 51,
+   "verification": "ok"
+  },
+  {
+   "first": 4,
+   "label_ar": "الأسوة الحسنة",
+   "label_en": "the good example",
+   "last": 4,
+   "prophet": "ibrahim",
+   "ref": "quran:60:4",
+   "surah": 60,
+   "verification": "needs_check"
+  },
+  {
+   "first": 3,
+   "label_ar": "المولد والإلقاء في اليم",
+   "label_en": "his birth and being put into the river",
+   "last": 13,
+   "prophet": "musa",
+   "ref": "quran:28:3-13",
+   "surah": 28,
+   "verification": "ok"
+  },
+  {
+   "first": 14,
+   "label_ar": "الخروج إلى مدين",
+   "label_en": "leaving for Madyan",
+   "last": 28,
+   "prophet": "musa",
+   "ref": "quran:28:14-28",
+   "surah": 28,
+   "verification": "ok"
+  },
+  {
+   "first": 29,
+   "label_ar": "النار والتكليم والرسالة",
+   "label_en": "the fire, Allah speaking to him and his mission",
+   "last": 35,
+   "prophet": "musa",
+   "ref": "quran:28:29-35",
+   "surah": 28,
+   "verification": "ok"
+  },
+  {
+   "first": 9,
+   "label_ar": "التكليم والآيات",
+   "label_en": "Allah speaking to him and the signs of the staff and the hand",
+   "last": 36,
+   "prophet": "musa",
+   "ref": "quran:20:9-36",
+   "surah": 20,
+   "verification": "ok"
+  },
+  {
+   "first": 37,
+   "label_ar": "المنة الأولى والذهاب إلى فرعون",
+   "label_en": "the earlier favour and going to Pharaoh",
+   "last": 54,
+   "prophet": "musa",
+   "ref": "quran:20:37-54",
+   "surah": 20,
+   "verification": "ok"
+  },
+  {
+   "first": 55,
+   "label_ar": "السحرة",
+   "label_en": "the magicians",
+   "last": 76,
+   "prophet": "musa",
+   "ref": "quran:20:55-76",
+   "surah": 20,
+   "verification": "ok"
+  },
+  {
+   "first": 77,
+   "label_ar": "الخروج والعجل",
+   "label_en": "leaving Egypt and the calf",
+   "last": 98,
+   "prophet": "musa",
+   "ref": "quran:20:77-98",
+   "surah": 20,
+   "verification": "ok"
+  },
+  {
+   "first": 10,
+   "label_ar": "فرعون والسحرة وشق البحر",
+   "label_en": "Pharaoh, the magicians and the parting of the sea",
+   "last": 68,
+   "prophet": "musa",
+   "ref": "quran:26:10-68",
+   "surah": 26,
+   "verification": "ok"
+  },
+  {
+   "first": 103,
+   "label_ar": "الآيات والسحرة والنجاة",
+   "label_en": "the signs, the magicians and being saved",
+   "last": 137,
+   "prophet": "musa",
+   "ref": "quran:7:103-137",
+   "surah": 7,
+   "verification": "ok"
+  },
+  {
+   "first": 138,
+   "label_ar": "بنو إسرائيل بعد النجاة والميقات",
+   "label_en": "the Children of Israel after being saved, and the appointed meeting",
+   "last": 162,
+   "prophet": "musa",
+   "ref": "quran:7:138-162",
+   "surah": 7,
+   "verification": "needs_check"
+  },
+  {
+   "first": 75,
+   "label_ar": "فرعون والغرق",
+   "label_en": "Pharaoh and the drowning",
+   "last": 92,
+   "prophet": "musa",
+   "ref": "quran:10:75-92",
+   "surah": 10,
+   "verification": "ok"
+  },
+  {
+   "first": 49,
+   "label_ar": "النعم على بني إسرائيل",
+   "label_en": "the favours given to the Children of Israel",
+   "last": 61,
+   "prophet": "musa",
+   "ref": "quran:2:49-61",
+   "surah": 2,
+   "verification": "needs_check"
+  },
+  {
+   "first": 67,
+   "label_ar": "البقرة",
+   "label_en": "the cow",
+   "last": 73,
+   "prophet": "musa",
+   "ref": "quran:2:67-73",
+   "surah": 2,
+   "verification": "ok"
+  },
+  {
+   "first": 60,
+   "label_ar": "موسى والعبد الصالح",
+   "label_en": "Musa and the righteous servant",
+   "last": 82,
+   "prophet": "musa",
+   "ref": "quran:18:60-82",
+   "surah": 18,
+   "verification": "ok"
+  },
+  {
+   "first": 7,
+   "label_ar": "النار والآيات",
+   "label_en": "the fire and the signs",
+   "last": 14,
+   "prophet": "musa",
+   "ref": "quran:27:7-14",
+   "surah": 27,
+   "verification": "ok"
+  },
+  {
+   "first": 23,
+   "label_ar": "مؤمن آل فرعون",
+   "label_en": "the believer from Pharaoh's family",
+   "last": 46,
+   "prophet": "musa",
+   "ref": "quran:40:23-46",
+   "surah": 40,
+   "verification": "needs_check"
+  },
+  {
+   "first": 17,
+   "label_ar": "الخروج والنجاة",
+   "label_en": "leaving and being saved",
+   "last": 33,
+   "prophet": "musa",
+   "ref": "quran:44:17-33",
+   "surah": 44,
+   "verification": "needs_check"
+  },
+  {
+   "first": 15,
+   "label_ar": "حديث موسى وفرعون",
+   "label_en": "the story of Musa and Pharaoh",
+   "last": 26,
+   "prophet": "musa",
+   "ref": "quran:79:15-26",
+   "surah": 79,
+   "verification": "ok"
+  },
+  {
+   "first": 59,
+   "label_ar": "الدعوة والتكذيب والنجاة",
+   "label_en": "calling his people, their denial and being saved",
+   "last": 64,
+   "prophet": "nuh",
+   "ref": "quran:7:59-64",
+   "surah": 7,
+   "verification": "ok"
+  },
+  {
+   "first": 71,
+   "label_ar": "التوكل والنجاة في الفلك",
+   "label_en": "trusting Allah and being saved in the ship",
+   "last": 73,
+   "prophet": "nuh",
+   "ref": "quran:10:71-73",
+   "surah": 10,
+   "verification": "ok"
+  },
+  {
+   "first": 25,
+   "label_ar": "الدعوة وصنع السفينة والطوفان وابنه",
+   "label_en": "calling his people, building the ship, the flood and his son",
+   "last": 49,
+   "prophet": "nuh",
+   "ref": "quran:11:25-49",
+   "surah": 11,
+   "verification": "ok"
+  },
+  {
+   "first": 76,
+   "label_ar": "الاستجابة والنجاة",
+   "label_en": "the answered prayer and being saved",
+   "last": 77,
+   "prophet": "nuh",
+   "ref": "quran:21:76-77",
+   "surah": 21,
+   "verification": "needs_check"
+  },
+  {
+   "first": 23,
+   "label_ar": "الدعوة وصنع الفلك",
+   "label_en": "calling his people and building the ship",
+   "last": 30,
+   "prophet": "nuh",
+   "ref": "quran:23:23-30",
+   "surah": 23,
+   "verification": "ok"
+  },
+  {
+   "first": 105,
+   "label_ar": "الدعوة والتكذيب",
+   "label_en": "calling his people and their denial",
+   "last": 122,
+   "prophet": "nuh",
+   "ref": "quran:26:105-122",
+   "surah": 26,
+   "verification": "ok"
+  },
+  {
+   "first": 14,
+   "label_ar": "مدة الدعوة والنجاة",
+   "label_en": "how long he called his people, and being saved",
+   "last": 15,
+   "prophet": "nuh",
+   "ref": "quran:29:14-15",
+   "surah": 29,
+   "verification": "ok"
+  },
+  {
+   "first": 75,
+   "label_ar": "النداء والنجاة",
+   "label_en": "his call to Allah and being saved",
+   "last": 82,
+   "prophet": "nuh",
+   "ref": "quran:37:75-82",
+   "surah": 37,
+   "verification": "needs_check"
+  },
+  {
+   "first": 9,
+   "label_ar": "التكذيب والطوفان",
+   "label_en": "the denial and the flood",
+   "last": 17,
+   "prophet": "nuh",
+   "ref": "quran:54:9-17",
+   "surah": 54,
+   "verification": "ok"
+  },
+  {
+   "first": 1,
+   "label_ar": "سورة نوح - الدعوة ليلا ونهارا",
+   "label_en": "calling his people night and day",
+   "last": 28,
+   "prophet": "nuh",
+   "ref": "quran:71:1-28",
+   "surah": 71,
+   "verification": "ok"
+  },
+  {
+   "first": 4,
+   "label_ar": "الرؤيا",
+   "label_en": "the dream",
+   "last": 6,
+   "prophet": "yusuf",
+   "ref": "quran:12:4-6",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 7,
+   "label_ar": "الإخوة والبئر",
+   "label_en": "the brothers and the well",
+   "last": 18,
+   "prophet": "yusuf",
+   "ref": "quran:12:7-18",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 19,
+   "label_ar": "السيارة وبيت العزيز",
+   "label_en": "the travellers and the house of al-Aziz",
+   "last": 22,
+   "prophet": "yusuf",
+   "ref": "quran:12:19-22",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 23,
+   "label_ar": "الامتحان والصبر",
+   "label_en": "the test and patience",
+   "last": 34,
+   "prophet": "yusuf",
+   "ref": "quran:12:23-34",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 35,
+   "label_ar": "السجن وتعبير الرؤى",
+   "label_en": "prison and explaining dreams",
+   "last": 42,
+   "prophet": "yusuf",
+   "ref": "quran:12:35-42",
+   "surah": 12,
+   "verification": "needs_check"
+  },
+  {
+   "first": 43,
+   "label_ar": "رؤيا الملك والخروج من السجن",
+   "label_en": "the king's dream and leaving prison",
+   "last": 57,
+   "prophet": "yusuf",
+   "ref": "quran:12:43-57",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 58,
+   "label_ar": "قدوم الإخوة",
+   "label_en": "the brothers come to Egypt",
+   "last": 82,
+   "prophet": "yusuf",
+   "ref": "quran:12:58-82",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 83,
+   "label_ar": "حزن يعقوب واللقاء",
+   "label_en": "Yaqub's sadness and the meeting",
+   "last": 98,
+   "prophet": "yusuf",
+   "ref": "quran:12:83-98",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 99,
+   "label_ar": "اجتماع الأسرة وتحقق الرؤيا",
+   "label_en": "the family together and the dream come true",
+   "last": 101,
+   "prophet": "yusuf",
+   "ref": "quran:12:99-101",
+   "surah": 12,
+   "verification": "ok"
+  },
+  {
+   "first": 34,
+   "label_ar": "ذكر يوسف في سورة غافر",
+   "label_en": "Yusuf mentioned in Surah Ghafir",
+   "last": 34,
+   "prophet": "yusuf",
+   "ref": "quran:40:34",
+   "surah": 40,
+   "verification": "needs_check"
+  }
+ ],
+ "review_status": "draft",
+ "schema_version": 1,
+ "source": "corpus/candidate/prophets/*_source_map.yaml + episode_labels_en.yaml"
+}
