@@ -61,7 +61,7 @@ _KIN = {"اب": "اب", "ابا": "اب", "ابو": "اب", "ابي": "اب", "�
         "زوجته": "زوج", "امراه": "زوج", "امراته": "زوج"}
 # People of the stories, besides family words and prophets' names: only words naming a person can fail rule 1.
 PEOPLE_AR = frozenset({"اب", "اخ", "ابن", "ام", "زوج", "سحره", "ساحر", "فرعون", "ابليس", "شيطان", "ملايكه",
-                       "ملك", "عزيز", "ضيف", "قوم", "هامان", "قارون", "بنو", "اسرايل", "عبد"})
+                       "ملك", "عزيز", "ضيف", "قوم", "هامان", "قارون", "بنو", "اسراييل", "عبد"})
 # A prophet's family as the ayahs of his story call them: Yusuf's brothers say "أبانا", never "يعقوب".
 FAMILY_AR = {"يعقوب": "اب", "ازر": "اب", "هارون": "اخ", "اسماعيل": "ابن", "اسحاق": "ابن"}
 FAMILY_EN = {"yaqub": "father", "jacob": "father", "harun": "brother", "aaron": "brother", "ismail": "son",
