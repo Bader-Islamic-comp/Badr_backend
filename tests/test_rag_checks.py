@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from companion_api.rag import arabizi, checks, responses, router
+from companion_api.rag import arabizi, checks, normalize, responses, router
 from companion_api.rag.ayahs import AyahIndex, surah_name
 from companion_api.rag.checks import Answer, Verifier, addressee_mismatches, asks_for, gives
 from companion_api.rag.embeddings import HashingEmbedder
@@ -46,8 +46,7 @@ def _chunk(chunk_id, text, *, content_type="quran", language="ar", refs=(), prop
     return Chunk(id=chunk_id, document_id=chunk_id.split("#")[0], kind="passage",
                  title=title or "سورة التجربة 99:1–5", language=language, age_bands=("7-9", "10-11"),
                  content_type=content_type, madhhab=(), review_status="draft", synthetic=False, text=text,
-                 search_text=__import__("companion_api.rag.normalize", fromlist=["x"]).search_text(
-                     text, quranic=content_type == "quran"),
+                 search_text=normalize.search_text(text, quranic=content_type == "quran"),
                  references=tuple(refs) or ("placeholder:1",), source_label=source_label, unit_ids=("u1",),
                  source_ids=("fixture-source",), source_refs=tuple(refs), prophet_id=prophet)
 
@@ -291,7 +290,7 @@ def test_robert_says_honestly_that_he_is_a_robot_learning_companion(message, tex
 
 def test_the_disclosure_claims_no_authority_and_no_humanity():
     for text in (responses.DISCLOSURE, responses.DISCLOSURE_AR):
-        assert not verify(text + " [1]", [HADITH]).failure in ("authority_claim",)
+        assert verify(text + " [1]", [HADITH]).failure != "authority_claim"
     assert "not a real person" in responses.DISCLOSURE and "not a scholar" in responses.DISCLOSURE
     assert router.disclosure("Is Robert a real person?") is None  # app help answers that from the corpus
     assert router.disclosure("Are you happy today?") is None
