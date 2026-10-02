@@ -1,4 +1,4 @@
-"""The knowledge graph (knowledge/graph.py, kg-v1) on a tiny invented corpus. Placeholder text only."""
+"""The knowledge graph (knowledge/graph.py, kg-v2) on a tiny invented corpus. Placeholder text only."""
 import json
 
 import pytest
@@ -92,4 +92,53 @@ def test_the_graph_files_hold_ids_and_counts_not_text(corpus, tmp_path):
     written = (tmp_path / "out/nodes.jsonl").read_text(encoding="utf-8") + \
         (tmp_path / "out/edges.jsonl").read_text(encoding="utf-8")
     assert "القارب" not in written and "الصبر" not in written
-    assert summary["graph_version"] == "kg-v1" and summary["edges"]["EXPLAINS"] == 1
+    assert summary["graph_version"] == "kg-v2" and summary["edges"]["EXPLAINS"] == 1
+
+
+# --- kg-v2: the Quranpedia tafsir books, translation coverage and the King Fahd Complex check ---------------
+
+@pytest.fixture
+def corpus_v2(corpus):
+    path = corpus / "canonical/quran/ayat.jsonl"
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    _write(path, [dict(row, kfc_check="basmala_prefixed" if (row["surah"], row["ayah"]) == (2, 1)
+                       else "identical_after_normalization") for row in rows])
+    record = {"source_id": "quranpedia-tafsir-mujahid", "package_rule": "in_rule", "book_id": 269, "surah": 1,
+              "quran_refs": ["quran:1:1", "quran:1:2"], "footnotes": "", "quran_quotes": 0, "part": "1",
+              "numbering": "global", "words": 3}
+    _write(corpus / "canonical/tafsir/quranpedia-mujahid.jsonl", [
+        dict(record, record_id="mujahid:1:1-2/1", section_id="mujahid:1:1-2", from_ayah=1, to_ayah=2,
+             text="شرح تجريبي أول", page=10, flags=[]),
+        dict(record, record_id="mujahid:1:1-2/2", section_id="mujahid:1:1-2", from_ayah=1, to_ayah=2,
+             text="شرح تجريبي ثان", page=11, flags=[]),
+        dict(record, record_id="mujahid:2:1/1", section_id="mujahid:2:1", surah=2, from_ayah=1, to_ayah=1,
+             quran_refs=["quran:2:1"], text="مقدمة", page=1, flags=["out_of_place"])])
+    _write(corpus / "canonical/translations/quranpedia-en-ruwwad.jsonl", [
+        {"surah": 1, "ayah": 1, "text": "Placeholder.", "label_mismatch": False},
+        {"surah": 1, "ayah": 2, "text": "Placeholder two.", "label_mismatch": True}])
+    return corpus
+
+
+def test_quranpedia_books_explain_their_ranges_with_their_package_rule(corpus_v2):
+    graph = kg.build(corpus_v2)
+    node = graph.nodes["mujahid:1:1-2"]
+    assert node["type"] == "tafsir_section" and node["passages"] == 2 and node["words"] == 6
+    assert node["source_id"] == "quranpedia-tafsir-mujahid" and node["package_rule"] == "in_rule"
+    explains = _edges(graph, "EXPLAINS")
+    assert explains[("mujahid:1:1-2", "quran:1:2")]["package_rule"] == "in_rule"
+    assert explains[("mujahid:1:1-2", "quran:1:1")]["method"] == "passage_range"
+    assert "mujahid:2:1" not in graph.nodes  # a passage filed out of place is left out
+    assert graph.nodes["ibn-kathir:1:1"]["book"] == "ibn-kathir"
+    summary = kg.stats(graph)
+    assert summary["tafsir_books"]["mujahid"] == {"package_rule": "in_rule", "sections": 1, "ayat_explained": 2,
+                                                  "words": 6}
+
+
+def test_ayah_nodes_carry_translation_coverage_and_the_kfc_check(corpus_v2):
+    graph = kg.build(corpus_v2)
+    assert graph.nodes["quran:1:1"]["translations"] == ["ruwwad"]
+    assert graph.nodes["quran:1:2"]["translations"] == []  # labelled for another ayah
+    assert graph.nodes["quran:2:1"]["kfc_check"] == "basmala_prefixed"
+    summary = kg.stats(graph)
+    assert summary["translations"] == {"quranpedia-en-ruwwad": {"ayat": 1, "content_type": "quran_translation"}}
+    assert summary["kfc_check"] == {"basmala_prefixed": 1, "identical_after_normalization": 2}
