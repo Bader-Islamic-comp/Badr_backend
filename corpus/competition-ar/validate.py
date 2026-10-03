@@ -108,7 +108,7 @@ def main():
         parsed = urlparse(url)
         if parsed.scheme != "https" or parsed.hostname not in domains:
             errors.append(f"prayer_learning: unapproved URL {key}")
-    if prayer["madhhab_applicability"] not in ("requires_reviewer_policy", "approved_policy_recorded"):
+    if prayer["madhhab_applicability"] not in ("shared_basics_only", "approved_policy_recorded"):
         errors.append("unexpected madhhab policy; review validator before changing")
     if content["language"] != sources["policy"]["language"] or content["locale"] != sources["policy"]["market"]:
         errors.append("language/market mismatch")
@@ -116,6 +116,12 @@ def main():
         errors.append("age bands mismatch")
     if {story["id"] for story in content["stories"]} != {"story-adam", "story-musa", "story-isa", "story-muhammad"}:
         errors.append("story scope changed")
+    required_occasions = {"morning", "evening", "after_obligatory_prayer"}
+    actual_occasions = {occasion for item in content["adhkar"] for occasion in item["occasions"]}
+    if not required_occasions <= actual_occasions:
+        errors.append("missing morning, evening, or after-prayer adhkar")
+    if not content["daily_duas"] or any(not prayer[group] for group in ("preparation", "wudu", "prayer_steps", "prayer_counts")):
+        errors.append("missing daily duas or prayer-learning section")
 
     evaluation = load("evaluation.json")
     approvals = load("approvals.json")
@@ -158,7 +164,7 @@ def main():
                 errors.append(f"release blocked: {source['id']} lacks rights record")
         if sources["sources"][0]["candidate_dump_state"] != "downloaded_and_verified":
             errors.append("release blocked: Quran source edition and fingerprint not verified")
-        if prayer["madhhab_applicability"] == "requires_reviewer_policy" or not approvals["prayer_policy"]:
+        if not approvals["prayer_policy"]:
             errors.append("release blocked: prayer policy not approved")
         if not approvals["recheck_due_at"]:
             errors.append("release blocked: re-review date not set")

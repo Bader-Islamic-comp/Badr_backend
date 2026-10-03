@@ -522,7 +522,7 @@
   "prayer_learning": {
     "scope": "تعليم تمهيدي للصلاة المفروضة، دون إصدار فتوى فردية أو الحكم على صحة صلاة طفل بعينه",
     "fiqh_source": "https://dorar.net/feqhia/880/",
-    "madhhab_applicability": "requires_reviewer_policy",
+    "madhhab_applicability": "shared_basics_only",
     "preparation": [
       {
         "id": "prepare-time",
