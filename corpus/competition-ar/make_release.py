@@ -31,10 +31,19 @@ def main():
     if args.supersedes and not (releases / args.supersedes / "manifest.json").is_file():
         parser.error("superseded release not found")
     target.mkdir(parents=True)
+    source_list = json.loads((HERE / "sources.json").read_text(encoding="utf-8"))["sources"]
+    source_files = tuple(
+        source[key] for source in source_list for key in ("source_file", "license_file")
+        if source.get(key)
+    )
     hashes = {}
-    for name in FILES:
-        source = HERE / name
-        shutil.copyfile(source, target / name)
+    for name in FILES + source_files:
+        source = (HERE / name).resolve()
+        if not source.is_relative_to(HERE):
+            parser.error(f"source path escapes corpus directory: {name}")
+        destination = target / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
         hashes[name] = hashlib.sha256(source.read_bytes()).hexdigest()
     manifest = {
         "version": args.version,

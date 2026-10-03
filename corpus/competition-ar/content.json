@@ -558,7 +558,8 @@
         "refs": [
           "fiqh:wudu:description"
         ],
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_url": "https://dorar.net/feqhia/258/"
       },
       {
         "id": "wudu-01",
@@ -598,7 +599,8 @@
         "refs": [
           "fiqh:wudu:order"
         ],
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_url": "https://dorar.net/feqhia/289/"
       }
     ],
     "prayer_steps": [
@@ -737,7 +739,7 @@
     ],
     "evidence_urls": {
       "prayer_description": "https://dorar.net/feqhia/880/",
-      "wudu_description": "https://dorar.net/feqhia/271/",
+      "wudu_description": "https://dorar.net/feqhia/258/",
       "wudu_order": "https://dorar.net/feqhia/289/",
       "prayer_hadith": "https://dorar.net/hadith/sharh/70527"
     }

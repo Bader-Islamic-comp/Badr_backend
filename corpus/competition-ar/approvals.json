@@ -6,8 +6,38 @@
     "child_language": "محرر لغة/محتوى أطفال يراجع الفهم والملاءمة العمرية والسلامة؛ يوثق دوره وتعارض المصالح",
     "rights": "المسؤول عن الحقوق يثبت إذن الاستخدام لكل مصدر ونطاقه وتاريخه"
   },
-  "item_reviews": [],
-  "source_rights": [],
+  "technical_verification": {
+    "checked_on": "2026-10-03",
+    "quran_source": "مصحف حفص من Quranpedia، إصدار 2026-10-03، SHA-256 مطابق للفهرس الرسمي؛ 114 سورة و6236 آية",
+    "content_structure": "validate.py نجح؛ هذا لا يُعد مراجعة شرعية أو تصريحًا بالنشر"
+  },
+  "package_reviews": [],
+  "source_rights": [
+    {
+      "source_id": "quranpedia-quran",
+      "decision": "pending_owner_signoff",
+      "evidence_ref": "https://quranpedia.net/dumps/LICENSE.md",
+      "observation": "استعمال التطبيق مسموح حسب الرخصة المنشورة؛ إعادة نشر الحزمة تتطلب الإسناد ورقم الإصدار ومتابعة التصحيحات.",
+      "reviewer": null,
+      "approved_at": null
+    },
+    {
+      "source_id": "dorar-hadith",
+      "decision": "pending_owner_signoff",
+      "evidence_ref": "https://dorar.net/hadith",
+      "observation": "استُخدمت روابط تحقق وألفاظ أذكار قصيرة؛ لم يُثبت إذن صريح لإعادة توزيع قاعدة بيانات حديثية.",
+      "reviewer": null,
+      "approved_at": null
+    },
+    {
+      "source_id": "dorar-fiqh",
+      "decision": "pending_owner_signoff",
+      "evidence_ref": "https://dorar.net/feqhia",
+      "observation": "الشرح في الحزمة صياغة أصلية مع روابط مصدر؛ لم يُثبت إذن لإعادة توزيع نصوص الموقع.",
+      "reviewer": null,
+      "approved_at": null
+    }
+  ],
   "prayer_policy": null,
   "recheck_due_at": null
 }

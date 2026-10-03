@@ -2,6 +2,8 @@
 """Validate the self-contained Arabic competition corpus candidate."""
 
 import argparse
+import gzip
+import hashlib
 import json
 import re
 import sys
@@ -29,6 +31,33 @@ def main():
     ids = set()
     domains = set(sources["policy"]["allowed_domains"])
     verse_counts = {int(k): v for k, v in sources["quran_verse_counts_used"].items()}
+    quran_source = next((s for s in sources["sources"] if s["id"] == "quranpedia-quran"), None)
+    if not quran_source:
+        errors.append("Quran source missing")
+    else:
+        try:
+            license_path = (HERE / quran_source["license_file"]).resolve()
+            if not license_path.is_relative_to(HERE) or hashlib.sha256(license_path.read_bytes()).hexdigest() != quran_source["license_sha256"]:
+                errors.append("Quran source license fingerprint mismatch")
+            source_path = (HERE / quran_source["source_file"]).resolve()
+            if not source_path.is_relative_to(HERE):
+                raise ValueError("Quran source path escapes corpus directory")
+            raw = source_path.read_bytes()
+            if len(raw) != quran_source["source_bytes"] or hashlib.sha256(raw).hexdigest() != quran_source["source_sha256"]:
+                errors.append("Quran source fingerprint mismatch")
+            mushaf = json.loads(gzip.decompress(raw))
+            surahs = mushaf["data"]["surahs"]
+            if len(surahs) != 114 or sum(len(s["ayahs"]) for s in surahs) != 6236:
+                errors.append("Quran source coverage is not 114 surahs / 6236 ayahs")
+            actual_counts = {s["id"]: len(s["ayahs"]) for s in surahs}
+            if any(actual_counts.get(n) != count for n, count in verse_counts.items()):
+                errors.append("Quran verse-count metadata mismatch")
+            if any([a["number"] for a in s["ayahs"]] != list(range(1, len(s["ayahs"]) + 1)) for s in surahs):
+                errors.append("Quran ayah numbering is not sequential")
+            if mushaf["license"]["version"] != quran_source["candidate_dump_version"]:
+                errors.append("Quran source version mismatch")
+        except (OSError, KeyError, ValueError, TypeError) as exc:
+            errors.append(f"Quran source unreadable: {exc}")
 
     def check_item(item):
         item_id = item.get("id")
@@ -109,19 +138,17 @@ def main():
             errors.append("release blocked: named human reviews and approval date missing")
         if any(item.get("review_status") != "approved" for item in items + content["stories"]):
             errors.append("release blocked: item review incomplete")
-        missing_reviews = []
-        for item_id in ids | {story["id"] for story in content["stories"]}:
-            for role in ("religious", "child_language"):
-                if not any(
-                    row.get("item_id") == item_id and row.get("role") == role
-                    and row.get("decision") == "approved" and row.get("reviewer")
-                    and row.get("credentials_ref") and row.get("conflicts_declared") is True
-                    and row.get("approved_at")
-                    for row in approvals["item_reviews"]
-                ):
-                    missing_reviews.append(f"{item_id}:{role}")
-        if missing_reviews:
-            errors.append(f"release blocked: {len(missing_reviews)} item review records missing (e.g. {', '.join(sorted(missing_reviews)[:3])})")
+        content_hash = hashlib.sha256((HERE / "content.json").read_bytes()).hexdigest()
+        for role in ("religious", "child_language"):
+            if not any(
+                row.get("role") == role and row.get("decision") == "approved"
+                and row.get("scope") == "all_content_items"
+                and row.get("content_sha256") == content_hash
+                and row.get("reviewer") and row.get("credentials_ref")
+                and row.get("conflicts_declared") is True and row.get("approved_at")
+                for row in approvals["package_reviews"]
+            ):
+                errors.append(f"release blocked: {role} package review for current content hash missing")
         for source in sources["sources"]:
             if not any(
                 row.get("source_id") == source["id"] and row.get("decision") == "cleared"
