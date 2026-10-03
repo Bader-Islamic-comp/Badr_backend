@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "reference_document": {
+    "title": "المرجعية والحزمة العلمية والبيانات",
+    "date_hijri": "1448-03-20",
+    "sha256": "68d22af4d2499b7b0285f63cd080fd575bf3e5af6b72f0d792ef2eb8fb49600e",
+    "stored_in_repository": false
+  },
+  "policy": {
+    "language": "ar",
+    "market": "sa",
+    "age_bands": ["7-9", "10-11"],
+    "allowed_domains": ["quranpedia.net", "dorar.net"],
+    "sacred_text": "لا يُنشأ نص القرآن أو الحديث من النموذج. لا يوجد متن قرآني في هذه الحزمة؛ تُجلب الآية لاحقًا من طبعة معتمدة ومصرّح بها.",
+    "interpretation": "كل شرح للطفل مسودة مستقلة عن النص الأصلي، وتحتاج مراجعة بشرية قبل العرض.",
+    "out_of_scope": ["فتوى شخصية", "الحكم على إيمان الناس أو عباداتهم", "مقارنة مذهبية للأطفال", "رواية غير ثابتة", "تفاصيل قصصية مخترعة", "إجابة بلا مرجع"]
+  },
+  "sources": [
+    {
+      "id": "quranpedia-quran",
+      "type": "quran_reference",
+      "work": "القرآن الكريم",
+      "publisher": "موسوعة القرآن الكريم (Quranpedia)",
+      "edition": null,
+      "candidate_dump_version": "2026-10-02",
+      "candidate_dump_url": "https://quranpedia.net/dumps/mushafs-1.json.gz",
+      "candidate_dump_license": "https://quranpedia.net/dumps/LICENSE.md",
+      "candidate_dump_state": "not_downloaded_or_verified",
+      "translator": null,
+      "identifier_scheme": "quran:<surah>:<first_ayah>[-<last_ayah>]",
+      "reference_url": "https://quranpedia.net/",
+      "verse_url_pattern": "https://quranpedia.net/ayahs/{surah}/{first_ayah}/1",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "references_only"
+    },
+    {
+      "id": "dorar-hadith",
+      "type": "hadith_verification",
+      "work": "الموسوعة الحديثية",
+      "publisher": "مؤسسة الدرر السنية",
+      "edition": "online; hadith collection and number stored per item",
+      "translator": null,
+      "identifier_scheme": "hadith:<collection>:<number>",
+      "reference_url": "https://dorar.net/hadith",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "short invocations and verification links; no bulk hadith text"
+    },
+    {
+      "id": "dorar-fiqh",
+      "type": "fiqh_reference",
+      "work": "الموسوعة الفقهية",
+      "publisher": "مؤسسة الدرر السنية",
+      "edition": "online; page URL stored in prayer_learning.evidence_urls or item evidence_url",
+      "translator": null,
+      "identifier_scheme": "fiqh:<topic>:<section>",
+      "reference_url": "https://dorar.net/feqhia",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "original teaching summaries only"
+    }
+  ],
+  "quran_verse_counts_used": {
+    "1": 7, "2": 286, "3": 200, "4": 176, "5": 120, "6": 165, "7": 206,
+    "9": 129, "14": 52, "17": 111, "19": 98, "20": 135, "21": 112,
+    "26": 227, "27": 93, "28": 88, "61": 14, "96": 19,
+    "112": 4, "113": 5, "114": 6
+  }
+}
