@@ -23,12 +23,14 @@
       "scenes": [
         {
           "id": "adam-01",
-          "text": "خلق الله آدم عليه السلام وعلّمه أسماء أشياء كثيرة. أظهر الله بذلك فضل العلم الذي منحه له.",
+          "text": "خلق الله آدم عليه السلام وعلّمه الأسماء كلها. أظهر الله بذلك فضل العلم الذي منحه له.",
           "lesson": "أتعلم كل يوم شيئًا نافعًا.",
           "refs": [
             "quran:2:30-33"
           ],
-          "review_status": "draft"
+          "review_status": "draft",
+          "needs_check": true,
+          "change_note": "«أسماء أشياء كثيرة» صارت «الأسماء كلها» كما في البقرة 31."
         },
         {
           "id": "adam-02",
@@ -123,13 +125,15 @@
       "scenes": [
         {
           "id": "isa-01",
-          "text": "بشّر الله مريم عليها السلام بولد اسمه عيسى. تعجبت مريم، فأخبرها الرسول أن هذا الأمر يسير على الله.",
+          "text": "بشّر الله مريم عليها السلام بولد اسمه عيسى. تعجبت مريم، فأخبرها المَلَك أن هذا الأمر يسير على الله.",
           "lesson": "أتذكر قدرة الله وأثق به.",
           "refs": [
             "quran:19:16-21",
             "quran:3:45-47"
           ],
-          "review_status": "draft"
+          "review_status": "draft",
+          "needs_check": true,
+          "change_note": "«الرسول» صارت «المَلَك»: «الملائكة» في آل عمران 45، و«رسول ربك» في مريم 19 هو المَلَك."
         },
         {
           "id": "isa-02",
@@ -230,7 +234,9 @@
       "evidence_url": "https://dorar.net/hadith/sharh/70251",
       "grading": "حسن بحسب المصدر",
       "child_note": "اقرأ السور الثلاث صباحًا ومساءً، ثلاث مرات لكل سورة. نص السور يُجلب من المصحف المعتمد.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "needs_check": true,
+      "change_note": "الدرجة «حسن بحسب المصدر» لا تسمّي من حسّنه؛ يلزم ذكر المحكِّم وموضع حكمه."
     },
     {
       "id": "morning-by-god",
@@ -244,9 +250,11 @@
         "hadith:abu-dawud:5068"
       ],
       "evidence_url": "https://dorar.net/hadith/sharh/80365",
-      "grading": "صحيح بحسب تصحيح الألباني لرواية أبي داود 5068؛ يلزم تثبيت الطبعة",
+      "grading": "حسن — البغوي، شرح السنة 3/120؛ أخرجه أبو داود (5068) والترمذي (3391)",
       "child_note": "أبدأ صباحي بذكر الله. تُراجع صيغة الصباح قبل اعتمادها.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "needs_check": true,
+      "change_note": "سُجّلت درجة صفحة الدليل (البغوي، شرح السنة 3/120: حسن). صيغة الصباح «وإليك النشور» هي المشهورة؛ يتحقق المراجع من لفظها ومصدرها."
     },
     {
       "id": "evening-by-god",
@@ -254,15 +262,17 @@
         "evening"
       ],
       "kind": "hadith_invocation",
-      "display": "اللهم بك أمسينا، وبك نحيا، وبك نموت، وإليك النشور",
+      "display": "اللهم بك أمسينا، وبك أصبحنا، وبك نحيا، وبك نموت، وإليك المصير",
       "repeat": 1,
       "refs": [
         "hadith:abu-dawud:5068"
       ],
       "evidence_url": "https://dorar.net/hadith/sharh/80365",
-      "grading": "صحيح بحسب تصحيح الألباني لرواية أبي داود 5068؛ توجد ألفاظ أخرى",
+      "grading": "حسن — البغوي، شرح السنة 3/120؛ أخرجه أبو داود (5068) والترمذي (3391)",
       "child_note": "أختم يومي بذكر الله. يراجع المختص صيغة المساء ومصدرها.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "needs_check": true,
+      "change_note": "أُضيفت «وبك أصبحنا» الساقطة، وخُتم الذكر بـ«وإليك المصير» كما في صفحة دليله (البغوي، شرح السنة 3/120)، وعُدّلت الدرجة إلى ما في الصفحة."
     },
     {
       "id": "morning-evening-tasbih",
@@ -274,7 +284,7 @@
       "display": "سبحان الله وبحمده",
       "repeat": 100,
       "refs": [
-        "hadith:muslim:2692"
+        "hadith:muslim-abdulbaqi:2692"
       ],
       "evidence_url": "https://dorar.net/h/gUeCMn3a?osoul=1",
       "grading": "صحيح مسلم؛ يلزم مطابقة اللفظ من الطبعة المعتمدة",
@@ -290,12 +300,16 @@
       "display": "أستغفر الله",
       "repeat": 3,
       "refs": [
-        "hadith:muslim:591"
+        "hadith:muslim-abdulbaqi:591"
       ],
       "evidence_url": "https://dorar.net/hadith/sharh/43634",
       "grading": "صحيح مسلم",
       "child_note": "بعد التسليم، أستغفر الله ثلاث مرات.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "mismatch",
+      "evidence_note": "صفحة الدليل (الدرر، الشرح 43634) تعرض رواية أبي داود 1513 من غير نص الذكر؛ يلزم رابط يعرض لفظ مسلم 591.",
+      "needs_check": true,
+      "change_note": "عُلّم رابط الدليل: لا يعرض نص الحديث المذكور."
     },
     {
       "id": "after-prayer-salam",
@@ -303,15 +317,19 @@
         "after_obligatory_prayer"
       ],
       "kind": "hadith_invocation",
-      "display": "اللهم أنت السلام، ومنك السلام، تباركت يا ذا الجلال والإكرام",
+      "display": "اللهم أنت السلام، ومنك السلام، تباركت ذا الجلال والإكرام",
       "repeat": 1,
       "refs": [
-        "hadith:muslim:591"
+        "hadith:muslim-abdulbaqi:591"
       ],
       "evidence_url": "https://dorar.net/hadith/sharh/43634",
       "grading": "صحيح مسلم",
       "child_note": "أذكر الله بهذا الدعاء بعد الاستغفار.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "mismatch",
+      "evidence_note": "صفحة الدليل (الدرر، الشرح 43634) تعرض رواية أبي داود 1513 من غير نص الذكر؛ يلزم رابط يعرض لفظ مسلم 591.",
+      "needs_check": true,
+      "change_note": "حُذفت «يا» ليطابق لفظ مسلم 591: «تباركت ذا الجلال والإكرام». رابط الدليل لا يعرض النص."
     },
     {
       "id": "after-prayer-tasbih",
@@ -322,7 +340,7 @@
       "display": "سبحان الله 33 مرة، الحمد لله 33 مرة، الله أكبر 33 مرة، ثم: لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير",
       "repeat": 1,
       "refs": [
-        "hadith:muslim:597"
+        "hadith:muslim-abdulbaqi:597"
       ],
       "evidence_url": "https://dorar.net/h/lB1M5vxN?osoul=1",
       "grading": "صحيح مسلم 597؛ توجد صيغ ثابتة أخرى",
@@ -473,7 +491,7 @@
       "kind": "hadith_invocation",
       "display": "اللهم افتح لي أبواب رحمتك",
       "refs": [
-        "hadith:muslim:713"
+        "hadith:muslim-abdulbaqi:713"
       ],
       "evidence_url": "https://dorar.net/h/GKFx5lgu?osoul=1",
       "grading": "صحيح مسلم 713",
@@ -486,7 +504,7 @@
       "kind": "hadith_invocation",
       "display": "اللهم إني أسألك من فضلك",
       "refs": [
-        "hadith:muslim:713"
+        "hadith:muslim-abdulbaqi:713"
       ],
       "evidence_url": "https://dorar.net/h/GKFx5lgu?osoul=1",
       "grading": "صحيح مسلم 713",
@@ -630,7 +648,11 @@
         ],
         "evidence_url": "https://dorar.net/hadith/sharh/70527",
         "grading": "صحيح البخاري 757",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "same_hadith_other_entry",
+        "evidence_note": "الرابط يعرض صحيح الجامع 738 (البخاري 6667، مسلم 397)، وهو حديث المسيء صلاته نفسه من موضع آخر؛ المرجع المذكور البخاري 757.",
+        "needs_check": true,
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757."
       },
       {
         "id": "prayer-04",
@@ -641,7 +663,11 @@
         ],
         "evidence_url": "https://dorar.net/hadith/sharh/70527",
         "grading": "صحيح البخاري 757",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "same_hadith_other_entry",
+        "evidence_note": "الرابط يعرض صحيح الجامع 738 (البخاري 6667، مسلم 397)، وهو حديث المسيء صلاته نفسه من موضع آخر؛ المرجع المذكور البخاري 757.",
+        "needs_check": true,
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757."
       },
       {
         "id": "prayer-05",
@@ -652,7 +678,11 @@
         ],
         "evidence_url": "https://dorar.net/hadith/sharh/70527",
         "grading": "صحيح البخاري 757",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "same_hadith_other_entry",
+        "evidence_note": "الرابط يعرض صحيح الجامع 738 (البخاري 6667، مسلم 397)، وهو حديث المسيء صلاته نفسه من موضع آخر؛ المرجع المذكور البخاري 757.",
+        "needs_check": true,
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757."
       },
       {
         "id": "prayer-06",

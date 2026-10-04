@@ -43,7 +43,12 @@
       "publisher": "مؤسسة الدرر السنية",
       "edition": "online; hadith collection and number stored per item",
       "translator": null,
-      "identifier_scheme": "hadith:<collection>:<number>",
+      "identifier_scheme": "hadith:<numbering>:<number>, <numbering> one of numbering_schemes",
+      "numbering_schemes": {
+        "bukhari": "Sahih al-Bukhari, Fath al-Bari numbering (Muhammad Fuad Abdul-Baqi); the same numbering as the canonical corpus (corpus/canonical/hadith/bukhari.jsonl, ref bukhari:<n>)",
+        "muslim-abdulbaqi": "Sahih Muslim, Muhammad Fuad Abdul-Baqi numbering, as dorar.net cites it; NOT the canonical corpus's Muslim numbering (sunnah.com, ref muslim:<n>), so it is kept apart (ref muslim_abdulbaqi:<n> in corpus documents)",
+        "abu-dawud": "Sunan Abi Dawud, the numbering dorar.net cites; the edition is to be confirmed by the reviewer (not in the canonical corpus)"
+      },
       "reference_url": "https://dorar.net/hadith",
       "accessed_on": "2026-10-03",
       "rights_status": "pending_legal",

@@ -26,6 +26,14 @@ RAW = REPO / "corpus/raw"
 QURAN = re.compile(r"quran:(\d{1,3}):(\d{1,3})(?:-(\d{1,3}))?\Z")
 HADITH = re.compile(r"hadith:([a-z-]+):(\d+)\Z")
 FIQH = re.compile(r"fiqh:[a-z-]+:[a-z-]+\Z")
+ITEM_FIELDS = {"id", "text", "lesson", "display", "prayer", "rakah", "context", "kind", "occasion", "occasions",
+               "repeat", "child_note", "refs", "quote_ref", "evidence_url", "grading", "review_status",
+               # review flags: a changed or doubtful item waits for the reviewer (needs_check, change_note), and
+               # an evidence link that does not show the cited text says so (evidence_status, evidence_note)
+               "needs_check", "change_note", "evidence_status", "evidence_note"}
+# matches: the link shows the cited text; same_hadith_other_entry: it shows the same hadith from another entry
+# (another book or number); mismatch: it does not show the cited text, so the item cannot be released.
+EVIDENCE_STATUSES = ("matches", "same_hadith_other_entry", "mismatch")
 
 
 def load(folder, name):
@@ -76,6 +84,7 @@ def validate(folder=HERE, release=False, registry_path=REGISTRY, raw_root=RAW):
     items = []
     ids = set()
     domains = set(sources["policy"]["allowed_domains"])
+    numbering = {scheme for source in sources["sources"] for scheme in source.get("numbering_schemes", {})}
     verse_counts = {int(k): v for k, v in sources["quran_verse_counts_used"].items()}
     quran_source = next((s for s in sources["sources"] if s["id"] == "quranpedia-quran"), None)
     if not quran_source:
@@ -89,6 +98,17 @@ def validate(folder=HERE, release=False, registry_path=REGISTRY, raw_root=RAW):
             errors.append(f"duplicate/missing item id: {item_id}")
         ids.add(item_id)
         items.append(item)
+        for key in sorted(set(item) - ITEM_FIELDS):
+            errors.append(f"{item_id}: unknown field {key}")
+        if not isinstance(item.get("needs_check", False), bool):
+            errors.append(f"{item_id}: needs_check must be true or false")
+        if item.get("needs_check") and not str(item.get("change_note") or "").strip():
+            errors.append(f"{item_id}: needs_check needs a change_note saying what to check")
+        if "evidence_status" in item:
+            if item["evidence_status"] not in EVIDENCE_STATUSES:
+                errors.append(f"{item_id}: evidence_status must be one of {', '.join(EVIDENCE_STATUSES)}")
+            if not item.get("evidence_url") or not str(item.get("evidence_note") or "").strip():
+                errors.append(f"{item_id}: evidence_status needs evidence_url and evidence_note")
         if item.get("review_status") not in ("draft", "approved"):
             errors.append(f"{item_id}: invalid review status")
         if not item.get("refs"):
@@ -101,7 +121,10 @@ def validate(folder=HERE, release=False, registry_path=REGISTRY, raw_root=RAW):
                 surah, first, last = map(int, (quran[1], quran[2], quran[3] or quran[2]))
                 if not (1 <= surah <= 114 and 1 <= first <= last <= verse_counts.get(surah, 0)):
                     errors.append(f"{item_id}: invalid Quran range {ref}")
-            elif HADITH.fullmatch(ref):
+            elif hadith := HADITH.fullmatch(ref):
+                if hadith[1] not in numbering:
+                    errors.append(f"{item_id}: {ref}: numbering {hadith[1]} is not declared in sources.json "
+                                  f"({', '.join(sorted(numbering))})")
                 if not item.get("grading") or not item.get("evidence_url"):
                     errors.append(f"{item_id}: hadith needs grading and evidence URL")
             elif FIQH.fullmatch(ref):
@@ -168,6 +191,12 @@ def validate(folder=HERE, release=False, registry_path=REGISTRY, raw_root=RAW):
             errors.append("release blocked: named human reviews and approval date missing")
         if any(item.get("review_status") != "approved" for item in items + content["stories"]):
             errors.append("release blocked: item review incomplete")
+        flagged = [item["id"] for item in items if item.get("needs_check")]
+        if flagged:
+            errors.append(f"release blocked: {len(flagged)} items need a check ({', '.join(flagged)})")
+        mismatched = [item["id"] for item in items if item.get("evidence_status") == "mismatch"]
+        if mismatched:
+            errors.append(f"release blocked: evidence link does not show the cited text ({', '.join(mismatched)})")
         content_hash = hashlib.sha256((folder / "content.json").read_bytes()).hexdigest()
         for role in ("religious", "child_language"):
             if not any(
@@ -201,7 +230,8 @@ def validate(folder=HERE, release=False, registry_path=REGISTRY, raw_root=RAW):
             errors.append("release blocked: re-review date not set")
 
     summary = (f"OK: {len(content['stories'])} stories, {len(items)} referenced content items, "
-               f"{len(evaluation['cases'])} evaluation cases; release={'checked' if release else 'not requested'}")
+               f"{len(evaluation['cases'])} evaluation cases, {sum(1 for i in items if i.get('needs_check'))} items "
+               f"awaiting a check; release={'checked' if release else 'not requested'}")
     return errors, summary
 
 
