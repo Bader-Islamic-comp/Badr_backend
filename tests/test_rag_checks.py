@@ -452,3 +452,9 @@ def test_a_named_translation_quoted_word_for_word_is_released():
 def test_a_translation_presented_as_the_quran_or_misquoted_is_withheld(output, reason):
     result = _english(output).answer("Where did the brothers go in the morning?")
     assert (result.answer_type, result.text, result.reason) == ("abstained", responses.ABSTAIN_FAITH, reason)
+
+
+def test_faith_terms_read_the_contracted_article_and_the_plural():
+    # dev-patterns-v4: «للصلاة» (ل + the article), «وللصلاة» and the plural «الصلوات» are the term «الصلاة».
+    for text in ("ماذا أقول بعد الصلاة؟", "أقف للصلاة وأكبر", "وللصلاة وقت", "الصلوات الخمس", "بالصلاة"):
+        assert router.faith_words(text) == router.faith_words("الصلاة"), text

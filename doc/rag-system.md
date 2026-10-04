@@ -880,6 +880,7 @@ the other 10 pass every check; the 8 Arabizi questions that got the chat line no
 | Verifier | `grounding-v4` | quotations in curly single quotes are held word for word too |
 | Checks | `checks-v2` | the pipeline above (provenance `checks`, log `checks` and `checks_version`) |
 | Router | `dev-patterns-v3` | Arabizi faith terms; the AI-disclosure detector; «إنسانًا», «تنحسب», «بنو إسرائيل» |
+| Router | `dev-patterns-v4` | a faith term after the contracted article («للصلاة», «وللصلاة») and the plural «الصلوات» count as the term: the 2026-10-04 run held a correct prayer answer back as `off_topic` |
 | Policy | `conversation-policy-v3` | disclosure, misquoted-ayah correction, the checks (conversation-policy §14-16) |
 | Judge | `faith-judge-v1` | unchanged, now the last check |
 | Retriever, normalizer | `hybrid-rrf-v2`, `norm-v3` | unchanged |

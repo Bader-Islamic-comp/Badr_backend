@@ -35,7 +35,7 @@ from typing import Literal, Protocol, Sequence
 
 from . import arabic_rules, arabizi, normalize
 
-ROUTER_VERSION = "dev-patterns-v3"
+ROUTER_VERSION = "dev-patterns-v4"
 
 Category = Literal["safety", "personal_data", "ruling", "injection", "retrieve"]
 ORDER: tuple[Category, ...] = ("safety", "personal_data", "ruling", "injection")
@@ -276,9 +276,9 @@ FAITH_PATTERNS = (
 # Search-folded Arabic (alef variants to alef, ta marbuta to ha), with an optional
 # conjunction or preposition and article: Allah, Qur'an, prophet, messenger,
 # prayer, Ramadan, mosque, Islam, Muslim, Jannah, dua, hadith, surah, wudu.
-FAITH_ARABIC = ("(?:\u0648|\u0628|\u0641|\u0644)?(?:\u0627\u0644)?(?:"
+FAITH_ARABIC = ("(?:(?:\u0648|\u0641)?\u0644\u0644|(?:\u0648|\u0628|\u0641|\u0644)?(?:\u0627\u0644)?)(?:"
                 "\u0627\u0644\u0644\u0647|\u0642\u0631\u0627\u0646|\u0646\u0628\u064a|\u0631\u0633\u0648\u0644|"
-                "\u0635\u0644\u0627\u0647|\u0631\u0645\u0636\u0627\u0646|\u0645\u0633\u062c\u062f|"
+                "\u0635\u0644\u0627\u0647|\u0635\u0644\u0648\u0627\u062a|\u0631\u0645\u0636\u0627\u0646|\u0645\u0633\u062c\u062f|"
                 "\u0627\u0633\u0644\u0627\u0645|\u0645\u0633\u0644\u0645\\w*|\u062c\u0646\u0647|"
                 "\u062f\u0639\u0627\u0621|"
                 "\u062d\u062f\u064a\u062b|\u0633\u0648\u0631\u0647|\u0648\u0636\u0648\u0621)")
@@ -321,6 +321,10 @@ _NAME_AR = re.compile(rf"(?:{arabic_rules.PROPHET_NAMES_AR})")
 _ARABIC_TERM = re.compile("^[\u0621-\u064a ]+$")
 
 
+# dev-patterns-v4: a plural compares as its singular ("الصلوات" and "الصلاة" are one term).
+_FAITH_PLURALS = {"\u0635\u0644\u0648\u0627\u062a": "\u0635\u0644\u0627\u0647"}
+
+
 def _faith_key(word: str) -> str:
     """One key per faith term, so a question and its answer compare alike: an English plural reads singular,
     and an Arabic term loses its attached و ف ب ل and article ("والملايكه" and "الملايكه" are one term)."""
@@ -328,11 +332,15 @@ def _faith_key(word: str) -> str:
         return word[:-1] if len(word) > 4 and word.endswith("s") else word
     if "\u0644\u0644\u0647" in word:  # every form of the name of Allah
         return "\u0627\u0644\u0644\u0647"
+    if word[:1] in ("\u0648", "\u0641") and word[1:3] == "\u0644\u0644" and len(word) > 5:
+        word = word[1:]
+    if word.startswith("\u0644\u0644") and len(word) > 4:  # "للصلاه": ل + the article
+        word = "\u0627\u0644" + word[2:]
     if word[0] in "\u0648\u0641\u0628\u0644" and len(word) > 4:
         word = word[1:]
     if word.startswith("\u0627\u0644") and len(word) > 4:
         word = word[2:]
-    return word
+    return _FAITH_PLURALS.get(word, word)
 
 
 def faith_words(text: str) -> set[str]:
