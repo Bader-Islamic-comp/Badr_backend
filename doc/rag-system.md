@@ -936,7 +936,26 @@ chunk on it, 12:87-93 (the answer), 12:58-63 and 12:75-79. On `wave1-review-1` r
 branch moves 15 questions across the fourth place (6 in, 9 out), at the margin and with no pattern by prophet or
 variant; header phrases alone add one. The harmful-set routes are unchanged.
 
+**A person of the story counts (`checks-v3`).** «ما معنى «فصبر جميل» في قصة يعقوب؟» got a right answer
+(Mujahid's explanation and 12:18) that `faith_terms` refused as `off_topic`: the question names Yaqub and the
+ayat say «أباهم». Now a prophet's name the question asks about also counts as used when the cited passages tell
+a story that person appears in: the passages' prophet (`prophetId`, or the episode map for a Quran range) and
+the people listed for that story in `checks.STORY_PEOPLE` (Yaqub in Yusuf's, Harun in Musa's, Ismail and Ishaq
+in Ibrahim's), with names from `data/query_aliases.json`. Such a pass is recorded as `pass:story_person`. A name
+from another story, or passages with no prophet (hadith), still fail; a decline still fails first. On the
+device chunks the 2026-10-03 case passes; Yaqub over Nuh's passages and Harun over Yusuf's still fail. The replay
+of the 2026-10-01 recording over `wave1-review-1` is unchanged: 17 released answers pass every deterministic
+check, yusuf-15-msa still fails `numbers`, and the other recorded questions route as before.
+
 **Limits.** The adhkar after the prayer now reach the four (second, from outside them), but the hashing embedder
 still ranks the prayer-steps lesson first; ordering them needs a semantic embedder, not more lexical rules.
 "About as relevant" is a fused-score ratio, not a judgement of the content. A tafsir chunk tells the model what a
 scholar said about the passage; the prompt and checks treat it as evidence like any source.
+
+**Versions.**
+
+| Piece | Version | What changed |
+| --- | --- | --- |
+| Retriever | `hybrid-rrf-v3` | passages ranked per branch, commentary after its passage, curated content first, header phrases |
+| Checks | `checks-v3` | `faith_terms` accepts a person of the cited story (`pass:story_person`) |
+| Prompt, verifier, judge, router, policy | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `dev-patterns-v3`, `conversation-policy-v3` | unchanged |

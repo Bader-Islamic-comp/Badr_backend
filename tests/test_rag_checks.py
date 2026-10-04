@@ -114,6 +114,57 @@ def test_the_judge_still_decides_last_and_is_unavailable_without_a_model():
     assert failure is None and results[-1].code() == "unavailable:no_model"
 
 
+# faith_terms: a person of the cited story (checks-v3) --------------------------------------------------------
+
+def _faith_terms(question, text, cited, episodes=EPISODES):
+    return checks.check_faith_terms(answer(question, text, cited, faith_topic=router.is_faith_topic(question)),
+                                    episodes).code()
+
+
+def test_a_prophet_named_by_kinship_in_his_story_counts_as_the_question_term():
+    # The 2026-10-03 case: the question names Yaqub, the ayat and the answer say "their father".
+    assert _faith_terms("ما معنى «صبر جميل» في قصة يعقوب؟", "قال أبوهم صبر جميل والله المستعان.",
+                        [WELL_CHUNK]) == "pass:story_person"
+    assert checks.CHECKS_VERSION == "checks-v3"
+
+
+@pytest.mark.parametrize("question, prophet", [
+    ("ماذا قال هارون في قصة موسى؟", "musa"), ("ما قصة إسماعيل عليه السلام؟", "ibrahim"),
+    ("ما قصة إسحاق عليه السلام؟", "ibrahim"), ("What is the story of Jacob?", "yusuf"),
+])
+def test_each_listed_person_counts_in_his_own_story_only(question, prophet):
+    passage = _chunk("quran-097-001-005#1", "وذهب الفتى إلى السوق ورأى الناس هناك", prophet=prophet,
+                     refs=[f"quran:97:{n}" for n in range(1, 6)])
+    assert _faith_terms(question, "ذهب الفتى إلى السوق.", [passage], None) == "pass:story_person"
+    other = "nuh" if prophet != "nuh" else "adam"
+    elsewhere = _chunk("quran-097-001-005#1", passage.text, prophet=other, refs=passage.source_refs)
+    assert _faith_terms(question, "ذهب الفتى إلى السوق.", [elsewhere], None) == "fail:off_topic"
+
+
+def test_a_name_from_another_story_is_still_off_topic():
+    assert _faith_terms("ما قصة هارون عليه السلام؟", "قال أبوهم صبر جميل.", [WELL_CHUNK]) == "fail:off_topic"
+    assert _faith_terms("ما قصة يعقوب عليه السلام؟", "قال الفتى لأبيه يا أبت.", [FATHER]) == "fail:off_topic"
+    assert _faith_terms("ما قصة يعقوب عليه السلام؟", "الكلمة الطيبة صدقة.", [HADITH]) == "fail:off_topic"
+
+
+def test_the_episode_map_places_a_passage_without_a_prophet_id():
+    unlabelled = _chunk(WELL_CHUNK.id, WELL_CHUNK.text, refs=WELL_CHUNK.source_refs)
+    question, text = "ما معنى «صبر جميل» في قصة يعقوب؟", "قال أبوهم صبر جميل."
+    assert _faith_terms(question, text, [unlabelled]) == "pass:story_person"
+    assert _faith_terms(question, text, [unlabelled], None) == "fail:off_topic"
+
+
+def test_the_person_rule_never_excuses_a_decline():
+    assert _faith_terms("ما معنى «صبر جميل» في قصة يعقوب؟", "The sources do not say.", [WELL_CHUNK]) == "fail:declined"
+
+
+def test_the_verifier_reads_the_episode_map_for_faith_terms():
+    unlabelled = _chunk(WELL_CHUNK.id, WELL_CHUNK.text, refs=WELL_CHUNK.source_refs)
+    results, failure = Verifier(EPISODES, AYAHS).run(
+        answer("ما معنى «صبر جميل» في قصة يعقوب؟", "قال أبوهم صبر جميل.", [unlabelled], faith_topic=True), None)
+    assert failure is None and checks.summary(results)["faith_terms"] == "pass:story_person"
+
+
 # answered ------------------------------------------------------------------------------------------------------
 
 @pytest.mark.parametrize("question, wanted", [
@@ -359,7 +410,7 @@ def test_faith_answers_record_every_check_in_provenance_and_codes_only_on_the_lo
     assert (result.answer_type, result.reason) == ("abstained", "faith_abstain:answered:no_quantity")
     assert {check.name: check.status for check in result.checks}["answered"] == "fail"
     line = json.loads(caplog.records[-1].getMessage().split(" ", 1)[1])
-    assert line["checks"]["answered"] == "fail:answered:no_quantity" and line["checks_version"] == "checks-v2"
+    assert line["checks"]["answered"] == "fail:answered:no_quantity" and line["checks_version"] == "checks-v3"
     assert "الصباح" not in caplog.text and "البئر" not in caplog.text
 
 
