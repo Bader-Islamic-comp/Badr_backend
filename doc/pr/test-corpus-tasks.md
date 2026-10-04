@@ -11,7 +11,7 @@ the app. Review by owner:
 
 | Owner | Look at | Decide |
 | --- | --- | --- |
-| Scholarly board | the 10 `needs_check` items and the `evidence_status` marks in `corpus/competition-ar/content.json` | Approve the fixed wordings (evening dhikr, «تباركت ذا الجلال», adam-01, isa-01) and replace the mismatched Dorar links |
+| Scholarly board | the 10 `needs_check` items and the `evidence_status` marks in `corpus/competition-ar/content.json` | Approve the fixed wordings («تباركت ذا الجلال», adam-01, isa-01), choose the evening dhikr's narration (أبو داود 5068 or الترمذي 3391), and confirm the Dorar entries now linked (`evidence_entry`) |
 | Governance owner | `quranpedia-mushaf-hafs` (candidate) | Clearing it lets the 9 Quranic supplications and the three surahs into releases |
 | Safeguarding / child editor | `rag/curated.py` cue lists; the verbatim replies | Extend the occasion cues children really use |
 | Pipeline owner | `rag/retriever.py` (`hybrid-rrf-v3`), `rag/checks.py` (`checks-v3`), `rag/curated.py` | The 0.9 curated-first ratio; the remaining judge rejections of the Prophet ﷺ story question |

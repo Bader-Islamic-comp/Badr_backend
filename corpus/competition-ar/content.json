@@ -231,12 +231,15 @@
         "quran:113:1-5",
         "quran:114:1-6"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/70251",
-      "grading": "حسن بحسب المصدر",
+      "evidence_url": "https://dorar.net/h/xgBR2fIt",
+      "grading": "حسن — الألباني، صحيح أبي داود 5082",
       "child_note": "اقرأ السور الثلاث صباحًا ومساءً، ثلاث مرات لكل سورة. نص السور يُجلب من المصحف المعتمد.",
       "review_status": "draft",
       "needs_check": true,
-      "change_note": "الدرجة «حسن بحسب المصدر» لا تسمّي من حسّنه؛ يلزم ذكر المحكِّم وموضع حكمه."
+      "change_note": "الدرجة «حسن بحسب المصدر» لا تسمّي من حسّنه؛ يلزم ذكر المحكِّم وموضع حكمه.",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح أبي داود 5082 (الألباني)",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "morning-by-god",
@@ -249,13 +252,16 @@
       "refs": [
         "hadith:abu-dawud:5068"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/80365",
-      "grading": "حسن — البغوي، شرح السنة 3/120؛ أخرجه أبو داود (5068) والترمذي (3391)",
+      "evidence_url": "https://dorar.net/h/jETvRg4a",
+      "grading": "إسناده صحيح — شعيب الأرناؤوط، تخريج سنن أبي داود 5068",
       "child_note": "أبدأ صباحي بذكر الله.",
       "review_status": "draft",
       "needs_check": true,
       "change_note": "سُجّلت درجة صفحة الدليل (البغوي، شرح السنة 3/120: حسن). صيغة الصباح «وإليك النشور» هي المشهورة؛ يتحقق المراجع من لفظها ومصدرها.",
-      "review_note": "تُراجع صيغة الصباح قبل اعتمادها."
+      "review_note": "تُراجع صيغة الصباح قبل اعتمادها.",
+      "evidence_status": "matches",
+      "evidence_entry": "تخريج سنن أبي داود 5068 (شعيب الأرناؤوط)",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "evening-by-god",
@@ -263,18 +269,21 @@
         "evening"
       ],
       "kind": "hadith_invocation",
-      "display": "اللهم بك أمسينا، وبك أصبحنا، وبك نحيا، وبك نموت، وإليك المصير",
+      "display": "اللهم بك أمسينا، وبك نحيا، وبك نموت، وإليك النشور",
       "repeat": 1,
       "refs": [
         "hadith:abu-dawud:5068"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/80365",
-      "grading": "حسن — البغوي، شرح السنة 3/120؛ أخرجه أبو داود (5068) والترمذي (3391)",
+      "evidence_url": "https://dorar.net/h/jETvRg4a",
+      "grading": "إسناده صحيح — شعيب الأرناؤوط، تخريج سنن أبي داود 5068",
       "child_note": "أختم يومي بذكر الله.",
       "review_status": "draft",
       "needs_check": true,
-      "change_note": "أُضيفت «وبك أصبحنا» الساقطة، وخُتم الذكر بـ«وإليك المصير» كما في صفحة دليله (البغوي، شرح السنة 3/120)، وعُدّلت الدرجة إلى ما في الصفحة.",
-      "review_note": "يراجع المختص صيغة المساء ومصدرها."
+      "change_note": "Restored to the wording of أبو داود 5068 (its Dorar entry, checked 2026-10-04). The 2026-10-04 change to «وبك أصبحنا … وإليك المصير» followed another narration (البغوي، شرح السنة؛ الترمذي 3391); both are attested — the reviewer chooses the wording to teach and its matching entry.",
+      "review_note": "يراجع المختص صيغة المساء ومصدرها.",
+      "evidence_status": "matches",
+      "evidence_entry": "تخريج سنن أبي داود 5068 (شعيب الأرناؤوط)",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "morning-evening-tasbih",
@@ -288,10 +297,13 @@
       "refs": [
         "hadith:muslim-abdulbaqi:2692"
       ],
-      "evidence_url": "https://dorar.net/h/gUeCMn3a?osoul=1",
-      "grading": "صحيح مسلم؛ يلزم مطابقة اللفظ من الطبعة المعتمدة",
+      "evidence_url": "https://dorar.net/h/Cfuml05Y",
+      "grading": "صحيح — صحيح مسلم 2692",
       "child_note": "يمكن تعلم هذا الذكر تدريجيًا، من غير ضغط أو شعور بالذنب.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 2692",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "after-prayer-istighfar",
@@ -304,14 +316,15 @@
       "refs": [
         "hadith:muslim-abdulbaqi:591"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/43634",
-      "grading": "صحيح مسلم",
+      "evidence_url": "https://dorar.net/h/8eEYq84T",
+      "grading": "صحيح — صحيح مسلم 591",
       "child_note": "بعد التسليم، أستغفر الله ثلاث مرات.",
       "review_status": "draft",
-      "evidence_status": "mismatch",
-      "evidence_note": "صفحة الدليل (الدرر، الشرح 43634) تعرض رواية أبي داود 1513 من غير نص الذكر؛ يلزم رابط يعرض لفظ مسلم 591.",
+      "evidence_status": "matches",
+      "evidence_note": "checked on dorar.net 2026-10-04; The previous link (sharh 43634) showed أبو داود 1513 without the text.",
       "needs_check": true,
-      "change_note": "عُلّم رابط الدليل: لا يعرض نص الحديث المذكور."
+      "change_note": "عُلّم رابط الدليل: لا يعرض نص الحديث المذكور.",
+      "evidence_entry": "صحيح مسلم 591"
     },
     {
       "id": "after-prayer-salam",
@@ -324,14 +337,15 @@
       "refs": [
         "hadith:muslim-abdulbaqi:591"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/43634",
-      "grading": "صحيح مسلم",
+      "evidence_url": "https://dorar.net/h/8eEYq84T",
+      "grading": "صحيح — صحيح مسلم 591",
       "child_note": "أذكر الله بهذا الدعاء بعد الاستغفار.",
       "review_status": "draft",
-      "evidence_status": "mismatch",
-      "evidence_note": "صفحة الدليل (الدرر، الشرح 43634) تعرض رواية أبي داود 1513 من غير نص الذكر؛ يلزم رابط يعرض لفظ مسلم 591.",
+      "evidence_status": "matches",
+      "evidence_note": "checked on dorar.net 2026-10-04; The previous link (sharh 43634) showed أبو داود 1513 without the text.",
       "needs_check": true,
-      "change_note": "حُذفت «يا» ليطابق لفظ مسلم 591: «تباركت ذا الجلال والإكرام». رابط الدليل لا يعرض النص."
+      "change_note": "حُذفت «يا» ليطابق لفظ مسلم 591: «تباركت ذا الجلال والإكرام». رابط الدليل لا يعرض النص.",
+      "evidence_entry": "صحيح مسلم 591"
     },
     {
       "id": "after-prayer-tasbih",
@@ -344,10 +358,13 @@
       "refs": [
         "hadith:muslim-abdulbaqi:597"
       ],
-      "evidence_url": "https://dorar.net/h/lB1M5vxN?osoul=1",
-      "grading": "صحيح مسلم 597؛ توجد صيغ ثابتة أخرى",
+      "evidence_url": "https://dorar.net/h/0gxejrPz",
+      "grading": "صحيح — صحيح مسلم 597",
       "child_note": "أتعلم هذا الذكر بعد الصلاة بالتدرج، مع مراعاة وجود صيغ ثابتة أخرى.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 597",
+      "evidence_note": "checked on dorar.net 2026-10-04; The previous link (dorar.net/h/lB1M5vxN) showed a weak narration (الألباني، ضعيف الترغيب 983) with another formula."
     }
   ],
   "daily_duas": [
@@ -443,10 +460,13 @@
       "refs": [
         "hadith:bukhari:6324"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/36822",
+      "evidence_url": "https://dorar.net/h/jsYGsTXi",
       "grading": "صحيح البخاري",
       "child_note": "أذكر الله قبل النوم.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 6324",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-wake",
@@ -456,10 +476,13 @@
       "refs": [
         "hadith:bukhari:6324"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/36822",
+      "evidence_url": "https://dorar.net/h/jsYGsTXi",
       "grading": "صحيح البخاري",
       "child_note": "أحمد الله عندما أستيقظ.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 6324",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-before-food",
@@ -469,10 +492,13 @@
       "refs": [
         "hadith:bukhari:5376"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/14362",
+      "evidence_url": "https://dorar.net/h/Rrj6d4b6",
       "grading": "صحيح البخاري",
       "child_note": "أسمّي الله قبل الطعام وآكل بأدب.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 5376",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-bathroom",
@@ -482,10 +508,13 @@
       "refs": [
         "hadith:bukhari:142"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/69251",
+      "evidence_url": "https://dorar.net/h/q3nrNnAI",
       "grading": "صحيح البخاري؛ يُراجع ضبط النص",
       "child_note": "أقول الدعاء قبل دخول الحمام، في خصوصية.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 142",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-mosque-enter",
@@ -495,10 +524,13 @@
       "refs": [
         "hadith:muslim-abdulbaqi:713"
       ],
-      "evidence_url": "https://dorar.net/h/GKFx5lgu?osoul=1",
+      "evidence_url": "https://dorar.net/h/GKFx5lgu",
       "grading": "صحيح مسلم 713",
       "child_note": "أدعو بهذا عند دخول المسجد.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 713",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-mosque-exit",
@@ -508,10 +540,13 @@
       "refs": [
         "hadith:muslim-abdulbaqi:713"
       ],
-      "evidence_url": "https://dorar.net/h/GKFx5lgu?osoul=1",
+      "evidence_url": "https://dorar.net/h/GKFx5lgu",
       "grading": "صحيح مسلم 713",
       "child_note": "أدعو الله من فضله عند الخروج من المسجد.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 713",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-sneezing",
@@ -521,10 +556,13 @@
       "refs": [
         "hadith:bukhari:6224"
       ],
-      "evidence_url": "https://dorar.net/hadith/sharh/117872",
+      "evidence_url": "https://dorar.net/h/SUJwx8jQ",
       "grading": "صحيح البخاري؛ يُراجع سياق الرد",
       "child_note": "إذا عطست أحمد الله، وأتعلم أدب الرد على من يدعو لي.",
-      "review_status": "draft"
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 6224",
+      "evidence_note": "checked on dorar.net 2026-10-04"
     },
     {
       "id": "dua-ask-guidance",
@@ -579,7 +617,10 @@
           "fiqh:wudu:description"
         ],
         "review_status": "draft",
-        "evidence_url": "https://dorar.net/feqhia/258/"
+        "evidence_url": "https://dorar.net/feqhia/234/",
+        "evidence_status": "matches",
+        "evidence_entry": "الموسوعة الفقهية: الباب السادس: الوضوء",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous page (feqhia/258) covers washing the face only."
       },
       {
         "id": "wudu-01",
@@ -648,13 +689,14 @@
           "hadith:bukhari:757",
           "fiqh:prayer:description"
         ],
-        "evidence_url": "https://dorar.net/hadith/sharh/70527",
+        "evidence_url": "https://dorar.net/h/3gzp06Yt",
         "grading": "صحيح البخاري 757",
         "review_status": "draft",
-        "evidence_status": "same_hadith_other_entry",
-        "evidence_note": "الرابط يعرض صحيح الجامع 738 (البخاري 6667، مسلم 397)، وهو حديث المسيء صلاته نفسه من موضع آخر؛ المرجع المذكور البخاري 757.",
+        "evidence_status": "matches",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous link showed صحيح الجامع 738 (the same hadith from another entry).",
         "needs_check": true,
-        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757."
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757.",
+        "evidence_entry": "صحيح البخاري 757"
       },
       {
         "id": "prayer-04",
@@ -663,13 +705,14 @@
           "hadith:bukhari:757",
           "fiqh:prayer:description"
         ],
-        "evidence_url": "https://dorar.net/hadith/sharh/70527",
+        "evidence_url": "https://dorar.net/h/3gzp06Yt",
         "grading": "صحيح البخاري 757",
         "review_status": "draft",
-        "evidence_status": "same_hadith_other_entry",
-        "evidence_note": "الرابط يعرض صحيح الجامع 738 (البخاري 6667، مسلم 397)، وهو حديث المسيء صلاته نفسه من موضع آخر؛ المرجع المذكور البخاري 757.",
+        "evidence_status": "matches",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous link showed صحيح الجامع 738 (the same hadith from another entry).",
         "needs_check": true,
-        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757."
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757.",
+        "evidence_entry": "صحيح البخاري 757"
       },
       {
         "id": "prayer-05",
@@ -678,13 +721,14 @@
           "hadith:bukhari:757",
           "fiqh:prayer:description"
         ],
-        "evidence_url": "https://dorar.net/hadith/sharh/70527",
+        "evidence_url": "https://dorar.net/h/3gzp06Yt",
         "grading": "صحيح البخاري 757",
         "review_status": "draft",
-        "evidence_status": "same_hadith_other_entry",
-        "evidence_note": "الرابط يعرض صحيح الجامع 738 (البخاري 6667، مسلم 397)، وهو حديث المسيء صلاته نفسه من موضع آخر؛ المرجع المذكور البخاري 757.",
+        "evidence_status": "matches",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous link showed صحيح الجامع 738 (the same hadith from another entry).",
         "needs_check": true,
-        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757."
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757.",
+        "evidence_entry": "صحيح البخاري 757"
       },
       {
         "id": "prayer-06",
@@ -722,7 +766,9 @@
         ],
         "evidence_url": "https://dorar.net/feqhia/1448/",
         "id": "rakah-fajr",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
       },
       {
         "prayer": "الظهر",
@@ -733,7 +779,9 @@
         ],
         "evidence_url": "https://dorar.net/feqhia/1446/",
         "id": "rakah-dhuhr",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
       },
       {
         "prayer": "العصر",
@@ -744,7 +792,9 @@
         ],
         "evidence_url": "https://dorar.net/feqhia/1446/",
         "id": "rakah-asr",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
       },
       {
         "prayer": "المغرب",
@@ -755,7 +805,9 @@
         ],
         "evidence_url": "https://dorar.net/feqhia/1448/",
         "id": "rakah-maghrib",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
       },
       {
         "prayer": "العشاء",
@@ -766,14 +818,16 @@
         ],
         "evidence_url": "https://dorar.net/feqhia/1446/",
         "id": "rakah-isha",
-        "review_status": "draft"
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
       }
     ],
     "evidence_urls": {
       "prayer_description": "https://dorar.net/feqhia/880/",
-      "wudu_description": "https://dorar.net/feqhia/258/",
+      "wudu_description": "https://dorar.net/feqhia/234/",
       "wudu_order": "https://dorar.net/feqhia/289/",
-      "prayer_hadith": "https://dorar.net/hadith/sharh/70527"
+      "prayer_hadith": "https://dorar.net/h/3gzp06Yt"
     }
   },
   "content_origin": "new Badr competition draft; independent of previous corpus branches",

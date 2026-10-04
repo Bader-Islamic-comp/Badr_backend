@@ -39,9 +39,19 @@ served verbatim. Built by two parallel agents (`test/corpus-tasks-c2`, `test/cor
 
 ### Fixed (content, flagged `needs_check` for the reviewer)
 
-- The evening dhikr's missing «وبك أصبحنا» and its grading; «تباركت ذا الجلال» (Muslim 591); «الأسماء كلها»
+- «تباركت ذا الجلال» (Muslim 591); «الأسماء كلها»
   (adam-01); «المَلَك» (isa-01); Muslim references declared in Abdul-Baqi numbering; evidence links that do not
   show the cited text are marked. Two editor's notes moved out of the child-facing text (`review_note`).
+- **Every Dorar evidence link now opens the exact entry it cites** (checked by hand on dorar.net, 2026-10-04;
+  `evidence_entry` names it): 11 hadith and 5 fiqh pages. Three were wrong — the after-prayer tasbih linked a
+  weak narration (الألباني، ضعيف الترغيب 983) with another formula, the after-prayer istighfar and «اللهم أنت
+  السلام» linked أبو داود 1513 without the text, and the prayer steps linked صحيح الجامع 738; wudu linked a page on
+  washing the face only. The rak'ah counts are marked `indirect` (no Dorar page lists them). Gradings now name
+  their grader and entry.
+- **Corrected:** the evening dhikr was right as the package wrote it — it is أبو داود 5068's wording
+  («اللهم بك أمسينا، وبك نحيا، وبك نموت، وإليك النشور»); only its link showed another narration (البغوي،
+  الترمذي 3391: «وبك أصبحنا … وإليك المصير»). The earlier "fix" is undone and the item flagged for the reviewer
+  to choose the wording.
 
 ### Verification
 

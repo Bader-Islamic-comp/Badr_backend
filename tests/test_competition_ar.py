@@ -258,11 +258,12 @@ def test_the_validator_passes_the_package_and_counts_items_awaiting_a_check(pack
 
 def test_release_refuses_while_items_need_a_check_or_evidence_does_not_match(package):
     folder, registry, raw = package
+    # Every Dorar link was matched to its cited entry on 2026-10-04; a mismatch is made here to test the gate.
+    _edit(folder, lambda c: _item(c, "after-prayer-salam").update(evidence_status="mismatch"))
     errors, _ = _validator().validate(folder, True, registry, raw)
     assert any(e.startswith("release blocked:") and "items need a check" in e and "evening-by-god" in e
                for e in errors)
-    assert any("evidence link does not show the cited text (after-prayer-istighfar, after-prayer-salam)" in e
-               for e in errors)
+    assert any("evidence link does not show the cited text (after-prayer-salam)" in e for e in errors)
     assert "release blocked: registry source quranpedia-mushaf-hafs is candidate, not cleared" in errors
 
 
@@ -272,8 +273,8 @@ def test_release_refuses_while_items_need_a_check_or_evidence_does_not_match(pac
     (lambda c: _item(c, "dua-sleep").update(needs_check="yes", change_note="x"), "needs_check must be true or false"),
     (lambda c: _item(c, "dua-sleep").update(evidence_status="unsure", evidence_note="x"),
      "dua-sleep: evidence_status must be one of"),
-    (lambda c: _item(c, "dua-sleep").update(evidence_status="mismatch"), "evidence_status needs evidence_url and "
-                                                                         "evidence_note"),
+    (lambda c: (_item(c, "dua-sleep").update(evidence_status="mismatch"), _item(c, "dua-sleep").pop("evidence_note")),
+     "evidence_status needs evidence_url and evidence_note"),
     (lambda c: _item(c, "dua-mosque-enter").update(refs=["hadith:muslim:713"]),
      "dua-mosque-enter: hadith:muslim:713: numbering muslim is not declared"),
 ])
