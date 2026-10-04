@@ -960,3 +960,21 @@ scholar said about the passage; the prompt and checks treat it as evidence like 
 | Retriever | `hybrid-rrf-v3` | passages ranked per branch, commentary after its passage, curated content first, header phrases |
 | Checks | `checks-v3` | `faith_terms` accepts a person of the cited story (`pass:story_person`) |
 | Prompt, verifier, judge, router, policy | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `dev-patterns-v3`, `conversation-policy-v3` | unchanged |
+
+## 18. Curated items verbatim (`curated-v1`, 2026-10-04)
+
+`rag/curated.py` selects curated chunks by their document `topics` — `occasion:<code>` on the package's adhkar
+and supplications, `lesson:<section>` on its prayer lessons (set by `corpusprep/competition.py`) — and
+`AnswerService.prepare` returns them verbatim as a `grounded` result with reason `curated_verbatim:<topic>`, one
+segment and source per item, in release order, at most four (conversation-policy §17). The question must name
+one occasion and ask for words, or name a prayer lesson and ask how (cue lists in the module; a cue word also
+matches behind an attached و ف ب ل). Only chunks the retriever may serve in the service's language and age band
+are eligible (`HybridRetriever.eligible`), so drafts appear only in a preview and a candidate source keeps an item
+out of the release as before. Provenance records `"curated": "curated-v1"`; the policy is
+`conversation-policy-v4`.
+
+On release `wave1-comp-3` the package's five adhkar, supplication and prayer evaluation questions (all withheld
+by the 2026-10-04 real-model run) get their items; the stories, the abstention cases and the ruling still take
+their earlier paths. Limits: one occasion per question; the cues are a fixed list a native-speaker reviewer
+should extend; the three Quranic morning/evening surahs and the other Quranic supplications stay out of the
+release while `quranpedia-mushaf-hafs` is a candidate source.

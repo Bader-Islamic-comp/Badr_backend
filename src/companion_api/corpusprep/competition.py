@@ -101,10 +101,14 @@ def source_refs(item: dict, prayer: dict | None = None) -> list[str]:
     return list(dict.fromkeys(out))
 
 
+def occasions(item: dict) -> list[str]:
+    """The item's occasion codes ("morning", "before_eating", ...)."""
+    return item.get("occasions") or [item["occasion"]]
+
+
 def occasion_label(item: dict) -> str:
     """The item's occasions in Arabic, joined with «، »."""
-    occasions = item.get("occasions") or [item["occasion"]]
-    return "، ".join(OCCASIONS_AR.get(occasion, occasion) for occasion in occasions)
+    return "، ".join(OCCASIONS_AR.get(occasion, occasion) for occasion in occasions(item))
 
 
 def _times(count: int) -> str:
@@ -171,7 +175,7 @@ def documents(content: dict, entry: dict, quran: dict[tuple[int, int], str]) -> 
             units.append(_unit("note", item["child_note"], doc_id, refs, False))
             docs.append(document(
                 doc_id, f"{name}: {_short(item['display'])}", "dua", f"{name} — {occasion_label(item)} ({DRAFT})",
-                units, grading=item.get("grading"),
+                units, grading=item.get("grading"), topics=[f"occasion:{o}" for o in occasions(item)],
                 sourceIds=[SOURCE_ID, QURAN_SOURCE_ID] if quran_refs else [SOURCE_ID]))
     prayer = content["prayer_learning"]
     common = "common" if prayer.get("madhhab_applicability") == "shared_basics_only" else None
@@ -186,7 +190,7 @@ def documents(content: dict, entry: dict, quran: dict[tuple[int, int], str]) -> 
         docs.append(document(
             doc_id, f"تعليم الصلاة: {title}", "lesson",
             f"تعليم الصلاة — {title} ({DRAFT}؛ الأساسيات المشتركة فقط)", units,
-            grading="؛ ".join(gradings) or None, madhhabScope=common))
+            grading="؛ ".join(gradings) or None, madhhabScope=common, topics=[f"lesson:{suffix}"]))
     return docs
 
 

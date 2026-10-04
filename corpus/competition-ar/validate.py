@@ -30,7 +30,9 @@ ITEM_FIELDS = {"id", "text", "lesson", "display", "prayer", "rakah", "context", 
                "repeat", "child_note", "refs", "quote_ref", "evidence_url", "grading", "review_status",
                # review flags: a changed or doubtful item waits for the reviewer (needs_check, change_note), and
                # an evidence link that does not show the cited text says so (evidence_status, evidence_note)
-               "needs_check", "change_note", "evidence_status", "evidence_note"}
+               "needs_check", "change_note", "evidence_status", "evidence_note",
+               # an editor's note kept out of the child-facing text (child_note), for the reviewer only
+               "review_note"}
 # matches: the link shows the cited text; same_hadith_other_entry: it shows the same hadith from another entry
 # (another book or number); mismatch: it does not show the cited text, so the item cannot be released.
 EVIDENCE_STATUSES = ("matches", "same_hadith_other_entry", "mismatch")

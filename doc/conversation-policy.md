@@ -385,3 +385,19 @@ never as the words of the Quran, in the third person, quoted word for word.
 
 **Open review items.** The disclosure and correction copy (Arabic and English), the Arabizi faith terms and the
 disclosure patterns need safeguarding, scholarly and native-speaker review, like all copy in `responses.py`.
+
+## 17. conversation-policy-v4: curated adhkar, supplications and prayer lessons verbatim (2026-10-04)
+
+When a child asks what to say on an occasion the curated competition package covers (morning, evening, after
+the obligatory prayer, before eating, before sleep, entering the mosque, after sneezing and the others in
+`corpus/competition-ar/content.json`), or how to do a part of the prayer it teaches (the steps, wudu,
+preparation, the number of rak'ahs), Robert replies with those items exactly as the package writes them, each
+cited, and calls no model (`rag/curated.py`, `curated-v1`). The step runs after the routing, disclosure,
+language and misquoted-ayah steps and before retrieval, for Arabic and Arabizi questions only. A question must
+name exactly one occasion and ask for words (ذكر، دعاء، ماذا أقول…), or name a prayer lesson and ask how; every
+other question goes on to retrieval as before, so stories are still generated and checked.
+
+Why: on 2026-10-04 the real model answered every story question of the package correctly, but held back every
+adhkar, supplication and prayer question — it mixed items of different occasions, or retold a correct item that
+the judge then rejected. These items are meant to be shown as written: nothing is generated, so there is nothing
+to ground or judge, and each item's own review status still decides whether a release may hold it.

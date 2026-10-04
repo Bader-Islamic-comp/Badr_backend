@@ -182,6 +182,10 @@ class HybridRetriever:
         return [index for index in self._eligible if chunks[index].language == language
                 and (age_band is None or age_band in chunks[index].age_bands)]
 
+    def eligible(self, *, language: str = "en", age_band: str | None = None) -> list[Chunk]:
+        """The chunks this retriever may serve in `language` (and `age_band`), in release order."""
+        return [self.release.chunks[index] for index in self._allowed(language, age_band)]
+
     def exact(self, question: str, *, language: str = "en", age_band: str | None = None) -> Candidate | None:
         """The eligible answer chunk holding this exact reviewed phrasing, stopwords included, if any.
 

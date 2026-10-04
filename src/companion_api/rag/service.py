@@ -44,7 +44,7 @@ import random
 from time import perf_counter
 from typing import NamedTuple
 
-from . import arabizi, chat, checks, judge, normalize, router
+from . import arabizi, chat, checks, curated, judge, normalize, router
 from .ayahs import AyahIndex, surah_name
 from .checks import CheckResult
 from .embeddings import embedder_for
@@ -59,7 +59,7 @@ from .types import Chunk, Generator
 
 logger = logging.getLogger("companion_api.rag")
 
-POLICY_VERSION = "conversation-policy-v3"
+POLICY_VERSION = "conversation-policy-v4"
 INVITATION_RATE = 1 / 3  # conversation-policy §8: at most about one chat reply in three
 # A difficult feeling deserves kindness, not a nudge, and a goodbye is a goodbye.
 NO_INVITATION = frozenset({"feeling_negative", "goodbye"})
@@ -156,6 +156,7 @@ class AnswerService:
             "judge": judge.JUDGE_VERSION,
             "router": router.ROUTER_VERSION,
             "checks": checks.CHECKS_VERSION,
+            "curated": curated.CURATED_VERSION,
         }
 
     def _result(self, answer_type: str, text: str, reason: str, segments: tuple[Segment, ...] | None = None,
@@ -219,6 +220,11 @@ class AnswerService:
         corrected = self._quran_correction(text, language)
         if corrected is not None:
             return Plan("quran_check", corrected)
+        # What to say on an occasion the curated package covers, or how to do a part of the prayer it teaches:
+        # its items verbatim, with no model call (curated.py, conversation-policy §17).
+        curated_reply = self._curated(text, language)
+        if curated_reply is not None:
+            return Plan("curated", curated_reply)
         where = {"language": self.language, "age_band": self.age_band}
         # An Arabizi question is searched with Arabic terms, narrowed to the prophets it names.
         query, prophets = text, ()
@@ -256,6 +262,17 @@ class AnswerService:
         # A religious best passage makes it a faith answer, whatever words the question used.
         faith = is_faith_passage(retrieval.candidates[0].chunk)
         return Plan("retrieval", None, retrieval, "generate", faith=faith)
+
+    def _curated(self, text: str, language: str) -> AnswerResult | None:
+        if language != "ar":
+            return None
+        selection = curated.select(text, self.retriever.eligible(language=language, age_band=self.age_band))
+        if selection is None:
+            return None
+        segments = tuple(Segment(chunk.text.strip(), (chunk.id,)) for chunk in selection.chunks)
+        sources = tuple(Source.of(chunk) for chunk in selection.chunks)
+        return self._result("grounded", curated.text(selection), "curated_verbatim:" + selection.topic, segments,
+                            sources)
 
     def _quran_correction(self, text: str, language: str) -> AnswerResult | None:
         near = self.ayahs.near_quote(text)

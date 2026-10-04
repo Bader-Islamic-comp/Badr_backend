@@ -10,6 +10,47 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-04 (test/corpus-tasks: the competition package in the app)
+
+The team's competition package (branch `corpus-tasks-2`, `corpus/competition-ar`) merged and built into the
+pipeline, the weaknesses found on the emulator fixed, and the package's adhkar, supplications and prayer lessons
+served verbatim. Built by two parallel agents (`test/corpus-tasks-c2`, `test/corpus-tasks-fix`), merged here.
+
+### Added
+
+- **The competition package in the pipeline** (`corpusprep/competition.py`): 43 draft `comp-*` documents (17
+  story scenes, 22 adhkar and supplications, 4 prayer lessons) in `corpus/wave1` and layer 0, with Arabic
+  headers, occasion labels and `topics`; registered as `competition-ar-content` (`pending_legal`, acquisition
+  `authored`). The 9 Quranic supplications quote `quranpedia-mushaf-hafs` (candidate) and stay out of releases.
+- **Curated items verbatim** (`rag/curated.py`, `curated-v1`, conversation-policy §17): "what do I say in the
+  morning / after the prayer / before eating", "how do I pray" get the package's items as written, cited, with no
+  model call.
+- **Retrieval `hybrid-rrf-v3`**: a tafsir chunk counts for the Quran passage it explains and enters the prompt
+  only right after it (at most one); curated story, dua and lesson content within 0.9 of the best score ranks
+  first; header phrases such as «بعد الصلاة» are scored.
+
+### Changed
+
+- **`checks-v3`**: `faith_terms` accepts a person of the cited story (Yaqub in Yusuf's, Harun in Musa's, Ismail
+  and Ishaq in Ibrahim's). **`dev-patterns-v4`**: «للصلاة», «وللصلاة» and «الصلوات» read as «الصلاة».
+- The package's Quran is verified through the registry; the committed Quranpedia dump and licence copy are
+  removed (they remain in git history from the `corpus-tasks-2` merge).
+- English layer-0 translation units no longer carry footnote markers such as «[582]».
+
+### Fixed (content, flagged `needs_check` for the reviewer)
+
+- The evening dhikr's missing «وبك أصبحنا» and its grading; «تباركت ذا الجلال» (Muslim 591); «الأسماء كلها»
+  (adam-01); «المَلَك» (isa-01); Muslim references declared in Abdul-Baqi numbering; evidence links that do not
+  show the cited text are marked. Two editor's notes moved out of the child-facing text (`review_note`).
+
+### Verification
+
+- `pytest`: **890 passed** (824 before). Package validator OK; `--release` refuses (10 items await a check).
+- Real model over `wave1-comp-1` (before `curated-v1`): the stories of Adam, Musa and Isa and Yusuf's words to
+  his brothers answered correctly (the last failed before, crowded out by al-Tabari); all 4 abstention cases
+  abstained or redirected; the 5 adhkar, supplication and prayer questions were withheld. With `curated-v1` those
+  5 get their items verbatim (`wave1-comp-3`). Emulator: Adam, Yusuf, Isa and the personal ruling as recorded.
+
 ## Unreleased — 2026-10-02 (test/corpus-tasks: the challenge's reference package)
 
 The product owner's request of 2026-10-02, verbatim: "Yes they have gave permission for participants to use

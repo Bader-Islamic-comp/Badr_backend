@@ -4,6 +4,18 @@ Branch `test/corpus-tasks` (server, on `corpus-tasks`) and `test/corpus-tasks` (
 `corpus-tasks`). Git branch names cannot hold ": " or spaces, so "test: corpus-tasks" became
 `test/corpus-tasks`. For the team's review; nothing here is approved or child-facing.
 
+## Competition package in the app (2026-10-04)
+
+`corpus-tasks-2`'s package (`corpus/competition-ar`) is built into wave 1 as 43 `comp-*` documents and served by
+the app. Review by owner:
+
+| Owner | Look at | Decide |
+| --- | --- | --- |
+| Scholarly board | the 10 `needs_check` items and the `evidence_status` marks in `corpus/competition-ar/content.json` | Approve the fixed wordings (evening dhikr, «تباركت ذا الجلال», adam-01, isa-01) and replace the mismatched Dorar links |
+| Governance owner | `quranpedia-mushaf-hafs` (candidate) | Clearing it lets the 9 Quranic supplications and the three surahs into releases |
+| Safeguarding / child editor | `rag/curated.py` cue lists; the verbatim replies | Extend the occasion cues children really use |
+| Pipeline owner | `rag/retriever.py` (`hybrid-rrf-v3`), `rag/checks.py` (`checks-v3`), `rag/curated.py` | The 0.9 curated-first ratio; the remaining judge rejections of the Prophet ﷺ story question |
+
 ## Reference package (2026-10-02)
 
 The challenge's reference package «المرجعية والحزمة العلمية والبيانات» (20/3/1448) lists the approved sources and
