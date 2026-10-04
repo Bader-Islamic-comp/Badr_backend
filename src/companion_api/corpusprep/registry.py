@@ -24,8 +24,9 @@ OPTIONAL = ("dataset", "role", "format", "package_rule", "package_basis", "acqui
 #   not_applicable  licence texts and metadata
 PACKAGE_RULES = ("listed", "in_rule", "conditional", "borderline", "outside_rule", "not_listed", "not_applicable")
 # download (default): fetched from `url` by scripts/fetch_sources.py; crawl: assembled by a crawl script that
-# records its own digest; manual: a person downloads it (the site's robots.txt disallows automated downloads).
-ACQUISITIONS = ("download", "crawl", "manual")
+# records its own digest; manual: a person downloads it (the site's robots.txt disallows automated downloads);
+# authored: written in this repository (`url` is its path; sha256 is of the reviewed file, checked by its builder).
+ACQUISITIONS = ("download", "crawl", "manual", "authored")
 SOURCE_ID = re.compile(r"^[a-z0-9][a-z0-9-]{1,63}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 

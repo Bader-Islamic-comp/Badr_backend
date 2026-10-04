@@ -18,7 +18,7 @@ not exist. Today: 0 problems, 1 warning.
 
 | package rule | meaning | sources | registry status | acquisition |
 | --- | --- | ---: | --- | --- |
-| `listed` | the package names this source or its publisher | 9 | candidate 9 | crawled 1, downloaded 8 |
+| `listed` | the package names this source or its publisher | 10 | candidate 9, pending_legal 1 | authored 1, crawled 1, downloaded 8 |
 | `in_rule` | the package's rule admits it (a tafsir of the first three Hijri centuries, the two Sahihs) | 12 | candidate 8, pending_legal 4 | downloaded 12 |
 | `conditional` | admitted per record once a condition holds (a hadith with an approved grading in the data) | 4 | candidate 3, pending_legal 1 | downloaded 4 |
 | `borderline` | needs the organizers' reading | 4 | candidate 4 | downloaded 4 |
@@ -30,8 +30,9 @@ Warning: the organizers' permission is reported but its written confirmation is 
 
 ## Sources by package rule
 
-Acquisition: downloaded (`scripts/fetch_sources.py`), crawled (`scripts/crawl_jamharah.py`) or manual
-(a person downloads it). The package's sources that refuse scripts (blocked) follow in the next section.
+Acquisition: downloaded (`scripts/fetch_sources.py`), crawled (`scripts/crawl_jamharah.py`), manual
+(a person downloads it) or authored (written in this repository). The package's sources that refuse
+scripts (blocked) follow in the next section.
 
 ### `listed`: the package names this source or its publisher
 
@@ -46,6 +47,7 @@ Acquisition: downloaded (`scripts/fetch_sources.py`), crawled (`scripts/crawl_ja
 | `quranpedia-en-sahih-international` | Saheeh International, English translation of the meanings | candidate | downloaded | Reference package (20/3/1448), Quran: translations on quranpedia.net |
 | `quranpedia-en-ruwwad` | English translation of the meanings, Ruwwad Translation Center | candidate | downloaded | Reference package (20/3/1448), Quran: translations on quranpedia.net |
 | `jamharah-dictionary-entries` | Jamharah dictionary entries for the glossary's terms (الجمهرة - مفردات المحتوى الإسلامي) | candidate | crawled | Reference package (20/3/1448), translation and terms: islamic-content.com/dictionary |
+| `competition-ar-content` | Badr Arabic competition package (content.json) | pending_legal | authored | Reference package (20/3/1448): the team's own child content, citing only listed sources (Quranpedia for the Quran, dorar.net for hadith and fiqh) |
 
 ### `in_rule`: the package's rule admits it (a tafsir of the first three Hijri centuries, the two Sahihs)
 
