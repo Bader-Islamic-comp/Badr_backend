@@ -18,7 +18,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from companion_api.corpusprep import age_band, candidates, cluster, ingest, quran, quranpedia, registry as registry_module  # noqa: E402,E501
+from companion_api.corpusprep import age_band, candidates, cluster, competition, ingest, quran, quranpedia, registry as registry_module  # noqa: E402,E501
 from companion_api.corpusprep.segments import load_metadata, load_transliterated_names, segment, verify_cover  # noqa: E402,E501
 from companion_api.rag.chunking import VERSION as CHUNKER, chunk_documents  # noqa: E402
 from companion_api.rag.corpus import load_corpus, word_count  # noqa: E402
@@ -151,6 +151,13 @@ def main(argv=None) -> int:
         layer0 += built.documents
         quranpedia_docs[book.source_id] = len(built.documents)
         quranpedia_skipped.update(built.skipped)
+    # test/corpus-tasks-c2: the team's Arabic competition package (corpus/competition-ar), in layer 0 and wave 1.
+    _log("building the competition package documents (corpus/competition-ar)")
+    try:
+        competition_docs = competition.build(base / "competition-ar/content.json", registry, base / "raw")
+    except competition.CompetitionError as error:
+        raise SystemExit(f"FAILED: competition package: {error}")
+    layer0 += competition_docs
     _log("attaching generated retrieval questions (checked against sacred text)")
     generated = json.loads((base / "candidate/retrieval_questions.json").read_text(encoding="utf-8"))
     sacred = age_band.SacredIndex([row["text_simple"] for row in ayat_rows],
@@ -167,7 +174,8 @@ def main(argv=None) -> int:
                         "Quran (Tanzil), Tafsir al-Muyassar and Tafsir Ibn Kathir (candidate licences), Sahih "
                         "al-Bukhari and Sahih Muslim cluster primaries, and from Quranpedia (candidate) English "
                         "translations of the meanings and the tafsir books of the reference package's rule "
-                        "(in_rule and borderline). Draft, not reviewed, not for children.",
+                        "(in_rule and borderline), and the team's Arabic competition package. Draft, not reviewed, "
+                        "not for children.",
                         layer0)
 
     _log("building corpus/wave1 (Wave 1 release candidate: 5 prophets + selected hadith, no tafsir)")
@@ -183,9 +191,10 @@ def main(argv=None) -> int:
             wave1.append({**doc, "topics": list(dict.fromkeys(labels))})
     wave1 += [{**doc, "topics": [topics[doc["units"][0]["reference"]]]}
               for doc in built_hadith.documents if doc["units"][0]["reference"] in chosen]
+    wave1 += competition_docs
     ingest.write_corpus(base / "wave1", "wave1", "Wave 1 candidate corpus",
-                        "Quran segments for Adam, Nuh, Ibrahim, Yusuf and Musa, and the checked hadith selection. "
-                        "Draft, not reviewed, not for children.", wave1)
+                        "Quran segments for Adam, Nuh, Ibrahim, Yusuf and Musa, the checked hadith selection and the "
+                        "team's Arabic competition package. Draft, not reviewed, not for children.", wave1)
 
     _log("validating and chunking with the existing pipeline (chunk-v2)")
     summary = {
@@ -202,6 +211,7 @@ def main(argv=None) -> int:
                     **quranpedia_skipped},
         "ibn_kathir_documents": len(built_ibn_kathir.documents),
         "quranpedia_documents": quranpedia_docs,
+        "competition_documents": dict(Counter(doc["contentType"] for doc in competition_docs)),
         "long_hadith_with_parts": sum(1 for doc in built_hadith.documents if doc["units"][0]["parts"]),
         "wave1_prophet_segments": len(wave_segments), "wave1_hadith": len(chosen),
         "generated_questions": sum(len(doc["generatedQuestions"]) for doc in wave1),
