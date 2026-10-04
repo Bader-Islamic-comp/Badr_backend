@@ -41,7 +41,8 @@ def main(argv=None) -> int:
     for source in registry.sources:
         acquisition = source.get("acquisition", "download")
         if acquisition != "download":
-            # Crawled or manually downloaded: never fetched from `url` here, only verified when present.
+            # Crawled, manually downloaded or authored in this repository: never fetched from `url` here, only
+            # verified when present in the raw folder.
             target = fetch.raw_path(args.raw_dir, source)
             if not target.is_file() or source["sha256"] is None:
                 print(f"  skipped  {source['source_id']}  ({acquisition}: not present or not recorded yet)",

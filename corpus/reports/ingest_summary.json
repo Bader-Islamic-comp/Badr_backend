@@ -94,19 +94,27 @@
     "quranpedia-tafsir-nasai": 351,
     "quranpedia-tafsir-sahih-masbur": 906
   },
+  "competition_documents": {
+    "story": 17,
+    "dua": 22,
+    "lesson": 4
+  },
   "long_hadith_with_parts": 2053,
   "wave1_prophet_segments": 144,
   "wave1_hadith": 40,
   "generated_questions": 552,
   "layer0": {
-    "documents": 28337,
-    "chunks": 108236,
-    "parent_chunks": 73062,
-    "child_chunks": 35174,
+    "documents": 28380,
+    "chunks": 108278,
+    "parent_chunks": 73105,
+    "child_chunks": 35173,
     "by_content_type": {
+      "story": 17,
+      "dua": 22,
+      "lesson": 4,
       "hadith": 19673,
       "quran": 7287,
-      "quran_translation": 22447,
+      "quran_translation": 22446,
       "tafsir": 51000,
       "tafsir_translation": 7829
     },
@@ -118,14 +126,17 @@
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 172.2
+    "seconds": 185.8
   },
   "wave1": {
-    "documents": 184,
-    "chunks": 1106,
-    "parent_chunks": 184,
+    "documents": 227,
+    "chunks": 1149,
+    "parent_chunks": 227,
     "child_chunks": 922,
     "by_content_type": {
+      "story": 17,
+      "dua": 22,
+      "lesson": 4,
       "hadith": 45,
       "quran": 1061
     },
@@ -133,10 +144,10 @@
     "errors": 0,
     "parent_words": {
       "max": 378,
-      "median": 71
+      "median": 62
     },
     "every_chunk_has_source_refs": true,
     "every_chunk_has_header": true,
-    "seconds": 1.0
+    "seconds": 1.4
   }
 }

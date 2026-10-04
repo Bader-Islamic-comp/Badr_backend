@@ -73,6 +73,14 @@ READING = {
                  "records entry ids, links and short English headings only.",
                  "May the dictionary's entries and English headings be used in a release, and with what credit? "
                  "(reference package, translation and terms row)"),
+    "competition-ar": (None,
+                       "The team's own wording (stories, lessons, notes, prayer summaries) is the project's to use. "
+                       "It cites Quranpedia and dorar.net by reference and stores no file of theirs.",
+                       "The short supplication wordings follow the cited hadith as dorar.net shows them, and the "
+                       "ayat quoted in its documents come from quranpedia-mushaf-hafs (a candidate source); the "
+                       "package's own rights records (corpus/competition-ar/approvals.json) await sign-off.",
+                       "May the package's documents, with their Quranpedia ayat and dorar.net citations, be served "
+                       "to children once reviewed? (corpus/competition-ar/README.md)"),
 }
 
 

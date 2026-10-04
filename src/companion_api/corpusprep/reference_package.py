@@ -12,7 +12,7 @@ A check fails when:
     that admits it (`rulings`, below);
   * a ruling is incomplete (who answered, when, the answer, where the written answer is kept);
   * a row's acquisition disagrees with its registry sources' (downloaded = download, crawled = crawl,
-    manual = manual; blocked and reference rows name no registry source);
+    manual = manual, authored = authored; blocked and reference rows name no registry source);
   * a file cited by the standard or levels mapping does not exist.
 
 A ruling is necessary, not sufficient: clearing a source stays a signed governance decision
@@ -30,8 +30,8 @@ SCHEMA_VERSION = 1
 NEEDS_RULING = ("outside_rule", "borderline", "not_listed")
 ANSWERS = ("admitted", "admitted_with_conditions", "not_admitted")
 ADMITTING = ("admitted", "admitted_with_conditions")
-ROW_ACQUISITIONS = {"downloaded": "download", "crawled": "crawl", "manual": "manual", "blocked": None,
-                    "reference": None}
+ROW_ACQUISITIONS = {"downloaded": "download", "crawled": "crawl", "manual": "manual", "authored": "authored",
+                    "blocked": None, "reference": None}
 _RANGE = re.compile(r"^(?P<prefix>[a-z0-9-]*?-)(?P<first>\d+)\.\.(?P<last>\d+)$")
 
 
@@ -220,7 +220,7 @@ RULE_MEANING = {
     "not_listed": "the package does not name it for this role; kept for cross-checking",
     "not_applicable": "licence texts and metadata",
 }
-ACQUIRED = {"download": "downloaded", "crawl": "crawled", "manual": "manual"}
+ACQUIRED = {"download": "downloaded", "crawl": "crawled", "manual": "manual", "authored": "authored"}
 _DIGITS = re.compile(r"\d+")
 
 
@@ -286,8 +286,9 @@ def render(sources: list[dict], package: dict, report: Report) -> str:
     for warning in report.warnings:
         lines += ["", f"Warning: {warning}."]
     lines += ["", "## Sources by package rule", "",
-              "Acquisition: downloaded (`scripts/fetch_sources.py`), crawled (`scripts/crawl_jamharah.py`) or manual",
-              "(a person downloads it). The package's sources that refuse scripts (blocked) follow in the next section."]
+              "Acquisition: downloaded (`scripts/fetch_sources.py`), crawled (`scripts/crawl_jamharah.py`), manual",
+              "(a person downloads it) or authored (written in this repository). The package's sources that refuse",
+              "scripts (blocked) follow in the next section."]
     for rule in PACKAGE_RULES:
         members = [source for source in sources if source.get("package_rule") == rule]
         if not members:

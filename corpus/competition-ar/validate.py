@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""Validate the self-contained Arabic competition corpus candidate."""
+"""Validate the Arabic competition corpus candidate.
+
+The Quran is not stored here: sources.json names the registry's pinned Quranpedia mushaf
+(corpus/sources/registry.yaml), and this check verifies the file scripts/fetch_sources.py placed in
+corpus/raw/ by the registry's sha256 and its coverage (114 surahs, 6236 ayat).
+"""
 
 import argparse
-import gzip
 import hashlib
 import json
 import re
@@ -11,53 +15,82 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[1]
+sys.path.insert(0, str(REPO / "src"))
+
+from companion_api.corpusprep import fetch, registry as registry_module  # noqa: E402
+from companion_api.corpusprep.quranpedia import QuranpediaError, load as load_dump  # noqa: E402
+
+REGISTRY = REPO / "corpus/sources/registry.yaml"
+RAW = REPO / "corpus/raw"
 QURAN = re.compile(r"quran:(\d{1,3}):(\d{1,3})(?:-(\d{1,3}))?\Z")
 HADITH = re.compile(r"hadith:([a-z-]+):(\d+)\Z")
 FIQH = re.compile(r"fiqh:[a-z-]+:[a-z-]+\Z")
+ITEM_FIELDS = {"id", "text", "lesson", "display", "prayer", "rakah", "context", "kind", "occasion", "occasions",
+               "repeat", "child_note", "refs", "quote_ref", "evidence_url", "grading", "review_status",
+               # review flags: a changed or doubtful item waits for the reviewer (needs_check, change_note), and
+               # an evidence link that does not show the cited text says so (evidence_status, evidence_note)
+               "needs_check", "change_note", "evidence_status", "evidence_note"}
+# matches: the link shows the cited text; same_hadith_other_entry: it shows the same hadith from another entry
+# (another book or number); mismatch: it does not show the cited text, so the item cannot be released.
+EVIDENCE_STATUSES = ("matches", "same_hadith_other_entry", "mismatch")
 
 
-def load(name):
-    with (HERE / name).open(encoding="utf-8") as stream:
+def load(folder, name):
+    with (folder / name).open(encoding="utf-8") as stream:
         return json.load(stream)
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--release", action="store_true", help="also enforce publication gates")
-    args = parser.parse_args()
-    content, sources = load("content.json"), load("sources.json")
+def check_quran(quran_source, verse_counts, registry_path, raw_root):
+    """Problems with the registry-pinned Quran file: registered, present, the registry's sha256, full coverage."""
+    errors = []
+    try:
+        registry = registry_module.load(registry_path)
+        entry = registry.get(quran_source["registry_source_id"])
+        license_entry = registry.get(quran_source["registry_license_source_id"])
+    except (OSError, registry_module.RegistryError, KeyError) as exc:
+        return [f"Quran source not in the registry: {exc}"]
+    for source in (entry, license_entry):
+        path = fetch.raw_path(raw_root, source)
+        if not source.get("sha256"):
+            errors.append(f"{source['source_id']}: no sha256 in the registry")
+        elif not path.is_file():
+            errors.append(f"{source['source_id']}: {path} is missing; run scripts/fetch_sources.py")
+        elif fetch.digest(path) != source["sha256"]:
+            errors.append(f"{source['source_id']}: {path} does not match the registry's sha256")
+    if errors:
+        return errors
+    try:
+        mushaf = load_dump(fetch.raw_path(raw_root, entry))
+        surahs = mushaf["data"]["surahs"]
+        if len(surahs) != 114 or sum(len(s["ayahs"]) for s in surahs) != 6236:
+            errors.append("Quran source coverage is not 114 surahs / 6236 ayahs")
+        actual_counts = {s["id"]: len(s["ayahs"]) for s in surahs}
+        if any(actual_counts.get(n) != count for n, count in verse_counts.items()):
+            errors.append("Quran verse-count metadata mismatch")
+        if any([a["number"] for a in s["ayahs"]] != list(range(1, len(s["ayahs"]) + 1)) for s in surahs):
+            errors.append("Quran ayah numbering is not sequential")
+        if mushaf["license"]["version"] != quran_source["dump_version_in_file"]:
+            errors.append("Quran source version mismatch")
+    except (QuranpediaError, KeyError, ValueError, TypeError) as exc:
+        errors.append(f"Quran source unreadable: {exc}")
+    return errors
+
+
+def validate(folder=HERE, release=False, registry_path=REGISTRY, raw_root=RAW):
+    """(errors, summary line) for the package in `folder`."""
+    content, sources = load(folder, "content.json"), load(folder, "sources.json")
     errors = []
     items = []
     ids = set()
     domains = set(sources["policy"]["allowed_domains"])
+    numbering = {scheme for source in sources["sources"] for scheme in source.get("numbering_schemes", {})}
     verse_counts = {int(k): v for k, v in sources["quran_verse_counts_used"].items()}
     quran_source = next((s for s in sources["sources"] if s["id"] == "quranpedia-quran"), None)
     if not quran_source:
         errors.append("Quran source missing")
     else:
-        try:
-            license_path = (HERE / quran_source["license_file"]).resolve()
-            if not license_path.is_relative_to(HERE) or hashlib.sha256(license_path.read_bytes()).hexdigest() != quran_source["license_sha256"]:
-                errors.append("Quran source license fingerprint mismatch")
-            source_path = (HERE / quran_source["source_file"]).resolve()
-            if not source_path.is_relative_to(HERE):
-                raise ValueError("Quran source path escapes corpus directory")
-            raw = source_path.read_bytes()
-            if len(raw) != quran_source["source_bytes"] or hashlib.sha256(raw).hexdigest() != quran_source["source_sha256"]:
-                errors.append("Quran source fingerprint mismatch")
-            mushaf = json.loads(gzip.decompress(raw))
-            surahs = mushaf["data"]["surahs"]
-            if len(surahs) != 114 or sum(len(s["ayahs"]) for s in surahs) != 6236:
-                errors.append("Quran source coverage is not 114 surahs / 6236 ayahs")
-            actual_counts = {s["id"]: len(s["ayahs"]) for s in surahs}
-            if any(actual_counts.get(n) != count for n, count in verse_counts.items()):
-                errors.append("Quran verse-count metadata mismatch")
-            if any([a["number"] for a in s["ayahs"]] != list(range(1, len(s["ayahs"]) + 1)) for s in surahs):
-                errors.append("Quran ayah numbering is not sequential")
-            if mushaf["license"]["version"] != quran_source["candidate_dump_version"]:
-                errors.append("Quran source version mismatch")
-        except (OSError, KeyError, ValueError, TypeError) as exc:
-            errors.append(f"Quran source unreadable: {exc}")
+        errors += check_quran(quran_source, verse_counts, registry_path, raw_root)
 
     def check_item(item):
         item_id = item.get("id")
@@ -65,6 +98,17 @@ def main():
             errors.append(f"duplicate/missing item id: {item_id}")
         ids.add(item_id)
         items.append(item)
+        for key in sorted(set(item) - ITEM_FIELDS):
+            errors.append(f"{item_id}: unknown field {key}")
+        if not isinstance(item.get("needs_check", False), bool):
+            errors.append(f"{item_id}: needs_check must be true or false")
+        if item.get("needs_check") and not str(item.get("change_note") or "").strip():
+            errors.append(f"{item_id}: needs_check needs a change_note saying what to check")
+        if "evidence_status" in item:
+            if item["evidence_status"] not in EVIDENCE_STATUSES:
+                errors.append(f"{item_id}: evidence_status must be one of {', '.join(EVIDENCE_STATUSES)}")
+            if not item.get("evidence_url") or not str(item.get("evidence_note") or "").strip():
+                errors.append(f"{item_id}: evidence_status needs evidence_url and evidence_note")
         if item.get("review_status") not in ("draft", "approved"):
             errors.append(f"{item_id}: invalid review status")
         if not item.get("refs"):
@@ -77,7 +121,10 @@ def main():
                 surah, first, last = map(int, (quran[1], quran[2], quran[3] or quran[2]))
                 if not (1 <= surah <= 114 and 1 <= first <= last <= verse_counts.get(surah, 0)):
                     errors.append(f"{item_id}: invalid Quran range {ref}")
-            elif HADITH.fullmatch(ref):
+            elif hadith := HADITH.fullmatch(ref):
+                if hadith[1] not in numbering:
+                    errors.append(f"{item_id}: {ref}: numbering {hadith[1]} is not declared in sources.json "
+                                  f"({', '.join(sorted(numbering))})")
                 if not item.get("grading") or not item.get("evidence_url"):
                     errors.append(f"{item_id}: hadith needs grading and evidence URL")
             elif FIQH.fullmatch(ref):
@@ -123,8 +170,8 @@ def main():
     if not content["daily_duas"] or any(not prayer[group] for group in ("preparation", "wudu", "prayer_steps", "prayer_counts")):
         errors.append("missing daily duas or prayer-learning section")
 
-    evaluation = load("evaluation.json")
-    approvals = load("approvals.json")
+    evaluation = load(folder, "evaluation.json")
+    approvals = load(folder, "approvals.json")
     for case in evaluation["cases"]:
         for item_id in case.get("expected_item_ids", []):
             if item_id not in ids:
@@ -134,7 +181,7 @@ def main():
         if case["expected_action"] == "abstain_or_redirect" and case.get("expected_item_ids"):
             errors.append(f"evaluation {case['id']}: abstention must not cite an item")
 
-    if args.release:
+    if release:
         if content.get("status") != "approved" or not content.get("publication_allowed"):
             errors.append("release blocked: package remains draft")
         if content.get("rights_status") != "cleared" or any(s["rights_status"] != "cleared" for s in sources["sources"]):
@@ -144,7 +191,13 @@ def main():
             errors.append("release blocked: named human reviews and approval date missing")
         if any(item.get("review_status") != "approved" for item in items + content["stories"]):
             errors.append("release blocked: item review incomplete")
-        content_hash = hashlib.sha256((HERE / "content.json").read_bytes()).hexdigest()
+        flagged = [item["id"] for item in items if item.get("needs_check")]
+        if flagged:
+            errors.append(f"release blocked: {len(flagged)} items need a check ({', '.join(flagged)})")
+        mismatched = [item["id"] for item in items if item.get("evidence_status") == "mismatch"]
+        if mismatched:
+            errors.append(f"release blocked: evidence link does not show the cited text ({', '.join(mismatched)})")
+        content_hash = hashlib.sha256((folder / "content.json").read_bytes()).hexdigest()
         for role in ("religious", "child_language"):
             if not any(
                 row.get("role") == role and row.get("decision") == "approved"
@@ -162,19 +215,39 @@ def main():
                 for row in approvals["source_rights"]
             ):
                 errors.append(f"release blocked: {source['id']} lacks rights record")
-        if sources["sources"][0]["candidate_dump_state"] != "downloaded_and_verified":
-            errors.append("release blocked: Quran source edition and fingerprint not verified")
+        if quran_source:
+            try:
+                registry = registry_module.load(registry_path)
+                for sid in (quran_source["registry_source_id"], quran_source["registry_license_source_id"]):
+                    if registry.get(sid)["status"] != "cleared":
+                        errors.append(f"release blocked: registry source {sid} is {registry.get(sid)['status']}, "
+                                      "not cleared")
+            except (OSError, registry_module.RegistryError, KeyError) as exc:
+                errors.append(f"release blocked: registry unreadable ({exc})")
         if not approvals["prayer_policy"]:
             errors.append("release blocked: prayer policy not approved")
         if not approvals["recheck_due_at"]:
             errors.append("release blocked: re-review date not set")
 
+    summary = (f"OK: {len(content['stories'])} stories, {len(items)} referenced content items, "
+               f"{len(evaluation['cases'])} evaluation cases, {sum(1 for i in items if i.get('needs_check'))} items "
+               f"awaiting a check; release={'checked' if release else 'not requested'}")
+    return errors, summary
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--release", action="store_true", help="also enforce publication gates")
+    parser.add_argument("--package-dir", type=Path, default=HERE, help=argparse.SUPPRESS)
+    parser.add_argument("--registry", type=Path, default=REGISTRY, help="the source registry (default: the repository's)")
+    parser.add_argument("--raw-root", type=Path, default=RAW, help="where scripts/fetch_sources.py puts raw files")
+    args = parser.parse_args(argv)
+    errors, summary = validate(args.package_dir, args.release, args.registry, args.raw_root)
     if errors:
         for error in errors:
             print("ERROR:", error, file=sys.stderr)
         return 1
-    print(f"OK: {len(content['stories'])} stories, {len(items)} referenced content items, "
-          f"{len(evaluation['cases'])} evaluation cases; release={'checked' if args.release else 'not requested'}")
+    print(summary)
     return 0
 
 

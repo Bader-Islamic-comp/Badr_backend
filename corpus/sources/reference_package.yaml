@@ -12,6 +12,7 @@
 #                           around. The data has to come from the organizers or the publisher.
 #               manual      robots.txt disallows automated downloads; a person downloads the file
 #               reference   used by people to verify, not copied into the corpus
+#               authored    written in this repository from the listed sources (the competition package)
 # registry:     registry ids; `prefix-001..114` stands for every zero-padded id in the range.
 #
 # Further sections, after the rows:
@@ -45,6 +46,12 @@ rows:
         acquisition: crawled
         registry: [jamharah-dictionary-entries]
         why: Only the dictionary entries for the glossary's terms are taken (see the translation row).
+      - name: حزمة بدر العربية للمسابقة (corpus/competition-ar)
+        acquisition: authored
+        registry: [competition-ar-content]
+        why: The team's own child content (four prophet stories, adhkar, daily duas, first prayer lessons), citing
+          Quranpedia for the Quran and dorar.net for hadith and fiqh; no third-party file is kept with it. Draft and
+          unreviewed; built into corpus/wave1 and corpus/layer0 as comp-* documents.
   - field: القرآن الكريم
     rule: The Quranic text in its rasm and the approved text, with approved translations (King Fahd Complex,
       its translations, or those on quranpedia.net); make sure the ayat are transmitted faithfully.

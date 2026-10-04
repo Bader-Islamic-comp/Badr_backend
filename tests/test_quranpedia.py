@@ -286,6 +286,32 @@ def test_translation_documents_mirror_the_quran_segments():
     assert {chunk.content_type for chunk in chunk_document(document)} == {"quran_translation"}
 
 
+@pytest.mark.parametrize("raw, shown", [
+    ("the Lord[1] of the worlds", "the Lord of the worlds"),
+    ("the Merciful.[3]", "the Merciful."),
+    ("Your Grace[4] , not those", "Your Grace, not those"),
+    ("Your Anger [5] (that is)", "Your Anger (that is)"),
+    ("out of error). [6], [7]", "out of error)."),
+    ("everything)[1], then", "everything), then"),
+    ("[2] Placeholder", "Placeholder"),
+    ("one[582]two", "one two"),
+    ("they said [saying] words", "they said [saying] words"),  # a bracketed word is translation text
+])
+def test_footnote_markers_are_left_out_of_translation_units(raw, shown):
+    assert ingest.strip_footnote_markers(raw) == shown
+
+
+def test_translation_units_drop_footnote_markers_but_the_record_keeps_them():
+    records = {(1, 1): _translation_record(1, 1, "Placeholder Lord[582] of words.[583]"),
+               (1, 2): _translation_record(1, 2, "Placeholder Lord of words.")}
+    [data] = ingest.translation_documents([Segment(1, 1, 2)], records, SAHIH, {1: "Al-Faatiha"}, _registry(),
+                                          {}).documents
+    # The two ayat now read the same, so they share one unit that cites both, as any repeated text does.
+    assert [unit["text"] for unit in data["units"]] == ["Placeholder Lord of words."]
+    assert data["units"][0]["sourceRefs"] == ["quran:1:1", "quran:1:2"]
+    assert records[(1, 1)]["text"] == "Placeholder Lord[582] of words.[583]"
+
+
 def test_the_mukhtasar_english_is_a_tafsir_translation_citing_every_ayah_of_a_shared_text():
     records = {(1, ayah): _translation_record(1, ayah, "One explanation.") for ayah in (1, 2)}
     [data] = ingest.translation_documents([Segment(1, 1, 2)], records, MUKHTASAR, {1: "Al-Faatiha"}, _registry(),
