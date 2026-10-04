@@ -22,6 +22,31 @@ model sees the whole unit in context and cites the parent id, and one passage
 never fills several of the final slots. Releases without children rank as
 under v1.
 
+Passages first, commentary after its passage (`hybrid-rrf-v3`, doc/rag-system.md
+§17). On a release with the tafsirs, commentary outnumbers the Quran passages it
+explains by about five to one and its narrations repeat the question's words, so
+under v2 four al-Tabari chunks filled the prompt for a Yusuf question with no
+ayah among them. v3 ranks passages, not chunks:
+
+* A tafsir chunk (`tafsir`, `tafsir_translation`) is evidence for the passage its
+  `parentChunk` names, like a child for its parent: the parent when it is
+  eligible for this query, else (an English service) an eligible translation of
+  the meanings of that passage. Commentary with no such passage never serves.
+* Each branch ranks passages, at the best rank any of their members reached
+  (own children and commentary), and keeps 20 passages; RRF fuses the two lists.
+  A passage named by its own words in one branch and by its commentary in the
+  other gets both.
+* The prompt gets the best four passages in order. A commentary chunk enters
+  only right after its own passage, as an addition that never takes a passage's
+  place: the best-ranked chunk of a book not yet used, at most one in all
+  (`MAX_COMMENTARY`), so the prompt holds at most five sources.
+* Curated child content (`story`, `dua`, `lesson`, tier 2) about as relevant as
+  the best passage (fused score at least `CURATED_RATIO` of it) is put first.
+* The lexical branch also scores the header phrases (`lexical.phrases`): a pair
+  of a function word and a content word of the question found in a chunk's
+  context header ("بعد الصلاة"), scored by BM25 over headers and added to the
+  text's BM25 score.
+
 Threshold calibration. Cosine scales differ between embedders, so both
 thresholds are per embedder and can be overridden at construction:
 
@@ -49,15 +74,22 @@ from typing import Sequence
 
 from . import normalize
 from .embeddings import cosine
-from .lexical import BM25, chunk_tokens
+from .lexical import BM25, chunk_tokens, header_phrases, phrases
 from .release import LoadedRelease
 from .types import Chunk, Embedder
 
-RETRIEVER_VERSION = "hybrid-rrf-v2"
+RETRIEVER_VERSION = "hybrid-rrf-v3"
 RRF_K = 60
 BRANCH_K = 20
 FINAL_K = 4
 REVIEWED_JACCARD = 0.6
+# Commentary on a passage: served only after that passage (v3).
+COMMENTARY_CONTENT = frozenset({"tafsir", "tafsir_translation"})
+TRANSLATION_OF_PASSAGE = "quran_translation"
+MAX_COMMENTARY = 1
+# Curated child content (tier 2): first when its fused score is at least this share of the best passage's.
+CURATED_CONTENT = frozenset({"story", "dua", "lesson"})
+CURATED_RATIO = 0.9
 
 # (weak-evidence cosine, reviewed-answer cosine) by EmbedderIdentity.name.
 THRESHOLDS = {
@@ -113,6 +145,7 @@ class HybridRetriever:
         self.branch_k, self.final_k, self.rrf_k = branch_k, final_k, rrf_k
         self._eligible = [index for index, chunk in enumerate(release.chunks) if include_drafts or chunk.servable]
         self._index = BM25([chunk_tokens(chunk) for chunk in release.chunks])
+        self._headers = BM25([header_phrases(chunk) for chunk in release.chunks])
         # Where each chunk's hit is served: itself, or for a chunk-v2 child its parent (small-to-big).
         positions = {chunk.id: index for index, chunk in enumerate(release.chunks)}
         self._serves: list[int] = []
@@ -122,6 +155,19 @@ class HybridRetriever:
                 raise RetrieverError(f"release {release.manifest.release_id!r}: child chunk {chunk.id} names a "
                                      "parent that is not a parent chunk in the release")
             self._serves.append(parent)
+        # Commentary (v3): the passage its unit's parentChunk names in another document, and the translations
+        # of the meanings of each passage, for a service that cannot serve the passage itself.
+        self._commented: dict[int, int] = {}
+        self._translations: dict[str, list[int]] = {}
+        for index, chunk in enumerate(release.chunks):
+            unit = release.chunks[self._serves[index]]
+            target = positions.get(unit.parent_id) if unit.parent_id and not unit.is_child else None
+            if target is None:
+                continue
+            if chunk.content_type in COMMENTARY_CONTENT:
+                self._commented[index] = self._serves[target]
+            elif chunk.content_type == TRANSLATION_OF_PASSAGE and not chunk.is_child:
+                self._translations.setdefault(release.chunks[target].id, []).append(index)
         # Reviewed phrasings by their full search text, stopwords included. A
         # child asking one word for word gets its reviewed answer even when the
         # question is all stopwords ("What can you do?"), which leaves nothing
@@ -159,33 +205,98 @@ class HybridRetriever:
         if prophet_ids:
             narrowed = [index for index in allowed if self.release.chunks[index].prophet_id in prophet_ids]
             allowed = narrowed or allowed
-        if not allowed:
+        # Where each eligible chunk's hit is served: its passage. Commentary without one never serves.
+        units = self._units(allowed)
+        if not units:
             return Retrieval((), True)
         exact = self.exact(question, language=language, age_band=age_band)
         if exact is not None:
             return Retrieval((exact,), False, exact)
-        query_tokens = normalize.content_tokens(question)
-        lexical = self._index.top(query_tokens, self.branch_k, allowed)
+        bm25 = self._lexical(question, units)
+        lexical = sorted(bm25.items(), key=lambda item: (-item[1], item[0]))
         vector = self.embedder.embed_query(question)
-        cosines = {index: cosine(vector, self.release.vectors[index]) for index in allowed}
-        dense = sorted(cosines.items(), key=lambda item: (-item[1], item[0]))[:self.branch_k]
+        cosines = {index: cosine(vector, self.release.vectors[index]) for index in units}
+        dense = sorted(cosines.items(), key=lambda item: (-item[1], item[0]))
         if not lexical and dense[0][1] < self.weak_cosine:
             return Retrieval((), True)
 
+        # Each branch ranks passages at the best rank any of their members reached; RRF fuses the two lists.
         fused: dict[int, float] = {}
+        members: dict[int, int] = {}       # passage -> its best-ranked member (for its scores)
+        commentary: dict[int, float] = {}  # commentary chunk -> its own fused score, for choosing among them
         for ranking in (lexical, dense):
-            for rank, (index, _score) in enumerate(ranking, start=1):
-                fused[index] = fused.get(index, 0.0) + 1.0 / (self.rrf_k + rank)
-        bm25 = dict(lexical)
-        # Each served chunk once, at the best rank any of its members reached, with that member's scores.
-        best: dict[int, int] = {}
-        for index in sorted(fused, key=lambda index: (-fused[index], index)):
-            best.setdefault(self._serves[index], index)
-            if len(best) == self.final_k:
-                break
-        candidates = tuple(Candidate(self.release.chunks[served], fused[member], cosines[member],
-                                     bm25.get(member, 0.0)) for served, member in best.items())
+            ranked: dict[int, int] = {}
+            for position, (index, _score) in enumerate(ranking, start=1):
+                unit = units[index]
+                if unit not in ranked:
+                    if len(ranked) == self.branch_k:
+                        break
+                    ranked[unit] = len(ranked) + 1
+                    members.setdefault(unit, index)
+                if index in self._commented:
+                    commentary[index] = commentary.get(index, 0.0) + 1.0 / (self.rrf_k + position)
+            for unit, rank in ranked.items():
+                fused[unit] = fused.get(unit, 0.0) + 1.0 / (self.rrf_k + rank)
+        order = sorted(fused, key=lambda unit: (-fused[unit], unit))
+        order = self._curated_first(order, fused)
+        by_unit: dict[int, list[int]] = {}
+        for index in sorted(commentary, key=lambda index: (-commentary[index], index)):
+            by_unit.setdefault(units[index], []).append(self._serves[index])
+
+        def candidate(served: int, member: int, score: float) -> Candidate:
+            return Candidate(self.release.chunks[served], score, cosines[member], bm25.get(member, 0.0))
+
+        # The best `final_k` passages; commentary only right after its own passage, the best-ranked chunk of a
+        # book not yet used, at most MAX_COMMENTARY in all. It adds to the passages, never takes their place.
+        chosen: list[Candidate] = []
+        books: set[tuple[str, ...]] = set()
+        for unit in order[:self.final_k]:
+            chosen.append(candidate(unit, members[unit], fused[unit]))
+            for served in dict.fromkeys(by_unit.get(unit, ())):
+                book = self._book(self.release.chunks[served])
+                if len(books) < MAX_COMMENTARY and book not in books:
+                    books.add(book)
+                    chosen.append(candidate(served, served if served in cosines else members[unit], fused[unit]))
+                    break
+        candidates = tuple(chosen)
         return Retrieval(candidates, False, self._reviewed(question, candidates))
+
+    def _units(self, allowed: Sequence[int]) -> dict[int, int]:
+        """Eligible chunk -> the passage its hit serves: its parent (small-to-big), or for commentary the passage
+        it explains when that passage is eligible, else an eligible translation of its meanings; none, none."""
+        permitted, chunks = set(allowed), self.release.chunks
+        units = {}
+        for index in allowed:
+            if chunks[index].content_type not in COMMENTARY_CONTENT:
+                units[index] = self._serves[index]
+                continue
+            passage = self._commented.get(index)
+            if passage is None:  # commentary that names no passage in the release
+                continue
+            if passage not in permitted:
+                passage = next((translation for translation in self._translations.get(chunks[passage].id, ())
+                                if translation in permitted), None)
+            if passage is not None:
+                units[index] = passage
+        return units
+
+    def _lexical(self, question: str, units: dict[int, int]) -> dict[int, float]:
+        """BM25 over the search text plus BM25 over the header phrases, for chunks that can serve."""
+        scores = self._index.scores(normalize.content_tokens(question))
+        for index, score in self._headers.scores(phrases(question)).items():
+            scores[index] = scores.get(index, 0.0) + score
+        return {index: score for index, score in scores.items() if index in units and score > 0}
+
+    def _curated_first(self, order: list[int], fused: dict[int, float]) -> list[int]:
+        """Curated child content about as relevant as the best passage goes first, in its own order."""
+        best = fused[order[0]]
+        curated = [unit for unit in order if self.release.chunks[unit].content_type in CURATED_CONTENT
+                   and fused[unit] >= CURATED_RATIO * best]
+        return curated + [unit for unit in order if unit not in curated]
+
+    @staticmethod
+    def _book(chunk: Chunk) -> tuple[str, ...]:
+        return chunk.source_ids or (chunk.document_id,)
 
     def _reviewed(self, question: str, candidates: Sequence[Candidate]) -> Candidate | None:
         """The answer-bank candidate whose reviewed text answers the question, if any.

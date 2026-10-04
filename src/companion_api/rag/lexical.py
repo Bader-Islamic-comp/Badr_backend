@@ -29,6 +29,28 @@ def chunk_tokens(chunk: Chunk) -> list[str]:
     return tokens
 
 
+def phrases(text: str) -> list[str]:
+    """Adjacent word pairs of one content word and one function word, as one term each ("بعد الصلاه").
+
+    Content-word search drops the function word, so "ماذا أقول بعد الصلاة؟" reads as أقول + الصلاة and
+    cannot tell the adhkar after the prayer from a lesson on the prayer itself (hybrid-rrf-v3). A pair of two
+    content words adds nothing BM25 does not already see, and a pair of two function words means nothing.
+    A space never occurs inside a token, so a phrase term never collides with a word.
+    """
+    words = normalize.tokens(text)
+    return [f"{left} {right}" for left, right in zip(words, words[1:])
+            if _content(left) != _content(right) and len(left) > 1 and len(right) > 1]
+
+
+def header_phrases(chunk: Chunk) -> list[str]:
+    """The phrase terms of a chunk's context header (its title when it has none): the curator's own label."""
+    return phrases(chunk.context_header or chunk.title)
+
+
+def _content(token: str) -> bool:
+    return token not in normalize.STOPWORDS
+
+
 class BM25:
     """Okapi BM25 with a Lucene-style non-negative IDF."""
 

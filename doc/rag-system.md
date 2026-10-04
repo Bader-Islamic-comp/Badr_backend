@@ -276,6 +276,9 @@ question in another Latin-script language is routed as if it were English.
 
 Hybrid (`hybrid-rrf-v2`): BM25 over `searchText` and cosine over vectors, each
 top-20, fused with reciprocal rank fusion (k = 60); top 4 go to the prompt.
+`hybrid-rrf-v3` (§17) ranks passages rather than chunks in each branch, serves
+tafsir only after the passage it explains, puts curated child content first when
+it is about as relevant, and adds header phrases to BM25.
 Small-to-big (new in v2): a chunk-v2 child is ranked like any chunk, but its hit
 serves its parent, once, at the best rank any member reached. The prompt gets
 the whole unit and the citation names the parent, and one passage cannot take
@@ -409,6 +412,8 @@ from its settings it attaches a stream handler at INFO to `companion_api.rag`
 | Fusion constant | RRF k = 60 | `retriever.RRF_K` |
 | Candidates per branch | 20 (BM25 and cosine each) | `retriever.BRANCH_K` |
 | Passages to the prompt | 4 | `retriever.FINAL_K` |
+| Commentary in the prompt (v3) | at most 1, right after its own passage, in addition to the 4 | `retriever.MAX_COMMENTARY` |
+| Curated content first (v3) | fused score ≥ 0.9 × the best passage's | `retriever.CURATED_RATIO` |
 | Weak evidence, `hashing` | no BM25 hit and best cosine < 0.2 | `retriever.THRESHOLDS` |
 | Reviewed answer by cosine, `hashing` | top candidate ≥ 0.75 | `retriever.THRESHOLDS` |
 | Weak evidence, `openai-compatible` | no BM25 hit and best cosine < 0.55 (measured) | `retriever.THRESHOLDS` |
@@ -884,3 +889,73 @@ and absence, inside the five Wave 1 stories, so a wrong scene told with the same
 "answered" accepts any number or duration, not only the right one. The near-quote detector reads Arabic ayahs
 only (not a misquoted translation, not Arabizi). The episode map is model-proposed draft data, like the source
 maps. None of this replaces the scholarly review of the corpus and of the evaluation sets.
+
+## 17. Passages before commentary, curated content first (test/corpus-tasks-fix, 2026-10-04)
+
+On the emulator (Qwen3.5-9B, release `device-candidate-1`: Wave 1, Saheeh International and the in-rule and
+borderline tafsirs) "ماذا قال يوسف لإخوته بعد أن عرّفهم بنفسه؟" retrieved four al-Tabari chunks and no ayah,
+and the model answered from a narration of another scene. That release holds 4883 tafsir chunks for 1061 Quran
+chunks, and a narration repeats a question's words more often than the ayah does. `hybrid-rrf-v3` changes how
+the four sources are chosen; the scores, thresholds and weak-evidence test are unchanged.
+
+**Passages, not chunks.** A tafsir chunk (`tafsir`, `tafsir_translation`) is evidence for the passage its
+`parentChunk` names, as a chunk-v2 child is for its parent: the parent when it is eligible for this query
+(servable, language, age band), else an eligible translation of the meanings of that passage (an English
+service, whose Quran passages are translations). Commentary that names no such passage never serves. Each
+branch (BM25, cosine) ranks passages at the best rank any of their members reached and keeps 20; RRF (k = 60)
+fuses the two lists. So a passage that a commentary chunk names in BM25 and its own words name in the cosine
+list gets both, which is what brought 12:87-93 into the Yusuf question's four.
+
+**Commentary only after its passage.** The prompt gets the best four passages in order. One commentary chunk
+(`MAX_COMMENTARY`) may follow its own passage directly, as a fifth source that never takes a passage's place:
+the best-ranked chunk of the first of the four passages that has commentary among the hits, one chunk per book
+(`source_ids`) if the limit is raised. Passage [1], which picks the prompt, is never commentary.
+
+**Curated child content first.** A `story`, `dua` or `lesson` chunk (tier 2, the curated `comp-*` documents)
+whose fused score is at least `CURATED_RATIO` = 0.9 of the best passage's goes first, curated ones in their own
+order. With k = 60 that is roughly "in the top seven of both branches"; one branch alone (about 0.5) is not
+enough. These types are already `FAITH_CONTENT`, so the faith prompt, the faith abstention and every check apply.
+
+**Header phrases.** Content-word search drops function words, so "ماذا أقول بعد الصلاة؟" reads as «أقول» +
+«الصلاة» and ranked the prayer-steps lesson above the adhkar after the prayer. `lexical.phrases` makes one term
+of each adjacent pair of a function word and a content word ("بعد الصلاه"); a second BM25 index holds the
+phrases of each chunk's context header (its title when it has none), and its score is added to the text's BM25
+score. Pairs of two content words add nothing BM25 does not see; headers are short, curated labels, so a match
+there says what the chunk is about.
+
+**Measured** (`scripts/eval_serving.py`, gold questions with an expected passage among the four):
+
+| Release | v2 | v3 |
+| --- | --- | --- |
+| `device-candidate-1` (with tafsir) | 57 | 162 |
+| `releases/wave1-review-1` (no tafsir) | 125 | 122 |
+
+On `device-candidate-1` nine of ten device questions now have a Quran passage first and at most one tafsir chunk,
+after its parent (the tenth, in Arabizi, is weak evidence under both); the Yusuf question gets 12:80-86, a Tabari
+chunk on it, 12:87-93 (the answer), 12:58-63 and 12:75-79. On `wave1-review-1` ranking by passage in each
+branch moves 15 questions across the fourth place (6 in, 9 out), at the margin and with no pattern by prophet or
+variant; header phrases alone add one. The harmful-set routes are unchanged.
+
+**A person of the story counts (`checks-v3`).** «ما معنى «فصبر جميل» في قصة يعقوب؟» got a right answer
+(Mujahid's explanation and 12:18) that `faith_terms` refused as `off_topic`: the question names Yaqub and the
+ayat say «أباهم». Now a prophet's name the question asks about also counts as used when the cited passages tell
+a story that person appears in: the passages' prophet (`prophetId`, or the episode map for a Quran range) and
+the people listed for that story in `checks.STORY_PEOPLE` (Yaqub in Yusuf's, Harun in Musa's, Ismail and Ishaq
+in Ibrahim's), with names from `data/query_aliases.json`. Such a pass is recorded as `pass:story_person`. A name
+from another story, or passages with no prophet (hadith), still fail; a decline still fails first. On the
+device chunks the 2026-10-03 case passes; Yaqub over Nuh's passages and Harun over Yusuf's still fail. The replay
+of the 2026-10-01 recording over `wave1-review-1` is unchanged: 17 released answers pass every deterministic
+check, yusuf-15-msa still fails `numbers`, and the other recorded questions route as before.
+
+**Limits.** The adhkar after the prayer now reach the four (second, from outside them), but the hashing embedder
+still ranks the prayer-steps lesson first; ordering them needs a semantic embedder, not more lexical rules.
+"About as relevant" is a fused-score ratio, not a judgement of the content. A tafsir chunk tells the model what a
+scholar said about the passage; the prompt and checks treat it as evidence like any source.
+
+**Versions.**
+
+| Piece | Version | What changed |
+| --- | --- | --- |
+| Retriever | `hybrid-rrf-v3` | passages ranked per branch, commentary after its passage, curated content first, header phrases |
+| Checks | `checks-v3` | `faith_terms` accepts a person of the cited story (`pass:story_person`) |
+| Prompt, verifier, judge, router, policy | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `dev-patterns-v3`, `conversation-policy-v3` | unchanged |

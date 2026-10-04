@@ -125,7 +125,7 @@ def test_hybrid_retrieval_fuses_both_rankings_with_rrf(retriever):
     assert top.score == pytest.approx(2 / 61)
     scores = [candidate.score for candidate in retrieval.candidates]
     assert scores == sorted(scores, reverse=True)
-    assert RETRIEVER_VERSION == "hybrid-rrf-v2"
+    assert RETRIEVER_VERSION == "hybrid-rrf-v3"
 
 
 def test_retrieval_filters_drafts_language_and_age_band(release):
@@ -476,10 +476,10 @@ def test_grounded_answer_cites_sources_in_order(retriever):
     assert [segment.citations for segment in result.segments] == [("app-help-stars#1",),
                                                                    ("app-help-pause#1", "app-help-stars#1")]
     assert result.provenance == {"releaseId": "dev-runtime-1", "model": "qwen3.5:9b", "promptVersion": "rag-answer-v4",
-                                 "retriever": "hybrid-rrf-v2", "verifier": "grounding-v4",
+                                 "retriever": "hybrid-rrf-v3", "verifier": "grounding-v4",
                                  "embedder": "hashing/hashing-v1", "policy": "conversation-policy-v3",
                                  "chatPromptVersion": "chat-v2", "chatChecker": "chat-check-v1",
-                                 "judge": "faith-judge-v1", "router": "dev-patterns-v3", "checks": "checks-v2"}
+                                 "judge": "faith-judge-v1", "router": "dev-patterns-v3", "checks": "checks-v3"}
     assert result.grounding == "ok"
 
 
@@ -522,7 +522,7 @@ def test_provenance_log_line_never_contains_question_passages_or_answer(retrieve
     assert fields["answer_type"] == "grounded" and fields["release_id"] == "dev-runtime-1"
     assert fields["model"] == "qwen3.5:9b" and fields["prompt_version"] == "rag-answer-v4"
     assert fields["chat_prompt_version"] == "chat-v2" and fields["chat_checker"] == "chat-check-v1"
-    assert fields["retriever"] == "hybrid-rrf-v2" and fields["passages"] >= 1 and fields["latency_ms"] >= 0
+    assert fields["retriever"] == "hybrid-rrf-v3" and fields["passages"] >= 1 and fields["latency_ms"] >= 0
     assert records[0].rag == fields
 
     service_with(retriever, FakeGenerator(error=RuntimeError(marker))).answer(f"How do I earn stars {marker}?")

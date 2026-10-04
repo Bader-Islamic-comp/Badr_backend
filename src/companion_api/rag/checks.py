@@ -16,7 +16,7 @@ existed before keep their old spelling (`grounding:first_person`, `declined`, `o
 | Check | Applies to | Fails when |
 | --- | --- | --- |
 | `first_person` | answers citing religious text | Robert speaks as "I" outside a quotation |
-| `faith_terms` | questions naming a faith term | the answer declines, or neither it nor its passages use the question's faith terms |
+| `faith_terms` | questions naming a faith term | the answer declines, or misses the question's faith terms (v3: a person of the cited story counts) |
 | `answered` | questions asking how many, how long or when | the answer holds no number, duration or time |
 | `numbers` | answers citing religious text (checks-v2) | the answer states a count its passages do not state |
 | `addressee` | a quotation framed as said to someone | its own vocative names someone else («رَبِّ» after "لأبيه") |
@@ -37,7 +37,7 @@ from .prompts import is_faith_passage, is_translation, translation_name
 from .scene import Episodes, check_scene
 from .types import Chunk, Generator
 
-CHECKS_VERSION = "checks-v2"
+CHECKS_VERSION = "checks-v3"
 PASS, FAIL, UNAVAILABLE = "pass", "fail", "unavailable"
 NOT_APPLICABLE = "not_applicable"
 
@@ -91,9 +91,34 @@ def check_first_person(answer: Answer) -> CheckResult:
     return _failed("first_person", "grounding:first_person") if first_person(answer.text) else _passed("first_person")
 
 
-def check_faith_terms(answer: Answer) -> CheckResult:
+# checks-v3: people of a story whom its ayat call by kinship, never by name. Yusuf's brothers say «أبانا», not
+# «يعقوب», so «ما معنى «فصبر جميل» في قصة يعقوب؟» answered rightly from 12:18 failed as off topic (2026-10-03).
+# By the prophet whose story the passages tell; each prophet's own names count too (data/query_aliases.json).
+STORY_PEOPLE = {
+    "yusuf": ("يعقوب", "yaqub", "yakub", "jacob"),
+    "musa": ("هارون", "harun", "haroon", "aaron"),
+    "ibrahim": ("اسماعيل", "اسحاق", "اسحق", "ismail", "ismael", "ishmael", "ishaq", "isaac"),
+}
+
+
+def story_people(cited: Sequence[Chunk], episodes: Episodes | None = None) -> set[str]:
+    """The faith keys of the people who appear in the stories the cited passages tell: the passages' prophet
+    (`prophetId`, or the episode map for an ayah range) and the people of `STORY_PEOPLE`."""
+    prophets = {chunk.prophet_id for chunk in cited if chunk.prophet_id}
+    if episodes is not None:
+        prophets |= {episode.prophet for chunk in cited for episode in episodes.of_chunk(chunk)}
+    names = [name for prophet in prophets for name in STORY_PEOPLE.get(prophet, ())]
+    for entry in arabizi._aliases()["prophets"]:
+        if entry["id"] in prophets:
+            names += [entry["ar"], *entry["latin"]]
+    return {router._faith_key(name) for name in names}
+
+
+def check_faith_terms(answer: Answer, episodes: Episodes | None = None) -> CheckResult:
     """conversation-policy §3.1: on a faith topic, a decline is no answer, and the answer and its passages must
-    use the question's own faith terms (any faith term when the question has none of its own)."""
+    use the question's own faith terms (any faith term when the question has none of its own). checks-v3: a
+    prophet's name the question asks about counts as used when the cited passages tell a story that person
+    appears in (`story_people`), and the pass says so (`story_person`)."""
     if not answer.faith_topic:
         return _passed("faith_terms", NOT_APPLICABLE)
     if DECLINE.search(router.matchable(answer.text)):
@@ -106,11 +131,12 @@ def check_faith_terms(answer: Answer) -> CheckResult:
         wanted = router.faith_words(answer.question_terms)
         if not wanted:
             return _passed("faith_terms", "declined_only")
-    for text in (answer.text, " ".join(chunk.text for chunk in answer.cited)):
-        found = router.faith_words(text)
-        if not (found & wanted if wanted else found):
-            return _failed("faith_terms", "off_topic")
-    return _passed("faith_terms")
+    texts = (answer.text, " ".join(chunk.text for chunk in answer.cited))
+    if all(router.faith_words(text) & wanted if wanted else router.faith_words(text) for text in texts):
+        return _passed("faith_terms")
+    if wanted & story_people(answer.cited, episodes):
+        return _passed("faith_terms", "story_person")
+    return _failed("faith_terms", "off_topic")
 
 
 # answered: a question for a quantity, a duration or a time gets one --------------------------------------
@@ -424,9 +450,12 @@ class Verifier:
             return _failed("scene", "scene:" + finding.reason)
         return CheckResult("scene", finding.status, finding.reason)
 
+    def check_faith_terms(self, answer: Answer) -> CheckResult:
+        return check_faith_terms(answer, self.episodes)
+
     @property
     def deterministic(self) -> tuple[Callable[[Answer], CheckResult], ...]:
-        return (check_first_person, check_faith_terms, check_answered, check_numbers, check_addressee,
+        return (check_first_person, self.check_faith_terms, check_answered, check_numbers, check_addressee,
                 self.check_scene, check_translation)
 
     def run(self, answer: Answer, generator: Generator | None) -> tuple[tuple[CheckResult, ...], str | None]:
