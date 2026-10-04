@@ -1,0 +1,241 @@
+{
+ "computed_at": "2026-09-28T00:53:31+00:00",
+ "total": 58.7,
+ "automated": 58.7,
+ "human": 0.0,
+ "automated_possible": 58.7,
+ "human_possible": 41.3,
+ "commands_run": 11,
+ "tasks": [
+  {
+   "task": 1,
+   "total": 40.0,
+   "automated": 40.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "1b",
+     "kind": "H",
+     "text": "Scope approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 2,
+   "total": 50.0,
+   "automated": 50.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "2c",
+     "kind": "H",
+     "text": "Source policy approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    },
+    {
+     "id": "2d",
+     "kind": "H",
+     "text": "Every registered source accepted or rejected",
+     "owner": "Mousa al-Rashdan",
+     "why": "15/15 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 3,
+   "total": 50.0,
+   "automated": 50.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "3c",
+     "kind": "H",
+     "text": "Every source cleared or rejected by the rights owner",
+     "owner": "Mousa al-Rashdan",
+     "why": "15/15 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 4,
+   "total": 40.0,
+   "automated": 40.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "4c",
+     "kind": "H",
+     "text": "Reviewer policy approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    },
+    {
+     "id": "4d",
+     "kind": "H",
+     "text": "Reviewers named and approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 5,
+   "total": 60.0,
+   "automated": 60.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "5b",
+     "kind": "H",
+     "text": "Release policy approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 6,
+   "total": 60.0,
+   "automated": 60.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "6c",
+     "kind": "H",
+     "text": "Review workflow approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 7,
+   "total": 70.0,
+   "automated": 70.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "7b",
+     "kind": "H",
+     "text": "Audit and retention rules approved (in the review workflow policy)",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 8,
+   "total": 50.0,
+   "automated": 50.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "8b",
+     "kind": "H",
+     "text": "Re-review cadence approved",
+     "owner": "Mousa al-Rashdan",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 9,
+   "total": 70.0,
+   "automated": 70.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "9e",
+     "kind": "H",
+     "text": "Prophet source-map ranges decided by a scholarly reviewer",
+     "owner": "scholarly board",
+     "why": "59/59 items without an applied, audited decision"
+    },
+    {
+     "id": "9f",
+     "kind": "H",
+     "text": "Wave 1 hadith selection decided by a scholarly reviewer",
+     "owner": "scholarly board",
+     "why": "40/40 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 10,
+   "total": 40.0,
+   "automated": 40.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "10b",
+     "kind": "H",
+     "text": "Every age-band version written by a person and approved by a qualified reviewer",
+     "owner": "writers + scholarly board",
+     "why": "198/198 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 11,
+   "total": 70.0,
+   "automated": 70.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "11b",
+     "kind": "H",
+     "text": "ADR 0005 accepted",
+     "owner": "Momen Alhamza",
+     "why": "1/1 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 12,
+   "total": 40.0,
+   "automated": 40.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "12b",
+     "kind": "H",
+     "text": "Every gold question approved or rejected",
+     "owner": "Momen Alhamza",
+     "why": "390/390 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 13,
+   "total": 40.0,
+   "automated": 40.0,
+   "human": 0.0,
+   "missing": [
+    {
+     "id": "13b",
+     "kind": "H",
+     "text": "Every harmful question approved or rejected",
+     "owner": "Momen Alhamza (safety items with the safeguarding lead)",
+     "why": "151/151 items without an applied, audited decision"
+    }
+   ]
+  },
+  {
+   "task": 14,
+   "total": 100.0,
+   "automated": 100.0,
+   "human": 0.0,
+   "missing": []
+  },
+  {
+   "task": 15,
+   "total": 100.0,
+   "automated": 100.0,
+   "human": 0.0,
+   "missing": []
+  }
+ ]
+}

@@ -51,14 +51,23 @@ def write_corpus(root, document):
 
 def real_document(**overrides):
     """Approved, non-synthetic and shaped like reviewed content; the text is an obvious placeholder."""
-    data = {"schemaVersion": 1, "id": "real-doc", "kind": "passage", "title": "Placeholder title", "language": "en",
+    data = {"schemaVersion": 2, "id": "real-doc", "kind": "passage", "title": "Placeholder title", "language": "en",
             "ageBands": ["10-11"], "contentType": "lesson", "curriculumPolicy": "placeholder-policy",
             "synthetic": False, "source": {"work": "Placeholder work", "edition": "1", "publisher": "Placeholder press",
                                            "license": "placeholder"},
             "review": {"status": "approved", "reviewer": "Board member", "approvedOn": "2026-09-25"},
-            "units": [{"id": "u1", "text": "Placeholder unit text.", "reference": "1"}]}
+            "units": [{"id": "u1", "text": "Placeholder unit text.", "reference": "1"}],
+            "sourceIds": ["fixture-source"]}  # write_release admits real content only from registered sources
     data.update(overrides)
     return data
+
+
+def write_registry(path, status="pending_legal"):
+    source = {"source_id": "fixture-source", "format": "txt", "title": "t", "edition": "e", "publisher": "p",
+              "url": "https://example.invalid/x", "license": "l", "license_url": None, "terms_summary": "t",
+              "retrieved_at": None, "sha256": None, "numbering_system": "n", "status": status, "notes": None}
+    path.write_text(json.dumps({"schema_version": 1, "sources": [source]}), encoding="utf-8")  # JSON is valid YAML
+    return str(path)
 
 
 def test_shipped_dev_corpus_validates_with_zero_errors():
@@ -119,7 +128,7 @@ def test_build_verify_and_load_round_trip(tmp_path, capsys):
     assert (manifest.release_id, manifest.channel, manifest.corpus_ids) == ("dev-test-1", "development",
                                                                             ("dev-app-help",))
     assert manifest.document_count == len(documents) == 20 and manifest.chunk_count == len(expected)
-    assert manifest.pipeline == {"normalizer": "norm-v1", "chunker": "chunk-v1", "maxChunkWords": 180}
+    assert manifest.pipeline == {"normalizer": "norm-v3", "chunker": "chunk-v2", "maxChunkWords": 180}
     assert manifest.review == {"approved": 0, "draft": 20, "synthetic": 20}
     assert manifest.embedder == HashingEmbedder().identity
     vectors = HashingEmbedder().embed_documents([embedding_text(chunk) for chunk in expected])
@@ -186,8 +195,18 @@ def test_published_channel_needs_approved_real_documents(tmp_path, capsys):
     assert main(["build", str(draft), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
                  "--channel", "published"]) == 1
     approved = write_corpus(tmp_path / "approved", real_document())
+    pending = write_registry(tmp_path / "pending.yaml")
+    cleared = write_registry(tmp_path / "cleared.yaml", status="cleared")
     assert main(["build", str(approved), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
-                 "--channel", "published", "--release-id", "real-1"]) == 0
+                 "--channel", "published", "--release-id", "real-1"]) == 1  # no registry: real content refused
+    capsys.readouterr()
+    # A licence still pending legal review is not a clearance, whichever build path is used.
+    assert main(["build", str(approved), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
+                 "--channel", "published", "--release-id", "real-1", "--registry", pending]) == 1
+    assert "source fixture-source is pending_legal, not cleared" in capsys.readouterr().err
+    assert not (tmp_path / "out" / "real-1").exists()
+    assert main(["build", str(approved), "--out", str(tmp_path / "out"), "--embedding-model", "hashing",
+                 "--channel", "published", "--release-id", "real-1", "--registry", cleared]) == 0
     manifest = load_release(tmp_path / "out" / "real-1").manifest
     assert manifest.channel == "published" and manifest.review == {"approved": 1, "draft": 0, "synthetic": 0}
 

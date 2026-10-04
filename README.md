@@ -61,6 +61,26 @@ grounded-answer jobs currently run on a thread inside the API process:
 
 `--check` validates configuration and exits; normal operation waits until stopped.
 
+## Religious corpus (corpus tasks)
+
+The corpus pipeline builds the reviewed religious corpus in layers: **layer 0** is the full canonical
+text (Quran from Tanzil, tafsir, Sahih al-Bukhari and Muslim, the Nawawi forty and more), fetched
+and verified by sha256; **wave 1** is the first child-facing candidate set (five prophets, 40 hadith)
+chunked with chunk-v2; **age-band drafts** are empty templates that people fill in. Everything is
+draft: every source licence is `pending_legal` and nothing is approved.
+
+Rules the pipeline enforces:
+
+- No Quran or hadith text is typed from memory; every sacred text comes from a registered, verified
+  download, and the third-party text stays out of git until the licences are cleared.
+- No automated approvals: only a signed human decision in `doc/decisions/decisions.yaml`, applied by
+  `scripts/apply_decisions.py`, can approve or clear anything. An AI pre-review is not an approval.
+- No child data in the corpus, the index, the evaluation sets or the logs.
+
+Start here: [`doc/SETUP.md`](doc/SETUP.md) (rebuild and verify), [`doc/corpus-tasks.md`](doc/corpus-tasks.md)
+(the 15 tasks), [`doc/done.md`](doc/done.md) (coverage and progress) and
+[ADR 0005](doc/adr-0005-embedding-selection.md) (embedding evaluation).
+
 ## Grounded answers (RAG) — development
 
 Off by default. With `COMPANION_RAG_ENABLED=true` the API answers from one

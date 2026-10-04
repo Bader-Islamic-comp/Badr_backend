@@ -1,0 +1,93 @@
+# حزمة القرار 03 — اعتماد السياسات
+
+**صاحب القرار:** Mousa al-Rashdan (`role: governance`). **الوقت المتوقع:** ~1 دقيقة لكل سياسة. كل سياسة مسودة
+بـ `doc/governance/`؛ ملاحظات الوكيل B بجانبها. ترتيب: fail ثم flag ثم pass.
+
+## `policy-re-review-policy` — [re-review-policy.md](../governance/re-review-policy.md)
+
+محفّزات إعادة المراجعة (تغيّر المصدر، الموديل، السياسة، المدة) ومدة مقترحة 12 شهراً.
+
+**أهم 3 نقاط للقرار:**
+1. المدة.
+2. إضافة محفّز لتغيّر الموديل التوليدي/البرومبت/المسترجع (نبّه له B).
+3. هل عيّنة الـ 5% الأسبوعية تُنقّح من بيانات الطفل قبل إرسالها (نبّه له B).
+
+ai_prereview: **flag** (ثقة 0.75) — Trigger list omits model, prompt-policy and retriever changes. doc/architecture.md s12 and AGENTS.md (Engineering expectations) require the reviewed evaluation set to run before any model, prompt, policy, embedding, retriever or corpus change. Only embedding_changed and policy_changed are covered.؛ No trigger fires when a hadith's grading, grader or crosscheck_status changes unless the source sha256 also changes. A re-grade recorded only in canonical files or the registry would go unnoticed.؛ The '5% weekly sample of answers' sent to a scholarly reviewer does not say it is redacted, role-restricted or short-retention. Answers are paired with child questions, and doc/architecture.md s7 requires 'Redacted human-review queues with role-based access and short retention'. AGENTS.md forbids raw child content in ordinary logs.؛ It does not say who may raise an emergency quarantine, though it lists this as a decision needed. Meanwhile doc/governance/review-workflow.md lets any actor quarantine with only a reason. The two documents should agree once that decision is made. — مقترح: Add triggers for model, prompt-policy and retriever version changes, and for changes to hadith grading or crosscheck status. State that the weekly answer sample is redacted of child content, role-restricted and short-retention.
+
+## `policy-releases` — [releases.md](../governance/releases.md)
+
+إصدارات ثابتة للقراءة فقط، مؤشر current_release، rollback، عزل؛ المنشور يحتاج مصادر cleared.
+
+**أهم 3 نقاط للقرار:**
+1. من يسمح له بـ promote و rollback.
+2. من يعلن عزلاً طارئاً.
+3. هل التقييم الشرعي/الأمان إلزامي قبل كل promote.
+
+ai_prereview: **flag** (ثقة 0.75) — The release gate excludes only documents citing 'candidate' or 'rejected' sources. Documents citing 'pending_legal' sources pass the gate, and today every source is pending_legal (doc/governance/rights-clearance.md). doc/architecture.md s14 Phase 0 exit criteria require 'source rights confirmed'. The policy does not state that a published or served release needs rights clearance, only that every document is approved.؛ The release pointer can be served through COMPANION_RAG_RELEASE. The policy does not state that only a 'published' (all-approved) release may be served to children, which AGENTS.md requires: 'Retrieve only from immutable, published, scholar-approved corpus releases'. It also does not say that dev releases such as wave1-dev-1 are blocked from the child experience.؛ No automated regression evaluation step is required before promotion. AGENTS.md: 'Religious-content changes require both automated regression evaluation and the configured human review workflow'.؛ Rollback and quarantine match doc/architecture.md s6.3 (one-step rollback and emergency quarantine), and the read-only, checksummed release files match the immutability requirement. — مقترح: State that promotion to a served or published release requires cleared source rights (which needs a new registry status beyond pending_legal) and a passing religious and child-safety evaluation run. State that non-published releases cannot be served in the child experience.
+
+## `policy-review-workflow` — [review-workflow.md](../governance/review-workflow.md)
+
+draft → in_review → approved/rejected/quarantined، والقرارات فقط من decisions.yaml، وسجل تدقيق.
+
+**أهم 3 نقاط للقرار:**
+1. اعتماد أن approve/reject لا تأتي إلا من decisions.yaml.
+2. مدة الاحتفاظ بسجل التدقيق ونسخته الاحتياطية.
+3. بناء بوابة المراجعة (UI) أم الاكتفاء بالملف.
+
+ai_prereview: **flag** (ثقة 0.75) — Approval is refused when 'R not qualified', but there is no role match. A reviewer qualified only as 'language' or 'safeguarding' appears able to approve religious accuracy. doc/architecture.md s6.1 reserves doctrine and source eligibility for the scholarly board.؛ A single reviewer's approval moves an item to 'approved'. There is no requirement for both a scholarly and a safeguarding sign-off, nor a minimum reviewer count. doc/governance/reviewer-policy.md leaves the minimum count open, but the workflow's state machine has no room for multiple sign-offs.؛ Quarantine is performed by 'governance' and refused only when no reason is given. No authorization or role check is stated for the actor.؛ The 'checks' that gate approval are not defined here. doc/governance/reviewer-policy.md limits them to reading-level checks, which excludes the automated regression evaluation AGENTS.md requires for religious-content changes.؛ The hash-chained audit trail carrying no content text or child data is consistent with AGENTS.md logging rules. The admin endpoints align with doc/architecture.md s5.2. — مقترح: Require the approving reviewer's role to match the item's review dimension, and allow multiple required sign-offs (scholarly plus safeguarding at minimum) before 'approved'. Restrict quarantine to named roles, and name the automated checks, including the religious and child-safety evaluation set.
+
+## `policy-reviewer-policy` — [reviewer-policy.md](../governance/reviewer-policy.md)
+
+أدوار المراجعين، فصل الكاتب عن المراجع، إفصاح تعارض المصالح.
+
+**أهم 3 نقاط للقرار:**
+1. أسماء المراجعين (حزمة 02).
+2. عدد المراجعين لكل بند (اليوم واحد).
+3. هل يجب مطابقة الدور لنوع البند.
+
+ai_prereview: **flag** (ثقة 0.7) — Rule 4 ('Checks first') gates approval only on reading-level checks. AGENTS.md requires automated regression evaluation, plus human review, for religious-content changes. Grounding, citation and source checks are not part of the gate.؛ Roles are defined (scholarly, safeguarding, language), but no rule ties a role to what it may approve. As written, any qualified reviewer can approve any dimension, which is inconsistent with the scholarly-board authority in doc/architecture.md s6.1.؛ Qualification criteria, renewal period, minimum reviewers and named reviewers are all left open. That is appropriate for a template, and corpus/governance/reviewers.yaml is empty, so nothing can be approved today.؛ The conflict-of-interest declaration and author/reviewer separation are sound and consistent with AGENTS.md. — مقترح: Add a rule that each role approves only its own dimension, and that an item needs every required role's sign-off. Extend rule 4 to include the automated religious and child-safety regression checks, not only reading level.
+
+## `policy-source-policy` — [source-policy.md](../governance/source-policy.md)
+
+معايير قبول مصدر، وسلسلة الأدلة (url، طبعة، sha256، تاريخ)، ومصدران مستقلان للحديث.
+
+**أهم 3 نقاط للقرار:**
+1. هل يُقبل مصدر نصّه الأصلي غير موثّق المنشأ.
+2. هل تدخل مجموعة بمصدر واحد أي إصدار.
+3. من يعتمد طبعة جديدة لما يتغيّر sha256 المصدر.
+
+ai_prereview: **flag** (ثقة 0.75) — The registry statuses are candidate, pending_legal and rejected, and 'No source is marked cleared by tooling'. There is no status for a cleared or accepted source. So neither this policy nor doc/governance/releases.md can require rights clearance before a release, and pending_legal sources currently pass the release gate. This conflicts with the doc/architecture.md s14 Phase 0 exit criterion 'source rights confirmed'.؛ Criterion 4 states the collection rule 'Bukhari and Muslim: sahih' as one 'the board has accepted', but no board or named approver exists yet (corpus/governance/reviewers.yaml is empty, and doc/governance/scope.md is not approved). The wording should mark it as proposed.؛ The single-source question (criterion 5, 'where one exists') is left as an open decision. That is acceptable, but until it is decided the policy allows single-source text into a release.؛ The chain of evidence (registry, sha256, verbatim canonical files, never overwriting on upstream change) is consistent with doc/architecture.md s6.3 and the AGENTS.md provenance rules. — مقترح: Add an explicit accepted or cleared status that only the rights owner sets, and require it for any source cited by a published release. Reword criterion 4 as a proposed board rule until the board records acceptance.
+
+## `policy-rights-clearance` — [rights-clearance.md](../governance/rights-clearance.md)
+
+جدول لكل مصدر بالشروط حرفياً؛ كل التراخيص pending_legal حتى قرارك.
+
+**أهم 3 نقاط للقرار:**
+1. القرارات بحزمة 01.
+2. من يرسل إيميلات طلب الإذن ومتى.
+3. ماذا يحدث لو ما جاء رد.
+
+ai_prereview: **pass** (ثقة 0.7) — Every source's clearance is 'pending_legal'. The document states plainly that the allowed and unclear columns are a draft reading, not legal advice, which is consistent with the doc/architecture.md s14 Phase 0 requirement that rights be confirmed by named approvers.؛ It records the open conflict between the Tanzil 'CHANGING IT IS NOT ALLOWED' term and the separate normalized search copy that doc/architecture.md s6.3 and AGENTS.md require. The conflict is raised as a legal question, not assumed away.؛ Sources with no licence found (alquran-cloud-muyassar, the ahmedbaset sources) are marked 'candidate', and 'nothing assumed' is stated. This matches doc/governance/source-policy.md.؛ Minor: Tanzil's attribution-and-link condition implies an in-app attribution requirement. No document in scope assigns it to the app's source cards. Worth noting for the legal review.
+
+## `policy-scope` — [scope.md](../governance/scope.md)
+
+ما بيدخل الكوربس وما بيطلع برّاه: 10 استثناءات صريحة (فتاوى، خلافيات، إسرائيليات، ضعيف، تصوير الأنبياء، ...).
+
+**أهم 3 نقاط للقرار:**
+1. اعتماد قائمة الاستثناءات العشرة كما هي أو تعديلها.
+2. أي تفسير (إن وُجد) مسموح للموجة 1.
+3. سياسة الخلاف المعتبر (§6.5): أساسيات مشتركة فقط، أو منهج محدد.
+
+ai_prereview: **pass** (ثقة 0.7) — The out-of-scope list is consistent with doc/architecture.md and AGENTS.md: no rulings, disputed questions escalated to a human, madhhab never inferred, no open web, no model-memory sacred text, no child data in the corpus, and graded hadith only.؛ The depiction rule (no images, no invented dialogue, Robert never a character) is stricter than the architecture's 'board approves sacred-figure depiction' and does not contradict it.؛ Open product decisions (age band, market, curriculum) are left open with a reference to s18, not assumed. The 'Decisions needed' list covers the tafsir-vs-ayat question and the s6.5 differences policy.؛ Minor: it does not restate the architecture s6.5 default that, with no curriculum selected, only board-designated common foundations are taught. It is covered by the listed decision. Layer 3's path 'corpus/dev-app-help' differs from AGENTS.md 'comp-server/corpus/dev-app-help', which is a cosmetic path difference.
+
+## صيغة القرار
+
+```yaml
+- decision_id: D-POL-001
+  item_ids: ["policy-scope", "policy-source-policy"]
+  decision: approve
+  decided_by: Mousa al-Rashdan
+  role: governance
+  date: 2026-10-01
+  note: "..."
+```

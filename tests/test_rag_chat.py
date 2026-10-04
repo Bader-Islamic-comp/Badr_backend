@@ -497,7 +497,7 @@ def test_the_log_line_has_versions_and_outcomes_but_no_text_or_intent(retriever,
     assert [line["outcome"] for line in lines] == ["chat", "question", "chat_fallback:error:RuntimeError"]
     for line in lines:
         assert line["chat_prompt_version"] == "chat-v2" and line["chat_checker"] == "chat-check-v1"
-        assert line["policy"] == "conversation-policy-v1"
+        assert line["policy"] == "conversation-policy-v4"
     logged = caplog.text + " ".join(repr(vars(record)) for record in caplog.records)
     for secret in (marker, "sad", "feeling", "grown-up", "times 8", "small_talk", "Thank you"):
         assert secret not in logged, secret

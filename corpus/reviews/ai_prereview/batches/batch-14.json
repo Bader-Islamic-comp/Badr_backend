@@ -1,0 +1,511 @@
+{
+ "batch": 14,
+ "output": "corpus/reviews/ai_prereview/batch-14.jsonl",
+ "items": [
+  {
+   "item_id": "hadith-good-word-msa",
+   "item_type": "gold_question",
+   "question": "هل الكلمة الطيبة صدقة؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2989#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-good-word-egyptian",
+   "item_type": "gold_question",
+   "question": "الكلمة الحلوة تبقى صدقة؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2989#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-good-word-misspelled",
+   "item_type": "gold_question",
+   "question": "هل الكلمه الطيبه صدقه",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2989#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-good-word-arabizi",
+   "item_type": "gold_question",
+   "question": "el kilme el 7ilwe sada2a?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2989#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-good-word-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Is a kind word a charity?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2989#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-strong-msa",
+   "item_type": "gold_question",
+   "question": "من هو القوي الحقيقي كما قال النبي صلى الله عليه وسلم؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-strong-gulf",
+   "item_type": "gold_question",
+   "question": "مين القوي صدق مثل ما قال النبي؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-strong-misspelled",
+   "item_type": "gold_question",
+   "question": "مين هوا القوي الحقيقي زي ماقال النبي",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-strong-arabizi",
+   "item_type": "gold_question",
+   "question": "meen el 2awi el 7a2i2i mitl ma 2al el nabi?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-strong-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who is really strong, according to the Prophet?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-6114#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-gentle-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال النبي صلى الله عليه وسلم عن الرفق واللطف؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-6601#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-gentle-levantine",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن اللطف والرفق؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-muslim-6601#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-gentle-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن الرفق واللطف مع الناس",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-6601#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-gentle-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al el nabi 3an el rif2?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-6601#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-gentle-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet say about being gentle?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-6601#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mercy-msa",
+   "item_type": "gold_question",
+   "question": "ما الحديث الذي يتحدث عن الرحمة بالصغار؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5997#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mercy-egyptian",
+   "item_type": "gold_question",
+   "question": "فيه حديث عن إننا نرحم الصغيرين؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5997#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mercy-misspelled",
+   "item_type": "gold_question",
+   "question": "ماالحديث الي بيحكي عن الرحمه بالصغار",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5997#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mercy-arabizi",
+   "item_type": "gold_question",
+   "question": "fi 7adith 3an el ra7me bel zghar?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5997#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mercy-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Is there a hadith about being merciful to children?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5997#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mother-msa",
+   "item_type": "gold_question",
+   "question": "من أحق الناس بحسن الصحبة كما في الحديث؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-6500#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mother-gulf",
+   "item_type": "gold_question",
+   "question": "مين أحق واحد إننا نعامله زين بالحديث؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-muslim-6500#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mother-misspelled",
+   "item_type": "gold_question",
+   "question": "مين احق الناس بحسن الصحبه بالحديث",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-6500#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mother-arabizi",
+   "item_type": "gold_question",
+   "question": "meen a7a2 el nas enno n3amlo mni7 bel 7adith?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-6500#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-mother-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who deserves our good treatment the most, according to the hadith?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-6500#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-best-deeds-msa",
+   "item_type": "gold_question",
+   "question": "ما أحب الأعمال إلى الله كما في الحديث؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-527#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-best-deeds-levantine",
+   "item_type": "gold_question",
+   "question": "شو أحب شغلة لعند الله بالحديث؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-bukhari-527#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-best-deeds-misspelled",
+   "item_type": "gold_question",
+   "question": "ما احب الاعمال الى اللة بالحديث",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-527#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-best-deeds-arabizi",
+   "item_type": "gold_question",
+   "question": "shu a7ab el a3mal la allah bel 7adith?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-527#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-best-deeds-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What deeds does Allah love most, according to the hadith?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-527#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-salam-msa",
+   "item_type": "gold_question",
+   "question": "ماذا قال النبي صلى الله عليه وسلم عن إفشاء السلام؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-muslim-194#1",
+    "hadith-bukhari-12#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-salam-egyptian",
+   "item_type": "gold_question",
+   "question": "النبي قال إيه عن إننا نسلم على الناس؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-muslim-194#1",
+    "hadith-bukhari-12#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-salam-misspelled",
+   "item_type": "gold_question",
+   "question": "شو قال النبي عن افشاء السلام",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-muslim-194#1",
+    "hadith-bukhari-12#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-salam-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2al el nabi 3an enno nsallem 3al nas?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-muslim-194#1",
+    "hadith-bukhari-12#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-salam-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet say about greeting people with salam?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-muslim-194#1",
+    "hadith-bukhari-12#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-quran-learn-msa",
+   "item_type": "gold_question",
+   "question": "من خير الناس كما قال النبي صلى الله عليه وسلم عن تعلم القرآن؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-quran-learn-gulf",
+   "item_type": "gold_question",
+   "question": "مين أحسن الناس اللي يتعلمون القرآن؟",
+   "variant": "gulf",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-quran-learn-misspelled",
+   "item_type": "gold_question",
+   "question": "مين خير الناس الي بيتعلمو القران ويعلموة",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-quran-learn-arabizi",
+   "item_type": "gold_question",
+   "question": "meen a7san el nas elli byet3allamo el quran?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-quran-learn-english_transliteration",
+   "item_type": "gold_question",
+   "question": "Who are the best people according to the hadith about learning the Quran?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5027#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-thirsty-dog-msa",
+   "item_type": "gold_question",
+   "question": "ما قصة الرجل الذي سقى كلباً عطشان؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2363#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-thirsty-dog-levantine",
+   "item_type": "gold_question",
+   "question": "شو قصة الزلمة اللي سقى كلب عطشان؟",
+   "variant": "levantine",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2363#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-thirsty-dog-misspelled",
+   "item_type": "gold_question",
+   "question": "ماقصه الرجل الي سقا كلب عطشان",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2363#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-thirsty-dog-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 2esset el zalame elli sa2a kalb 3atshan?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2363#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-thirsty-dog-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What is the story of the man who gave water to a thirsty dog?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-2363#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-eating-msa",
+   "item_type": "gold_question",
+   "question": "ماذا علّم النبي صلى الله عليه وسلم الغلام عن آداب الأكل؟",
+   "variant": "msa",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5376#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-eating-egyptian",
+   "item_type": "gold_question",
+   "question": "النبي علم الولد إيه لما ياكل؟",
+   "variant": "egyptian",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5376#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-eating-misspelled",
+   "item_type": "gold_question",
+   "question": "شو علم النبي الولد عن اداب الاكل",
+   "variant": "misspelled",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5376#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-eating-arabizi",
+   "item_type": "gold_question",
+   "question": "shu 3allam el nabi el walad lama yakol?",
+   "variant": "arabizi",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5376#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  },
+  {
+   "item_id": "hadith-eating-english_transliteration",
+   "item_type": "gold_question",
+   "question": "What did the Prophet teach the boy about eating manners?",
+   "variant": "english_transliteration",
+   "expected_chunk_ids": [
+    "hadith-bukhari-5376#1"
+   ],
+   "documents_dir": "corpus/wave1/documents"
+  }
+ ]
+}

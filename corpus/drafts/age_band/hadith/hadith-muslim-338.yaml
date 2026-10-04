@@ -1,0 +1,33 @@
+# Age-band draft (tier 2). Human-written, human-reviewed: see WRITING_GUIDE.md in this folder.
+# Write only in `text` and `lesson` of each version; never type Quran or hadith text, use
+# [[quote:<ref>]] markers. `reading_level_checks` is written by scripts/age_band.py check.
+schema_version: 1
+id: hadith-muslim-338
+kind: hadith_explanation
+prophet_id: null
+title: النية في الحسنات
+source_refs:
+- muslim:338
+- nawawi40:37
+source_status: ok
+cluster_id: hc-muslim-338
+disputed: false
+excluded_details: []
+reviewer_notes: ''
+versions:
+  7-9:
+    text: ''
+    lesson: ''
+    author: null
+    reviewer: null
+    review_status: empty
+    reading_level_checks:
+      status: empty
+  10-11:
+    text: ''
+    lesson: ''
+    author: null
+    reviewer: null
+    review_status: empty
+    reading_level_checks:
+      status: empty

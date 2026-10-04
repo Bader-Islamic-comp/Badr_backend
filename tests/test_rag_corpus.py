@@ -88,7 +88,7 @@ def test_valid_document_builds_with_only_canonical_changes():
 @pytest.mark.parametrize("path, value, field", [
     ("id", DELETE, "id"),
     ("id", "Stars_1", "id"),
-    ("schemaVersion", 2, "schemaVersion"),
+    ("schemaVersion", 3, "schemaVersion"),
     ("schemaVersion", True, "schemaVersion"),
     ("kind", "article", "kind"),
     ("title", DELETE, "title"),

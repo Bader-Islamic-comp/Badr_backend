@@ -4,11 +4,38 @@ The canonical form is what a child is shown and what a reviewer approved, so it
 is only Unicode-composed and trimmed. Search text folds case, Arabic diacritics,
 tatweel and letter variants so that "أ" and "ا", or "Stars" and "stars", match.
 Search text is never displayed and never written back over canonical text.
+
+norm-v2 added one step for Arabic: Uthmani-rasm spellings are mapped to the
+simple spelling ("الصلوه" -> "الصلاه") from a table derived from Tanzil data
+(`data/rasm_map.tsv`, built by `corpusprep.rasm`). Latin text is unchanged.
+
+norm-v3 applies that map to Quran text only (`search_text(text, quranic=True)`,
+set by the chunker for Quran documents). Several of its keys are ordinary words
+in other text, and mapping them everywhere merged distinct words in questions,
+hadith and app help: شعير (barley) became شعاير (rituals), ثلث (a third) became
+ثلاث (three), تبرك became تبارك. A question is never mapped; it is written in
+simple spelling already, which is what a mapped Quran text becomes.
 """
+from pathlib import Path
 import re
 import unicodedata
 
-VERSION = "norm-v1"
+VERSION = "norm-v3"
+_RASM_FILE = Path(__file__).with_name("data") / "rasm_map.tsv"
+
+
+def _load_rasm() -> dict[str, str]:
+    if not _RASM_FILE.is_file():
+        return {}
+    table = {}
+    for line in _RASM_FILE.read_text(encoding="utf-8").splitlines():
+        if line and not line.startswith("#"):
+            word, target = line.split("\t")
+            table[word] = target
+    return table
+
+
+RASM = _load_rasm()
 
 # Harakat, tanwin, shadda, sukun, superscript alef and Qur'anic annotation marks.
 _ARABIC_MARKS = re.compile("[\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06ed]")
@@ -29,6 +56,17 @@ STOPWORDS = frozenset(
     "\u0641\u064a \u0645\u0646 \u0639\u0644\u064a \u0627\u0644\u064a \u0639\u0646 \u0647\u0630\u0627 "
     "\u0647\u0630\u0647 \u0645\u0627 \u0645\u0627\u0630\u0627 \u0643\u064a\u0641 \u0647\u0644 \u0648".split()
 )
+# norm-v3 (test/corpus-tasks): the Arabic list had 12 words against about 50 English ones, so a faithful Arabic
+# sentence failed the support check on its function words ("\u062b\u0645", "\u0628\u0639\u062f", "\u0644\u0627\u0646\u0647", "\u0627\u0644\u0630\u064a"). These are search-folded.
+# The last row is citation framing ("\u0643\u0645\u0627 \u0648\u0631\u062f \u0641\u064a \u0627\u0644\u0645\u0635\u062f\u0631", "\u062d\u0633\u0628 \u0627\u0644\u0645\u0635\u0627\u062f\u0631"), which states no fact. "\u0630\u0643\u0631" stays a
+# content word: it is also dhikr.
+ARABIC_FUNCTION_WORDS = frozenset("""
+\u0627\u0646 \u0627\u0646\u0647 \u0627\u0646\u0647\u0627 \u0627\u0646\u0647\u0645 \u0644\u0627\u0646 \u0644\u0627\u0646\u0647 \u0644\u0627\u0646\u0647\u0627 \u0643\u0645\u0627 \u062b\u0645 \u0628\u0639\u062f \u0642\u0628\u0644 \u0645\u0639 \u0644\u0645 \u0644\u0646 \u0644\u0627 \u0647\u0648 \u0647\u064a \u0647\u0645 \u0647\u0645\u0627 \u0627\u0644\u0630\u064a \u0627\u0644\u062a\u064a \u0627\u0644\u0630\u064a\u0646 \u0630\u0644\u0643 \u062a\u0644\u0643 \u0647\u0648\u0644\u0627\u0621
+\u0628\u0644 \u0627\u0648 \u0627\u0630\u0627 \u0627\u0630 \u0643\u0627\u0646 \u0643\u0627\u0646\u062a \u0643\u0627\u0646\u0648\u0627 \u064a\u0643\u0648\u0646 \u0642\u062f \u0644\u0642\u062f \u0639\u0646\u062f \u062d\u062a\u064a \u0628\u064a\u0646 \u0628\u064a\u0646\u0645\u0627 \u0643\u0644 \u0627\u064a \u0644\u0647 \u0644\u0647\u0627 \u0644\u0647\u0645 \u0628\u0647 \u0628\u0647\u0627 \u0641\u064a\u0647 \u0641\u064a\u0647\u0627 \u0645\u0646\u0647 \u0645\u0646\u0647\u0627 \u0639\u0644\u064a\u0647
+\u0639\u0644\u064a\u0647\u0627 \u0627\u0644\u064a\u0647 \u0627\u0644\u064a\u0647\u0627 \u0639\u0646\u0647 \u0639\u0646\u0647\u0627 \u0648\u0647\u0648 \u0648\u0647\u064a \u0648\u0647\u0645 \u0648\u0630\u0644\u0643 \u0648\u0643\u0627\u0646 \u0648\u0642\u062f \u0641\u0642\u062f \u0644\u0643\u0646 \u0648\u0644\u0643\u0646 \u0627\u064a\u0636\u0627 \u0643\u0630\u0644\u0643 \u062d\u064a\u062b \u0627\u0644\u0627 \u063a\u064a\u0631
+\u0627\u0644\u0645\u0635\u062f\u0631 \u0627\u0644\u0645\u0635\u0627\u062f\u0631 \u0645\u0635\u062f\u0631 \u0648\u0631\u062f \u0648\u0631\u062f\u062a \u062d\u0633\u0628 \u064a\u0642\u0648\u0644 \u062a\u0642\u0648\u0644 \u0645\u0630\u0643\u0648\u0631 \u0645\u0630\u0643\u0648\u0631\u0647
+""".split())
+STOPWORDS = STOPWORDS | ARABIC_FUNCTION_WORDS
 
 
 def canonical(text: str) -> str:
@@ -36,11 +74,25 @@ def canonical(text: str) -> str:
     return unicodedata.normalize("NFC", text).strip()
 
 
-def search_text(text: str) -> str:
-    """The matchable form. Deterministic, idempotent and never shown."""
+def search_text_v1(text: str) -> str:
+    """norm-v1: case, marks, tatweel and letter variants folded, punctuation removed."""
     value = unicodedata.normalize("NFKC", text).casefold()
     value = _ARABIC_MARKS.sub("", value).replace(_TATWEEL, "").translate(_ARABIC_FOLDS)
     return " ".join(_NON_WORD.sub(" ", value).replace("_", " ").split())
+
+
+def tokens_v1(text: str) -> list[str]:
+    return search_text_v1(text).split()
+
+
+def search_text(text: str, *, quranic: bool = False) -> str:
+    """The matchable form (norm-v3). Deterministic, idempotent and never shown.
+
+    `quranic` maps Uthmani-rasm spellings to the simple spelling; only Quran
+    text is written in that rasm, so only Quran text sets it.
+    """
+    words = search_text_v1(text).split()
+    return " ".join(RASM.get(word, word) for word in words) if quranic else " ".join(words)
 
 
 def tokens(text: str) -> list[str]:
@@ -56,3 +108,26 @@ def content_tokens(text: str) -> list[str]:
 def detect_language(text: str) -> str:
     """"ar" when Arabic letters outnumber Latin ones, otherwise "en"."""
     return "ar" if len(_ARABIC_LETTER.findall(text)) > len(_LATIN_LETTER.findall(text)) else "en"
+
+
+# Arabic clitics for the light stem, longest first: conjunction + preposition + article, then the parts.
+_ARABIC_WORD = re.compile("^[ء-ي]+$")
+_PREFIXES = ("وال", "بال", "كال", "فال", "لل", "ال", "و", "ف", "ب", "ك", "ل")
+_SUFFIXES = ("هما", "كما", "هم", "هن", "كم", "كن", "نا", "ها", "ه", "ك", "ي")
+
+
+def arabic_forms(token: str) -> frozenset[str]:
+    """The token and its light stems: each leading clitic and each trailing pronoun it may carry, removed.
+
+    Two tokens match when their forms share one: "والملايكه" and "للملايكه"
+    share "ملايكه", "كتابهم" and "الكتاب" share "كتاب". Every possible split
+    is kept rather than one guessed, because a clitic letter can also be a root
+    letter (the ك of كتاب). A form keeps at least three letters. Latin tokens
+    and digits have only themselves. For matching only (grounding-v3).
+    """
+    if not _ARABIC_WORD.match(token):
+        return frozenset((token,))
+    starts = {token} | {token[len(prefix):] for prefix in _PREFIXES
+                        if token.startswith(prefix) and len(token) - len(prefix) >= 3}
+    return frozenset(starts | {start[:-len(suffix)] for start in starts for suffix in _SUFFIXES
+                               if start.endswith(suffix) and len(start) - len(suffix) >= 3})

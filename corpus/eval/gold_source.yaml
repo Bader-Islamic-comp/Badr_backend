@@ -1,0 +1,678 @@
+# Gold retrieval questions, source form (corpus tasks Phase 5, task 12).
+# SYNTHETIC: every question was written for evaluation by the model (2026-09-27); none comes from a
+# child. approval_status: pending for every item until a reviewer approves the question, its expected
+# references and its notes. `refs` are Quran references inside the Wave 1 source maps, or `selection:N`
+# (the Nth entry of corpus/candidate/hadith_selection.yaml). scripts/build_eval.py resolves them to
+# chunk ids of corpus/wave1 and refuses any reference the corpus does not contain.
+# Variants: msa, gulf, levantine, egyptian, misspelled, arabizi, english_transliteration.
+schema_version: 1
+intents:
+# --- Adam -------------------------------------------------------------------------------------------
+- id: adam-01
+  refs: [quran:2:30-34, quran:7:11, quran:15:28-31, quran:38:71-73, quran:17:61, quran:18:50, quran:20:116]
+  notes: Allah tells the angels He will place a khalifa; the angels prostrate to Adam.
+  q:
+    msa: ماذا طلب الله من الملائكة عندما خلق آدم؟
+    gulf: وش قال الله للملايكة لما خلق آدم؟
+    misspelled: ماذا طلب اللة من الملاءكه لما خلق ادم
+    arabizi: shu talab allah mn el malaeke lama 5ala2 adam?
+    english_transliteration: What did Allah ask the angels to do when He created Adam?
+- id: adam-02
+  refs: [quran:2:31-33]
+  notes: Allah taught Adam the names; the angels could not tell them.
+  q:
+    msa: ما الذي علّمه الله لآدم عليه السلام؟
+    levantine: شو علّم الله لآدم؟
+    misspelled: ماالذي علمة الله لادم عليه السلام
+    arabizi: shu 3allam allah la adam?
+    english_transliteration: What did Allah teach Prophet Adam?
+- id: adam-03
+  refs: [quran:2:34, quran:7:11-12, quran:15:31-33, quran:17:61, quran:38:73-76, quran:18:50, quran:20:116]
+  notes: Iblis refused to prostrate out of arrogance, claiming he was better.
+  q:
+    msa: لماذا رفض إبليس أن يسجد لآدم؟
+    egyptian: ليه إبليس مرضيش يسجد لآدم؟
+    misspelled: ليش ابليس رفض يسجد لادم
+    arabizi: leish iblees rafad yosjod la adam?
+    english_transliteration: Why did Iblis refuse to bow to Adam?
+- id: adam-04
+  refs: [quran:2:35-36, quran:7:19-22, quran:20:117-121]
+  notes: Adam and his wife in the garden, told not to approach the tree; Shaytan tempted them.
+  q:
+    msa: ما قصة الشجرة التي نهى الله آدم عنها؟
+    gulf: وش سالفة الشجرة اللي الله نهى آدم عنها؟
+    misspelled: ما قصه الشجره الي نهى الله ادم عنها
+    arabizi: shu 2esset el shajara elli allah naha adam 3anha?
+    english_transliteration: What is the story of the tree Adam was told not to eat from?
+- id: adam-05
+  refs: [quran:2:37, quran:7:23, quran:20:122]
+  notes: Adam received words from his Lord and repented; Allah accepted his repentance.
+  q:
+    msa: كيف تاب آدم عليه السلام بعد أن أكل من الشجرة؟
+    levantine: كيف آدم تاب بعد ما أكل من الشجرة؟
+    misspelled: كيف تاب ادم بعد مااكل من الشجره
+    arabizi: kif adam tab ba3d ma akal mn el shajara?
+    english_transliteration: How did Adam repent after eating from the tree?
+- id: adam-06
+  refs: [quran:2:36-38, quran:7:24-25, quran:20:123]
+  notes: Adam and his wife were sent down to the earth.
+  q:
+    msa: أين عاش آدم بعد أن خرج من الجنة؟
+    egyptian: آدم راح فين بعد ما خرج من الجنة؟
+    misspelled: وين عاش ادم بعد ماخرج من الجنه
+    arabizi: wein 3ash adam ba3d ma tele3 mn el jannah?
+    english_transliteration: Where did Adam live after leaving Jannah?
+- id: adam-07
+  refs: [quran:18:50]
+  notes: Iblis was of the jinn.
+  q:
+    msa: هل كان إبليس من الملائكة أم من الجن؟
+    gulf: إبليس كان من الملايكة ولا من الجن؟
+    misspelled: هل كان ابليس من الملاءكة ام من الجن
+    arabizi: iblees kan mn el malaeke walla mn el jinn?
+    english_transliteration: Was Iblis one of the angels or one of the jinn?
+# --- Nuh --------------------------------------------------------------------------------------------
+- id: nuh-01
+  refs: [quran:29:14]
+  notes: Nuh stayed among his people a thousand years less fifty.
+  q:
+    msa: كم سنة دعا نوح عليه السلام قومه؟
+    levantine: قديش ضل نوح يدعي قومه؟
+    misspelled: كم سنه دعى نوح قومة
+    arabizi: 2adeish dal noo7 yed3i 2awmo?
+    english_transliteration: How many years did Prophet Nuh call his people?
+- id: nuh-02
+  refs: [quran:11:37-38, quran:23:27]
+  notes: Allah told Nuh to build the ark under His eyes and inspiration.
+  q:
+    msa: من أمر نوحاً ببناء السفينة؟
+    egyptian: مين قال لنوح يبني السفينة؟
+    misspelled: مين امر نوح يبني السفينه
+    arabizi: meen amar noo7 yebni el safine?
+    english_transliteration: Who told Nuh to build the ark?
+- id: nuh-03
+  refs: [quran:11:42-43, quran:11:45-46]
+  notes: Nuh's son refused to board, said he would take refuge on a mountain, and drowned.
+  q:
+    msa: ماذا حدث لابن نوح عندما رفض أن يركب السفينة؟
+    gulf: وش صار لولد نوح لما رفض يركب السفينة؟
+    misspelled: شو صار لابن نوح لما رفض يركب السفينه
+    arabizi: shu sar la ibn noo7 lama rafad yerkab el safine?
+    english_transliteration: What happened to Nuh's son when he refused to get on the ark?
+- id: nuh-04
+  refs: [quran:11:38, quran:54:9, quran:26:105-111, quran:23:24-25]
+  notes: His people mocked him while he built the ark and rejected him.
+  q:
+    msa: كيف كان قوم نوح يعاملونه وهو يبني السفينة؟
+    levantine: شو كانوا يعملوا قوم نوح وهو عم يبني السفينة؟
+    misspelled: كيف كان قوم نوح يعاملونة وهو يبني السفينه
+    arabizi: shu kano ya3mlo 2awm noo7 w howe 3am yebni el safine?
+    english_transliteration: How did Nuh's people treat him while he was building the ark?
+- id: nuh-05
+  refs: [quran:54:11-12, quran:11:40, quran:11:44, quran:23:27]
+  notes: Water poured from the sky and gushed from the earth; then the water subsided.
+  q:
+    msa: من أين جاء ماء الطوفان في قصة نوح؟
+    egyptian: مية الطوفان جت منين في قصة نوح؟
+    misspelled: من وين اجا ماء الطوفان بقصه نوح
+    arabizi: mn wein ija mai el tofan b 2esset noo7?
+    english_transliteration: Where did the water of the flood come from in Nuh's story?
+- id: nuh-06
+  refs: [quran:71:5-9]
+  notes: Nuh called his people night and day, openly and in private.
+  q:
+    msa: متى كان نوح عليه السلام يدعو قومه؟
+    gulf: نوح متى كان يدعي قومه؟ بالليل ولا بالنهار؟
+    misspelled: متا كان نوح يدعو قومة
+    arabizi: noo7 emta kan yed3i 2awmo, bel leil walla bel nhar?
+    english_transliteration: Did Prophet Nuh call his people at night or in the day?
+# --- Ibrahim ----------------------------------------------------------------------------------------
+- id: ibrahim-01
+  refs: [quran:21:57-63, quran:37:91-93]
+  notes: Ibrahim broke the idols except the biggest one.
+  q:
+    msa: ماذا فعل إبراهيم عليه السلام بالأصنام؟
+    levantine: شو عمل إبراهيم بالأصنام؟
+    misspelled: ماذا فعل ابراهيم بالاصنام
+    arabizi: shu 3emel ibrahim bel asnam?
+    english_transliteration: What did Prophet Ibrahim do to the idols?
+- id: ibrahim-02
+  refs: [quran:21:68-70, quran:29:24, quran:37:97-98]
+  notes: They threw Ibrahim into the fire; Allah made it cool and safe.
+  q:
+    msa: ماذا حدث للنار عندما ألقي فيها إبراهيم؟
+    egyptian: النار عملت إيه لما رموا إبراهيم فيها؟
+    misspelled: ماذا حدث للنار لما القوا ابراهيم فيها
+    arabizi: shu sar lal nar lama kabbo ibrahim fiha?
+    english_transliteration: What happened to the fire when Ibrahim was thrown into it?
+- id: ibrahim-03
+  refs: [quran:6:76-79]
+  notes: Ibrahim looked at a star, the moon and the sun, each setting, and turned to the One who created the heavens.
+  q:
+    msa: ما قصة إبراهيم مع النجم والقمر والشمس؟
+    gulf: وش قصة إبراهيم مع النجمة والقمر والشمس؟
+    misspelled: ماقصه ابراهيم مع النجم والقمر والشمس
+    arabizi: shu 2esset ibrahim ma3 el najme wel 2amar wel shams?
+    english_transliteration: What is the story of Ibrahim with the star, the moon and the sun?
+- id: ibrahim-04
+  refs: [quran:19:42-48, quran:6:74, quran:21:52, quran:26:70-72]
+  notes: Ibrahim spoke gently to his father about worshipping what cannot hear or see.
+  q:
+    msa: كيف كلّم إبراهيم أباه عن عبادة الأصنام؟
+    levantine: كيف حكى إبراهيم مع أبوه عن الأصنام؟
+    misspelled: كيف كلم ابراهيم اباة عن عباده الاصنام
+    arabizi: kif 7aka ibrahim ma3 abuh 3an el asnam?
+    english_transliteration: How did Ibrahim talk to his father about the idols?
+- id: ibrahim-05
+  refs: [quran:2:127-129]
+  notes: Ibrahim and Ismail raised the foundations of the House and made du'a.
+  q:
+    msa: من بنى الكعبة مع إبراهيم عليه السلام؟
+    egyptian: مين بنى الكعبة مع سيدنا إبراهيم؟
+    misspelled: مين بنا الكعبه مع ابراهيم
+    arabizi: meen bana el ka3ba ma3 ibrahim?
+    english_transliteration: Who built the Kaaba with Prophet Ibrahim?
+- id: ibrahim-06
+  refs: [quran:11:69-73, quran:51:24-30, quran:15:51-56]
+  notes: Honoured guests (angels) came; Ibrahim served a calf; they brought glad tidings of a son.
+  q:
+    msa: ما قصة ضيوف إبراهيم الذين بشروه بولد؟
+    gulf: وش قصة الضيوف اللي جوا إبراهيم وبشروه بولد؟
+    misspelled: ماقصه ضيوف ابراهيم الي بشروة بولد
+    arabizi: shu 2esset el dyof elli ijo 3ala ibrahim w basharo bi walad?
+    english_transliteration: What is the story of the guests who gave Ibrahim good news of a son?
+- id: ibrahim-07
+  refs: [quran:37:102-107]
+  notes: Ibrahim saw in a dream that he was sacrificing his son; both submitted; it was ransomed.
+  q:
+    msa: ما الرؤيا التي رآها إبراهيم عن ابنه؟
+    levantine: شو المنام اللي شافه إبراهيم عن ابنه؟
+    misspelled: ماالرؤيه الي راها ابراهيم عن ابنة
+    arabizi: shu el manam elli shafo ibrahim 3an ibno?
+    english_transliteration: What dream did Ibrahim see about his son?
+- id: ibrahim-08
+  refs: [quran:2:260]
+  notes: Ibrahim asked to see how Allah gives life to the dead; the four birds.
+  q:
+    msa: ما قصة الطيور الأربعة مع إبراهيم عليه السلام؟
+    egyptian: إيه حكاية الأربع طيور مع إبراهيم؟
+    misspelled: ماقصه الطيور الاربعه مع ابراهيم
+    arabizi: shu 2esset el arba3 tyoor ma3 ibrahim?
+    english_transliteration: What is the story of Ibrahim and the four birds?
+# --- Yusuf ------------------------------------------------------------------------------------------
+- id: yusuf-01
+  refs: [quran:12:4-5]
+  notes: Yusuf saw eleven stars, the sun and the moon prostrating to him and told his father.
+  q:
+    msa: ماذا رأى يوسف عليه السلام في منامه وهو صغير؟
+    gulf: وش شاف يوسف في منامه وهو صغير؟
+    misspelled: ماذا راى يوسف فى منامة وهو صغير
+    arabizi: shu shaf yusuf b manamo w howe zghir?
+    english_transliteration: What did Prophet Yusuf see in his dream when he was young?
+- id: yusuf-02
+  refs: [quran:12:8-9]
+  notes: The brothers said their father loved Yusuf and his brother more.
+  q:
+    msa: لماذا غار إخوة يوسف منه؟
+    levantine: ليش إخوة يوسف غاروا منه؟
+    misspelled: ليش اخوه يوسف غارو منه
+    arabizi: leish ekhwet yusuf gharo meno?
+    english_transliteration: Why were Yusuf's brothers jealous of him?
+- id: yusuf-03
+  refs: [quran:12:10, quran:12:15]
+  notes: They agreed to put him at the bottom of the well.
+  q:
+    msa: أين ألقى الإخوة يوسف عليه السلام؟
+    egyptian: إخوات يوسف رموه فين؟
+    misspelled: وين رمو اخوه يوسف يوسف
+    arabizi: wein rmo ekhwet yusuf yusuf? bel bir?
+    english_transliteration: Where did the brothers throw Yusuf?
+- id: yusuf-04
+  refs: [quran:12:16-18]
+  notes: They came weeping at night with false blood on his shirt and said a wolf ate him.
+  q:
+    msa: ماذا قال الإخوة لأبيهم عندما عادوا بدون يوسف؟
+    gulf: وش قالوا الإخوان لأبوهم لما رجعوا بدون يوسف؟
+    misspelled: شو قالو الاخوه لابوهم لما رجعو بدون يوسف
+    arabizi: shu 2alo el ekhwe la abuhom lama rij3o bdoon yusuf?
+    english_transliteration: What did the brothers tell their father when they came back without Yusuf?
+- id: yusuf-05
+  refs: [quran:12:36-41]
+  notes: Two young men in prison told Yusuf their dreams; he called them to tawhid, then interpreted.
+  q:
+    msa: من الذين دخلوا السجن مع يوسف وماذا رأوا في المنام؟
+    levantine: مين اللي فاتوا عالسجن مع يوسف وشو شافوا بالمنام؟
+    misspelled: مين الي دخلو السجن مع يوسف وشو شافو بالمنام
+    arabizi: meen elli fato 3al sijn ma3 yusuf w shu shafo bel manam?
+    english_transliteration: Who went to prison with Yusuf and what did they dream about?
+- id: yusuf-06
+  refs: [quran:12:43-49]
+  notes: The king's dream of seven fat cows and seven lean, and ears of corn; Yusuf interpreted it.
+  q:
+    msa: ما رؤيا الملك التي فسرها يوسف عليه السلام؟
+    egyptian: الملك شاف إيه في الحلم ويوسف فسره إزاي؟
+    misspelled: ما روءيا الملك الي فسرها يوسف
+    arabizi: shu shaf el malik bel 7elem w kif fassaro yusuf?
+    english_transliteration: What was the king's dream that Yusuf explained?
+- id: yusuf-07
+  refs: [quran:12:58-62, quran:12:69]
+  notes: The brothers came to Egypt for provisions; he recognized them and they did not recognize him.
+  q:
+    msa: هل عرف الإخوة يوسف عندما جاؤوا إليه لأخذ الطعام؟
+    gulf: الإخوان عرفوا يوسف لما جوه ياخذون أكل؟
+    misspelled: هل عرف الاخوه يوسف لما جاو ياخدو الاكل
+    arabizi: el ekhwe 3erfo yusuf lama ijo yakhdo akl?
+    english_transliteration: Did the brothers recognize Yusuf when they came to get food?
+- id: yusuf-08
+  refs: [quran:12:89-92]
+  notes: Yusuf revealed himself and forgave them, "no blame on you today".
+  q:
+    msa: ماذا قال يوسف لإخوته بعد أن عرّفهم بنفسه؟
+    levantine: شو قال يوسف لإخوته لما عرّفهم عحاله؟
+    misspelled: شو قال يوسف لاخوتة بعد ماعرفهم بحالو
+    arabizi: shu 2al yusuf la ekhwto lama 3arrafhom 3a 7alo?
+    english_transliteration: What did Yusuf say to his brothers after he told them who he was?
+- id: yusuf-09
+  refs: [quran:12:93-96]
+  notes: Yusuf's shirt was cast over Ya'qub's face and his sight returned.
+  q:
+    msa: كيف عاد البصر إلى يعقوب عليه السلام؟
+    egyptian: سيدنا يعقوب رجعله نظره إزاي؟
+    misspelled: كيف رجع البصر ليعقوب
+    arabizi: kif reje3 el nazar la ya3qoob?
+    english_transliteration: How did Prophet Yaqub get his eyesight back?
+- id: yusuf-10
+  refs: [quran:12:18, quran:12:83-87]
+  notes: Ya'qub said "sabrun jamil" and did not despair of Allah's mercy.
+  q:
+    msa: كيف صبر يعقوب عليه السلام على فراق يوسف؟
+    gulf: كيف صبر يعقوب على فراق ولده يوسف؟
+    misspelled: كيف صبر يعقوب على فراق يوسف ومااياس
+    arabizi: kif sabar ya3qoob 3ala fra2 yusuf?
+    english_transliteration: How was Yaqub patient when he lost Yusuf?
+# --- Musa -------------------------------------------------------------------------------------------
+- id: musa-01
+  refs: [quran:28:7, quran:20:38-39]
+  notes: Allah inspired Musa's mother to put him in the river.
+  q:
+    msa: لماذا وضعت أم موسى ابنها في النهر؟
+    levantine: ليش إم موسى حطّت ابنها بالنهر؟
+    misspelled: ليش ام موسا حطت ابنها بالنهر
+    arabizi: leish emm mousa 7attat ibna bel nahr?
+    english_transliteration: Why did Musa's mother put her baby in the river?
+- id: musa-02
+  refs: [quran:28:8-13, quran:20:40]
+  notes: Pharaoh's family picked him up; he refused other nurses and was returned to his mother.
+  q:
+    msa: كيف رجع موسى الرضيع إلى أمه؟
+    egyptian: موسى وهو صغير رجع لأمه إزاي؟
+    misspelled: كيف رجع موسا الرضيع لامة
+    arabizi: kif reje3 mousa el zghir la emmo?
+    english_transliteration: How did baby Musa return to his mother?
+- id: musa-03
+  refs: [quran:20:9-14, quran:28:29-30, quran:27:7-9]
+  notes: Musa saw a fire, went to it, and was called; Allah spoke to him.
+  q:
+    msa: ماذا رأى موسى عليه السلام في الطريق فذهب إليه وكلمه الله؟
+    gulf: وش شاف موسى بالطريق وراح له وكلمه الله؟
+    misspelled: شو شاف موسا بالطريق وراحلة وكلمة الله
+    arabizi: shu shaf mousa bel tari2 w ra7 3ando w kallamo allah?
+    english_transliteration: What did Musa see on the road before Allah spoke to him?
+- id: musa-04
+  refs: [quran:20:17-21, quran:28:31, quran:27:10, quran:7:107, quran:26:32]
+  notes: Musa's staff became a moving snake as a sign.
+  q:
+    msa: ماذا حدث لعصا موسى عندما ألقاها؟
+    levantine: شو صار بعصاية موسى لما رماها؟
+    misspelled: ماذا حدث لعصى موسا لما القاها
+    arabizi: shu sar b 3asayet mousa lama rama7a?
+    english_transliteration: What happened to Musa's staff when he threw it down?
+- id: musa-05
+  refs: [quran:20:29-36, quran:28:34-35]
+  notes: Musa asked that his brother Harun be his helper.
+  q:
+    msa: من الذي طلب موسى أن يكون معه في الدعوة؟
+    egyptian: موسى طلب مين يكون معاه وهو رايح لفرعون؟
+    misspelled: مين الي طلب موسا يكون معو بالدعوه
+    arabizi: meen talab mousa ykoon ma3o w howe ray7 3a fer3on?
+    english_transliteration: Who did Musa ask to go with him to Firawn?
+- id: musa-06
+  refs: [quran:20:65-70, quran:7:113-122, quran:26:41-48]
+  notes: The magicians threw ropes; Musa's staff swallowed them; the magicians believed.
+  q:
+    msa: ماذا حدث في المواجهة بين موسى والسحرة؟
+    gulf: وش صار بين موسى والسحرة؟
+    misspelled: شو صار بين موسا والسحره
+    arabizi: shu sar bein mousa wel sa7ara?
+    english_transliteration: What happened when Musa faced the magicians?
+- id: musa-07
+  refs: [quran:26:61-66, quran:20:77-78, quran:2:50]
+  notes: Musa struck the sea with his staff and it parted; the believers were saved.
+  q:
+    msa: كيف نجا موسى وقومه من فرعون عند البحر؟
+    levantine: كيف نجي موسى وجماعته من فرعون عند البحر؟
+    misspelled: كيف نجا موسا وقومة من فرعون عند البحر
+    arabizi: kif naja mousa w 2awmo mn fer3on 3end el ba7r?
+    english_transliteration: How were Musa and his people saved from Firawn at the sea?
+- id: musa-08
+  refs: [quran:20:85-97, quran:7:148-150]
+  notes: While Musa was away, the Samiri made a calf and people worshipped it.
+  q:
+    msa: ما قصة العجل الذي عبده بنو إسرائيل؟
+    egyptian: إيه حكاية العجل اللي عبدوه بني إسرائيل؟
+    misspelled: ماقصه العجل الي عبدو بنو اسرائيل
+    arabizi: shu 2esset el 3ejl elli 3abado bani israeel?
+    english_transliteration: What is the story of the calf that Bani Israil worshipped?
+- id: musa-09
+  refs: [quran:18:60-82]
+  notes: Musa travelled with the righteous servant; the ship, the boy and the wall.
+  q:
+    msa: ما قصة موسى مع العبد الصالح والسفينة والجدار؟
+    gulf: وش قصة موسى مع العبد الصالح والسفينة والجدار؟
+    misspelled: ماقصه موسا مع العبد الصالح والسفينه والجدار
+    arabizi: shu 2esset mousa ma3 el 3abd el saleh wel safine wel 7eit?
+    english_transliteration: What is the story of Musa, the wise servant, the boat and the wall?
+- id: musa-10
+  refs: [quran:10:90-92, quran:20:78, quran:26:66]
+  notes: Pharaoh drowned; his body was kept as a sign.
+  q:
+    msa: ماذا حدث لفرعون في النهاية؟
+    levantine: شو صار بفرعون بالآخر؟
+    misspelled: ماذا حدث لفرعون فى النهايه
+    arabizi: shu sar b fer3on bel a5er?
+    english_transliteration: What happened to Firawn in the end?
+# --- Hadith (selection:N = Nth entry of hadith_selection.yaml) --------------------------------------
+- id: hadith-niyyah
+  refs: [selection:1]
+  notes: Actions are by intentions.
+  q:
+    msa: ما الحديث الذي يتحدث عن أن الأعمال بالنيات؟
+    egyptian: فيه حديث بيقول إن الأعمال بالنية؟
+    misspelled: ماالحديث الي بيحكي ان الاعمال بالنيه
+    arabizi: fi 7adith 3an en el a3mal bel niyye?
+    english_transliteration: Is there a hadith that says actions are judged by intentions?
+- id: hadith-pillars
+  refs: [selection:3, selection:2]
+  notes: Islam is built on five.
+  q:
+    msa: على كم شيء بني الإسلام كما في الحديث؟
+    gulf: الإسلام مبني على كم شي بالحديث؟
+    misspelled: على كم شي بنى الاسلام بالحديث
+    arabizi: el islam mabni 3ala kam shi bel 7adith?
+    english_transliteration: According to the hadith, how many things is Islam built on?
+- id: hadith-love-brother
+  refs: [selection:8]
+  notes: None of you believes until he loves for his brother what he loves for himself.
+  q:
+    msa: ماذا قال النبي صلى الله عليه وسلم عن حب الخير للآخرين؟
+    levantine: شو قال النبي عن إنك تحب لأخوك متل ما بتحب لحالك؟
+    misspelled: شو قال النبي عن حب الخير للاخرين
+    arabizi: shu 2al el nabi 3an enno t7eb la a5ook mitl ma bt7eb la 7alak?
+    english_transliteration: What did the Prophet say about loving for your brother what you love for yourself?
+- id: hadith-anger
+  refs: [selection:10, selection:22]
+  notes: 'Do not become angry; the strong one controls himself when angry.'
+  q:
+    msa: ماذا نصح النبي صلى الله عليه وسلم الرجل الذي طلب وصية؟
+    egyptian: النبي قال إيه عن الغضب؟
+    misspelled: شو قال النبي عن الغضب ومين القوي
+    arabizi: shu 2al el nabi 3an el ghadab?
+    english_transliteration: What did the Prophet say about getting angry?
+- id: hadith-speak-good
+  refs: [selection:9]
+  notes: Speak good or stay silent; honour the neighbour and the guest.
+  q:
+    msa: ما الحديث الذي يأمر بقول الخير أو الصمت وإكرام الضيف؟
+    gulf: وش الحديث اللي يقول قل خير أو اسكت واكرم الضيف؟
+    misspelled: ماالحديث الي بيقول قول خير او اسكت واكرم الضيف
+    arabizi: shu el 7adith elli bi2ool 2ool khair aw eskot?
+    english_transliteration: Which hadith says to say something good or stay quiet and honour your guest?
+- id: hadith-purity
+  refs: [selection:13]
+  notes: Purity is half of faith.
+  q:
+    msa: ماذا قال النبي صلى الله عليه وسلم عن الطهور والنظافة؟
+    levantine: شو قال النبي عن الطهارة؟
+    misspelled: شو قال النبي عن الطهور والنظافه
+    arabizi: shu 2al el nabi 3an el taharah?
+    english_transliteration: What did the Prophet say about purity and being clean?
+- id: hadith-charity-joints
+  refs: [selection:14, selection:36]
+  notes: Every good deed is charity, including removing harm from the road.
+  q:
+    msa: هل إزالة الأذى من الطريق صدقة؟
+    egyptian: لو شلت حاجة بتأذي الناس من الطريق تبقى صدقة؟
+    misspelled: هل ازاله الاذى من الطريق صدقه
+    arabizi: iza shilt shi bi2azi mn el tari2 btsir sada2a?
+    english_transliteration: Is removing something harmful from the road a kind of charity?
+- id: hadith-envy
+  refs: [selection:17]
+  notes: Do not envy one another; be brothers.
+  q:
+    msa: ماذا قال النبي صلى الله عليه وسلم عن الحسد والأخوة؟
+    gulf: وش قال النبي عن الحسد وإننا نكون إخوان؟
+    misspelled: شو قال النبي عن الحسد والاخوه
+    arabizi: shu 2al el nabi 3an el 7asad?
+    english_transliteration: What did the Prophet say about envy and being brothers?
+- id: hadith-relieve
+  refs: [selection:18]
+  notes: Whoever relieves a believer's hardship, Allah relieves his.
+  q:
+    msa: ما جزاء من يساعد غيره ويفرج عنه كربته؟
+    levantine: شو أجر اللي بيساعد حدا زعلان وبيفرّج عنه؟
+    misspelled: ماجزاء الي بيساعد غيرة ويفرج عنة
+    arabizi: shu ajr elli bisa3ed 7ada w bifarrej 3anno?
+    english_transliteration: What is the reward for helping someone who is in trouble?
+- id: hadith-good-word
+  refs: [selection:21]
+  notes: A good word is charity.
+  q:
+    msa: هل الكلمة الطيبة صدقة؟
+    egyptian: الكلمة الحلوة تبقى صدقة؟
+    misspelled: هل الكلمه الطيبه صدقه
+    arabizi: el kilme el 7ilwe sada2a?
+    english_transliteration: Is a kind word a charity?
+- id: hadith-strong
+  refs: [selection:22]
+  notes: The strong one is not the wrestler but the one who controls himself when angry.
+  q:
+    msa: من هو القوي الحقيقي كما قال النبي صلى الله عليه وسلم؟
+    gulf: مين القوي صدق مثل ما قال النبي؟
+    misspelled: مين هوا القوي الحقيقي زي ماقال النبي
+    arabizi: meen el 2awi el 7a2i2i mitl ma 2al el nabi?
+    english_transliteration: Who is really strong, according to the Prophet?
+- id: hadith-gentle
+  refs: [selection:24]
+  notes: Allah is gentle and loves gentleness.
+  q:
+    msa: ماذا قال النبي صلى الله عليه وسلم عن الرفق واللطف؟
+    levantine: شو قال النبي عن اللطف والرفق؟
+    misspelled: شو قال النبي عن الرفق واللطف مع الناس
+    arabizi: shu 2al el nabi 3an el rif2?
+    english_transliteration: What did the Prophet say about being gentle?
+- id: hadith-mercy
+  refs: [selection:25]
+  notes: Whoever does not show mercy will not be shown mercy.
+  q:
+    msa: ما الحديث الذي يتحدث عن الرحمة بالصغار؟
+    egyptian: فيه حديث عن إننا نرحم الصغيرين؟
+    misspelled: ماالحديث الي بيحكي عن الرحمه بالصغار
+    arabizi: fi 7adith 3an el ra7me bel zghar?
+    english_transliteration: Is there a hadith about being merciful to children?
+- id: hadith-mother
+  refs: [selection:26]
+  notes: The person most deserving of good company is your mother, then your mother, then your mother, then your father.
+  q:
+    msa: من أحق الناس بحسن الصحبة كما في الحديث؟
+    gulf: مين أحق واحد إننا نعامله زين بالحديث؟
+    misspelled: مين احق الناس بحسن الصحبه بالحديث
+    arabizi: meen a7a2 el nas enno n3amlo mni7 bel 7adith?
+    english_transliteration: Who deserves our good treatment the most, according to the hadith?
+- id: hadith-best-deeds
+  refs: [selection:27]
+  notes: The most beloved deeds - prayer on time, then kindness to parents.
+  q:
+    msa: ما أحب الأعمال إلى الله كما في الحديث؟
+    levantine: شو أحب شغلة لعند الله بالحديث؟
+    misspelled: ما احب الاعمال الى اللة بالحديث
+    arabizi: shu a7ab el a3mal la allah bel 7adith?
+    english_transliteration: What deeds does Allah love most, according to the hadith?
+- id: hadith-salam
+  refs: [selection:28, selection:29]
+  notes: Spread salam; feed people and greet those you know and do not know.
+  q:
+    msa: ماذا قال النبي صلى الله عليه وسلم عن إفشاء السلام؟
+    egyptian: النبي قال إيه عن إننا نسلم على الناس؟
+    misspelled: شو قال النبي عن افشاء السلام
+    arabizi: shu 2al el nabi 3an enno nsallem 3al nas?
+    english_transliteration: What did the Prophet say about greeting people with salam?
+- id: hadith-quran-learn
+  refs: [selection:30]
+  notes: The best of you are those who learn the Quran and teach it.
+  q:
+    msa: من خير الناس كما قال النبي صلى الله عليه وسلم عن تعلم القرآن؟
+    gulf: مين أحسن الناس اللي يتعلمون القرآن؟
+    misspelled: مين خير الناس الي بيتعلمو القران ويعلموة
+    arabizi: meen a7san el nas elli byet3allamo el quran?
+    english_transliteration: Who are the best people according to the hadith about learning the Quran?
+- id: hadith-thirsty-dog
+  refs: [selection:31]
+  notes: A man gave water to a thirsty dog and Allah forgave him; reward in every living being.
+  q:
+    msa: ما قصة الرجل الذي سقى كلباً عطشان؟
+    levantine: شو قصة الزلمة اللي سقى كلب عطشان؟
+    misspelled: ماقصه الرجل الي سقا كلب عطشان
+    arabizi: shu 2esset el zalame elli sa2a kalb 3atshan?
+    english_transliteration: What is the story of the man who gave water to a thirsty dog?
+- id: hadith-eating
+  refs: [selection:33]
+  notes: Say bismillah, eat with the right hand and from what is in front of you.
+  q:
+    msa: ماذا علّم النبي صلى الله عليه وسلم الغلام عن آداب الأكل؟
+    egyptian: النبي علم الولد إيه لما ياكل؟
+    misspelled: شو علم النبي الولد عن اداب الاكل
+    arabizi: shu 3allam el nabi el walad lama yakol?
+    english_transliteration: What did the Prophet teach the boy about eating manners?
+- id: hadith-truth
+  refs: [selection:34]
+  notes: Truthfulness leads to righteousness.
+  q:
+    msa: إلى أين يهدي الصدق كما في الحديث؟
+    gulf: الصدق وين يودي الواحد بالحديث؟
+    misspelled: الى وين بيودي الصدق بالحديث
+    arabizi: el sede2 wein bywaddi bel 7adith?
+    english_transliteration: Where does being truthful lead you, according to the hadith?
+- id: hadith-harmless
+  refs: [selection:35]
+  notes: The Muslim is the one from whose tongue and hand people are safe.
+  q:
+    msa: من هو المسلم كما عرّفه النبي صلى الله عليه وسلم في حديث اللسان واليد؟
+    levantine: مين المسلم اللي الناس بيسلموا من لسانه وإيده؟
+    misspelled: مين المسلم الي الناس بيسلمو من لسانة وايدة
+    arabizi: meen el muslim elli el nas byeslamo mn lsano w edo?
+    english_transliteration: Who is a true Muslim in the hadith about the tongue and the hand?
+# --- Serving checks (test/corpus-tasks-serving, 2026-10-02) -----------------------------------------
+# Written by the model for the post-generation checks: scene (another episode of the same story),
+# addressee (whom a quotation speaks to), answered (how many, how long, when), Arabizi faith routing,
+# and the organizers' page-6 test cases the Wave 1 corpus can answer. Synthetic, pending approval.
+- id: yusuf-11
+  refs: [quran:12:58-60]
+  notes: Scene check. On the brothers' first visit to Egypt Yusuf asked them to bring their brother from their father; not the well scene.
+  q:
+    msa: ماذا طلب يوسف من إخوته عندما جاؤوا إلى مصر أول مرة؟
+    gulf: وش طلب يوسف من إخوانه لما جوا مصر أول مرة؟
+    arabizi: shu talab yusuf mn ekhwto lama ijo 3ala masr awwal marra?
+    english_transliteration: What did Yusuf ask his brothers for when they first came to Egypt?
+- id: yusuf-12
+  refs: [quran:12:80-82]
+  notes: Scene check. When they came back without their youngest brother, they were told to tell their father that his son had stolen; not the wolf story of 12:16-18.
+  q:
+    msa: ماذا قال الإخوة لأبيهم لما رجعوا من مصر بدون أخيهم الصغير؟
+    levantine: شو قالوا الإخوة لأبوهم لما رجعوا من مصر بلا أخوهم الصغير؟
+    arabizi: shu 2alo ekhwet yusuf la abuhom lama rij3o mn masr bdoon 5ayyon el zghir?
+    english_transliteration: What did the brothers tell their father when they came back from Egypt without their youngest brother?
+- id: ibrahim-09
+  refs: [quran:14:35-37]
+  notes: Addressee check. Ibrahim's prayer for Makkah is addressed to his Lord, not to his father or his people.
+  q:
+    msa: بماذا دعا إبراهيم ربه لمكة وذريته؟
+    egyptian: إبراهيم دعا ربنا بإيه لمكة وولاده؟
+    arabizi: shu da3a ibrahim rabbo la makka w wlado?
+    english_transliteration: What did Ibrahim ask his Lord for Makkah and his children?
+- id: nuh-07
+  refs: [quran:11:42-43]
+  notes: Addressee check. Nuh called to his son to board with them; the son answered he would take refuge on a mountain.
+  q:
+    msa: ماذا قال نوح لابنه قبل أن يأتي الموج؟
+    gulf: وش قال نوح لولده قبل لا يجي الموج؟
+    arabizi: shu 2al noo7 la ibno 2abl ma yiji el moj?
+    english_transliteration: What did Nuh say to his son before the waves came?
+- id: yusuf-13
+  refs: [quran:12:87]
+  notes: Addressee check. Yaqub told his sons to go and look for Yusuf and his brother and not to lose hope in Allah's mercy.
+  q:
+    msa: ماذا قال يعقوب لأبنائه عندما أرسلهم يبحثون عن يوسف وأخيه؟
+    levantine: شو قال يعقوب لولاده لما بعتهم يدوروا على يوسف وأخوه؟
+    english_transliteration: What did Yaqub tell his sons when he sent them to look for Yusuf and his brother?
+- id: yusuf-14
+  refs: [quran:12:4]
+  notes: Answered check. Yusuf saw eleven stars, the sun and the moon; an answer must give the number.
+  q:
+    msa: كم كوكبًا رأى يوسف في منامه؟
+    levantine: قديش نجمة شاف يوسف بمنامه؟
+    arabizi: kam najme shaf yusuf bel manam? w 2adeish kawkab?
+    english_transliteration: How many stars did Yusuf see in his dream?
+- id: yusuf-15
+  refs: [quran:12:42]
+  notes: Answered check. Yusuf stayed in prison for some years (بضع سنين); an answer must give that duration.
+  q:
+    msa: كم سنة بقي يوسف في السجن؟
+    gulf: كم سنة قعد يوسف في السجن؟
+    arabizi: 2adeish sane dal yusuf bel sijn?
+    english_transliteration: How many years did Yusuf stay in prison?
+- id: yusuf-16
+  refs: [quran:12:16]
+  notes: Answered check (time). The brothers came to their father in the evening, weeping.
+  q:
+    msa: متى جاء إخوة يوسف إلى أبيهم يبكون؟
+    egyptian: إخوات يوسف جم لأبوهم إمتى وهم بيعيطوا؟
+    arabizi: emta ijo ekhwet yusuf la abuhom w hene 3am yebko?
+    english_transliteration: When did Yusuf's brothers come to their father crying?
+- id: ibrahim-10
+  refs: [quran:2:260]
+  notes: Answered check. Ibrahim was told to take four birds; an answer must give the number.
+  q:
+    msa: كم طيرًا أخذ إبراهيم ليرى كيف يحيي الله الموتى؟
+    egyptian: إبراهيم خد كام طير عشان يشوف ربنا بيحيي الموتى إزاي؟
+    arabizi: kam tayr a5ad ibrahim yshoof kif allah bi7yi el mawta?
+    english_transliteration: How many birds did Ibrahim take to see how Allah brings the dead to life?
+- id: musa-11
+  refs: [quran:7:142]
+  notes: Answered check. Allah appointed for Musa thirty nights and completed them with ten, forty nights in all.
+  q:
+    msa: كم ليلة واعد الله موسى؟
+    levantine: قديش ليلة واعد الله موسى؟
+    arabizi: kam leile wa3ad allah mousa?
+    english_transliteration: How many nights did Allah appoint for Musa?
+- id: page6-kaaba
+  refs: [quran:2:125-127]
+  notes: Organizers' case 1, adapted. Correct the misconception gently, without rebuke - worship is for Allah alone; the Kaaba is the House Ibrahim and Ismail raised for those who worship Allah. Wave 1 holds 2:124-133 only; the qibla verses (2:142-150) are not in the corpus, so a fuller answer needs them.
+  q:
+    msa: لماذا يعبد المسلمون الكعبة؟
+    levantine: ليش المسلمين بيعبدوا الكعبة؟
+    arabizi: leish el muslimin bi3bdo el ka3ba?
+    english_transliteration: Why do Muslims worship the Kaaba?
+- id: page6-sabr
+  refs: [quran:12:18, quran:12:83]
+  notes: Organizers' case 12, adapted. A question with an Islamic term (sabr jamil, beautiful patience) in another language; understand the term in context (Yaqub's patience), never a literal translation.
+  q:
+    msa: ما معنى الصبر الجميل في قصة يعقوب؟
+    arabizi: shu ya3ni sabr jameel b 2esset ya3qoob?
+    english_transliteration: What does sabr jameel mean in the story of Yaqub?
+- id: page6-one-god
+  refs: [quran:6:78-79, quran:21:56]
+  notes: Organizers' case 7, adapted. For a child who never heard the word tawhid - in plain words first (Ibrahim turned to the One who created the heavens and the earth), then the term; the corpus has no definition, so nothing beyond the passages.
+  q:
+    msa: ماذا يعني أن نعبد إلهًا واحدًا كما قال إبراهيم؟
+    levantine: شو يعني نعبد إله واحد متل ما قال إبراهيم؟
+    english_transliteration: What does it mean to worship only one God, like Ibrahim said?

@@ -46,6 +46,22 @@ class Chunk:
     unit_ids: tuple[str, ...]
     # Answer-bank entries only: the reviewed question phrasings `text` answers.
     questions: tuple[str, ...] = ()
+    # chunk-v2 metadata (doc/plan.md component 2). All optional, so chunk-v1 release files still load.
+    source_refs: tuple[str, ...] = ()          # machine-readable citations, e.g. "quran:12:4", "bukhari:6018"
+    parent_id: str | None = None                # the larger chunk this one is part of (small-to-big)
+    cluster_id: str | None = None               # one id for the same hadith across collections
+    cluster_refs: tuple[str, ...] = ()          # the other members of the cluster, not indexed separately
+    context_header: str = ""                    # one line placed before the text for embedding and search
+    tier: int | None = None                     # 0 reference text, 1 scholarly explanation, 2 child content, 3 app help
+    prophet_id: str | None = None
+    topics: tuple[str, ...] = ()
+    madhhab_scope: str | None = None            # "common" or "differs"
+    grading: str | None = None
+    reviewer: str | None = None
+    source_ids: tuple[str, ...] = ()            # registry source_ids the text was copied from
+    generated_questions: tuple[str, ...] = ()   # retrieval aids only, generated, never shown to a child
+    checksum: str = ""                          # sha256 of `text`
+    release_id: str | None = None
 
     def __post_init__(self):
         if not CHUNK_ID.match(self.id) or not self.id.startswith(self.document_id + "#"):
@@ -56,6 +72,16 @@ class Chunk:
             raise ValueError(f"empty text or title on {self.id!r}")
         if (self.kind == "answer") != bool(self.questions):
             raise ValueError(f"only answer chunks carry questions ({self.id!r})")
+        if self.parent_id is not None and not CHUNK_ID.match(self.parent_id):
+            raise ValueError(f"invalid parent id on {self.id!r}")
+        if self.tier is not None and self.tier not in (0, 1, 2, 3):
+            raise ValueError(f"invalid tier on {self.id!r}")
+        if self.madhhab_scope not in (None, "common", "differs"):
+            raise ValueError(f"invalid madhhab scope on {self.id!r}")
+
+    @property
+    def is_child(self) -> bool:
+        return self.parent_id is not None and self.parent_id.split("#")[0] == self.document_id
 
     @property
     def servable(self) -> bool:
@@ -109,10 +135,13 @@ class ReleaseManifest:
     review: dict = field(default_factory=dict)
     checksums: dict = field(default_factory=dict)
     schema_version: int = SCHEMA_VERSION
+    # Every chunk id in the release, written by write_release; empty in releases written before it existed.
+    chunk_ids: tuple[str, ...] = ()
 
     def to_json(self) -> dict:
         data = {_camel(key): getattr(self, key) for key in self.__dataclass_fields__}
         data["corpusIds"] = list(self.corpus_ids)
+        data["chunkIds"] = list(self.chunk_ids)
         data["embedder"] = self.embedder.to_json()
         return data
 
@@ -120,6 +149,7 @@ class ReleaseManifest:
     def from_json(cls, data: dict) -> "ReleaseManifest":
         values = {_snake(key): value for key, value in data.items()}
         values["corpus_ids"] = tuple(values["corpus_ids"])
+        values["chunk_ids"] = tuple(values.get("chunk_ids", ()))
         values["embedder"] = EmbedderIdentity.from_json(values["embedder"])
         return cls(**values)
 

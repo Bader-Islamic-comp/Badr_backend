@@ -13,7 +13,11 @@ from pathlib import Path
 
 from .rag.embeddings import DEFAULT_EMBEDDING_MODEL
 from .rag.endpoints import EndpointError, require_private_endpoint
+from .rag.release import ReleaseError, resolve as resolve_release
 from .rag.generator import ALLOWED_MODELS, DEFAULT_BASE_URL, DEFAULT_MODEL, is_allowed_model
+
+# The languages a corpus document may be written in (doc/rag-system.md §3.1).
+RAG_LANGUAGES = ("en", "ar")
 
 
 def _seconds(value: str | None, default: float) -> float:
@@ -37,6 +41,10 @@ class Settings:
     # Empty means "the LLM base URL": one local server usually serves both.
     embedding_base_url: str = ""
     embedding_model: str = DEFAULT_EMBEDDING_MODEL
+    # Corpus preview, for adult operators only (doc/rag-system.md §9.1): the service's one language, and
+    # whether unreviewed draft chunks are served. Both default to the child-safe development setting.
+    rag_language: str = "en"
+    rag_preview_drafts: bool = False
 
     @classmethod
     def from_environment(cls):
@@ -51,6 +59,8 @@ class Settings:
             llm_timeout_seconds=_seconds(env.get("COMPANION_LLM_TIMEOUT_SECONDS"), 60.0),
             embedding_base_url=env.get("COMPANION_EMBEDDING_BASE_URL", ""),
             embedding_model=env.get("COMPANION_EMBEDDING_MODEL") or DEFAULT_EMBEDDING_MODEL,
+            rag_language=env.get("COMPANION_RAG_LANGUAGE") or "en",
+            rag_preview_drafts=env.get("COMPANION_RAG_PREVIEW_DRAFTS") == "true",
         )
 
     @property
@@ -68,8 +78,15 @@ class Settings:
         problems = []
         if not self.rag_release:
             problems.append("COMPANION_RAG_RELEASE must name a release directory")
-        elif not (Path(self.rag_release) / "manifest.json").is_file():
-            problems.append(f"COMPANION_RAG_RELEASE={self.rag_release} is not a release directory (no manifest.json)")
+        else:
+            try:
+                directory = resolve_release(Path(self.rag_release))
+            except ReleaseError as exception:
+                problems.append(f"COMPANION_RAG_RELEASE={self.rag_release}: {exception}")
+            else:
+                if not (directory / "manifest.json").is_file():
+                    problems.append(f"COMPANION_RAG_RELEASE={self.rag_release} is not a release directory "
+                                    "(no manifest.json)")
         for name, url in (("COMPANION_LLM_BASE_URL", self.llm_base_url),
                           ("COMPANION_EMBEDDING_BASE_URL", self.embedding_endpoint)):
             try:
@@ -83,5 +100,7 @@ class Settings:
             problems.append("COMPANION_LLM_TIMEOUT_SECONDS must be a number of seconds from 1 to 600")
         if not self.embedding_model.strip():
             problems.append("COMPANION_EMBEDDING_MODEL must not be empty")
+        if self.rag_language not in RAG_LANGUAGES:
+            problems.append(f"COMPANION_RAG_LANGUAGE must be one of {', '.join(RAG_LANGUAGES)}")
         if problems:
             raise RuntimeError("Grounded answers cannot start: " + "; ".join(problems) + ".")

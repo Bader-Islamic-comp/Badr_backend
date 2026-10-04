@@ -1,0 +1,17 @@
+# Signed human decisions (the only way anything becomes approved, cleared or rejected).
+# Fill one entry per decision, then run: python scripts/apply_decisions.py
+# Fields (all required): decision_id (unique, e.g. D-0001), item_ids (list), decision
+# (approve | reject | revise | defer), decided_by (full name), role (governance | pipeline | scholarly |
+# safeguarding | language), date (YYYY-MM-DD), note (why; may be empty "").
+# Who may decide what: see doc/decisions/README.md. AI verdicts (ai_prereview) are never decisions.
+#
+# Example (commented out, not applied):
+# - decision_id: D-0001
+#   item_ids: ["source:tanzil-quran-uthmani", "source:tanzil-quran-simple"]
+#   decision: approve
+#   decided_by: Mousa al-Rashdan
+#   role: governance
+#   date: 2026-10-01
+#   note: "Tanzil terms accepted with attribution; normalized copy allowed as a derived file."
+schema_version: 1
+decisions: []

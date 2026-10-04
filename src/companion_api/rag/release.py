@@ -27,6 +27,12 @@ from typing import Sequence
 from .types import RELEASE_ID, SCHEMA_VERSION, Chunk, ReleaseManifest
 
 MANIFEST, CHUNKS, VECTORS = "manifest.json", "chunks.jsonl", "vectors.f32"
+# The only content a release may index (doc/corpus-tasks.md task 15): registered reference and reviewed
+# content, or synthetic app help. Never conversation text, child utterances or anything about a child.
+INDEXABLE_CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh",
+                           "quran_translation", "tafsir_translation")
+SYNTHETIC_CONTENT_TYPES = ("app_help", "orientation")
+BLOCKED_SOURCE_STATUSES = ("candidate", "rejected")
 
 
 class ReleaseError(RuntimeError):
@@ -59,9 +65,62 @@ def _float32_bytes(vectors: Sequence[Sequence[float]], dimensions: int) -> bytes
     return flat.tobytes()
 
 
+def admission_problems(chunks: Sequence[Chunk], sources: dict[str, str] | None) -> list[str]:
+    """Why chunks may not be indexed. `sources` maps registry source_id -> status.
+
+    Synthetic chunks are app help or orientation only. Every other chunk must cite at least one
+    registry source, all registered and none candidate or rejected. A chunk that does not satisfy
+    this (a chat turn, a child's words, text from nowhere) never reaches the vector store.
+    """
+    problems = []
+    for chunk in chunks:
+        if chunk.content_type not in INDEXABLE_CONTENT_TYPES:
+            problems.append(f"{chunk.id}: content type {chunk.content_type!r} is not indexable")
+        elif chunk.synthetic:
+            if chunk.content_type not in SYNTHETIC_CONTENT_TYPES:
+                problems.append(f"{chunk.id}: synthetic chunks may only be app help or orientation")
+        elif not chunk.source_ids:
+            problems.append(f"{chunk.id}: cites no registered source")
+        elif sources is None:
+            problems.append(f"{chunk.id}: no source registry was given to check it against")
+        else:
+            for source_id in chunk.source_ids:
+                status = sources.get(source_id)
+                if status is None:
+                    problems.append(f"{chunk.id}: source {source_id} is not in the registry")
+                elif status in BLOCKED_SOURCE_STATUSES:
+                    problems.append(f"{chunk.id}: source {source_id} is {status}")
+    return problems
+
+
+def publication_problems(chunks: Sequence[Chunk], sources: dict[str, str] | None) -> list[str]:
+    """Why chunks may not be published, on top of `admission_problems`.
+
+    The published channel serves approved, non-synthetic content only, and every source a chunk cites
+    must be `cleared` by the rights owner (doc/decisions/decisions.yaml); `pending_legal` is not enough.
+    Checked here, in the only writer, so no build path can publish around it.
+    """
+    problems = []
+    for chunk in chunks:
+        if chunk.synthetic or chunk.review_status != "approved":
+            problems.append(f"{chunk.id}: the published channel needs approved, non-synthetic content")
+        elif sources is None:
+            problems.append(f"{chunk.id}: no source registry was given to check clearance against")
+        else:
+            for source_id in chunk.source_ids:
+                status = sources.get(source_id, "not registered")
+                if status != "cleared":
+                    problems.append(f"{chunk.id}: source {source_id} is {status}, not cleared")
+    return problems
+
+
 def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk],
-                  vectors: Sequence[Sequence[float]]) -> Path:
-    """Writes a new release directory and returns its path.
+                  vectors: Sequence[Sequence[float]], *, sources: dict[str, str] | None = None) -> Path:
+    """Writes a new release directory and returns its path. The only writer of vectors.
+
+    Chunks are admitted only as `admission_problems` allows, checked against `sources`
+    (registry source_id -> status), and a `published` release also only as
+    `publication_problems` allows; any refusal writes nothing.
 
     `manifest` supplies identity and metadata; counts, checksums and (when
     empty) `created_at` are filled in here. An existing release id is refused:
@@ -71,8 +130,20 @@ def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk]
         raise ReleaseError("release ids are 3-64 characters of a-z, 0-9, '.', '_' or '-'")
     if not chunks or len(chunks) != len(vectors):
         raise ReleaseError("a release needs at least one chunk and exactly one vector per chunk")
-    if len({chunk.id for chunk in chunks}) != len(chunks):
+    ids = {chunk.id for chunk in chunks}
+    if len(ids) != len(chunks):
         raise ReleaseError("chunk ids must be unique within a release")
+    # The retriever serves a child chunk as its parent (small-to-big), so the parent must be here too.
+    orphans = [chunk.id for chunk in chunks if chunk.is_child and chunk.parent_id not in ids]
+    if orphans:
+        raise ReleaseError(f"{len(orphans)} child chunks name a parent outside the release: " + ", ".join(orphans[:5]))
+    problems = admission_problems(chunks, sources)
+    if problems:
+        raise ReleaseError(f"{len(problems)} chunks may not be indexed: " + "; ".join(problems[:5]))
+    if manifest.channel == "published":
+        problems = publication_problems(chunks, sources)
+        if problems:
+            raise ReleaseError(f"{len(problems)} chunks may not be published: " + "; ".join(problems[:5]))
     root = Path(root)
     target = root / manifest.release_id
     if target.exists():
@@ -89,6 +160,7 @@ def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk]
             created_at=manifest.created_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
             document_count=len({chunk.document_id for chunk in chunks}),
             chunk_count=len(chunks),
+            chunk_ids=tuple(chunk.id for chunk in chunks),
             checksums={CHUNKS: _digest(staging / CHUNKS), VECTORS: _digest(staging / VECTORS)},
         )
         (staging / MANIFEST).write_text(json.dumps(final.to_json(), indent=2, sort_keys=True, ensure_ascii=False) + "\n",
@@ -100,9 +172,30 @@ def write_release(root: Path, manifest: ReleaseManifest, chunks: Sequence[Chunk]
     return target
 
 
+POINTER = "current_release"
+QUARANTINED = "quarantined.json"
+
+
+def resolve(path: Path) -> Path:
+    """A release directory, or a `current_release` pointer file naming one beside it.
+
+    A quarantined release is refused even when a pointer still names it.
+    """
+    path = Path(path)
+    if path.is_file() and path.name == POINTER:
+        release_id = path.read_text(encoding="utf-8").strip()
+        if not RELEASE_ID.match(release_id):
+            raise ReleaseError(f"{path} does not name a release id")
+        path = path.parent / release_id
+    quarantine = path.parent / QUARANTINED
+    if quarantine.is_file() and path.name in json.loads(quarantine.read_text(encoding="utf-8")):
+        raise ReleaseError(f"release {path.name} is quarantined")
+    return path
+
+
 def load_release(path: Path) -> LoadedRelease:
     """Reads and verifies a release. Raises `ReleaseError` on any inconsistency."""
-    path = Path(path)
+    path = resolve(path)
     try:
         manifest = ReleaseManifest.from_json(json.loads((path / MANIFEST).read_text(encoding="utf-8")))
     except FileNotFoundError:
@@ -126,5 +219,28 @@ def load_release(path: Path) -> LoadedRelease:
     dimensions = manifest.embedder.dimensions
     if len(chunks) != manifest.chunk_count or len(flat) != manifest.chunk_count * dimensions:
         raise ReleaseError("chunk or vector counts do not match the manifest")
+    if manifest.chunk_ids and tuple(chunk.id for chunk in chunks) != manifest.chunk_ids:
+        raise ReleaseError("chunk ids do not match the manifest")
     vectors = tuple(flat[row * dimensions:(row + 1) * dimensions] for row in range(len(chunks)))
     return LoadedRelease(manifest, chunks, vectors)
+
+
+def scan(path: Path, sources: dict[str, str] | None) -> list[str]:
+    """Scans a release (the index) and returns every problem: ids not in the manifest, altered text,
+    or chunks that `admission_problems` would refuse (and, for a published release, that
+    `publication_problems` would: a source whose clearance was withdrawn). An empty list means
+    the index is clean."""
+    loaded = load_release(path)
+    problems = []
+    listed = set(loaded.manifest.chunk_ids)
+    if not listed:
+        problems.append("the manifest lists no chunk ids (release written before chunk-id listing)")
+    for chunk in loaded.chunks:
+        if listed and chunk.id not in listed:
+            problems.append(f"{chunk.id}: not in the manifest")
+        if chunk.checksum and sha256(chunk.text.encode("utf-8")).hexdigest() != chunk.checksum:
+            problems.append(f"{chunk.id}: text does not match its checksum")
+    problems += admission_problems(loaded.chunks, sources)
+    if loaded.manifest.channel == "published":
+        problems += publication_problems(loaded.chunks, sources)
+    return problems

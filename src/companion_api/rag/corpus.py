@@ -25,7 +25,10 @@ UNIT_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 KINDS = ("passage", "answer")
 LANGUAGES = ("en", "ar")
 AGE_BANDS = ("5-6", "7-9", "10-11", "12-14")
-CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh")
+# quran_translation / tafsir_translation (test/corpus-tasks): an English translation of the meanings of the Quran,
+# and a translated tafsir. Neither is the Quran: the rasm map (norm-v3) applies to `quran` only.
+CONTENT_TYPES = ("app_help", "orientation", "lesson", "story", "quran", "tafsir", "hadith", "dua", "fiqh",
+                 "quran_translation", "tafsir_translation")
 SYNTHETIC_CONTENT_TYPES = ("app_help", "orientation")
 REVIEW_STATUSES = ("draft", "approved")
 ANSWER_TYPES = ("unavailable", "grounded", "reviewed_answer", "abstained", "redirected", "safety", "chat")
@@ -40,9 +43,21 @@ DEFAULT_MAX_CHUNK_WORDS = 180
 _CORPUS_KEYS = ("schemaVersion", "id", "title", "description")
 _DOCUMENT_KEYS = ("schemaVersion", "id", "kind", "title", "language", "ageBands", "contentType", "madhhab",
                   "curriculumPolicy", "synthetic", "source", "grading", "review", "units", "questions", "answer")
+# Schema v2 (chunk-v2, doc/plan.md component 2): optional structure metadata. v1 documents stay valid.
+DOCUMENT_SCHEMAS = (1, 2)
+_DOCUMENT_KEYS_V2 = ("tier", "contextHeader", "prophetId", "topics", "madhhabScope", "clusterId", "clusterRefs",
+                     "sourceIds", "parentChunk", "children", "generatedQuestions")
+_UNIT_KEYS_V2 = ("sourceRefs", "parts")
+TIERS = (0, 1, 2, 3)
+MADHHAB_SCOPES = ("common", "differs")
+CHILDREN_MODES = ("units",)
+SOURCE_REF = re.compile(r"^(quran:[1-9][0-9]{0,2}:[1-9][0-9]{0,2}(-[1-9][0-9]{0,2})?|[a-z][a-z0-9_]{1,31}:[0-9][0-9.]{0,9})$")
+SLUG = re.compile(r"^[a-z][a-z0-9_-]{1,31}$")
+MAX_GENERATED_QUESTIONS = 8
 _SOURCE_KEYS = ("work", "edition", "publisher", "translator", "license", "checksum")
 _REVIEW_KEYS = ("status", "reviewer", "approvedOn", "supersedes")
 _UNIT_KEYS = ("id", "text", "reference", "section", "keepWithNext")
+_CHUNK_REF = re.compile(r"^[a-z0-9][a-z0-9-]{1,63}#[1-9][0-9]{0,3}$")
 _TYPE_NAMES = {bool: "true/false", int: "a number", float: "a number", str: "text", list: "a list",
                dict: "an object", type(None): "null"}
 
@@ -110,6 +125,8 @@ class Unit:
     reference: str | None = None
     section: str | None = None
     keep_with_next: bool = False
+    source_refs: tuple[str, ...] = ()  # v2; v1 units keep only `reference`
+    parts: tuple[str, ...] = ()        # v2: verbatim excerpts of `text`, indexed as child chunks
 
 
 @dataclass(frozen=True)
@@ -147,6 +164,18 @@ class Document:
     units: tuple[Unit, ...] = ()
     questions: tuple[str, ...] = ()
     answer: str | None = None
+    schema_version: int = SCHEMA_VERSION
+    tier: int | None = None
+    context_header: str | None = None
+    prophet_id: str | None = None
+    topics: tuple[str, ...] = ()
+    madhhab_scope: str | None = None
+    cluster_id: str | None = None
+    cluster_refs: tuple[str, ...] = ()
+    source_ids: tuple[str, ...] = ()
+    parent_chunk: str | None = None
+    children: str | None = None
+    generated_questions: tuple[str, ...] = ()
     # Where it came from, for messages only: the relative file and, for Markdown, field -> line.
     file: str = field(default="", compare=False)
     lines: dict = field(default_factory=dict, compare=False, repr=False)
@@ -154,18 +183,29 @@ class Document:
     def to_json(self) -> dict:
         """The canonical JSON form (§3.1), in the documented key order."""
         data = {
-            "schemaVersion": SCHEMA_VERSION, "id": self.id, "kind": self.kind, "title": self.title,
+            "schemaVersion": self.schema_version, "id": self.id, "kind": self.kind, "title": self.title,
             "language": self.language, "ageBands": list(self.age_bands), "contentType": self.content_type,
             "madhhab": list(self.madhhab), "curriculumPolicy": self.curriculum_policy, "synthetic": self.synthetic,
             "source": asdict(self.source), "grading": self.grading,
             "review": {"status": self.review.status, "reviewer": self.review.reviewer,
                        "approvedOn": self.review.approved_on, "supersedes": self.review.supersedes},
         }
+        if self.schema_version >= 2:
+            data.update({"tier": self.tier, "contextHeader": self.context_header, "prophetId": self.prophet_id,
+                         "topics": list(self.topics), "madhhabScope": self.madhhab_scope, "clusterId": self.cluster_id,
+                         "clusterRefs": list(self.cluster_refs), "sourceIds": list(self.source_ids),
+                         "parentChunk": self.parent_chunk, "children": self.children,
+                         "generatedQuestions": list(self.generated_questions)})
         if self.kind == "answer":
             data.update(questions=list(self.questions), answer=self.answer)
         else:
-            data["units"] = [{"id": unit.id, "text": unit.text, "reference": unit.reference, "section": unit.section,
-                              "keepWithNext": unit.keep_with_next} for unit in self.units]
+            data["units"] = []
+            for unit in self.units:
+                item = {"id": unit.id, "text": unit.text, "reference": unit.reference, "section": unit.section,
+                        "keepWithNext": unit.keep_with_next}
+                if self.schema_version >= 2:
+                    item.update(sourceRefs=list(unit.source_refs), parts=list(unit.parts))
+                data["units"].append(item)
         return data
 
 
@@ -343,7 +383,7 @@ def _parse_review(check: _Checker, value) -> Review | None:
     return Review(status or "draft", reviewer, approved_on, supersedes)
 
 
-def _parse_units(check: _Checker, data: dict, language: str | None) -> tuple[Unit, ...]:
+def _parse_units(check: _Checker, data: dict, language: str | None, version: int = 1) -> tuple[Unit, ...]:
     for key in ("questions", "answer"):
         if key in data:
             check.error(key, "belongs to answer documents (kind: answer); passage documents use units")
@@ -370,15 +410,23 @@ def _parse_units(check: _Checker, data: dict, language: str | None) -> tuple[Uni
         else:
             seen.add(unit_id)
             name = f"units[{unit_id}]"
-        check.keys(raw, _UNIT_KEYS, name + ".")
+        check.keys(raw, _UNIT_KEYS + (_UNIT_KEYS_V2 if version >= 2 else ()), name + ".")
         text = check.text(raw, "text", name + ".text")
         reference = check.text(raw, "reference", name + ".reference", required=False)
         section = check.text(raw, "section", name + ".section", required=False)
         keep = check.flag(raw, "keepWithNext", name + ".keepWithNext", default=False)
+        refs, parts = (), ()
+        if version >= 2:
+            refs = check.strings(raw, "sourceRefs", name + ".sourceRefs", required=False) or ()
+            for position_in_list, ref in enumerate(refs, 1):
+                if not SOURCE_REF.match(ref):
+                    check.error(f"{name}.sourceRefs[#{position_in_list}]",
+                                f"{_show(ref)} is not a source reference like quran:12:4-6 or bukhari:6018")
+            parts = _verbatim_parts(check, raw, name, text)
         if text:
             _check_language(check, name + ".text", text, language)
         if unit_id and text and keep is not None:
-            units.append(Unit(unit_id, text, reference, section, keep))
+            units.append(Unit(unit_id, text, reference, section, keep, tuple(refs), parts))
     for index, unit in enumerate(units):
         if not unit.keep_with_next:
             continue
@@ -390,6 +438,72 @@ def _parse_units(check: _Checker, data: dict, language: str | None) -> tuple[Uni
                         "is set but the next unit starts a new section, and a chunk never crosses a section; "
                         "move the section heading or remove keepWithNext")
     return tuple(units)
+
+
+def _verbatim_parts(check: _Checker, raw: dict, name: str, text: str | None) -> tuple[str, ...]:
+    """Parts are excerpts copied from the unit, never rewritten: each must occur in its text, in order."""
+    value = raw.get("parts")
+    if value is None:
+        return ()
+    if not isinstance(value, list) or any(not isinstance(item, str) or not item.strip() for item in value):
+        check.error(name + ".parts", "must be a list of non-empty excerpts of the unit text")
+        return ()
+    if len(value) == 1:
+        check.error(name + ".parts", "needs at least two parts, or none")
+        return ()
+    value = [normalize.canonical(item) for item in value]  # the same NFC form the unit text is held in
+    cursor = 0
+    for position, part in enumerate(value, 1):
+        found = text.find(part, cursor) if text else -1
+        if found < 0:
+            check.error(f"{name}.parts[#{position}]", "is not an excerpt of the unit text (parts are copied verbatim, "
+                                                       "in order)")
+            return ()
+        cursor = found + len(part)
+    return tuple(value)
+
+
+def _parse_v2(check: _Checker, data: dict) -> dict:
+    """Schema v2 document metadata (optional fields)."""
+    values: dict = {}
+    tier = data.get("tier")
+    if tier is not None and (isinstance(tier, bool) or tier not in TIERS):
+        check.error("tier", "must be 0, 1, 2 or 3")
+    values["tier"] = tier if tier in TIERS and not isinstance(tier, bool) else None
+    values["context_header"] = check.text(data, "contextHeader", "contextHeader", required=False)
+    if values["context_header"] and len(values["context_header"]) > 200:
+        check.error("contextHeader", "must be at most 200 characters")
+    prophet = data.get("prophetId")
+    if prophet is not None and not (isinstance(prophet, str) and SLUG.match(prophet)):
+        check.error("prophetId", "must be a slug like yusuf")
+    values["prophet_id"] = prophet if isinstance(prophet, str) and SLUG.match(prophet) else None
+    values["topics"] = check.strings(data, "topics", "topics", required=False) or ()
+    scope = data.get("madhhabScope")
+    if scope is not None and scope not in MADHHAB_SCOPES:
+        check.error("madhhabScope", "must be common, differs or null")
+    values["madhhab_scope"] = scope if scope in MADHHAB_SCOPES else None
+    values["cluster_id"] = check.text(data, "clusterId", "clusterId", required=False)
+    refs = check.strings(data, "clusterRefs", "clusterRefs", required=False) or ()
+    for position, ref in enumerate(refs, 1):
+        if not SOURCE_REF.match(ref):
+            check.error(f"clusterRefs[#{position}]", f"{_show(ref)} is not a source reference")
+    if refs and not values["cluster_id"]:
+        check.error("clusterRefs", "needs a clusterId")
+    values["cluster_refs"] = tuple(refs)
+    values["source_ids"] = check.strings(data, "sourceIds", "sourceIds", required=False) or ()
+    parent = check.text(data, "parentChunk", "parentChunk", required=False)
+    if parent and not _CHUNK_REF.match(parent):
+        check.error("parentChunk", "must be a chunk id like quran-012-004-006#1")
+    values["parent_chunk"] = parent
+    children = data.get("children")
+    if children is not None and children not in CHILDREN_MODES:
+        check.error("children", "must be units or null")
+    values["children"] = children if children in CHILDREN_MODES else None
+    questions = check.strings(data, "generatedQuestions", "generatedQuestions", required=False) or ()
+    if len(questions) > MAX_GENERATED_QUESTIONS:
+        check.error("generatedQuestions", f"must list at most {MAX_GENERATED_QUESTIONS} retrieval questions")
+    values["generated_questions"] = questions
+    return values
 
 
 def _parse_answer(check: _Checker, data: dict, language: str | None) -> tuple[tuple[str, ...], str | None]:
@@ -431,11 +545,12 @@ def parse_document(data, file: str, lines: dict | None = None) -> tuple[Document
     else:
         check.error("id", "is required" if raw_id is None else
                     "must be 2-64 characters of lowercase a-z, 0-9 and '-', starting with a letter or digit")
-    check.keys(data, _DOCUMENT_KEYS)
     version = data.get("schemaVersion")
-    if version != SCHEMA_VERSION or isinstance(version, bool):
+    if version not in DOCUMENT_SCHEMAS or isinstance(version, bool):
         check.error("schemaVersion",
-                    f"must be {SCHEMA_VERSION}" + ("" if version is None else f", not {_show(version)}"))
+                    "must be 1 or 2" + ("" if version is None else f", not {_show(version)}"))
+        version = SCHEMA_VERSION
+    check.keys(data, _DOCUMENT_KEYS + (_DOCUMENT_KEYS_V2 if version >= 2 else ()))
     kind = check.choice(data, "kind", "kind", KINDS)
     title = check.text(data, "title", "title")
     language = check.choice(data, "language", "language", LANGUAGES)
@@ -450,8 +565,9 @@ def parse_document(data, file: str, lines: dict | None = None) -> tuple[Document
     grading = check.text(data, "grading", "grading", required=False)
     review = _parse_review(check, data.get("review"))
     units, questions, answer = (), (), None
+    extra = _parse_v2(check, data) if version >= 2 else {}
     if kind == "passage":
-        units = _parse_units(check, data, language)
+        units = _parse_units(check, data, language, version)
     elif kind == "answer":
         questions, answer = _parse_answer(check, data, language)
 
@@ -466,10 +582,11 @@ def parse_document(data, file: str, lines: dict | None = None) -> tuple[Document
                 check.error(f"source.{key}", "is required for real (non-synthetic) content")
     if content_type == "hadith" and not grading:
         check.error("grading", "is required for hadith: record the grading and who graded it")
-    if content_type == "quran":
+    if content_type in ("quran", "quran_translation"):
         for unit in units:
-            if not unit.reference:
-                check.error(f"units[{unit.id}].reference", "is required for quran: every verse needs its reference")
+            if not unit.reference and not unit.source_refs:
+                check.error(f"units[{unit.id}].reference",
+                            f"is required for {content_type}: every verse needs its reference")
     if synthetic is True and source is not None and not source.work:
         check.warning("source.work", "is empty, so citations will show the document title instead of a source name")
     # §7: the app refuses a whole reply whose source title or reference is too long to show,
@@ -489,7 +606,8 @@ def parse_document(data, file: str, lines: dict | None = None) -> tuple[Document
     return Document(id=raw_id, kind=kind, title=title, language=language, age_bands=age_bands,
                     content_type=content_type, madhhab=madhhab, curriculum_policy=curriculum_policy,
                     synthetic=synthetic, source=source, grading=grading, review=review, units=units,
-                    questions=questions, answer=answer, file=file, lines=dict(lines or {})), check.issues
+                    questions=questions, answer=answer, schema_version=version, **extra,
+                    file=file, lines=dict(lines or {})), check.issues
 
 
 def keep_groups(units) -> list[list[Unit]]:
@@ -510,12 +628,17 @@ def corpus_issues(documents, max_chunk_words: int = DEFAULT_MAX_CHUNK_WORDS) -> 
     items = []  # (order, document, field, search text), in document order
     for document in documents:
         check = checks[document.id]
+        # Reference text repeats itself for real (a refrain ayah, one tafsir for several ayat): tier 0/1 units
+        # that cite their own source refs are distinct citations, so they skip duplicate detection. Repeated
+        # hadith are handled by clustering (corpusprep.cluster) before documents are written.
+        reference_text = document.tier in (0, 1)
         for unit in document.units:
             words = word_count(unit.text)
             if words > max_chunk_words:
                 check.warning(f"units[{unit.id}]", f"has {words} words, more than the {max_chunk_words}-word chunk "
                                                   "budget; it becomes one oversized chunk (units are never split)")
-            items.append((len(items), document, f"units[{unit.id}]", normalize.search_text(unit.text)))
+            if not (reference_text and unit.source_refs):
+                items.append((len(items), document, f"units[{unit.id}]", normalize.search_text(unit.text)))
         for group in keep_groups(document.units):
             words = sum(word_count(unit.text) for unit in group)
             if len(group) > 1 and words > max_chunk_words:

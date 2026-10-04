@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "reference_document": {
+    "title": "المرجعية والحزمة العلمية والبيانات",
+    "date_hijri": "1448-03-20",
+    "sha256": "68d22af4d2499b7b0285f63cd080fd575bf3e5af6b72f0d792ef2eb8fb49600e",
+    "stored_in_repository": false
+  },
+  "policy": {
+    "language": "ar",
+    "market": "sa",
+    "age_bands": ["7-9", "10-11"],
+    "curriculum_scope": "الأساسيات المشتركة المسندة إلى المصادر المحددة؛ تُستبعد المسائل المختلف فيها من تعليم الطفل المباشر حتى تُضبط بصياغة معتمدة. لا يُستنتج مذهب الأسرة من بلدها أو اسمها.",
+    "allowed_domains": ["quranpedia.net", "dorar.net"],
+    "sacred_text": "لا يُنشأ نص القرآن أو الحديث من النموذج. نص المصحف محفوظ كما نزل من حزمة Quranpedia الرسمية، منفصلًا عن شرح الطفل، ولا يُعرض حتى الاعتماد البشري.",
+    "interpretation": "كل شرح للطفل مسودة مستقلة عن النص الأصلي، وتحتاج مراجعة بشرية قبل العرض.",
+    "out_of_scope": ["فتوى شخصية", "الحكم على إيمان الناس أو عباداتهم", "مقارنة مذهبية للأطفال", "رواية غير ثابتة", "تفاصيل قصصية مخترعة", "إجابة بلا مرجع"]
+  },
+  "sources": [
+    {
+      "id": "quranpedia-quran",
+      "type": "quran_reference",
+      "work": "القرآن الكريم",
+      "publisher": "موسوعة القرآن الكريم (Quranpedia)",
+      "edition": "مصحف حفص عن عاصم، موافق لطبعة مجمع الملك فهد وفق وصف الناشر",
+      "registry_source_id": "quranpedia-mushaf-hafs",
+      "registry_license_source_id": "quranpedia-license",
+      "dump_version_in_file": "2026-09-30",
+      "verification": "الملف لا يُحفظ في git: يجلبه scripts/fetch_sources.py إلى corpus/raw/quranpedia-mushaf-hafs/، ويتحقق validate.py من بصمته SHA-256 المثبتة في السجل ومن تغطيته (114 سورة و6236 آية). طوبق نصه آية بآية مع نسخة 2026-10-03 التي كانت محفوظة في الحزمة: النص واحد، ويختلف تاريخ الإصدار وبايتات gzip فقط.",
+      "license_observation": "يسمح باستعمال البيانات داخل التطبيقات؛ إعادة نشر مجموعة بيانات قابلة للتنزيل تتطلب ذكر Quranpedia.net ورابط الموقع وتاريخ النسخة، مع واجب متابعة التصحيحات.",
+      "translator": null,
+      "identifier_scheme": "quran:<surah>:<first_ayah>[-<last_ayah>]",
+      "reference_url": "https://quranpedia.net/",
+      "verse_url_pattern": "https://quranpedia.net/ayahs/{surah}/{first_ayah}/1",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "canonical Quran text and references, held from publication until review"
+    },
+    {
+      "id": "dorar-hadith",
+      "type": "hadith_verification",
+      "work": "الموسوعة الحديثية",
+      "publisher": "مؤسسة الدرر السنية",
+      "edition": "online; hadith collection and number stored per item",
+      "translator": null,
+      "identifier_scheme": "hadith:<numbering>:<number>, <numbering> one of numbering_schemes",
+      "numbering_schemes": {
+        "bukhari": "Sahih al-Bukhari, Fath al-Bari numbering (Muhammad Fuad Abdul-Baqi); the same numbering as the canonical corpus (corpus/canonical/hadith/bukhari.jsonl, ref bukhari:<n>)",
+        "muslim-abdulbaqi": "Sahih Muslim, Muhammad Fuad Abdul-Baqi numbering, as dorar.net cites it; NOT the canonical corpus's Muslim numbering (sunnah.com, ref muslim:<n>), so it is kept apart (ref muslim_abdulbaqi:<n> in corpus documents)",
+        "abu-dawud": "Sunan Abi Dawud, the numbering dorar.net cites; the edition is to be confirmed by the reviewer (not in the canonical corpus)"
+      },
+      "reference_url": "https://dorar.net/hadith",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "short invocations and verification links; no bulk hadith text"
+    },
+    {
+      "id": "dorar-fiqh",
+      "type": "fiqh_reference",
+      "work": "الموسوعة الفقهية",
+      "publisher": "مؤسسة الدرر السنية",
+      "edition": "online; page URL stored in prayer_learning.evidence_urls or item evidence_url",
+      "translator": null,
+      "identifier_scheme": "fiqh:<topic>:<section>",
+      "reference_url": "https://dorar.net/feqhia",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "original teaching summaries only"
+    }
+  ],
+  "quran_verse_counts_used": {
+    "1": 7, "2": 286, "3": 200, "4": 176, "5": 120, "6": 165, "7": 206,
+    "9": 129, "14": 52, "17": 111, "19": 98, "20": 135, "21": 112,
+    "26": 227, "27": 93, "28": 88, "61": 14, "96": 19,
+    "112": 4, "113": 5, "114": 6
+  }
+}

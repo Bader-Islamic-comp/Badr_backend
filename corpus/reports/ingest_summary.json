@@ -1,0 +1,153 @@
+{
+  "chunker": "chunk-v2",
+  "normalizer": "norm-v3",
+  "segments": {
+    "count": 1054,
+    "max_ayat": 8,
+    "source": "Tanzil rukus split to 1-8 ayat and <= 180 words"
+  },
+  "aliases": {
+    "prophets": 25,
+    "arabic_checked": 35,
+    "arabic_needs_check": 1,
+    "latin_or_arabizi": 147
+  },
+  "source_maps": {
+    "adam": {
+      "ranges": 7,
+      "ayat": 73,
+      "needs_check": 3,
+      "missing_ayat": 0
+    },
+    "ibrahim": {
+      "ranges": 14,
+      "ayat": 164,
+      "needs_check": 4,
+      "missing_ayat": 0
+    },
+    "musa": {
+      "ranges": 18,
+      "ayat": 364,
+      "needs_check": 4,
+      "missing_ayat": 0
+    },
+    "nuh": {
+      "ranges": 10,
+      "ayat": 109,
+      "needs_check": 2,
+      "missing_ayat": 0
+    },
+    "yusuf": {
+      "ranges": 10,
+      "ayat": 99,
+      "needs_check": 2,
+      "missing_ayat": 0
+    }
+  },
+  "clusters": {
+    "records": 14940,
+    "clusters": 14112,
+    "size_distribution": {
+      "1": 13393,
+      "2": 636,
+      "3": 63,
+      "4": 16,
+      "5": 3,
+      "7": 1
+    }
+  },
+  "nawawi_links": {
+    "linked": 28,
+    "needs_check": 1,
+    "not_linked": 13
+  },
+  "selection": {
+    "entries": 40,
+    "ok": 40,
+    "needs_check": 0
+  },
+  "skipped": {
+    "cluster_member_not_primary": 828,
+    "mukhtasar_labelled_for_another_ayah": 72,
+    "mujahid_record_not_usable": 5,
+    "yahya-ibn-sallam_record_not_usable": 3,
+    "abu-ubayda-majaz_record_not_usable": 67,
+    "ibn-qutayba-gharib_record_not_usable": 34,
+    "tabari_record_not_usable": 125,
+    "sahih-masbur_record_not_usable": 68
+  },
+  "ibn_kathir_documents": 1911,
+  "quranpedia_documents": {
+    "quranpedia-en-hilali-khan": 1054,
+    "quranpedia-en-sahih-international": 1054,
+    "quranpedia-en-ruwwad": 1054,
+    "quranpedia-en-mukhtasar": 1054,
+    "quranpedia-tafsir-mujahid": 811,
+    "quranpedia-tafsir-sufyan-thawri": 387,
+    "quranpedia-tafsir-yahya-ibn-sallam": 323,
+    "quranpedia-tafsir-malik": 419,
+    "quranpedia-tafsir-shafii": 200,
+    "quranpedia-tafsir-farra-maani": 641,
+    "quranpedia-tafsir-abu-ubayda-majaz": 533,
+    "quranpedia-tafsir-ibn-qutayba-gharib": 377,
+    "quranpedia-tafsir-tabari": 1042,
+    "quranpedia-tafsir-nasai": 351,
+    "quranpedia-tafsir-sahih-masbur": 906
+  },
+  "competition_documents": {
+    "story": 17,
+    "dua": 22,
+    "lesson": 4
+  },
+  "long_hadith_with_parts": 2053,
+  "wave1_prophet_segments": 144,
+  "wave1_hadith": 40,
+  "generated_questions": 552,
+  "layer0": {
+    "documents": 28380,
+    "chunks": 108278,
+    "parent_chunks": 73105,
+    "child_chunks": 35173,
+    "by_content_type": {
+      "story": 17,
+      "dua": 22,
+      "lesson": 4,
+      "hadith": 19673,
+      "quran": 7287,
+      "quran_translation": 22446,
+      "tafsir": 51000,
+      "tafsir_translation": 7829
+    },
+    "warnings": 1954,
+    "errors": 0,
+    "parent_words": {
+      "max": 2042,
+      "median": 110
+    },
+    "every_chunk_has_source_refs": true,
+    "every_chunk_has_header": true,
+    "seconds": 118.8
+  },
+  "wave1": {
+    "documents": 227,
+    "chunks": 1149,
+    "parent_chunks": 227,
+    "child_chunks": 922,
+    "by_content_type": {
+      "story": 17,
+      "dua": 22,
+      "lesson": 4,
+      "hadith": 45,
+      "quran": 1061
+    },
+    "warnings": 1,
+    "errors": 0,
+    "parent_words": {
+      "max": 378,
+      "median": 62
+    },
+    "every_chunk_has_source_refs": true,
+    "every_chunk_has_header": true,
+    "seconds": 0.2
+  }
+}

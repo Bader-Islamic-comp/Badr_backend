@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "note": "سجل قرارات الاعتماد. لا تملأه إلا بقرار بشري موثق؛ لا تعني المراجع التقنية أن النشر أُجيز.",
+  "reviewer_policy": {
+    "religious": "مختص مؤهل بالمادة يراجع الاستدلال واللفظ والاختلاف المقبول؛ يوثق مؤهله وتعارض المصالح",
+    "child_language": "محرر لغة/محتوى أطفال يراجع الفهم والملاءمة العمرية والسلامة؛ يوثق دوره وتعارض المصالح",
+    "rights": "المسؤول عن الحقوق يثبت إذن الاستخدام لكل مصدر ونطاقه وتاريخه"
+  },
+  "technical_verification": {
+    "checked_on": "2026-10-03",
+    "quran_source": "مصحف حفص من Quranpedia، إصدار 2026-10-03، SHA-256 مطابق للفهرس الرسمي؛ 114 سورة و6236 آية. منذ 2026-10-04 يُتحقق منه عبر سجل المصادر (quranpedia-mushaf-hafs، ملف 2026-09-30 المطابق له آية بآية) بدل نسخة محفوظة في الحزمة",
+    "content_structure": "validate.py نجح؛ هذا لا يُعد مراجعة شرعية أو تصريحًا بالنشر"
+  },
+  "package_reviews": [],
+  "source_rights": [
+    {
+      "source_id": "quranpedia-quran",
+      "decision": "pending_owner_signoff",
+      "evidence_ref": "https://quranpedia.net/dumps/LICENSE.md",
+      "observation": "استعمال التطبيق مسموح حسب الرخصة المنشورة؛ إعادة نشر الحزمة تتطلب الإسناد ورقم الإصدار ومتابعة التصحيحات.",
+      "reviewer": null,
+      "approved_at": null
+    },
+    {
+      "source_id": "dorar-hadith",
+      "decision": "pending_owner_signoff",
+      "evidence_ref": "https://dorar.net/hadith",
+      "observation": "استُخدمت روابط تحقق وألفاظ أذكار قصيرة؛ لم يُثبت إذن صريح لإعادة توزيع قاعدة بيانات حديثية.",
+      "reviewer": null,
+      "approved_at": null
+    },
+    {
+      "source_id": "dorar-fiqh",
+      "decision": "pending_owner_signoff",
+      "evidence_ref": "https://dorar.net/feqhia",
+      "observation": "الشرح في الحزمة صياغة أصلية مع روابط مصدر؛ لم يُثبت إذن لإعادة توزيع نصوص الموقع.",
+      "reviewer": null,
+      "approved_at": null
+    }
+  ],
+  "prayer_policy": null,
+  "re_review_policy": {
+    "maximum_interval_months": 12,
+    "immediate_triggers": [
+      "تغيير إصدار المصدر أو تصحيح نصه أو درجة الحديث",
+      "تغيير رخصة المصدر أو نطاق استخدامها",
+      "بلاغ عن خطأ ديني أو لغوي أو ضرر على طفل",
+      "تعديل النص أو النطاق العمري أو سياسة المنهج",
+      "تغيير المسؤول المخوّل بالاعتماد"
+    ]
+  },
+  "recheck_due_at": null
+}

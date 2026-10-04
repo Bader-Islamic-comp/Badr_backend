@@ -1,0 +1,60 @@
+# Wave 1 source map (doc/plan.md component 1). Verse ranges proposed by the model from general
+# knowledge, NOT from a source: every range is a candidate for scholarly review. The checker
+# (python3 scripts/build_corpus.py --write-maps) records whether each range exists and whether the
+# prophet is named inside it; `confidence: medium` or a failed check means needs_check.
+# origin: model_proposed (2026-09-27). review_status: draft. No ayah text is written here.
+schema_version: 1
+prophet_id: yusuf
+origin: model_proposed
+review_status: draft
+ranges:
+- ref: quran:12:4-6
+  topic: الرؤيا
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:7-18
+  topic: الإخوة والبئر
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:19-22
+  topic: السيارة وبيت العزيز
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:23-34
+  topic: الامتحان والصبر
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:35-42
+  topic: السجن وتعبير الرؤى
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: false}
+  verification: needs_check
+- ref: quran:12:43-57
+  topic: رؤيا الملك والخروج من السجن
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:58-82
+  topic: قدوم الإخوة
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:83-98
+  topic: حزن يعقوب واللقاء
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:12:99-101
+  topic: اجتماع الأسرة وتحقق الرؤيا
+  confidence: high
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: ok
+- ref: quran:40:34
+  topic: ذكر يوسف في سورة غافر
+  confidence: medium
+  checks: {exists: true, prophet_named_in_range: true}
+  verification: needs_check

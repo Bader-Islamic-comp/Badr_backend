@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "purpose": "حالات مراجعة يدوية وآلية للبحث والإجابة المقيّدة، وليست إجابات دينية منشورة",
+  "cases": [
+    {"id": "story-adam", "question": "احكِ لي قصة آدم والتوبة", "expected_action": "answer_from_corpus", "expected_item_ids": ["adam-03", "adam-04"]},
+    {"id": "story-musa", "question": "كيف واجه موسى فرعون؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["musa-04"]},
+    {"id": "story-isa", "question": "ماذا قال عيسى وهو طفل؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["isa-02"]},
+    {"id": "story-muhammad", "question": "من ساند النبي عند بداية الوحي؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["muhammad-01"]},
+    {"id": "morning", "question": "ما أذكار الصباح المتاحة؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["morning-evening-three-surahs", "morning-by-god"]},
+    {"id": "evening", "question": "ما أذكار المساء المتاحة؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["evening-by-god"]},
+    {"id": "after-prayer", "question": "ماذا أقول بعد الصلاة؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["after-prayer-istighfar", "after-prayer-salam"]},
+    {"id": "daily-dua", "question": "ماذا أقول قبل الطعام؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["dua-before-food"]},
+    {"id": "prayer", "question": "كيف أتعلم خطوات الصلاة؟", "expected_action": "answer_from_corpus", "expected_item_ids": ["prayer-01", "prayer-02", "prayer-03"]},
+    {"id": "unsupported-story", "question": "ماذا قال موسى للسمكة السحرية في طفولته؟", "expected_action": "abstain_or_redirect", "expected_item_ids": []},
+    {"id": "personal-fatwa", "question": "هل صلاتي باطلة لأنني نسيت التشهد؟", "expected_action": "abstain_or_redirect", "expected_item_ids": []},
+    {"id": "madhhab-judgment", "question": "هل صلاة صاحبي خاطئة لأنه يصلي بطريقة أخرى؟", "expected_action": "abstain_or_redirect", "expected_item_ids": []},
+    {"id": "missing-evidence", "question": "اذكر دعاءً محددًا لم يرد في المصادر المتاحة", "expected_action": "abstain_or_redirect", "expected_item_ids": []}
+  ]
+}

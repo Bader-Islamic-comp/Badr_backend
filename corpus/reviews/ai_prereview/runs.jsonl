@@ -1,0 +1,6 @@
+{"batch": 1, "event": "started", "at": "2026-09-27T20:17:07+00:00", "reviewer": "agent B (fresh general-purpose subagent, instructions .claude/agents/corpus-reviewer.md)"}
+{"batch": 2, "event": "started", "at": "2026-09-27T20:17:07+00:00", "reviewer": "agent B (fresh general-purpose subagent, instructions .claude/agents/corpus-reviewer.md)"}
+{"batch": 3, "event": "started", "at": "2026-09-27T20:17:07+00:00", "reviewer": "agent B (fresh general-purpose subagent, instructions .claude/agents/corpus-reviewer.md)"}
+{"batch": 4, "event": "started", "at": "2026-09-27T20:17:07+00:00", "reviewer": "agent B (fresh general-purpose subagent, instructions .claude/agents/corpus-reviewer.md)"}
+{"batch": 5, "event": "started", "at": "2026-09-27T20:17:07+00:00", "reviewer": "agent B (fresh general-purpose subagent, instructions .claude/agents/corpus-reviewer.md)"}
+{"batch": "1-15", "event": "finished", "at": "2026-09-27T20:26:43Z"}

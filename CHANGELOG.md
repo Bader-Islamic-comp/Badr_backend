@@ -10,6 +10,271 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-04 (test/corpus-tasks: the competition package in the app)
+
+The team's competition package (branch `corpus-tasks-2`, `corpus/competition-ar`) merged and built into the
+pipeline, the weaknesses found on the emulator fixed, and the package's adhkar, supplications and prayer lessons
+served verbatim. Built by two parallel agents (`test/corpus-tasks-c2`, `test/corpus-tasks-fix`), merged here.
+
+### Added
+
+- **The competition package in the pipeline** (`corpusprep/competition.py`): 43 draft `comp-*` documents (17
+  story scenes, 22 adhkar and supplications, 4 prayer lessons) in `corpus/wave1` and layer 0, with Arabic
+  headers, occasion labels and `topics`; registered as `competition-ar-content` (`pending_legal`, acquisition
+  `authored`). The 9 Quranic supplications quote `quranpedia-mushaf-hafs` (candidate) and stay out of releases.
+- **Curated items verbatim** (`rag/curated.py`, `curated-v1`, conversation-policy §17): "what do I say in the
+  morning / after the prayer / before eating", "how do I pray" get the package's items as written, cited, with no
+  model call.
+- **Retrieval `hybrid-rrf-v3`**: a tafsir chunk counts for the Quran passage it explains and enters the prompt
+  only right after it (at most one); curated story, dua and lesson content within 0.9 of the best score ranks
+  first; header phrases such as «بعد الصلاة» are scored.
+
+### Changed
+
+- **`checks-v3`**: `faith_terms` accepts a person of the cited story (Yaqub in Yusuf's, Harun in Musa's, Ismail
+  and Ishaq in Ibrahim's). **`dev-patterns-v4`**: «للصلاة», «وللصلاة» and «الصلوات» read as «الصلاة».
+- The package's Quran is verified through the registry; the committed Quranpedia dump and licence copy are
+  removed (they remain in git history from the `corpus-tasks-2` merge).
+- English layer-0 translation units no longer carry footnote markers such as «[582]».
+
+### Fixed (content, flagged `needs_check` for the reviewer)
+
+- «تباركت ذا الجلال» (Muslim 591); «الأسماء كلها»
+  (adam-01); «المَلَك» (isa-01); Muslim references declared in Abdul-Baqi numbering; evidence links that do not
+  show the cited text are marked. Two editor's notes moved out of the child-facing text (`review_note`).
+- **Every Dorar evidence link now opens the exact entry it cites** (checked by hand on dorar.net, 2026-10-04;
+  `evidence_entry` names it): 11 hadith and 5 fiqh pages. Three were wrong — the after-prayer tasbih linked a
+  weak narration (الألباني، ضعيف الترغيب 983) with another formula, the after-prayer istighfar and «اللهم أنت
+  السلام» linked أبو داود 1513 without the text, and the prayer steps linked صحيح الجامع 738; wudu linked a page on
+  washing the face only. The rak'ah counts are marked `indirect` (no Dorar page lists them). Gradings now name
+  their grader and entry.
+- **Corrected:** the evening dhikr was right as the package wrote it — it is أبو داود 5068's wording
+  («اللهم بك أمسينا، وبك نحيا، وبك نموت، وإليك النشور»); only its link showed another narration (البغوي،
+  الترمذي 3391: «وبك أصبحنا … وإليك المصير»). The earlier "fix" is undone and the item flagged for the reviewer
+  to choose the wording.
+
+### Verification
+
+- `pytest`: **890 passed** (824 before). Package validator OK; `--release` refuses (10 items await a check).
+- Real model over `wave1-comp-1` (before `curated-v1`): the stories of Adam, Musa and Isa and Yusuf's words to
+  his brothers answered correctly (the last failed before, crowded out by al-Tabari); all 4 abstention cases
+  abstained or redirected; the 5 adhkar, supplication and prayer questions were withheld. With `curated-v1` those
+  5 get their items verbatim (`wave1-comp-3`). Emulator: Adam, Yusuf, Isa and the personal ruling as recorded.
+
+## Unreleased — 2026-10-02 (test/corpus-tasks: the challenge's reference package)
+
+The product owner's request of 2026-10-02, verbatim: "Yes they have gave permission for participants to use
+them, now I want you to use these new sources and add them as potential candidate data in the test/corpus-tasks
+branch, while doing so, address the issues that you commented on previously, use subagents." The sources are
+those of the challenge's reference package «المرجعية والحزمة العلمية والبيانات» (version 20/3/1448). Built by
+three parallel agents (`test/corpus-tasks-quranpedia`, `-serving`, `-governance`), merged here. Review guide:
+[`doc/pr/test-corpus-tasks.md`](doc/pr/test-corpus-tasks.md), section "Reference package".
+
+### Added
+
+- **Registry fields** `package_rule`, `package_basis` and `acquisition` (download, crawl, manual), and
+  `corpus/sources/reference_package.yaml`: the package's list and how each source stands, including those that
+  cannot be fetched. dorar.net answers scripted requests with Cloudflare 403, which is not worked around: its
+  data has to come from the organizers or Dorar (`doc/governance/data-request.md`, a draft, not sent).
+  dawa.center's robots.txt disallows automated downloads, so the Bayyinat PDF is a manual download.
+- **Quranpedia dumps** (`corpusprep/quranpedia.py`; all `candidate`, sha256 from Quranpedia's manifest):
+  - the King Fahd Complex Hafs text, checked against Tanzil (`corpusprep/quran_compare.py`, `kfc-compare-v1`,
+    `corpus/reports/quran_text_comparison.md`). Per-surah counts match. After folding marks, 5,836 ayat agree,
+    285 differ only in a hamza, 3 in word division (15:7, 27:20, 36:22), and 112 first ayat carry the opening
+    basmala in Tanzil's text. Per-ayah `kfc_check` metadata; the displayed text is unchanged.
+  - English translations of the meanings in `corpus/canonical/translations/`: Hilali and Khan (King Fahd
+    Complex), Saheeh International and Ruwwad (6,236 ayat each), and al-Mukhtasar's English (72 records labelled
+    for another ayah, kept out of layer 0).
+  - 13 tafsir books in `corpus/canonical/tafsir/quranpedia-*.jsonl`: 8 of the first three centuries (Mujahid,
+    Sufyan al-Thawri, Yahya ibn Sallam, Malik, al-Shafi'i, al-Farra, Abu Ubayda, Ibn Qutayba), 3 borderline
+    (al-Tabari, al-Nasa'i, al-Sahih al-Masbur) and 2 outside the rule (al-Mukhtasar, al-Sa'di, canonical only).
+  - Layer 0: content types `quran_translation` and `tafsir_translation`; 28,337 documents and 108,236 chunks
+    (18,131 and 38,614 before). Wave 1 is byte-identical.
+  - Knowledge graph `kg-v2`: sections of the new books with EXPLAINS edges carrying `package_rule`.
+- **Verification checks** (`rag/checks.py`, `checks-v1`): every faith answer passes named checks recorded in
+  provenance, deterministic ones first and the judge last: first person, faith terms, `answered` (a how-many,
+  how-long or when question needs a number, duration or time), `addressee` (a quotation framed as said to his
+  father, his people or his Lord must carry the matching vocative), `scene` (the asked episode, from the Wave 1
+  episode map `rag/data/episodes.json`, our own source-map data) and `translation` (a quoted translation is named
+  as one).
+- **A misquoted ayah in a question** gets the exact ayah with surah and number (`rag/ayahs.py`); **"are you a
+  sheikh / a real person?"** gets an honest fixed reply that Robert is a robot learning companion.
+- **English faith answers over translations of the meanings** (`rag-answer-v4`): the translation is named and
+  never presented as the Quran's own words.
+- **Reference package compliance** (`scripts/check_reference_package.py`, `doc/governance/reference-package.md`):
+  every source has a package rule; a source outside the rule, borderline or not listed cannot be cleared without
+  an organizers' ruling recorded in `reference_package.yaml`. The page-5 output standard is mapped clause by
+  clause to the code, with its gaps.
+- **Jamharah dictionary** (`scripts/crawl_jamharah.py`, about 148 requests, robots.txt obeyed, at least 5 s
+  apart): 88 glossary terms looked up, 65 matched, 46 English headings; the glossary moves to schema 2 with the
+  package's 10 page-7 terms. Definitions stay outside git.
+- **Evaluation**: the organizers' page-6 cases (adapted for children), AI disclosure and check cases;
+  `scripts/replay_checks.py`; a Dorar verification sample of 100 hadith numbers
+  (`corpus/reports/hadith_dorar_check.csv`).
+
+### Changed
+
+- Router `dev-patterns-v3` (Arabizi faith terms reach the faith path; disclosure), conversation policy v3
+  (§14–16), `grounding-v4`, `rag-answer-v4` (the Arabic prompt is unchanged).
+- The Bukhari and Muslim grader cites the package's hadith rule; eligibility is unchanged.
+- The rights table gains a package-rule column and readings for Quranpedia and Jamharah.
+
+### Corrected
+
+- The 2026-10-02 assessment said the corpus stores no hadith grading. It does: Bukhari and Muslim are `sahih` by
+  collection rule and every other hadith is ungraded and ineligible, which already meets the package's rule.
+
+### Verification
+
+- `pytest`: **824 passed** (703 before).
+- Replay of the 13 answers released on 2026-10-01: the 3 wrong ones now fail (`answered:no_quantity`,
+  `addressee:mismatch`, `scene:absent_person`); the 10 right ones pass every deterministic check.
+- `scripts/eval_serving.py`: no Arabizi gold question reaches casual chat (8 before); all 10 disclosure
+  questions get the disclosure; misquote probes: 0 of 130 exact quotations and 0 of 539 eval questions wrongly
+  corrected, 119 of 130 altered quotations caught.
+- **Real model** (Qwen3.5-9B, 2026-10-02; Arabic over release `wave1-review-1`, English over a measurement-only
+  scratch release of wave 1 plus Saheeh International, built from a registry copy; "right" is the developer's
+  reading, not a scholar's):
+  - The same 145 Arabic questions as on 2026-10-01: 12 answers released (13 before), 11 right (10 before). The
+    three 2026-10-01 misses are now withheld; one new wrong answer (yusuf-07-msa: "he knew them and he did not
+    know them").
+  - 27 new Arabic questions: 6 released, 2 right. Wrong: yusuf-15 ("nine years in prison" where 12:42 says «بِضْعَ
+    سِنِينَ»; now withheld by `checks-v2`, below), yusuf-12 (the first return from Egypt given for the second),
+    yusuf-13 (a paraphrase of 12:87 that makes Allah the one who despairs), page6-sabr (a non-answer).
+  - English, for the first time: 8 of 75 released, 5 right, 1 with events out of order (adam-01), 2 wrong
+    (ibrahim-02 a non-answer, yusuf-12 the wrong scene).
+  - Harmful sets (Arabic 135, English 51): 16 of 16 distress messages reach safeguarding, 15 of 15 personal-data
+    and 20 of 20 injection messages are redirected, 24 of 25 rulings redirected (1 abstained), the 3 personal
+    rulings of page 6 redirected, 10 of 10 disclosure questions answered honestly, and no fabricated hadith or
+    prophet mix-up answered. 3 generation errors, each failing closed (abstained). Median answer time 2.3 s.
+- **`checks-v2`** (after the run): a `numbers` check, a count stated by a faith answer must be stated by its
+  passages. Replayed over both runs it withholds yusuf-15 and nothing else. The four remaining wrong answers are
+  errors of meaning and scene that no deterministic check reads: they need a stronger judge (a second model
+  family) or human review.
+
+## Unreleased — 2026-10-01 (test/corpus-tasks)
+
+On branch `test/corpus-tasks` (from `corpus-tasks`; git branch names cannot hold ": "). The product owner's request
+of 2026-10-01, verbatim:
+
+> "ok, do the solutions that you recommended in the report in a branch called "test: corpus-tasks". I suggest
+> that you add tafsir Ibn Katheer for each Surah and Ayah available in the corpus and create a Knowledge Graph
+> that connects between the tafsir, Quran, Hadith and Prophet's names. After that, I will let the team review
+> it and submit any finding."
+
+Review guide: [`doc/pr/test-corpus-tasks.md`](doc/pr/test-corpus-tasks.md).
+
+### Added
+
+- **Tafsir Ibn Kathir** (Arabic, spa5k/tafsir_api v1.2.1 from Tarteel QUL resource 22): 114 registered files,
+  `candidate` (no licence stated for the text), 1,911 sections over all 6,236 ayat in `corpus/canonical` and
+  layer 0; never in a release.
+- **Knowledge graph `kg-v1`** (`doc/knowledge-graph.md`, `scripts/build_graph.py`, `scripts/graph_query.py`):
+  ayat, Ibn Kathir sections, 18,204 hadith and the 25 prophets, linked by structure, the sections' ranges,
+  quotations, the editor's takhrij notes (1,554 Bukhari citations, 1,052 confirmed by text), text matches, names
+  and the curated source maps; ids and counts only.
+- **Arabic and Arabizi routing** (router `dev-patterns-v2`, `rag/arabic_rules.py`): all 16 distress questions of
+  the harmful set reach safety, all personal-data and injection questions are redirected, 24 of 25 rulings.
+- **Faith answers** (`rag-answer-v3`, `grounding-v3`, `faith-judge-v1`): a faith prompt for religious passages,
+  verbatim quotations, no first person in a faith answer, Arabic-aware word matching, and a JSON-mode judge of
+  meaning that fails closed.
+- **Replies in the child's language**, `SAFETY_ABUSE` (never back to a parent) and `SAFETY_DISTRESS`.
+- **Arabizi search** (`rag/arabizi.py`, `corpus/glossary_cross_lingual.yaml`): 79 of 80 Arabizi questions
+  detected, none of 109 English ones; Arabic terms and the named prophets' passages.
+- **Signed decisions** (`governance/signatures.py`, `corpus/governance/signers.yaml`, `.github/CODEOWNERS`) and
+  **audit anchors** (`verify_audit.py --write-anchor`, `pipeline.auditHead` in release manifests).
+- `scripts/eval_serving.py`: the evaluation sets through the server's own routing and retriever.
+
+### Changed
+
+- **norm-v3**: the rasm map applies to Quran text only. Quran chunks are embedded from their simple-spelling
+  search text.
+- Conversation policy v2 (`doc/conversation-policy.md` §13), RAG system §15.
+
+### Verification
+
+- `pytest`: **703 passed** (647 before). App: 137 passed.
+- Harmful set, real model: 16 of 16 distress messages reach the safeguarding reply; every personal-data and
+  injection question and 24 of 25 rulings are redirected; no fabricated-hadith or prophet-mix-up question gets
+  an answer.
+- Gold set, real model: 13 of 145 answers released, 10 right by the developer's reading; 3 wrong ones passed the
+  judge (details in `doc/pr/test-corpus-tasks.md`). No answer speaks in the first person.
+- `scripts/eval_serving.py`: Arabizi questions reach the corpus (47 of 62; none before).
+
+## Unreleased — 2026-09-30 (corpus-tasks review fixes)
+
+Two problems found while validating the `corpus-tasks` branch, fixed on it.
+
+### Fixed
+
+- **Chunk-v2 children are served as their parent** (`hybrid-rrf-v2`). The serving retriever ranked
+  children as separate chunks, so one passage could take up to three of the four prompt slots and a
+  citation could name a fragment (wave 1 is 922 children to 184 parents). A child's hit now serves its
+  parent once, at the best rank any member reached, as `scripts/eval_retrieval.py` already assumed.
+  Releases without children rank as before. `write_release` refuses a child whose parent is missing.
+- **The published channel needs every source `cleared`, on every build path.** Only
+  `scripts/build_release.py` checked clearance; `python -m companion_api.rag.pipeline build --channel
+  published` accepted `pending_legal` sources, and a test asserted it. The rule now lives in
+  `write_release` (`publication_problems`), and `scan` reports a published release whose clearance
+  was withdrawn.
+
+### Added
+
+- **Corpus preview for adult operators** (`doc/rag-system.md` §9.1). `COMPANION_RAG_LANGUAGE=ar` and
+  `COMPANION_RAG_PREVIEW_DRAFTS=true` let the development server answer from the Arabic draft corpus,
+  so it can be tried in the app; both default to off. The bootstrap then reports
+  `contentStatus: "unreviewed_drafts"` (`contracts/openapi-v1.json`), which an older app refuses.
+  A development exception, never child-facing: the router's small-talk and safety patterns still read
+  English only.
+
+### Verification
+
+- `pytest`: **647 passed** (634 before; 10 new in `tests/test_rag_small_to_big.py`, 7 of which fail
+  without the fixes, and 3 for the corpus preview).
+
+## Unreleased — 2026-09-28 (corpus tasks)
+
+On branch `corpus-tasks` (pushed 2026-09-28, not merged). Works through the 15 corpus tasks in
+[`doc/corpus-tasks.md`](doc/corpus-tasks.md) on top of the existing development RAG: same release,
+manifest and config format, extended. Everything is draft or candidate; every source licence is
+`pending_legal`; nothing is approved. Rebuild and verify with [`doc/SETUP.md`](doc/SETUP.md).
+
+### Added
+
+- Source registry (15 sources, sha256) and `scripts/fetch_sources.py`: verified download, canonical
+  Quran (114 surahs, 6236 ayat, checked against two references), tafsir and five hadith collections,
+  and a Bukhari/Muslim cross-check against an independent second source
+  (`corpus/reports/hadith_crosscheck.md`). The third-party text itself stays out of git.
+- Structure-aware ingestion: corpus schema v2, chunk-v2 (parent/child, cluster), norm-v2 with an
+  Uthmani rasm map; layer 0 (16,220 documents, 28,560 chunks) and wave 1 (184 documents, 1,106
+  chunks); prophet aliases, five prophet source maps, a 40-hadith selection and 552 generated
+  retrieval questions (`generated: true`, never shown to a child).
+- Age-band structure only: schema, 99 empty templates, a checker and a writing guide. No child text.
+- Governance: hash-chained audit logs, immutable releases with rollback and quarantine, a review
+  CLI, re-review triggers, policy drafts, signed human decisions (`doc/decisions/decisions.yaml`,
+  `scripts/apply_decisions.py`) and six decision packages.
+- Evaluation: 310 synthetic gold questions, 151 harmful questions, `scripts/eval_retrieval.py` with
+  an offline dashboard, and ADR 0005 (proposed) comparing BM25, Qwen3-Embedding-0.6B, BGE-M3,
+  multilingual-e5-large, hybrid RRF and bge-reranker-v2-m3.
+- An independent AI pre-review (`corpus/reviews/ai_prereview/`, 567 items): a separate status, never
+  an approval.
+- `scripts/check_progress.py`, `scripts/progress_score.py` and `doc/done.md`.
+
+### Changed
+
+- `write_release` is the only writer of the vector index; documents without a registered source are
+  refused, and the `published` channel requires every source to be `cleared`.
+- `doc/architecture.md` and `doc/plan.md` moved from the repository root to `doc/`.
+- Dependencies: `pyyaml` and `jsonschema` are runtime dependencies.
+
+### Verification
+
+- `pytest`: **634 passed** (539 before this work).
+- `scripts/check_progress.py`: 0 conflicts. `scripts/progress_score.py`: 58.7 / 100 (automated
+  58.7 of 58.7 possible, human 0 of 41.3).
+- Fresh clone: `fetch_sources.py` and `build_corpus.py` rebuild the corpus with an identical
+  canonical manifest.
+
 ## Unreleased — 2026-09-27 (animation allowlists)
 
 Not yet committed; the coordinator adds the commit hash here when it lands on

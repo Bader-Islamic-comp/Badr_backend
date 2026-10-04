@@ -1,0 +1,835 @@
+{
+  "schema_version": 2,
+  "package_id": "badr-competition-ar-v1",
+  "language": "ar",
+  "locale": "sa",
+  "age_bands": [
+    "7-9",
+    "10-11"
+  ],
+  "status": "draft",
+  "publication_allowed": false,
+  "rights_status": "pending_legal",
+  "review": {
+    "religious_reviewer": null,
+    "child_language_reviewer": null,
+    "approved_at": null
+  },
+  "stories": [
+    {
+      "id": "story-adam",
+      "title": "آدم عليه السلام: التعلّم والتوبة",
+      "review_status": "draft",
+      "scenes": [
+        {
+          "id": "adam-01",
+          "text": "خلق الله آدم عليه السلام وعلّمه الأسماء كلها. أظهر الله بذلك فضل العلم الذي منحه له.",
+          "lesson": "أتعلم كل يوم شيئًا نافعًا.",
+          "refs": [
+            "quran:2:30-33"
+          ],
+          "review_status": "draft",
+          "needs_check": true,
+          "change_note": "«أسماء أشياء كثيرة» صارت «الأسماء كلها» كما في البقرة 31."
+        },
+        {
+          "id": "adam-02",
+          "text": "أمر الله الملائكة بالسجود لآدم، فسجدوا طاعة لله، أما إبليس فامتنع وتكبر.",
+          "lesson": "أتجنب التكبر وأستمع للحق.",
+          "refs": [
+            "quran:2:34",
+            "quran:7:11-13"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "adam-03",
+          "text": "عاش آدم وزوجه في الجنة، ونهاهما الله عن شجرة. وقعا في الخطأ، ثم أدركا حاجتهما إلى رحمة الله.",
+          "lesson": "أعترف بخطئي عندما أخطئ.",
+          "refs": [
+            "quran:7:19-23"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "adam-04",
+          "text": "علّم الله آدم كلمات يتوب بها إليه، فتقبّل توبته، وجعل للناس هدى يتبعونه.",
+          "lesson": "أطلب المغفرة وأصلح ما أستطيع.",
+          "refs": [
+            "quran:2:37-38",
+            "quran:20:122-123"
+          ],
+          "review_status": "draft"
+        }
+      ],
+      "author": "badr-content-draft"
+    },
+    {
+      "id": "story-musa",
+      "title": "موسى عليه السلام: شجاعة وتوكل",
+      "review_status": "draft",
+      "scenes": [
+        {
+          "id": "musa-01",
+          "text": "أوحى الله إلى أم موسى عليه السلام أن تضعه في اليم حين خافت عليه، ووعدها أن يعيده إليها. فعاد إليها بإذن الله.",
+          "lesson": "أثق بالله وأطلب مساعدة أهلي عند الخوف.",
+          "refs": [
+            "quran:28:7-13"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "musa-02",
+          "text": "ساعد موسى امرأتين عند الماء، ثم دعا الله بالخير وهو في حاجة إليه.",
+          "lesson": "أساعد من يحتاج إلى عون.",
+          "refs": [
+            "quran:28:23-24"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "musa-03",
+          "text": "كلّم الله موسى وأرسله إلى فرعون. طلب موسى من الله أن يشرح صدره، وأن يعينه أخوه هارون.",
+          "lesson": "أطلب المساعدة عندما أواجه مهمة كبيرة.",
+          "refs": [
+            "quran:20:9-36"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "musa-04",
+          "text": "كلّم موسى عليه السلام فرعون ودعاه إلى الحق. أمره الله أن يخاطبه هو وأخوه هارون بكلام لين، مع أن المهمة كانت صعبة.",
+          "lesson": "أختار الكلام الهادئ حين أشرح الحق.",
+          "refs": [
+            "quran:20:42-48"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "musa-05",
+          "text": "قاد موسى قومه بعيدًا عن ظلم فرعون. جعل الله لهم طريقًا في البحر ونجّاهم.",
+          "lesson": "أذكر الله وأحافظ على الأمل وقت الشدة.",
+          "refs": [
+            "quran:26:60-68"
+          ],
+          "review_status": "draft"
+        }
+      ],
+      "author": "badr-content-draft"
+    },
+    {
+      "id": "story-isa",
+      "title": "عيسى عليه السلام: رحمة وآيات بإذن الله",
+      "review_status": "draft",
+      "author": "badr-content-draft",
+      "scenes": [
+        {
+          "id": "isa-01",
+          "text": "بشّر الله مريم عليها السلام بولد اسمه عيسى. تعجبت مريم، فأخبرها المَلَك أن هذا الأمر يسير على الله.",
+          "lesson": "أتذكر قدرة الله وأثق به.",
+          "refs": [
+            "quran:19:16-21",
+            "quran:3:45-47"
+          ],
+          "review_status": "draft",
+          "needs_check": true,
+          "change_note": "«الرسول» صارت «المَلَك»: «الملائكة» في آل عمران 45، و«رسول ربك» في مريم 19 هو المَلَك."
+        },
+        {
+          "id": "isa-02",
+          "text": "حين جاءت مريم بعيسى عليه السلام إلى قومها، أشارَت إليه. تكلّم عيسى وهو طفل، وبيّن أنه عبد الله ونبيّه.",
+          "lesson": "أقول الحق بوضوح واحترام.",
+          "refs": [
+            "quran:19:27-33"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "isa-03",
+          "text": "أرسل الله عيسى إلى بني إسرائيل، وأيّده بآيات عظيمة. كان يذكّرهم أن ما يظهر على يديه يحدث بإذن الله.",
+          "lesson": "أنسب الفضل إلى الله وأشكره.",
+          "refs": [
+            "quran:3:49-51"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "isa-04",
+          "text": "سأل عيسى عليه السلام من يعينه في الدعوة إلى الله، فاستجاب له الحواريون وقالوا إنهم أنصار الله.",
+          "lesson": "أتعاون مع الآخرين على عمل الخير.",
+          "refs": [
+            "quran:3:52-53",
+            "quran:61:14"
+          ],
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "id": "story-muhammad",
+      "title": "محمد ﷺ: الوحي والرحمة والتعليم",
+      "review_status": "draft",
+      "author": "badr-content-draft",
+      "scenes": [
+        {
+          "id": "muhammad-01",
+          "text": "بدأ الوحي إلى النبي محمد ﷺ في غار حراء. كانت أول الآيات التي تلقاها تدعوه إلى القراءة باسم الله، ثم عاد إلى خديجة رضي الله عنها فأعانته وطمأنته.",
+          "lesson": "أطلب العون من أهلي حين يواجهني أمر جديد.",
+          "refs": [
+            "quran:96:1-5",
+            "hadith:bukhari:3"
+          ],
+          "evidence_url": "https://dorar.net/hadith/sharh/6299",
+          "grading": "صحيح البخاري 3",
+          "review_status": "draft"
+        },
+        {
+          "id": "muhammad-02",
+          "text": "كان النبي محمد ﷺ لينًا في تعامله مع أصحابه. علّمهم الله أن اللطف والعفو والمشاورة تعين على اجتماع القلوب.",
+          "lesson": "أتحدث بلطف وأستمع إلى غيري.",
+          "refs": [
+            "quran:3:159"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "muhammad-03",
+          "text": "حين خرج النبي ﷺ مهاجرًا، كان معه صاحب في الغار. ذكّره أن الله معهما، فأنزل الله سكينته عليه.",
+          "lesson": "أطمئن من أحب بكلام صادق عند الخوف.",
+          "refs": [
+            "quran:9:40"
+          ],
+          "review_status": "draft"
+        },
+        {
+          "id": "muhammad-04",
+          "text": "علّم النبي ﷺ طفلًا من آداب الطعام أن يسمّي الله ويأكل بيمينه ومما يليه. علّمه بكلمات قليلة وواضحة.",
+          "lesson": "أتعلم آداب الطعام وأعامل الصغار بلطف.",
+          "refs": [
+            "hadith:bukhari:5376"
+          ],
+          "evidence_url": "https://dorar.net/hadith/sharh/14362",
+          "grading": "صحيح البخاري",
+          "review_status": "draft"
+        }
+      ]
+    }
+  ],
+  "adhkar": [
+    {
+      "id": "morning-evening-three-surahs",
+      "occasions": [
+        "morning",
+        "evening"
+      ],
+      "kind": "quran_recitation",
+      "display": "سورة الإخلاص وسورة الفلق وسورة الناس",
+      "repeat": 3,
+      "refs": [
+        "hadith:abu-dawud:5082",
+        "quran:112:1-4",
+        "quran:113:1-5",
+        "quran:114:1-6"
+      ],
+      "evidence_url": "https://dorar.net/h/xgBR2fIt",
+      "grading": "حسن — الألباني، صحيح أبي داود 5082",
+      "child_note": "اقرأ السور الثلاث صباحًا ومساءً، ثلاث مرات لكل سورة. نص السور يُجلب من المصحف المعتمد.",
+      "review_status": "draft",
+      "needs_check": true,
+      "change_note": "الدرجة «حسن بحسب المصدر» لا تسمّي من حسّنه؛ يلزم ذكر المحكِّم وموضع حكمه.",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح أبي داود 5082 (الألباني)",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "morning-by-god",
+      "occasions": [
+        "morning"
+      ],
+      "kind": "hadith_invocation",
+      "display": "اللهم بك أصبحنا، وبك أمسينا، وبك نحيا، وبك نموت، وإليك النشور",
+      "repeat": 1,
+      "refs": [
+        "hadith:abu-dawud:5068"
+      ],
+      "evidence_url": "https://dorar.net/h/jETvRg4a",
+      "grading": "إسناده صحيح — شعيب الأرناؤوط، تخريج سنن أبي داود 5068",
+      "child_note": "أبدأ صباحي بذكر الله.",
+      "review_status": "draft",
+      "needs_check": true,
+      "change_note": "سُجّلت درجة صفحة الدليل (البغوي، شرح السنة 3/120: حسن). صيغة الصباح «وإليك النشور» هي المشهورة؛ يتحقق المراجع من لفظها ومصدرها.",
+      "review_note": "تُراجع صيغة الصباح قبل اعتمادها.",
+      "evidence_status": "matches",
+      "evidence_entry": "تخريج سنن أبي داود 5068 (شعيب الأرناؤوط)",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "evening-by-god",
+      "occasions": [
+        "evening"
+      ],
+      "kind": "hadith_invocation",
+      "display": "اللهم بك أمسينا، وبك نحيا، وبك نموت، وإليك النشور",
+      "repeat": 1,
+      "refs": [
+        "hadith:abu-dawud:5068"
+      ],
+      "evidence_url": "https://dorar.net/h/jETvRg4a",
+      "grading": "إسناده صحيح — شعيب الأرناؤوط، تخريج سنن أبي داود 5068",
+      "child_note": "أختم يومي بذكر الله.",
+      "review_status": "draft",
+      "needs_check": true,
+      "change_note": "Restored to the wording of أبو داود 5068 (its Dorar entry, checked 2026-10-04). The 2026-10-04 change to «وبك أصبحنا … وإليك المصير» followed another narration (البغوي، شرح السنة؛ الترمذي 3391); both are attested — the reviewer chooses the wording to teach and its matching entry.",
+      "review_note": "يراجع المختص صيغة المساء ومصدرها.",
+      "evidence_status": "matches",
+      "evidence_entry": "تخريج سنن أبي داود 5068 (شعيب الأرناؤوط)",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "morning-evening-tasbih",
+      "occasions": [
+        "morning",
+        "evening"
+      ],
+      "kind": "hadith_invocation",
+      "display": "سبحان الله وبحمده",
+      "repeat": 100,
+      "refs": [
+        "hadith:muslim-abdulbaqi:2692"
+      ],
+      "evidence_url": "https://dorar.net/h/Cfuml05Y",
+      "grading": "صحيح — صحيح مسلم 2692",
+      "child_note": "يمكن تعلم هذا الذكر تدريجيًا، من غير ضغط أو شعور بالذنب.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 2692",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "after-prayer-istighfar",
+      "occasions": [
+        "after_obligatory_prayer"
+      ],
+      "kind": "hadith_invocation",
+      "display": "أستغفر الله",
+      "repeat": 3,
+      "refs": [
+        "hadith:muslim-abdulbaqi:591"
+      ],
+      "evidence_url": "https://dorar.net/h/8eEYq84T",
+      "grading": "صحيح — صحيح مسلم 591",
+      "child_note": "بعد التسليم، أستغفر الله ثلاث مرات.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_note": "checked on dorar.net 2026-10-04; The previous link (sharh 43634) showed أبو داود 1513 without the text.",
+      "needs_check": true,
+      "change_note": "عُلّم رابط الدليل: لا يعرض نص الحديث المذكور.",
+      "evidence_entry": "صحيح مسلم 591"
+    },
+    {
+      "id": "after-prayer-salam",
+      "occasions": [
+        "after_obligatory_prayer"
+      ],
+      "kind": "hadith_invocation",
+      "display": "اللهم أنت السلام، ومنك السلام، تباركت ذا الجلال والإكرام",
+      "repeat": 1,
+      "refs": [
+        "hadith:muslim-abdulbaqi:591"
+      ],
+      "evidence_url": "https://dorar.net/h/8eEYq84T",
+      "grading": "صحيح — صحيح مسلم 591",
+      "child_note": "أذكر الله بهذا الدعاء بعد الاستغفار.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_note": "checked on dorar.net 2026-10-04; The previous link (sharh 43634) showed أبو داود 1513 without the text.",
+      "needs_check": true,
+      "change_note": "حُذفت «يا» ليطابق لفظ مسلم 591: «تباركت ذا الجلال والإكرام». رابط الدليل لا يعرض النص.",
+      "evidence_entry": "صحيح مسلم 591"
+    },
+    {
+      "id": "after-prayer-tasbih",
+      "occasions": [
+        "after_obligatory_prayer"
+      ],
+      "kind": "hadith_invocation",
+      "display": "سبحان الله 33 مرة، الحمد لله 33 مرة، الله أكبر 33 مرة، ثم: لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير",
+      "repeat": 1,
+      "refs": [
+        "hadith:muslim-abdulbaqi:597"
+      ],
+      "evidence_url": "https://dorar.net/h/0gxejrPz",
+      "grading": "صحيح — صحيح مسلم 597",
+      "child_note": "أتعلم هذا الذكر بعد الصلاة بالتدرج، مع مراعاة وجود صيغ ثابتة أخرى.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 597",
+      "evidence_note": "checked on dorar.net 2026-10-04; The previous link (dorar.net/h/lB1M5vxN) showed a weak narration (الألباني، ضعيف الترغيب 983) with another formula."
+    }
+  ],
+  "daily_duas": [
+    {
+      "id": "dua-parents",
+      "occasion": "for_parents",
+      "kind": "quran_recitation",
+      "display": "دعاء الرحمة للوالدين",
+      "quote_ref": "quran:17:24",
+      "refs": [
+        "quran:17:24"
+      ],
+      "child_note": "أدعو لوالديّ بالرحمة. نص الآية يُعرض من المصحف المعتمد.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-knowledge",
+      "occasion": "learning",
+      "kind": "quran_recitation",
+      "display": "دعاء زيادة العلم",
+      "quote_ref": "quran:20:114",
+      "refs": [
+        "quran:20:114"
+      ],
+      "child_note": "أطلب من الله علمًا نافعًا.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-good-hereafter",
+      "occasion": "general",
+      "kind": "quran_recitation",
+      "display": "دعاء الحسنة في الدنيا والآخرة",
+      "quote_ref": "quran:2:201",
+      "refs": [
+        "quran:2:201"
+      ],
+      "child_note": "أدعو الله بالخير في حياتي وآخرتي.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-forgiveness",
+      "occasion": "after_mistake",
+      "kind": "quran_recitation",
+      "display": "دعاء آدم وزوجه بالمغفرة",
+      "quote_ref": "quran:7:23",
+      "refs": [
+        "quran:7:23"
+      ],
+      "child_note": "إذا أخطأت، أعتذر وأطلب من الله المغفرة.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-prayer-family",
+      "occasion": "for_family",
+      "kind": "quran_recitation",
+      "display": "دعاء إبراهيم بإقامة الصلاة",
+      "quote_ref": "quran:14:40",
+      "refs": [
+        "quran:14:40"
+      ],
+      "child_note": "أدعو لنفسي ولأسرتي بالخير.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-ease",
+      "occasion": "before_difficult_task",
+      "kind": "quran_recitation",
+      "display": "دعاء موسى بشرح الصدر",
+      "quote_ref": "quran:20:25-28",
+      "refs": [
+        "quran:20:25-28"
+      ],
+      "child_note": "أدعو الله أن يعينني على المهمة الصعبة.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-gratitude",
+      "occasion": "gratitude",
+      "kind": "quran_recitation",
+      "display": "دعاء الشكر والعمل الصالح",
+      "quote_ref": "quran:27:19",
+      "refs": [
+        "quran:27:19"
+      ],
+      "child_note": "أشكر الله على نعمه وأحسن للناس.",
+      "review_status": "draft"
+    },
+    {
+      "id": "dua-sleep",
+      "occasion": "before_sleep",
+      "kind": "hadith_invocation",
+      "display": "باسمك اللهم أموت وأحيا",
+      "refs": [
+        "hadith:bukhari:6324"
+      ],
+      "evidence_url": "https://dorar.net/h/jsYGsTXi",
+      "grading": "صحيح البخاري",
+      "child_note": "أذكر الله قبل النوم.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 6324",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-wake",
+      "occasion": "after_waking",
+      "kind": "hadith_invocation",
+      "display": "الحمد لله الذي أحيانا بعدما أماتنا، وإليه النشور",
+      "refs": [
+        "hadith:bukhari:6324"
+      ],
+      "evidence_url": "https://dorar.net/h/jsYGsTXi",
+      "grading": "صحيح البخاري",
+      "child_note": "أحمد الله عندما أستيقظ.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 6324",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-before-food",
+      "occasion": "before_eating",
+      "kind": "hadith_invocation",
+      "display": "بسم الله",
+      "refs": [
+        "hadith:bukhari:5376"
+      ],
+      "evidence_url": "https://dorar.net/h/Rrj6d4b6",
+      "grading": "صحيح البخاري",
+      "child_note": "أسمّي الله قبل الطعام وآكل بأدب.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 5376",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-bathroom",
+      "occasion": "before_bathroom",
+      "kind": "hadith_invocation",
+      "display": "اللهم إني أعوذ بك من الخبث والخبائث",
+      "refs": [
+        "hadith:bukhari:142"
+      ],
+      "evidence_url": "https://dorar.net/h/q3nrNnAI",
+      "grading": "صحيح البخاري؛ يُراجع ضبط النص",
+      "child_note": "أقول الدعاء قبل دخول الحمام، في خصوصية.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 142",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-mosque-enter",
+      "occasion": "entering_mosque",
+      "kind": "hadith_invocation",
+      "display": "اللهم افتح لي أبواب رحمتك",
+      "refs": [
+        "hadith:muslim-abdulbaqi:713"
+      ],
+      "evidence_url": "https://dorar.net/h/GKFx5lgu",
+      "grading": "صحيح مسلم 713",
+      "child_note": "أدعو بهذا عند دخول المسجد.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 713",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-mosque-exit",
+      "occasion": "leaving_mosque",
+      "kind": "hadith_invocation",
+      "display": "اللهم إني أسألك من فضلك",
+      "refs": [
+        "hadith:muslim-abdulbaqi:713"
+      ],
+      "evidence_url": "https://dorar.net/h/GKFx5lgu",
+      "grading": "صحيح مسلم 713",
+      "child_note": "أدعو الله من فضله عند الخروج من المسجد.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح مسلم 713",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-sneezing",
+      "occasion": "after_sneezing",
+      "kind": "hadith_invocation",
+      "display": "الحمد لله",
+      "refs": [
+        "hadith:bukhari:6224"
+      ],
+      "evidence_url": "https://dorar.net/h/SUJwx8jQ",
+      "grading": "صحيح البخاري؛ يُراجع سياق الرد",
+      "child_note": "إذا عطست أحمد الله، وأتعلم أدب الرد على من يدعو لي.",
+      "review_status": "draft",
+      "evidence_status": "matches",
+      "evidence_entry": "صحيح البخاري 6224",
+      "evidence_note": "checked on dorar.net 2026-10-04"
+    },
+    {
+      "id": "dua-ask-guidance",
+      "occasion": "seeking_guidance",
+      "kind": "quran_recitation",
+      "display": "دعاء الهداية للصراط المستقيم",
+      "quote_ref": "quran:1:6",
+      "refs": [
+        "quran:1:6"
+      ],
+      "child_note": "أطلب من الله الهداية، وأقرأ النص من المصحف المعتمد.",
+      "review_status": "draft"
+    }
+  ],
+  "prayer_learning": {
+    "scope": "تعليم تمهيدي للصلاة المفروضة، دون إصدار فتوى فردية أو الحكم على صحة صلاة طفل بعينه",
+    "fiqh_source": "https://dorar.net/feqhia/880/",
+    "madhhab_applicability": "shared_basics_only",
+    "preparation": [
+      {
+        "id": "prepare-time",
+        "text": "أتعلم مواقيت الصلوات الخمس مع ولي أمري.",
+        "refs": [
+          "quran:4:103"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "prepare-cleanliness",
+        "text": "أتوضأ للصلاة وألبس ما يسترني، وأختار مكانًا طاهرًا.",
+        "refs": [
+          "quran:5:6",
+          "fiqh:prayer:preconditions"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "prepare-direction",
+        "text": "أستقبل القبلة، وأقصد الصلاة لله في قلبي.",
+        "refs": [
+          "quran:2:144",
+          "fiqh:prayer:preconditions"
+        ],
+        "review_status": "draft"
+      }
+    ],
+    "wudu": [
+      {
+        "id": "wudu-00",
+        "text": "أنوي الوضوء، وأغسل كفيّ، وأتمضمض وأستنشق؛ وأتعلم هذه الخطوات عمليًا مع معلم موثوق.",
+        "refs": [
+          "fiqh:wudu:description"
+        ],
+        "review_status": "draft",
+        "evidence_url": "https://dorar.net/feqhia/234/",
+        "evidence_status": "matches",
+        "evidence_entry": "الموسوعة الفقهية: الباب السادس: الوضوء",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous page (feqhia/258) covers washing the face only."
+      },
+      {
+        "id": "wudu-01",
+        "text": "أغسل وجهي.",
+        "refs": [
+          "quran:5:6"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "wudu-02",
+        "text": "أغسل يديّ إلى المرفقين.",
+        "refs": [
+          "quran:5:6"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "wudu-03",
+        "text": "أمسح رأسي.",
+        "refs": [
+          "quran:5:6"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "wudu-04",
+        "text": "أغسل رجليّ إلى الكعبين.",
+        "refs": [
+          "quran:5:6"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "wudu-05",
+        "text": "أحافظ على ترتيب الأعضاء وتتابع غسلها، وأتعلم تفاصيل ما يلزم لكل عضو من معلم موثوق.",
+        "refs": [
+          "fiqh:wudu:order"
+        ],
+        "review_status": "draft",
+        "evidence_url": "https://dorar.net/feqhia/289/"
+      }
+    ],
+    "prayer_steps": [
+      {
+        "id": "prayer-01",
+        "text": "أقف للصلاة وأكبر تكبيرة الإحرام.",
+        "refs": [
+          "fiqh:prayer:description"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "prayer-02",
+        "text": "أقرأ الفاتحة في القيام، وأتعلمها من المصحف المعتمد.",
+        "refs": [
+          "quran:1:1-7",
+          "fiqh:prayer:description"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "prayer-03",
+        "text": "أركع بهدوء حتى أطمئن، ثم أرفع حتى أعتدل.",
+        "refs": [
+          "hadith:bukhari:757",
+          "fiqh:prayer:description"
+        ],
+        "evidence_url": "https://dorar.net/h/3gzp06Yt",
+        "grading": "صحيح البخاري 757",
+        "review_status": "draft",
+        "evidence_status": "matches",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous link showed صحيح الجامع 738 (the same hadith from another entry).",
+        "needs_check": true,
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757.",
+        "evidence_entry": "صحيح البخاري 757"
+      },
+      {
+        "id": "prayer-04",
+        "text": "أسجد بهدوء حتى أطمئن، ثم أجلس بهدوء، ثم أسجد مرة ثانية.",
+        "refs": [
+          "hadith:bukhari:757",
+          "fiqh:prayer:description"
+        ],
+        "evidence_url": "https://dorar.net/h/3gzp06Yt",
+        "grading": "صحيح البخاري 757",
+        "review_status": "draft",
+        "evidence_status": "matches",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous link showed صحيح الجامع 738 (the same hadith from another entry).",
+        "needs_check": true,
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757.",
+        "evidence_entry": "صحيح البخاري 757"
+      },
+      {
+        "id": "prayer-05",
+        "text": "أكرر القيام والركوع والسجود بحسب عدد ركعات الصلاة، مع الطمأنينة.",
+        "refs": [
+          "hadith:bukhari:757",
+          "fiqh:prayer:description"
+        ],
+        "evidence_url": "https://dorar.net/h/3gzp06Yt",
+        "grading": "صحيح البخاري 757",
+        "review_status": "draft",
+        "evidence_status": "matches",
+        "evidence_note": "checked on dorar.net 2026-10-04; The previous link showed صحيح الجامع 738 (the same hadith from another entry).",
+        "needs_check": true,
+        "change_note": "أُضيفت حالة الدليل: الرابط يعرض موضعًا آخر للحديث نفسه، لا البخاري 757.",
+        "evidence_entry": "صحيح البخاري 757"
+      },
+      {
+        "id": "prayer-06",
+        "text": "أجلس للتشهد في موضعه، وأتعلم لفظه الصحيح من معلم موثوق.",
+        "refs": [
+          "fiqh:prayer:description"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "prayer-07",
+        "text": "في آخر الصلاة أجلس للتشهد الأخير، وأتعلم الصلاة على النبي ﷺ ودعاء ختام الصلاة.",
+        "refs": [
+          "fiqh:prayer:description"
+        ],
+        "review_status": "draft"
+      },
+      {
+        "id": "prayer-08",
+        "text": "أختم الصلاة بالتسليم إلى اليمين ثم اليسار.",
+        "refs": [
+          "fiqh:prayer:description"
+        ],
+        "review_status": "draft"
+      }
+    ],
+    "review_note": "مخطط تعليمي مرشح؛ يحتاج مراجع فقهياً لتثبيت الأحكام والألفاظ والتفريق بين الفرض والسنة والخلاف المعتبر، ومحررًا للأطفال، قبل عرضه باعتباره دليل أداء كامل.",
+    "prayer_counts": [
+      {
+        "prayer": "الفجر",
+        "rakah": 2,
+        "context": "في الحضر، للصلاة المفروضة",
+        "refs": [
+          "fiqh:prayer:counts"
+        ],
+        "evidence_url": "https://dorar.net/feqhia/1448/",
+        "id": "rakah-fajr",
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
+      },
+      {
+        "prayer": "الظهر",
+        "rakah": 4,
+        "context": "في الحضر، للصلاة المفروضة",
+        "refs": [
+          "fiqh:prayer:counts"
+        ],
+        "evidence_url": "https://dorar.net/feqhia/1446/",
+        "id": "rakah-dhuhr",
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
+      },
+      {
+        "prayer": "العصر",
+        "rakah": 4,
+        "context": "في الحضر، للصلاة المفروضة",
+        "refs": [
+          "fiqh:prayer:counts"
+        ],
+        "evidence_url": "https://dorar.net/feqhia/1446/",
+        "id": "rakah-asr",
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
+      },
+      {
+        "prayer": "المغرب",
+        "rakah": 3,
+        "context": "في الحضر، للصلاة المفروضة",
+        "refs": [
+          "fiqh:prayer:counts"
+        ],
+        "evidence_url": "https://dorar.net/feqhia/1448/",
+        "id": "rakah-maghrib",
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
+      },
+      {
+        "prayer": "العشاء",
+        "rakah": 4,
+        "context": "في الحضر، للصلاة المفروضة",
+        "refs": [
+          "fiqh:prayer:counts"
+        ],
+        "evidence_url": "https://dorar.net/feqhia/1446/",
+        "id": "rakah-isha",
+        "review_status": "draft",
+        "evidence_status": "indirect",
+        "evidence_note": "checked on dorar.net 2026-10-04; Dorar's fiqh encyclopedia has no page listing the five prayers' rak'ah counts: this page establishes them through what is, or is not, shortened in travel."
+      }
+    ],
+    "evidence_urls": {
+      "prayer_description": "https://dorar.net/feqhia/880/",
+      "wudu_description": "https://dorar.net/feqhia/234/",
+      "wudu_order": "https://dorar.net/feqhia/289/",
+      "prayer_hadith": "https://dorar.net/h/3gzp06Yt"
+    }
+  },
+  "content_origin": "new Badr competition draft; independent of previous corpus branches",
+  "competition_reference": "المرجعية والحزمة العلمية والبيانات، 20 ربيع الأول 1448"
+}

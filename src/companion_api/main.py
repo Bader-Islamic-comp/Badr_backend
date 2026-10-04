@@ -112,7 +112,9 @@ def create_app(settings: Settings | None = None, answer_service: AnswerService |
 
     @router.get("/bootstrap", response_model=s.Bootstrap)
     def bootstrap():
-        return s.Bootstrap(features=s.Features(generativeAnswers=answer_service is not None))
+        drafts = answer_service is not None and answer_service.retriever.include_drafts
+        return s.Bootstrap(features=s.Features(generativeAnswers=answer_service is not None),
+                           contentStatus="unreviewed_drafts" if drafts else "awaiting_review")
 
     @router.get("/lessons", response_model=s.LessonList)
     def lesson_list():

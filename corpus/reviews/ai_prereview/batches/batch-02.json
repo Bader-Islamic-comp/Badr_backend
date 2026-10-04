@@ -1,0 +1,406 @@
+{
+ "batch": 2,
+ "output": "corpus/reviews/ai_prereview/batch-02.jsonl",
+ "items": [
+  {
+   "item_id": "map-adam-01",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:2:30-39",
+   "stated_topic": "الاستخلاف وسجود الملائكة والهبوط",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-adam-02",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:7:11-25",
+   "stated_topic": "السجود وإبليس والأكل من الشجرة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-adam-03",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:15:26-43",
+   "stated_topic": "الخلق من صلصال وإباء إبليس",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-adam-04",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:17:61-65",
+   "stated_topic": "إباء إبليس",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-adam-05",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:18:50",
+   "stated_topic": "إبليس كان من الجن",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-adam-06",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:20:115-123",
+   "stated_topic": "العهد والنسيان والتوبة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-adam-07",
+   "item_type": "source_map_range",
+   "prophet": "adam",
+   "ref": "quran:38:71-85",
+   "stated_topic": "الخلق والسجود وإباء إبليس",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-01",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:2:124-133",
+   "stated_topic": "الإمامة وبناء البيت والوصية",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-02",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:2:258-260",
+   "stated_topic": "المحاجة وإحياء الموتى",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-03",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:3:65-68",
+   "stated_topic": "ملة إبراهيم",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-04",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:6:74-83",
+   "stated_topic": "النظر في الكواكب وحجة التوحيد",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-05",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:11:69-76",
+   "stated_topic": "البشرى بإسحاق",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-06",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:14:35-41",
+   "stated_topic": "الدعاء لمكة والذرية",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-07",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:15:51-60",
+   "stated_topic": "ضيف إبراهيم",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-08",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:19:41-50",
+   "stated_topic": "الحوار مع أبيه",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-09",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:21:51-73",
+   "stated_topic": "تحطيم الأصنام والنار",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-10",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:26:69-89",
+   "stated_topic": "الحوار مع قومه والدعاء",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-11",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:29:16-27",
+   "stated_topic": "الدعوة والنجاة من النار",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-12",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:37:83-113",
+   "stated_topic": "الأصنام والنار والذبح",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-13",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:51:24-37",
+   "stated_topic": "ضيف إبراهيم المكرمين",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-ibrahim-14",
+   "item_type": "source_map_range",
+   "prophet": "ibrahim",
+   "ref": "quran:60:4",
+   "stated_topic": "الأسوة الحسنة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-01",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:28:3-13",
+   "stated_topic": "المولد والإلقاء في اليم",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-02",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:28:14-28",
+   "stated_topic": "الخروج إلى مدين",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-03",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:28:29-35",
+   "stated_topic": "النار والتكليم والرسالة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-04",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:20:9-36",
+   "stated_topic": "التكليم والآيات",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-05",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:20:37-54",
+   "stated_topic": "المنة الأولى والذهاب إلى فرعون",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-06",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:20:55-76",
+   "stated_topic": "السحرة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-07",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:20:77-98",
+   "stated_topic": "الخروج والعجل",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-08",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:26:10-68",
+   "stated_topic": "فرعون والسحرة وشق البحر",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-09",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:7:103-137",
+   "stated_topic": "الآيات والسحرة والنجاة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-10",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:7:138-162",
+   "stated_topic": "بنو إسرائيل بعد النجاة والميقات",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-11",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:10:75-92",
+   "stated_topic": "فرعون والغرق",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-12",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:2:49-61",
+   "stated_topic": "النعم على بني إسرائيل",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-13",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:2:67-73",
+   "stated_topic": "البقرة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-14",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:18:60-82",
+   "stated_topic": "موسى والعبد الصالح",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-15",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:27:7-14",
+   "stated_topic": "النار والآيات",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-16",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:40:23-46",
+   "stated_topic": "مؤمن آل فرعون",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-17",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:44:17-33",
+   "stated_topic": "الخروج والنجاة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-musa-18",
+   "item_type": "source_map_range",
+   "prophet": "musa",
+   "ref": "quran:79:15-26",
+   "stated_topic": "حديث موسى وفرعون",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-01",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:7:59-64",
+   "stated_topic": "الدعوة والتكذيب والنجاة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-02",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:10:71-73",
+   "stated_topic": "التوكل والنجاة في الفلك",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-03",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:11:25-49",
+   "stated_topic": "الدعوة وصنع السفينة والطوفان وابنه",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-04",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:21:76-77",
+   "stated_topic": "الاستجابة والنجاة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-05",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:23:23-30",
+   "stated_topic": "الدعوة وصنع الفلك",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-06",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:26:105-122",
+   "stated_topic": "الدعوة والتكذيب",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-07",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:29:14-15",
+   "stated_topic": "مدة الدعوة والنجاة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-08",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:37:75-82",
+   "stated_topic": "النداء والنجاة",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-09",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:54:9-17",
+   "stated_topic": "التكذيب والطوفان",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-nuh-10",
+   "item_type": "source_map_range",
+   "prophet": "nuh",
+   "ref": "quran:71:1-28",
+   "stated_topic": "سورة نوح - الدعوة ليلا ونهارا",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  },
+  {
+   "item_id": "map-yusuf-01",
+   "item_type": "source_map_range",
+   "prophet": "yusuf",
+   "ref": "quran:12:4-6",
+   "stated_topic": "الرؤيا",
+   "canonical_file": "corpus/canonical/quran/ayat.jsonl"
+  }
+ ]
+}

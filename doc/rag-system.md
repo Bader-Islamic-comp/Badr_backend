@@ -56,7 +56,7 @@ a third-party provider is what the provider due-diligence gate decides.
 | Module | Owner | Purpose |
 |---|---|---|
 | `types.py` | shared | `Chunk`, `ReleaseManifest`, `EmbedderIdentity`, `Embedder` and `Generator` protocols |
-| `normalize.py` | shared | canonical vs search text, tokens, language detection (`norm-v1`) |
+| `normalize.py` | shared | canonical vs search text, tokens, language detection, Arabic light stems (`norm-v3`) |
 | `embeddings.py` | shared | `HashingEmbedder` (offline, deterministic), `OpenAICompatibleEmbedder` |
 | `endpoints.py` | shared | private-endpoint guard |
 | `release.py` | shared | write/load/verify immutable releases |
@@ -75,6 +75,9 @@ a third-party provider is what the provider due-diligence gate decides.
 | `service.py` | runtime | `AnswerService`: route → retrieve → generate → verify, and casual chat |
 | `evaluate.py` | runtime | `python -m companion_api.rag.evaluate` eval harness |
 | `ask.py` | runtime | `python -m companion_api.rag.ask` operator console |
+| `checks.py` | runtime | the post-generation checks on faith answers, in order, judge last (§16) |
+| `scene.py` | runtime | the scene check over the Wave 1 episode map, `data/episodes.json` (§16) |
+| `ayahs.py` | runtime | a release's ayahs one by one; questions quoting an ayah with altered words (§16) |
 
 Outside the package: `config.py` reads the §9 settings and `require_rag`
 validates them; `store.py` holds the §6.5 queue and turn states; `schemas.py`
@@ -126,7 +129,9 @@ corpus/<corpus-id>/
   `units`).
 - `language`: `en` or `ar` for now. `ageBands`: any of `5-6`, `7-9`, `10-11`, `12-14`.
 - `contentType`: `app_help`, `orientation`, `lesson`, `story`, `quran`,
-  `tafsir`, `hadith`, `dua`, `fiqh`.
+  `tafsir`, `hadith`, `dua`, `fiqh`, `quran_translation` (an English translation
+  of the meanings) and `tafsir_translation` (a translated tafsir); the last two
+  are never `quran`, so the rasm map does not apply to them.
 - **Units are atomic.** A unit is a verse, a narration, a ruling with its
   qualification, or a paragraph. The chunker never splits one, never crosses a
   `section` boundary, and never separates a unit marked `keepWithNext` from the
@@ -203,7 +208,12 @@ canonical JSON; loading also accepts `.md` directly.
 
 Written by `release.write_release`, verified by `release.load_release` (see its
 docstring for the layout). `channel` is `development` unless every document is
-approved and non-synthetic, in which case the builder may write `published`.
+approved and non-synthetic and every source it cites is `cleared` in the source
+registry, in which case the builder may write `published`. `write_release`
+enforces this itself (`publication_problems`), so the pipeline CLI and
+`scripts/build_release.py` apply the same rule: a licence still `pending_legal`
+never publishes. It also refuses a chunk-v2 child whose parent is not in the
+release, because the retriever serves children as their parent (§6.2).
 The manifest records the embedder identity, `pipeline`
 (`{"normalizer": "norm-v1", "chunker": "chunk-v1", "maxChunkWords": 180}`) and
 `review` counts. Releases live outside git (`releases/` is ignored).
@@ -264,8 +274,15 @@ question in another Latin-script language is routed as if it were English.
 
 ### 6.2 Retrieval
 
-Hybrid (`hybrid-rrf-v1`): BM25 over `searchText` and cosine over vectors, each
+Hybrid (`hybrid-rrf-v2`): BM25 over `searchText` and cosine over vectors, each
 top-20, fused with reciprocal rank fusion (k = 60); top 4 go to the prompt.
+`hybrid-rrf-v3` (§17) ranks passages rather than chunks in each branch, serves
+tafsir only after the passage it explains, puts curated child content first when
+it is about as relevant, and adds header phrases to BM25.
+Small-to-big (new in v2): a chunk-v2 child is ranked like any chunk, but its hit
+serves its parent, once, at the best rank any member reached. The prompt gets
+the whole unit and the citation names the parent, and one passage cannot take
+several of the four slots. Releases without children rank exactly as in v1.
 Filters: servable, language (profile language, `en` in development), age band
 when given (the API gives none yet: it has one synthetic profile). Weak
 evidence — no BM25 hit among the eligible chunks and best cosine under the
@@ -367,7 +384,7 @@ worker thread until the model call returns or reaches
 Each answer logs one line on `companion_api.rag`, fixed replies included:
 
 ```
-INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v2", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v1", "verifier": "grounding-v2"}
+INFO:     companion_api.rag rag_answer {"answer_type": "reviewed_answer", "chat_checker": "chat-check-v1", "chat_prompt_version": "chat-v2", "embedder": "hashing/hashing-v1", "latency_ms": 1, "model": "qwen3.5:9b", "outcome": "reviewed_match", "passages": 1, "policy": "conversation-policy-v1", "prompt_version": "rag-answer-v2", "release_id": "dev-app-help-hashing", "retriever": "hybrid-rrf-v2", "verifier": "grounding-v2"}
 ```
 
 The fields are answer type, release id, model, prompt version, retriever,
@@ -395,6 +412,8 @@ from its settings it attaches a stream handler at INFO to `companion_api.rag`
 | Fusion constant | RRF k = 60 | `retriever.RRF_K` |
 | Candidates per branch | 20 (BM25 and cosine each) | `retriever.BRANCH_K` |
 | Passages to the prompt | 4 | `retriever.FINAL_K` |
+| Commentary in the prompt (v3) | at most 1, right after its own passage, in addition to the 4 | `retriever.MAX_COMMENTARY` |
+| Curated content first (v3) | fused score ≥ 0.9 × the best passage's | `retriever.CURATED_RATIO` |
 | Weak evidence, `hashing` | no BM25 hit and best cosine < 0.2 | `retriever.THRESHOLDS` |
 | Reviewed answer by cosine, `hashing` | top candidate ≥ 0.75 | `retriever.THRESHOLDS` |
 | Weak evidence, `openai-compatible` | no BM25 hit and best cosine < 0.55 (measured) | `retriever.THRESHOLDS` |
@@ -532,6 +551,8 @@ conversation-policy §11.
 | `COMPANION_LLM_TIMEOUT_SECONDS` | `60` | per generation |
 | `COMPANION_EMBEDDING_BASE_URL` | LLM base URL | private endpoint for embeddings |
 | `COMPANION_EMBEDDING_MODEL` | `qwen3-embedding:0.6b` | `hashing` selects the offline embedder |
+| `COMPANION_RAG_LANGUAGE` | `en` | the service's one language, `en` or `ar` (§9.1) |
+| `COMPANION_RAG_PREVIEW_DRAFTS` | `false` | corpus preview: `true` serves draft chunks (§9.1) |
 
 The server refuses to start with grounded answers enabled when the release is
 missing or fails verification, either endpoint is not private, the model is not
@@ -544,6 +565,31 @@ The pipeline's `build` reads `COMPANION_EMBEDDING_MODEL`,
 not given, and `evaluate` and `ask` read all of these variables except
 `COMPANION_RAG_ENABLED` and `COMPANION_RAG_RELEASE` (they take `--release`), so
 an operator run measures what the server would do.
+
+### 9.1 Corpus preview (adult operators only)
+
+The corpus-tasks releases (wave 1, layer 0) are Arabic and every document in
+them is a draft, so the default service (English, servable chunks only) cannot
+answer from them at all. To try them end to end in the app, an adult operator
+may start the development server with `COMPANION_RAG_LANGUAGE=ar` and
+`COMPANION_RAG_PREVIEW_DRAFTS=true`. Then:
+
+- the retriever includes draft chunks, exactly as `evaluate --include-drafts`
+  does, and the language check reads Arabic instead of English;
+- `GET /v1/bootstrap` reports `contentStatus: "unreviewed_drafts"`, and an app
+  built before this value existed refuses the service; the app shows every
+  reply as unreviewed draft content for adult testing;
+- nothing else changes: routing, the faith rule (corpus or abstain), grounding
+  verification and the fixed replies are the same code.
+
+This is a development exception to "retrieve only from published,
+scholar-approved releases" (`AGENTS.md`) and is never a child-facing setting.
+The first run found that the router read English only and every fixed reply was
+English; since test/corpus-tasks the router reads Arabic and Arabizi and replies
+come in the child's language (§15), pending native-speaker review. What remains:
+Arabic answers are generated by the model from draft passages that no scholar
+has reviewed, checked by the same model's judge. Both settings default to off,
+and the server logs nothing more than usual.
 
 ## 10. What this does not do yet
 
@@ -649,3 +695,286 @@ above already describe the result.
     at once. `AnswerService.prepare` now returns a `Plan`. Chat replies cannot
     be grounded, so they pass their own checks instead; that scoped exception
     is recorded in [ADR 0004](adr-0004-casual-conversation.md).
+
+## 13. Schema v2, chunk-v2 and norm-v2 (corpus tasks, 2026-09-27)
+
+Added for the religious corpus ([`corpus-tasks.md`](corpus-tasks.md), task 9). Everything
+here is optional or additive: schema v1 documents, chunk-v1 release files and the app-help
+corpus behave as before.
+
+**Document schema v2** (`schemaVersion: 2`). Extra document fields: `tier` (0 reference text,
+1 scholarly explanation, 2 child content, 3 app help), `contextHeader`, `prophetId`, `topics`,
+`madhhabScope` (`common` / `differs` / null), `clusterId` and `clusterRefs` (the same hadith in
+other collections), `sourceIds` (registry ids), `parentChunk` (for example tafsir pointing at its
+Quran segment), `children` (`units`), `generatedQuestions` (retrieval aids, at most 8, never shown).
+Extra unit fields: `sourceRefs`, a list such as `["quran:12:4"]` or `["bukhari:6018"]`, next to the
+old single `reference` that stays readable; and `parts`, verbatim excerpts of the unit, checked to
+occur in its text in order. Tier 0/1 units that cite their own `sourceRefs` skip duplicate detection,
+because reference text repeats for real (a refrain ayah, one tafsir for several ayat).
+
+**chunk-v2.** Packing is unchanged (§4). New: each chunk carries `sourceRefs`, `parentId`,
+`clusterId`, `clusterRefs`, `contextHeader`, `tier`, `prophetId`, `topics`, `madhhabScope`,
+`grading`, `reviewer`, `sourceIds`, `generatedQuestions`, `checksum` (sha256 of the text) and
+`releaseId`. Child chunks for small-to-big retrieval: one per verbatim `part`, and one per unit of a
+multi-unit chunk when `children: units`. Children are numbered after the parent chunks, so every id
+keeps the `<document>#<n>` form the API contract accepts, and they point at the parent with
+`parentId`. A narration is never split: a long hadith is one parent chunk plus part children.
+`embedding_text` puts `contextHeader` (else the title) first. Unknown chunk fields still fail
+`load_release`.
+
+**norm-v2.** norm-v1 plus one Arabic step: Uthmani-rasm spellings map to the simple spelling from
+`src/companion_api/rag/data/rasm_map.tsv`, derived from Tanzil's own Uthmani and simple texts by
+`corpusprep.rasm` (750 entries; word agreement between the two texts 90.5% → 97.5%). Latin text is
+unchanged. Search text only; displayed text never changes.
+
+**norm-v3 (test/corpus-tasks, 2026-10-01).** The rasm map applies to Quran text only
+(`search_text(text, quranic=True)`, set by the chunker for `contentType: quran`), and a Quran chunk is
+embedded from that simple-spelling search text. norm-v2 mapped every text, so ordinary words in questions,
+hadith and app help were merged with Quranic spellings: شعير (barley) became شعاير (rituals), ثلث (a third)
+became ثلاث (three), and 59 of the 750 keys occur as ordinary words in the Bukhari and Muslim texts.
+Questions are never mapped: they are written in simple spelling, which is what a mapped Quran text becomes.
+`normalize.arabic_forms` gives a token's light stems (each leading clitic and trailing pronoun removed) for
+grounding-v3's matching; it never changes search text.
+
+**Where the corpus comes from.** `scripts/fetch_sources.py` (registry, sha256, canonical files) and
+`scripts/build_corpus.py` (checks, clusters, segments, documents) write `corpus/layer0/` and
+`corpus/wave1/` as ordinary corpus folders that `python -m companion_api.rag.pipeline build`
+releases. Both are regenerated and stay out of git.
+
+## 14. No child content in the vector store (corpus tasks, 2026-09-27)
+
+`release.write_release` is the only writer of vectors, and it admits a chunk only when
+`release.admission_problems` finds nothing: an indexable content type; synthetic chunks only as
+`app_help` or `orientation`; every other chunk citing at least one `sourceIds` entry that is in the
+source registry and is not `candidate` or `rejected`. Both builders pass the registry
+(`pipeline build --registry`, default `corpus/sources/registry.yaml`; `scripts/build_release.py`), so a
+schema v1 non-synthetic document, which cannot cite a registry source, is no longer releasable. The
+manifest lists every `chunkIds` entry, and `load_release` refuses a release whose chunks differ from it.
+`python scripts/scan_index.py [release]` rescans a release: ids against the manifest, text against each
+chunk's checksum, and every chunk against the admission rule (a source that becomes blocked later shows
+up here). `tests/test_no_child_content.py` checks that conversation modules (router, chat, service,
+generator, grounding, API, store) never import the pipeline, corpus preparation, governance or the chunker,
+and never call `write_release` or `embed_documents`.
+
+## 15. Arabic answers, the faith prompt and the faith judge (test/corpus-tasks, 2026-10-01)
+
+The first end-to-end run over the Arabic corpus (2026-09-30) released 4 answers out of 83 Arabic gold
+questions, and only one of them was right: the prompt's first-person rule made Robert narrate as Allah or a
+prophet, the lexical check passed a quote from the wrong scene and two verses fused into a false statement,
+and none of the 11 Arabic distress messages reached the safeguarding reply. This branch changes, in order:
+
+| Piece | Version | What changed |
+| --- | --- | --- |
+| Router | `dev-patterns-v2` | Arabic (MSA, Levantine, Gulf, Egyptian) and Arabizi patterns for safety, personal data, rulings and injection (`rag/arabic_rules.py`); English distress and fabrication additions. Arabic faith terms and prophets' names in a religious context; Arabic courtesy formulas. |
+| Small talk | `small-talk-v2` | Arabic greetings, how-are-you, thanks, goodbyes and feelings. |
+| Policy | `conversation-policy-v2` | Replies in the child's language (Arabic for Arabic script and Arabizi); Arabic small talk gets reviewed Arabic copy (the persona and its checks read English only); abuse and grooming get `SAFETY_ABUSE`, which never sends the child back to a parent; persistent sadness gets `SAFETY_DISTRESS`. |
+| Prompt | `rag-answer-v3` | `FAITH_SYSTEM` when the best passage is religious text: third person, never speaking as Allah or a prophet, quotations word for word in « », the question's language, NOT_IN_SOURCES when the passage tells another scene. App help keeps `SYSTEM`. |
+| Verifier | `grounding-v3` | `misquoted` (a quotation of two or more words not found word for word in a cited passage), `first_person` (outside quotations, in an answer citing religious text), Arabic-aware support (`normalize.arabic_forms`), passages read in their search text. |
+| Judge | `faith-judge-v1` | A JSON-mode call on every answer that cites religious text: `answers_question`, `supported`, `speaker_ok`; any false, unreadable or failed verdict gives the faith abstention (`judge.py`). |
+| Retrieval | `hybrid-rrf-v2` | Optional `prophet_ids` filter. An Arabizi question is searched with Arabic terms from `rag/data/query_aliases.json` (`rag/arabizi.py`), narrowed to the prophets it names. |
+
+**Faith by passage.** A question that names no faith term still gets faith handling when its best passage is
+Quran, tafsir or hadith (`prompts.FAITH_CONTENT`): the faith prompt, the faith abstention on any failure, and
+the judge whenever the answer cites religious text. The router's faith detection decides only whether casual
+chat may run.
+
+**Language.** One service still serves one corpus language. A message in another language abstains in the
+child's language (`language_mismatch`). Arabizi counts as Arabic. English questions to the Arabic corpus need
+reviewed English content (licensed translations), which is a corpus decision, not code.
+
+**What these checks cannot do.** The judge is the same model that wrote the answer: a second line, not an
+independent reviewer. None of this replaces the scholarly review of the corpus and of the evaluation sets.
+
+**Arabic function words (norm-v3).** The first answers over the Arabic corpus failed the support check largely
+on words that state nothing: the Arabic stopword list had 12 entries against about 50 English ones, and the
+model framed facts with "كما ورد في المصدر". `normalize.ARABIC_FUNCTION_WORDS` adds common function words and
+the citation-framing words; the faith prompt asks for the source's own words and no framing. "ذكر" stays a
+content word, because it is also dhikr.
+
+## 16. The verification pipeline (test/corpus-tasks-serving, 2026-10-02)
+
+The 2026-10-01 run (Qwen3.5-9B, release `wave1-preview-3`, 145 Arabic-script gold questions) released 13
+answers; 3 were wrong and every one had passed grounding-v3 and the faith judge: a quote from the wrong scene
+(yusuf-04-gulf: 12:63, the return from Egypt, for the wolf story of 12:16-18), a prayer to Allah framed as words
+to a father (ibrahim-04-msa: «رَبِّ…» after "قال إبراهيم لأبيه"), and an answer with no duration to
+"how long did Nuh call his people" (nuh-01-arabizi). And 8 of 62 Arabizi faith questions got the puzzled chat
+line. This branch adds a verification pipeline of small, named checks, mostly deterministic, around the judge.
+
+**Shape.** After grounding passes (§6.4), a faith answer (a faith topic, or any answer citing religious text)
+goes through `checks.Verifier.run`: a list of independent checks, each returning `pass`, `fail` with a fixed
+reason code, or `unavailable` when the data it needs is missing (recorded, never counted as a pass, and it does
+not withhold the answer). Every deterministic check runs and is recorded; the model judge runs last, and only
+when all of them passed, so a failure never costs a model call. The first failure in order is the faith
+abstention's reason (`faith_abstain:<reason>`). Results reach `AnswerResult.checks` and the log line
+(`"checks": {"answered": "pass", "scene": "fail:scene:absent_person", …}`, `"checks_version": "checks-v2"`):
+names and codes, never text. App-help answers do not go through it, as before.
+
+| # | Check | Applies to | Fails (reason) when |
+| --- | --- | --- | --- |
+| 1 | `first_person` | answers citing religious text | "I" outside a quotation (`grounding:first_person`, as before) |
+| 2 | `faith_terms` | faith topics | a decline (`declined`), or neither the answer nor its passages use the question's faith terms (`off_topic`); conversation-policy §3.1, unchanged except that an Arabizi question's terms are read through its Arabic search terms |
+| 3 | `answered` | questions asking how many, how much, how long (كم، قديش، كام، kam, 2adeish, how many/long) or when (متى، إمتى، emta, a clause-initial "when") | the answer holds no number (digits or number words) and no duration (`answered:no_quantity`); for "when", also no time of day and no time clause (`answered:no_time`) |
+| 4 | `numbers` (checks-v2) | answers citing religious text | the answer states a count (digits or a number word; surah, ayah and hadith numbers excepted; "one", "once" and «بضع» state none) that its cited passages do not state (`numbers:not_in_sources`). Added after the 2026-10-02 run released "nine years in prison" over 12:42, which says «بِضْعَ سِنِينَ»; a count the passages only imply (950 from «أَلْفَ سَنَةٍ إِلَّا خَمْسِينَ») fails too |
+| 5 | `addressee` | a quotation framed as said to someone (لأبيه، لقومه، لربه، لابنه، لإخوته، للملك، لفرعون; "said to his father") | the quotation's own vocative names someone else: «رَبِّ/ربنا/اللهم» Allah, «يا أبت/يابت/يا أبانا» a father, «يا قوم/يقوم» a people, «يا بني/يبني» a son, «يا أيها الملأ» a council, «يا موسى» Musa; "O my Lord", "O my father"… (`addressee:mismatch`). Either side unknown: pass |
+| 6 | `scene` | answers citing Quran passages inside the Wave 1 episode map | another episode (`scene:other_episode`) or a scene defined by someone's absence (`scene:absent_person`), below; `unavailable` when the map is missing or the cited ayahs lie outside every mapped episode; hadith: not applicable |
+| 7 | `translation` | a sentence quoting a cited translation of the meanings | it does not say it is a translation (`translation:unframed`) or does not name it (`translation:unnamed`) |
+| 8 | `judge` | answers citing religious text | `faith-judge-v1`, unchanged (`judge:<field>`) |
+
+**The scene check's decision rule** (`scene.py`). Episodes come from the Wave 1 source maps, exported with
+English labels to `rag/data/episodes.json` by `scripts/export_episodes.py` (59 ranges of 5 prophets: ranges
+and our own draft labels only; a test fails when it is out of date). A cited passage belongs to the episodes
+whose ranges hold its ayahs.
+
+1. *Another episode.* The question's words that name episodes of the cited prophet's story (key words of their
+   labels; not a word every episode of that prophet shares, not a generic label word such as «الدعوة» or
+   «النجاة», not the prophet's own name) point to those episodes. A passage in one of them passes. A passage
+   outside all of them fails only when one of those words names a person of the story (a father, brother, son,
+   mother or wife, the magicians, Pharaoh, the king, Iblis, another prophet; Yaqub counts as "father" in Yusuf's
+   story) and that person appears neither in the cited ayahs, nor within two ayahs of them, nor in their
+   episode's label. Objects and actions only point («الفلك» tells «السفينة» in another surah).
+2. *The absent person.* A question that defines its scene by someone's absence («بدون يوسف», "without his
+   brother", "bdoon yusuf") must be answered from ayahs that name that person: the ayahs the answer draws on (the
+   ayah holding a quotation, else the ayah sharing most words with the sentence) and two on each side.
+
+Neither rule decides which scene was asked; each refuses only on positive evidence of another scene.
+Measured: on the 13 released answers both wrong-scene answers fail (ibrahim-04-msa on rule 1, yusuf-04-gulf on
+rule 2) and the 10 right ones pass; on the gold set, every (question, expected passage) pair of the six Arabic
+variants passes (603 pairs with this branch's new intents, 0 failures; 100 hadith pairs not applicable).
+Quranpedia topics were read and are not used: they are thematic rather than narrative (12:60-61 carry none), and
+topic 3719 joins 12:16 with 12:63, the very scenes rule 2 must separate. No index built from them exists in the
+repository or in a release.
+
+**Misquoted ayahs.** `ayahs.AyahIndex` splits a release's Quran chunks back into ayahs (units joined by a blank
+line, one `quran:S:A` per unit). Before the faith step, `near_quote` aligns the question (or each quoted span)
+word by word with the ayahs sharing its words (Smith-Waterman over search tokens; a looser spelling form drops
+alef and hamza and joins a vocative "يا" to its noun, so spelling never counts as a change). A near quote needs
+at least 4 agreeing words, 3 of them content words, covering 60% of the aligned span on each side, and at least
+one word changed, missing or added inside it; without quotation marks or a quoting phrase ("قال تعالى", "الآية",
+"the ayah"), 7 agreeing words. An exact quote, whole or partial, is never corrected. The reply quotes the exact
+ayah from the release, named by surah (the release's title) and number, in the child's language
+(`responses.QURAN_CORRECTION[_AR]`; an ayah too long for one reply is named, never cut): answer type `grounded`,
+reason `quran_correction`, the ayah's chunk as its source, and no model reads the altered words. Measured on 130
+probes built in memory from `wave1-preview-3` (never written): exact quotes corrected 0, a replaced word
+corrected 119, a dropped word 119 (the misses are spans of particles); evaluation questions corrected 0 of 539.
+
+**English answers over translations of the meanings.** `quran_translation` and `tafsir_translation` are faith
+content (`prompts.FAITH_CONTENT`). An English question over them gets `FAITH_SYSTEM_EN` (rag-answer-v4): the
+sources carry `translation="<name>"` from their source label, and the prompt presents a translation as a named
+translation of the meanings ("In the translation of the meanings (Saheeh International): "…" [1]"), never as
+the words of the Quran or of Allah, in the third person. Quotations are held word for word to the translation
+passage (`misquoted`, which grounding-v4 extends to curly single quotes), and the `translation` check holds the
+framing. Arabic answers keep `FAITH_SYSTEM`. `release.INDEXABLE_CONTENT_TYPES` must also admit the two types
+before such a release can be written (the layer-0 translations work owns that file's change).
+
+**Replay.** `python scripts/replay_checks.py RECORDED.jsonl [RELEASE]` runs every deterministic check over the
+answers a real model released in a recorded run (a local file, never committed), reports the judge
+`unavailable`, and shows where the other recorded questions are routed now. On the 2026-10-01 run:
+nuh-01-arabizi fails `answered`, ibrahim-04-msa fails `addressee` and `scene`, yusuf-04-gulf fails `scene`;
+the other 10 pass every check; the 8 Arabizi questions that got the chat line now take the faith route.
+
+**Versions.**
+
+| Piece | Version | What changed |
+| --- | --- | --- |
+| Prompt | `rag-answer-v4` | `FAITH_SYSTEM_EN` for English answers over translations; Arabic unchanged |
+| Verifier | `grounding-v4` | quotations in curly single quotes are held word for word too |
+| Checks | `checks-v2` | the pipeline above (provenance `checks`, log `checks` and `checks_version`) |
+| Router | `dev-patterns-v3` | Arabizi faith terms; the AI-disclosure detector; «إنسانًا», «تنحسب», «بنو إسرائيل» |
+| Router | `dev-patterns-v4` | a faith term after the contracted article («للصلاة», «وللصلاة») and the plural «الصلوات» count as the term: the 2026-10-04 run held a correct prayer answer back as `off_topic` |
+| Policy | `conversation-policy-v3` | disclosure, misquoted-ayah correction, the checks (conversation-policy §14-16) |
+| Judge | `faith-judge-v1` | unchanged, now the last check |
+| Retriever, normalizer | `hybrid-rrf-v2`, `norm-v3` | unchanged |
+
+**What this cannot do.** The checks are lexical and rule-based: the scene rules act only on episode words, people
+and absence, inside the five Wave 1 stories, so a wrong scene told with the same people goes on to the judge.
+"answered" accepts any number or duration, not only the right one. The near-quote detector reads Arabic ayahs
+only (not a misquoted translation, not Arabizi). The episode map is model-proposed draft data, like the source
+maps. None of this replaces the scholarly review of the corpus and of the evaluation sets.
+
+## 17. Passages before commentary, curated content first (test/corpus-tasks-fix, 2026-10-04)
+
+On the emulator (Qwen3.5-9B, release `device-candidate-1`: Wave 1, Saheeh International and the in-rule and
+borderline tafsirs) "ماذا قال يوسف لإخوته بعد أن عرّفهم بنفسه؟" retrieved four al-Tabari chunks and no ayah,
+and the model answered from a narration of another scene. That release holds 4883 tafsir chunks for 1061 Quran
+chunks, and a narration repeats a question's words more often than the ayah does. `hybrid-rrf-v3` changes how
+the four sources are chosen; the scores, thresholds and weak-evidence test are unchanged.
+
+**Passages, not chunks.** A tafsir chunk (`tafsir`, `tafsir_translation`) is evidence for the passage its
+`parentChunk` names, as a chunk-v2 child is for its parent: the parent when it is eligible for this query
+(servable, language, age band), else an eligible translation of the meanings of that passage (an English
+service, whose Quran passages are translations). Commentary that names no such passage never serves. Each
+branch (BM25, cosine) ranks passages at the best rank any of their members reached and keeps 20; RRF (k = 60)
+fuses the two lists. So a passage that a commentary chunk names in BM25 and its own words name in the cosine
+list gets both, which is what brought 12:87-93 into the Yusuf question's four.
+
+**Commentary only after its passage.** The prompt gets the best four passages in order. One commentary chunk
+(`MAX_COMMENTARY`) may follow its own passage directly, as a fifth source that never takes a passage's place:
+the best-ranked chunk of the first of the four passages that has commentary among the hits, one chunk per book
+(`source_ids`) if the limit is raised. Passage [1], which picks the prompt, is never commentary.
+
+**Curated child content first.** A `story`, `dua` or `lesson` chunk (tier 2, the curated `comp-*` documents)
+whose fused score is at least `CURATED_RATIO` = 0.9 of the best passage's goes first, curated ones in their own
+order. With k = 60 that is roughly "in the top seven of both branches"; one branch alone (about 0.5) is not
+enough. These types are already `FAITH_CONTENT`, so the faith prompt, the faith abstention and every check apply.
+
+**Header phrases.** Content-word search drops function words, so "ماذا أقول بعد الصلاة؟" reads as «أقول» +
+«الصلاة» and ranked the prayer-steps lesson above the adhkar after the prayer. `lexical.phrases` makes one term
+of each adjacent pair of a function word and a content word ("بعد الصلاه"); a second BM25 index holds the
+phrases of each chunk's context header (its title when it has none), and its score is added to the text's BM25
+score. Pairs of two content words add nothing BM25 does not see; headers are short, curated labels, so a match
+there says what the chunk is about.
+
+**Measured** (`scripts/eval_serving.py`, gold questions with an expected passage among the four):
+
+| Release | v2 | v3 |
+| --- | --- | --- |
+| `device-candidate-1` (with tafsir) | 57 | 162 |
+| `releases/wave1-review-1` (no tafsir) | 125 | 122 |
+
+On `device-candidate-1` nine of ten device questions now have a Quran passage first and at most one tafsir chunk,
+after its parent (the tenth, in Arabizi, is weak evidence under both); the Yusuf question gets 12:80-86, a Tabari
+chunk on it, 12:87-93 (the answer), 12:58-63 and 12:75-79. On `wave1-review-1` ranking by passage in each
+branch moves 15 questions across the fourth place (6 in, 9 out), at the margin and with no pattern by prophet or
+variant; header phrases alone add one. The harmful-set routes are unchanged.
+
+**A person of the story counts (`checks-v3`).** «ما معنى «فصبر جميل» في قصة يعقوب؟» got a right answer
+(Mujahid's explanation and 12:18) that `faith_terms` refused as `off_topic`: the question names Yaqub and the
+ayat say «أباهم». Now a prophet's name the question asks about also counts as used when the cited passages tell
+a story that person appears in: the passages' prophet (`prophetId`, or the episode map for a Quran range) and
+the people listed for that story in `checks.STORY_PEOPLE` (Yaqub in Yusuf's, Harun in Musa's, Ismail and Ishaq
+in Ibrahim's), with names from `data/query_aliases.json`. Such a pass is recorded as `pass:story_person`. A name
+from another story, or passages with no prophet (hadith), still fail; a decline still fails first. On the
+device chunks the 2026-10-03 case passes; Yaqub over Nuh's passages and Harun over Yusuf's still fail. The replay
+of the 2026-10-01 recording over `wave1-review-1` is unchanged: 17 released answers pass every deterministic
+check, yusuf-15-msa still fails `numbers`, and the other recorded questions route as before.
+
+**Limits.** The adhkar after the prayer now reach the four (second, from outside them), but the hashing embedder
+still ranks the prayer-steps lesson first; ordering them needs a semantic embedder, not more lexical rules.
+"About as relevant" is a fused-score ratio, not a judgement of the content. A tafsir chunk tells the model what a
+scholar said about the passage; the prompt and checks treat it as evidence like any source.
+
+**Versions.**
+
+| Piece | Version | What changed |
+| --- | --- | --- |
+| Retriever | `hybrid-rrf-v3` | passages ranked per branch, commentary after its passage, curated content first, header phrases |
+| Checks | `checks-v3` | `faith_terms` accepts a person of the cited story (`pass:story_person`) |
+| Prompt, verifier, judge, router, policy | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `dev-patterns-v3`, `conversation-policy-v3` | unchanged |
+
+## 18. Curated items verbatim (`curated-v1`, 2026-10-04)
+
+`rag/curated.py` selects curated chunks by their document `topics` — `occasion:<code>` on the package's adhkar
+and supplications, `lesson:<section>` on its prayer lessons (set by `corpusprep/competition.py`) — and
+`AnswerService.prepare` returns them verbatim as a `grounded` result with reason `curated_verbatim:<topic>`, one
+segment and source per item, in release order, at most four (conversation-policy §17). The question must name
+one occasion and ask for words, or name a prayer lesson and ask how (cue lists in the module; a cue word also
+matches behind an attached و ف ب ل). Only chunks the retriever may serve in the service's language and age band
+are eligible (`HybridRetriever.eligible`), so drafts appear only in a preview and a candidate source keeps an item
+out of the release as before. Provenance records `"curated": "curated-v1"`; the policy is
+`conversation-policy-v4`.
+
+On release `wave1-comp-3` the package's five adhkar, supplication and prayer evaluation questions (all withheld
+by the 2026-10-04 real-model run) get their items; the stories, the abstention cases and the ruling still take
+their earlier paths. Limits: one occasion per question; the cues are a fixed list a native-speaker reviewer
+should extend; the three Quranic morning/evening surahs and the other Quranic supplications stay out of the
+release while `quranpedia-mushaf-hafs` is a candidate source.

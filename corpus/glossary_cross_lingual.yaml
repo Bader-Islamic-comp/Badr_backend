@@ -1,0 +1,394 @@
+# Cross-lingual glossary (test/corpus-tasks): Arabic terms of the wave-1 stories and hadith topics, with the
+# English and Arabizi words a child may use for them, and the reference package's sample terms. Used only to
+# rewrite an Arabizi question into Arabic search terms (rag/arabizi.py, through
+# src/companion_api/rag/data/query_aliases.json); never shown to a child. Prophets' names come from
+# corpus/aliases.yaml, not from here.
+# review_status: draft. Every entry needs_check by an Arabic-language reviewer: add variants children really
+# type, remove any that mislead. Regenerate the JSON afterwards with
+#   python scripts/export_query_aliases.py
+#
+# Fields (schema 2; checked by scripts/export_query_aliases.py):
+#   ar          the Arabic term
+#   latin       English and Arabizi words a child may type: model_proposed (2026-10-01; page-7 terms 2026-10-02)
+#   origin      glossary (wave-1 terms, model_proposed 2026-10-01; the default) or package_page_7: the sample
+#               glossary on page 7 of the reference package «المرجعية والحزمة العلمية والبيانات» (20/3/1448)
+#   sensitive   true for an Islamic term whose English the package wants from an approved dictionary rather than
+#               machine translation (the rest are everyday words of the stories): model_proposed. Page-7 terms
+#               are sensitive by definition. scripts/crawl_jamharah.py reads these entries first.
+#   query       the form looked up in the Jamharah dictionary when the term is inflected: model_proposed
+#   jamharah    the dictionary entry (islamic-content.com/dictionary) matched by scripts/crawl_jamharah.py on
+#               2026-10-02: {id, url, en}. `en` is the entry's English heading, `en: null` when the entry has no
+#               English translation, and absent when its English page was not read (the crawl's request budget
+#               ran out; the sensitive terms were read first). `unmatched`: no entry has exactly this title
+#               (never guessed). A match is by title only: `sense: differs` marks an entry whose heading or
+#               definition gives another meaning than the story's word, `sense: unclear` one a reviewer should
+#               check (both model_proposed). Definitions stay in the snapshot outside git
+#               (corpus/raw/jamharah-dictionary-entries/).
+#   en, usage_rule  page-7 terms: the package's English equivalent and a short paraphrase of its usage rule
+#   provenance  page-7 terms: where each field comes from: package_page_7, jamharah or model_proposed
+#               (unverified). Where Jamharah's English differs from the package's, the package's is used.
+schema_version: 2
+terms:
+# Adam
+- ar: الملائكة
+  sensitive: true
+  latin: [angels, angel, malaeke, malaika, malayka, mala2ika, mala2eke, mala2ke, malaeka]
+  jamharah: {id: 9961, url: 'https://islamic-content.com/dictionary/word/9961', en: Angels}
+- ar: اسجدوا
+  sensitive: true
+  latin: [prostrate, bow, sujood, sujud, yosjod, yesjod, yusjud, sajada, sajdeh, sujoud]
+  query: السجود
+  jamharah: {id: 5556, url: 'https://islamic-content.com/dictionary/word/5556', en: Prostration}
+- ar: الشجرة
+  latin: [tree, shajara, shajare, shajra, shajarah]
+  jamharah: unmatched
+- ar: الأسماء
+  latin: [names, asma2, asmaa, asma]
+  jamharah: unmatched
+- ar: تاب
+  sensitive: true
+  latin: [repent, repented, repentance, tawba, toba, tob, tab]
+  query: التوبة
+  jamharah: {id: 3519, url: 'https://islamic-content.com/dictionary/word/3519', en: Repentance}
+- ar: إبليس
+  sensitive: true
+  latin: [iblis, iblees, eblees, eblis]
+  jamharah: {id: 50, url: 'https://islamic-content.com/dictionary/word/50', en: Iblīs}
+- ar: الشيطان
+  sensitive: true
+  latin: [satan, shaitan, shaytan, shaytaan, shitan]
+  jamharah: {id: 6083, url: 'https://islamic-content.com/dictionary/word/6083', en: Satan}
+- ar: الجن
+  sensitive: true
+  latin: [jinn, jin, djinn, jinni]
+  jamharah: {id: 3903, url: 'https://islamic-content.com/dictionary/word/3903', en: The jinn}
+- ar: الجنة
+  sensitive: true
+  latin: [paradise, jannah, janna, jannat, jenneh, jane]
+  jamharah: {id: 3911, url: 'https://islamic-content.com/dictionary/word/3911', en: Heaven}
+- ar: الأرض
+  latin: [earth, ard, ardh, arḍ]
+  jamharah: {id: 729, url: 'https://islamic-content.com/dictionary/word/729', en: The earth}
+- ar: طين
+  latin: [clay, teen, tin, mud, tein]
+  jamharah: unmatched
+- ar: خليفة
+  sensitive: true
+  latin: [khalifa, khaleefa, khalifah, vicegerent, successor]
+  jamharah: {id: 4765, url: 'https://islamic-content.com/dictionary/word/4765', en: The Caliph, sense: differs}
+# Nuh
+- ar: الفلك
+  latin: [ark, fulk]
+  jamharah: unmatched
+- ar: السفينة
+  latin: [ship, boat, safina, safine, safeene, safeena, safineh]
+  jamharah: {id: 14467, url: 'https://islamic-content.com/dictionary/word/14467', en: null}
+- ar: الطوفان
+  sensitive: true
+  latin: [flood, tufan, toofan, tofan]
+  jamharah: {id: 11921, url: 'https://islamic-content.com/dictionary/word/11921', en: Flood}
+- ar: ابنه
+  latin: [son, ebno, ibno, ibnu, ebnu]
+  query: الابن
+  jamharah: {id: 51, url: 'https://islamic-content.com/dictionary/word/51', en: Son}
+- ar: جبل
+  latin: [mountain, jabal, jabbal, gabal]
+  jamharah: {id: 3761, url: 'https://islamic-content.com/dictionary/word/3761', en: Natural disposition, sense: differs}
+- ar: قومه
+  latin: [people, qawm, 2awm, 2awmo, qawmo, qawmuhu]
+  query: القوم
+  jamharah: unmatched
+- ar: الماء
+  latin: [water, maa2, maa, mayy, mayye, moya]
+  jamharah: unmatched
+- ar: يسخرون
+  sensitive: true
+  latin: [mocked, mock, laughed, yes5aro, yis5aro, sakhar, sa5ar, yeshza2o]
+  query: السخرية
+  jamharah: {id: 5569, url: 'https://islamic-content.com/dictionary/word/5569', en: Derision}
+# Ibrahim
+- ar: الأصنام
+  sensitive: true
+  latin: [idols, idol, statues, asnam, asnaam, sanam]
+  jamharah: {id: 1184, url: 'https://islamic-content.com/dictionary/word/1184', en: Idols}
+- ar: النار
+  sensitive: true
+  latin: [fire, nar, naar]
+  jamharah: {id: 10295, url: 'https://islamic-content.com/dictionary/word/10295', en: Fire}
+- ar: بردا
+  latin: [cool, cold, bard, bardan]
+  query: البرد
+  jamharah: {id: 11589, url: 'https://islamic-content.com/dictionary/word/11589', en: Cold}
+- ar: أبيه
+  latin: [father, abuh, abuhu, abooh, abou, abo]
+  query: الأب
+  jamharah: {id: 2, url: 'https://islamic-content.com/dictionary/word/2', en: Father, sense: unclear}
+- ar: آزر
+  latin: [azar, aazar]
+  jamharah: unmatched
+- ar: كوكبا
+  latin: [star, stars, kawkab, kawkaban, najm, njoum, nujum]
+  query: الكوكب
+  jamharah: unmatched
+- ar: القمر
+  latin: [moon, qamar, 2amar, amar]
+  jamharah: unmatched
+- ar: الشمس
+  latin: [sun, shams, shamss]
+  jamharah: unmatched
+- ar: البيت
+  sensitive: true
+  latin: [kaaba, ka3ba, kabah, kaba, house, bayt, beit]
+  jamharah: {id: 11596, url: 'https://islamic-content.com/dictionary/word/11596', en: Dwelling/House, sense: differs}
+- ar: الذبح
+  sensitive: true
+  latin: [sacrifice, slaughter, dhab7, zab7, dab7, dhabh, zabh, dabe7]
+  jamharah: {id: 4988, url: 'https://islamic-content.com/dictionary/word/4988', en: Slaughter}
+- ar: رؤيا
+  sensitive: true
+  latin: [dream, dreams, dreamed, 7elem, 7elm, 7ilm, helm, manam, ro2ya, roya, ru2ya]
+  jamharah: {id: 5372, url: 'https://islamic-content.com/dictionary/word/5372', en: Dream}
+- ar: الطير
+  latin: [birds, bird, tyour, teer, tuyur, tyoor, 3asafeer]
+  jamharah: unmatched
+# Yusuf
+- ar: إخوة
+  latin: [brothers, ikhwe, ekhwe, ikhwa, ikhwat, ekhwato, ikhwan, 5wato, ekhweh]
+  jamharah: {id: 540, url: 'https://islamic-content.com/dictionary/word/540', en: Brotherhood, sense: differs}
+- ar: الجب
+  latin: [well, pit, bir, bi2r, jubb, jub]
+  jamharah: {id: 3749, url: 'https://islamic-content.com/dictionary/word/3749', en: Cutting a man’s genital, sense: differs}
+- ar: الذئب
+  latin: [wolf, di2b, dhi2b, deeb, deib, zi2b, theeb]
+  jamharah: unmatched
+- ar: القميص
+  latin: [shirt, 2amis, qamis, ameez, 2ameez, qamees]
+  jamharah: {id: 14597, url: 'https://islamic-content.com/dictionary/word/14597'}
+- ar: السجن
+  latin: [prison, jail, sijn, sejn, sjn, segn, habs]
+  jamharah: {id: 5555, url: 'https://islamic-content.com/dictionary/word/5555'}
+- ar: الملك
+  latin: [king, malik, malek, malak]
+  jamharah: {id: 9975, url: 'https://islamic-content.com/dictionary/word/9975'}
+- ar: مصر
+  latin: [egypt, masr, misr, mesr]
+  jamharah: {id: 12303, url: 'https://islamic-content.com/dictionary/word/12303'}
+- ar: العزيز
+  latin: [aziz, 3aziz, al3aziz]
+  jamharah: {id: 6870, url: 'https://islamic-content.com/dictionary/word/6870'}
+- ar: الكيل
+  latin: [grain, measure, kayl, keil]
+  jamharah: {id: 12163, url: 'https://islamic-content.com/dictionary/word/12163'}
+- ar: بقرات
+  latin: [cows, cow, ba2arat, baqarat, ba2ar]
+  query: البقرة
+  jamharah: unmatched
+- ar: بصيرا
+  latin: [sight, eyes, blind, basar, nazar, 3ayneh, 3ayno]
+  query: البصر
+  jamharah: {id: 2089, url: 'https://islamic-content.com/dictionary/word/2089'}
+# Musa
+- ar: فرعون
+  latin: [pharaoh, firaun, firawn, fir3on, fer3on, far3oun, fir3awn, fer3oun]
+  jamharah: unmatched
+- ar: عصا
+  latin: [staff, stick, 3asa, 3assa, 3asaya, asa]
+  jamharah: {id: 6889, url: 'https://islamic-content.com/dictionary/word/6889'}
+- ar: البحر
+  latin: [sea, ba7r, bahr, ba7er]
+  jamharah: {id: 11575, url: 'https://islamic-content.com/dictionary/word/11575'}
+- ar: اليم
+  latin: [river, nile, yamm, yam, nahr]
+  jamharah: unmatched
+- ar: أم موسى
+  latin: [mother, umm, omm, em, imm, emmo, ommo]
+  jamharah: unmatched
+- ar: التابوت
+  latin: [box, basket, chest, tabut, taboot, sandou2]
+  jamharah: {id: 2299, url: 'https://islamic-content.com/dictionary/word/2299'}
+- ar: السحرة
+  sensitive: true
+  latin: [magicians, sorcerers, magician, sa7ara, s7ara, sahara, sa7re]
+  jamharah: unmatched
+- ar: حية
+  latin: [snake, serpent, 7aye, 7ayye, ta3ban, thu3ban]
+  jamharah: unmatched
+- ar: الطور
+  latin: [mount, tur, toor, sinai, sina]
+  jamharah: unmatched
+- ar: عبدا من عبادنا
+  sensitive: true
+  latin: [khidr, khader, kheder, khadir, 5edr, righteous servant]
+  jamharah: unmatched
+- ar: الجدار
+  latin: [wall, jidar, jedar, 7eet, 7ayt]
+  jamharah: {id: 11729, url: 'https://islamic-content.com/dictionary/word/11729'}
+- ar: الغلام
+  latin: [boy, ghulam, ghoulam, walad, sabi]
+  jamharah: {id: 7304, url: 'https://islamic-content.com/dictionary/word/7304'}
+# Hadith topics
+- ar: صدقة
+  sensitive: true
+  latin: [charity, sadaqa, sadaqah, sada2a, sadaka]
+  jamharah: {id: 11880, url: 'https://islamic-content.com/dictionary/word/11880', en: Charity}
+- ar: تبسمك
+  sensitive: true
+  latin: [smile, smiling, ibtisama, btisame, bitsama]
+  query: التبسم
+  jamharah: {id: 2373, url: 'https://islamic-content.com/dictionary/word/2373', en: Smiling}
+- ar: تغضب
+  sensitive: true
+  latin: [anger, angry, ghadab, ghadeb, za3al, 3asabi]
+  query: الغضب
+  jamharah: {id: 7298, url: 'https://islamic-content.com/dictionary/word/7298', en: Anger}
+- ar: الجار
+  sensitive: true
+  latin: [neighbor, neighbour, jar, jaar, jiran]
+  jamharah: {id: 14366, url: 'https://islamic-content.com/dictionary/word/14366', en: null}
+- ar: النيات
+  sensitive: true
+  latin: [intention, intentions, niyyah, niye, niyya, niyyat]
+  query: النية
+  jamharah: {id: 10653, url: 'https://islamic-content.com/dictionary/word/10653', en: Intention}
+- ar: الصدق
+  sensitive: true
+  latin: [truth, honesty, sidq, sed2, sidi2]
+  jamharah: {id: 6197, url: 'https://islamic-content.com/dictionary/word/6197', en: Telling the truth}
+- ar: الكذب
+  sensitive: true
+  latin: [lie, lying, lies, kizb, kedeb, kidb, kezb]
+  jamharah: {id: 8137, url: 'https://islamic-content.com/dictionary/word/8137', en: Lies}
+- ar: الرحمة
+  sensitive: true
+  latin: [mercy, merciful, ra7ma, rahma, ra7meh]
+  jamharah: {id: 5170, url: 'https://islamic-content.com/dictionary/word/5170', en: Mercy}
+- ar: كلب
+  latin: [dog, kalb, kaleb]
+  jamharah: {id: 12161, url: 'https://islamic-content.com/dictionary/word/12161'}
+- ar: طعام
+  latin: [eat, eating, food, akl, ta3am, aakol]
+  jamharah: {id: 6576, url: 'https://islamic-content.com/dictionary/word/6576'}
+- ar: الكلمة الطيبة
+  sensitive: true
+  latin: [kind word, good word, kilme, kalima, tayybe, tayyiba]
+  jamharah: {id: 8233, url: 'https://islamic-content.com/dictionary/word/8233', en: The good word, sense: unclear}
+- ar: الأذى عن الطريق
+  sensitive: true
+  latin: [road, path, street, tari2, tariq, adha, adhan, harm]
+  query: إماطة الأذى
+  jamharah: {id: 1563, url: 'https://islamic-content.com/dictionary/word/1563', en: Removal of harmful objects}
+- ar: الصلاة
+  sensitive: true
+  latin: [prayer, prayers, salah, salat, salaa, salaat, sala]
+  jamharah: {id: 6327, url: 'https://islamic-content.com/dictionary/word/6327', en: Prayer}
+- ar: الصيام
+  sensitive: true
+  latin: [fasting, fast, siyam, sawm, siyaam, soum]
+  jamharah: {id: 14515, url: 'https://islamic-content.com/dictionary/word/14515', en: null}
+- ar: لأخيه
+  latin: [brother, a5oh, akhoh, akhih, a5uh]
+  query: الأخ
+  jamharah: {id: 399, url: 'https://islamic-content.com/dictionary/word/399'}
+- ar: الشديد
+  latin: [strong, strength, 2awi, qawi, shadeed, shadid]
+  jamharah: unmatched
+- ar: الرفق
+  sensitive: true
+  latin: [gentle, gentleness, rifq, kind, kindness, lutf]
+  jamharah: {id: 5262, url: 'https://islamic-content.com/dictionary/word/5262', en: Gentleness}
+- ar: السلام
+  sensitive: true
+  latin: [salam, greeting, greet, peace]
+  jamharah: {id: 5648, url: 'https://islamic-content.com/dictionary/word/5648', en: Peace, sense: unclear}
+- ar: الطهور
+  sensitive: true
+  latin: [purity, clean, cleanliness, tahara, nadafa, tuhur]
+  jamharah: {id: 14522, url: 'https://islamic-content.com/dictionary/word/14522', en: null}
+- ar: تحاسدوا
+  sensitive: true
+  latin: [envy, jealousy, jealous, 7asad, hasad]
+  query: الحسد
+  jamharah: {id: 4306, url: 'https://islamic-content.com/dictionary/word/4306', en: Envy}
+- ar: كربة
+  latin: [relieve, relief, distress, kurba, karb]
+  jamharah: unmatched
+- ar: خمس
+  sensitive: true
+  latin: [pillars, pillar, arkan, five, 5ams, khams]
+  query: أركان الإسلام
+  jamharah: unmatched
+- ar: القرآن
+  sensitive: true
+  latin: [quran, koran, qur2an, 2ur2an, quraan]
+  jamharah: {id: 7771, url: 'https://islamic-content.com/dictionary/word/7771', en: The Qur’an}
+# Reference package, page 7: the sample glossary (term, English equivalent, usage rule)
+- ar: الإسلام
+  origin: package_page_7
+  en: Islam
+  usage_rule: Submission to Allah through tawhid and obedience; explained from its context, never reduced to a general cultural meaning.
+  latin: [islam, islaam, eslam]
+  jamharah: {id: 1018, url: 'https://islamic-content.com/dictionary/word/1018', en: Islam}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: التوحيد
+  origin: package_page_7
+  en: Tawhid / Oneness of God
+  usage_rule: Keep the term and explain it as singling Allah out in lordship, worship and the names and attributes revelation gives Him; never a translation that suggests mere numerical oneness.
+  latin: [tawhid, tawheed, tauhid, oneness of god]
+  jamharah: {id: 3529, url: 'https://islamic-content.com/dictionary/word/3529', en: Monotheism}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: العبادة
+  origin: package_page_7
+  en: Worship
+  usage_rule: Every act of the heart, tongue and limbs by which a servant draws near to Allah; not limited to rituals.
+  latin: [worship, ibada, ibadah, 3ibada, 3ibadah, 3ebade]
+  jamharah: {id: 6732, url: 'https://islamic-content.com/dictionary/word/6732', en: Worship}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: النبوة
+  origin: package_page_7
+  en: Prophethood
+  usage_rule: Allah's choosing of prophets through revelation; kept distinct from human religious leadership.
+  latin: [prophethood, nubuwwa, nubuwwah, nubuwah, nobowa, nboweh]
+  jamharah: {id: 10342, url: 'https://islamic-content.com/dictionary/word/10342', en: Prophethood}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: الوحي
+  origin: package_page_7
+  en: Revelation
+  usage_rule: What Allah revealed to His prophets; avoid loose uses that suggest personal inspiration.
+  latin: [revelation, wahy, wahi, wa7y, wa7i]
+  jamharah: {id: 10849, url: 'https://islamic-content.com/dictionary/word/10849', en: Revelation}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: الشريعة
+  origin: package_page_7
+  en: Sharia / Islamic law and guidance
+  usage_rule: Explained from its context; never reduced to punishments or criminal law.
+  latin: [sharia, shariah, sharee3a, shari3a]
+  jamharah: {id: 5979, url: 'https://islamic-content.com/dictionary/word/5979', en: The sharia}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: الحديث
+  origin: package_page_7
+  en: Hadith
+  usage_rule: What is transmitted from the Prophet (peace be upon him) of word, deed or approval; its grading is stated whenever it is used as evidence.
+  latin: [hadith, hadeeth, 7adith, 7adeeth, hadis]
+  jamharah: {id: 4139, url: 'https://islamic-content.com/dictionary/word/4139', en: Hadith}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: السنة
+  origin: package_page_7
+  en: Sunnah
+  usage_rule: The Prophet's (peace be upon him) guidance and way; its exact meaning follows the scholarly context.
+  latin: [sunnah, sunna, sunneh]
+  jamharah: {id: 5744, url: 'https://islamic-content.com/dictionary/word/5744', en: The sunnah}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: الفتوى
+  origin: package_page_7
+  en: Fatwa
+  usage_rule: A shar'i answer by a qualified person to a case or question; never equated with general information.
+  latin: [fatwa, fatwah, fatawa]
+  jamharah: {id: 7399, url: 'https://islamic-content.com/dictionary/word/7399', en: Fatwa}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}
+- ar: الدعوة
+  origin: package_page_7
+  en: Da'wah / Invitation to Islam
+  usage_rule: Introducing and inviting to Islam with wisdom; the English equivalent is chosen by context and audience.
+  latin: [dawah, da3wa, da3wah, da3weh]
+  jamharah: {id: 4890, url: 'https://islamic-content.com/dictionary/word/4890', en: Invitation}
+  provenance: {en: package_page_7, usage_rule: package_page_7, latin: model_proposed, jamharah: jamharah}

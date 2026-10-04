@@ -12,6 +12,25 @@ Faith topics are answered only from the corpus. They are decided before small
 talk and never reach the persona, so casual chat cannot talk about faith from
 model memory, whatever the persona would have said.
 
+conversation-policy-v2 (test/corpus-tasks): every fixed reply is given in the
+language of the child's message (Arabic for Arabic script and for Arabizi,
+English otherwise); an Arabizi question is searched with Arabic terms
+(`arabizi.expand`); an answer over religious passages (Quran, tafsir, hadith)
+is handled as faith even when the question did not name a faith term, so it
+gets the faith prompt (rag-answer-v3), the first-person and quotation checks
+(grounding-v3), the faith judge (`judge.py`) and the faith abstention; and
+Arabic small talk gets reviewed Arabic copy, because the persona prompt and its
+checks are English only.
+
+conversation-policy-v3 (test/corpus-tasks-serving): a verified faith answer
+passes the post-generation checks (`checks.py`: first person, faith terms,
+answered, addressee, scene, translation, then the judge), each recorded in
+provenance; a question asking whether Robert is a person or a scholar gets an
+honest fixed reply (§16); a question quoting an ayah with altered words gets
+the exact ayah from the release (§14); Arabizi faith terms make a faith topic
+(§15); and an English question over English translations of the meanings gets
+the English faith prompt (rag-answer-v4).
+
 Provenance (release, model, prompt, retriever, verifier, embedder, chat prompt
 and chat checker versions) travels with every result and is logged once per
 answer on `companion_api.rag`. The question, the passages, the answer and the
@@ -25,33 +44,42 @@ import random
 from time import perf_counter
 from typing import NamedTuple
 
-from . import chat, normalize, router
+from . import arabizi, chat, checks, curated, judge, normalize, router
+from .ayahs import AyahIndex, surah_name
+from .checks import CheckResult
 from .embeddings import embedder_for
 from .generator import OpenAICompatibleGenerator
-from .grounding import DECLINE, MAX_CHARS, VERIFIER_VERSION, Segment, verify
-from .prompts import PROMPT_VERSION, build_messages
+from .grounding import MAX_CHARS, VERIFIER_VERSION, Segment, verify
+from .prompts import PROMPT_VERSION, build_messages, is_faith_passage
 from .release import ReleaseError, load_release
-from .responses import (ABSTAIN, ABSTAIN_FAITH, CHAT_FALLBACKS, INJECTION, INVITATIONS, PERSONAL_DATA, RULING,
-                        SAFETY, SALAM_RETURN)
+from .responses import FALLBACKS, INVITATIONS_BY_LANGUAGE, SAFETY_REPLY, reply
+from .scene import load_episodes
 from .retriever import RETRIEVER_VERSION, Candidate, HybridRetriever, Retrieval, RetrieverError
 from .types import Chunk, Generator
 
 logger = logging.getLogger("companion_api.rag")
 
-POLICY_VERSION = "conversation-policy-v1"
+POLICY_VERSION = "conversation-policy-v4"
 INVITATION_RATE = 1 / 3  # conversation-policy §8: at most about one chat reply in three
 # A difficult feeling deserves kindness, not a nudge, and a goodbye is a goodbye.
 NO_INVITATION = frozenset({"feeling_negative", "goodbye"})
 # The grounded model said the sources do not answer: outside faith, the persona decides whether it was chat.
 DECLINED = frozenset({"not_in_sources", "mixed_not_in_sources"})
 
-# Route category -> (answer type, fixed reply).
+# Route category -> (answer type, fixed reply name in responses.REPLIES).
 FIXED = {
-    "safety": ("safety", SAFETY),
-    "personal_data": ("redirected", PERSONAL_DATA),
-    "ruling": ("redirected", RULING),
-    "injection": ("redirected", INJECTION),
+    "safety": ("safety", "safety"),
+    "personal_data": ("redirected", "personal_data"),
+    "ruling": ("redirected", "ruling"),
+    "injection": ("redirected", "injection"),
 }
+
+
+def reply_language(text: str) -> str:
+    """The language a reply to `text` is written in: Arabic for Arabic script or Arabizi, else English."""
+    if normalize.detect_language(text) == "ar" or arabizi.is_arabizi(text):
+        return "ar"
+    return "en"
 
 
 class Source(NamedTuple):
@@ -77,6 +105,8 @@ class AnswerResult:
     reason: str = ""
     # The grounded prompt's verdict when it ran ("ok" or its failure code), even when the persona then answered.
     grounding: str = ""
+    # The post-generation checks a faith answer went through, in order (checks.py); empty otherwise.
+    checks: tuple[CheckResult, ...] = ()
 
     @property
     def citations(self) -> tuple[str, ...]:
@@ -87,8 +117,8 @@ class AnswerResult:
 class Plan:
     """What `prepare` decided before any model call (conversation-policy §2).
 
-    `route` names the step that decided: fixed, language, faith, exact,
-    small_talk or retrieval. `step` is "done" when `result` is final,
+    `route` names the step that decided: fixed, disclosure, language,
+    quran_check, faith, exact, small_talk or retrieval. `step` is "done" when `result` is final,
     "generate" for the grounded prompt and "chat" for the persona.
     """
     route: str
@@ -109,6 +139,10 @@ class AnswerService:
         # Chooses fallback lines and invitations; injectable so tests are deterministic.
         self.rng = rng or random.Random()
         identity = retriever.embedder.identity
+        # The release's ayahs one by one (a misquoted ayah, the scene check) and the episode map of the stories.
+        self.ayahs = AyahIndex(chunk for chunk in retriever.release.chunks
+                               if retriever.include_drafts or chunk.servable)
+        self.verifier = checks.Verifier(load_episodes(), self.ayahs)
         self.provenance = {
             "releaseId": retriever.release.manifest.release_id,
             "model": generator.model,
@@ -119,17 +153,21 @@ class AnswerService:
             "policy": POLICY_VERSION,
             "chatPromptVersion": chat.CHAT_PROMPT_VERSION,
             "chatChecker": chat.CHAT_CHECKER_VERSION,
+            "judge": judge.JUDGE_VERSION,
+            "router": router.ROUTER_VERSION,
+            "checks": checks.CHECKS_VERSION,
+            "curated": curated.CURATED_VERSION,
         }
 
     def _result(self, answer_type: str, text: str, reason: str, segments: tuple[Segment, ...] | None = None,
                 sources: tuple[Source, ...] = ()) -> AnswerResult:
         return AnswerResult(answer_type, text, segments or (Segment(text, ()),), sources, dict(self.provenance), reason)
 
-    def _abstain(self, reason: str) -> AnswerResult:
-        return self._result("abstained", ABSTAIN, reason)
+    def _abstain(self, reason: str, language: str = "en") -> AnswerResult:
+        return self._result("abstained", reply("abstain", language), reason)
 
-    def _abstain_faith(self, reason: str) -> AnswerResult:
-        return self._result("abstained", ABSTAIN_FAITH, "faith_abstain:" + reason)
+    def _abstain_faith(self, reason: str, language: str = "en") -> AnswerResult:
+        return self._result("abstained", reply("abstain_faith", language), "faith_abstain:" + reason)
 
     def _reviewed(self, candidate: Candidate | None) -> AnswerResult | None:
         if candidate is None or len(candidate.chunk.text) > MAX_CHARS:
@@ -142,8 +180,11 @@ class AnswerService:
         found = router.route(text, self.classifiers)
         if found.category == "retrieve":
             return None
-        answer_type, reply = FIXED[found.category]
-        return self._result(answer_type, reply, "route:" + found.category)
+        answer_type, name = FIXED[found.category]
+        if found.category == "safety":
+            # Abuse and grooming never send the child back to a parent; distress gets a calmer line.
+            name = SAFETY_REPLY.get(found.reason_code, "safety")
+        return self._result(answer_type, reply(name, reply_language(text)), "route:" + found.category)
 
     def route(self, text: str) -> AnswerResult | None:
         """A fixed reply, or None when the question needs retrieval. Cheap and deterministic."""
@@ -166,15 +207,36 @@ class AnswerService:
         fixed = self._route(text)
         if fixed is not None:
             return Plan("fixed", fixed)
-        if normalize.detect_language(text) != self.language:
-            # The router's patterns and both detectors only read this service's language.
-            return Plan("language", self._abstain("language_mismatch"))
+        # "Are you a real person?", "هل أنت شيخ؟": an honest fixed reply in any service language, before the faith
+        # step, because the question names a faith word ("sheikh") without asking about faith (§16).
+        disclosed = router.disclosure(text)
+        if disclosed is not None:
+            return Plan("disclosure", self._result("chat", reply("disclosure", disclosed), "disclosure"))
+        language = reply_language(text)
+        if language != self.language:
+            # The corpus holds this service's language only; the abstention is in the child's language.
+            return Plan("language", self._abstain("language_mismatch", language))
+        # An ayah quoted with altered words gets the exact ayah, never an answer built on the altered text (§14).
+        corrected = self._quran_correction(text, language)
+        if corrected is not None:
+            return Plan("quran_check", corrected)
+        # What to say on an occasion the curated package covers, or how to do a part of the prayer it teaches:
+        # its items verbatim, with no model call (curated.py, conversation-policy §17).
+        curated_reply = self._curated(text, language)
+        if curated_reply is not None:
+            return Plan("curated", curated_reply)
         where = {"language": self.language, "age_band": self.age_band}
+        # An Arabizi question is searched with Arabic terms, narrowed to the prophets it names.
+        query, prophets = text, ()
+        if arabizi.is_arabizi(text):
+            expansion = arabizi.expand(text)
+            query, prophets = expansion.query, expansion.prophet_ids
+        search = dict(where, prophet_ids=prophets)
         if router.is_faith_topic(text):
             # Only the corpus answers faith: never small talk, never the persona.
-            retrieval = self.retriever.retrieve(text, **where)
+            retrieval = self.retriever.retrieve(query, **search) if query else Retrieval((), True)
             if retrieval.weak:
-                return Plan("faith", self._abstain_faith("weak_evidence"), retrieval, faith=True)
+                return Plan("faith", self._abstain_faith("weak_evidence", language), retrieval, faith=True)
             reviewed = self._reviewed(retrieval.reviewed)
             if reviewed is not None:
                 return Plan("faith", reviewed, retrieval, faith=True)
@@ -185,14 +247,44 @@ class AnswerService:
             return Plan("exact", exact, Retrieval((candidate,), False, candidate))
         intent = router.small_talk(text)
         if intent is not None:
+            if language == "ar":
+                # The persona prompt and its checks read English only: reviewed Arabic copy instead.
+                return Plan("small_talk", self._chat_reply(intent, None, "chat_fixed", language), intent=intent)
             return Plan("small_talk", step="chat", intent=intent)
-        retrieval = self.retriever.retrieve(text, **where)
+        retrieval = self.retriever.retrieve(query, **search) if query else Retrieval((), True)
         if retrieval.weak:
+            if language == "ar":
+                return Plan("retrieval", self._chat_reply("other", None, "chat_fixed", language), retrieval)
             return Plan("retrieval", None, retrieval, "chat")
         reviewed = self._reviewed(retrieval.reviewed)
         if reviewed is not None:
             return Plan("retrieval", reviewed, retrieval)
-        return Plan("retrieval", None, retrieval, "generate")
+        # A religious best passage makes it a faith answer, whatever words the question used.
+        faith = is_faith_passage(retrieval.candidates[0].chunk)
+        return Plan("retrieval", None, retrieval, "generate", faith=faith)
+
+    def _curated(self, text: str, language: str) -> AnswerResult | None:
+        if language != "ar":
+            return None
+        selection = curated.select(text, self.retriever.eligible(language=language, age_band=self.age_band))
+        if selection is None:
+            return None
+        segments = tuple(Segment(chunk.text.strip(), (chunk.id,)) for chunk in selection.chunks)
+        sources = tuple(Source.of(chunk) for chunk in selection.chunks)
+        return self._result("grounded", curated.text(selection), "curated_verbatim:" + selection.topic, segments,
+                            sources)
+
+    def _quran_correction(self, text: str, language: str) -> AnswerResult | None:
+        near = self.ayahs.near_quote(text)
+        if near is None:
+            return None
+        ayah, chunk = near.ayah, near.ayah.chunk
+        surah = surah_name(chunk) or ("سورة" if language == "ar" else "Surah") + f" {ayah.surah}"
+        corrected = reply("quran_correction", language).format(surah=surah, number=ayah.number, ayah=ayah.text)
+        if len(corrected) > MAX_CHARS:  # never cut an ayah: name it instead
+            corrected = reply("quran_correction_named", language).format(surah=surah, number=ayah.number)
+        return self._result("grounded", corrected, "quran_correction", (Segment(corrected, (chunk.id,)),),
+                            (Source.of(chunk),))
 
     def answer(self, text: str) -> AnswerResult:
         """The full path. Never raises."""
@@ -214,30 +306,43 @@ class AnswerService:
             # content, but an unexpected exception's message might.
             logger.warning("rag_answer_error type=%s", type(exception).__name__)
             code = "error:" + type(exception).__name__
-            result = self._abstain_faith(code) if faith or _faith_or_false(text) else self._abstain(code)
+            language = _language_or_english(text)
+            result = (self._abstain_faith(code, language) if faith or _faith_or_false(text)
+                      else self._abstain(code, language))
         self._log(result, passages, started)
         return result
 
     def _generate(self, text: str, passages: list[Chunk], faith: bool) -> AnswerResult:
-        output = self.generator.complete(build_messages(text, passages), max_tokens=self.max_tokens)
+        language = reply_language(text)
+        # The prompt follows the best passage: the faith prompt when it is religious text (Quran, tafsir, hadith).
+        # A faith question over app-help passages keeps the app-help prompt, where Robert speaking as "I" is right.
+        output = self.generator.complete(build_messages(text, passages, faith=is_faith_passage(passages[0]),
+                                                        language=language), max_tokens=self.max_tokens)
         grounding = verify(output, passages)
         if grounding.ok:
             released = " ".join(segment.text for segment in grounding.segments)
             by_id = {chunk.id: chunk for chunk in passages}
-            cited = list(dict.fromkeys(chunk_id for segment in grounding.segments for chunk_id in segment.citations))
-            unanswered = _unanswered_faith(text, released, [by_id[chunk_id] for chunk_id in cited]) if faith else None
-            if unanswered is not None:
-                return replace(self._abstain_faith(unanswered), grounding=unanswered)
+            cited = [by_id[chunk_id] for chunk_id in
+                     dict.fromkeys(chunk_id for segment in grounding.segments for chunk_id in segment.citations)]
+            # Whatever the prompt, an answer that cites religious text is a faith answer: it passes every
+            # post-generation check, the faith judge last (checks.py).
+            results: tuple[CheckResult, ...] = ()
+            if faith or any(is_faith_passage(chunk) for chunk in cited):
+                answer = checks.Answer(text, released, grounding.segments, tuple(cited), router.is_faith_topic(text))
+                results, problem = self.verifier.run(answer, self.generator)
+                if problem is not None:
+                    return replace(self._abstain_faith(problem, language),
+                                   grounding=problem.removeprefix("grounding:"), checks=results)
             result = self._result("grounded", released, "grounded", grounding.segments,
-                                  tuple(Source.of(by_id[chunk_id]) for chunk_id in cited))
-            return replace(result, grounding="ok")
+                                  tuple(Source.of(chunk) for chunk in cited))
+            return replace(result, grounding="ok", checks=results)
         failure = str(grounding.failure)
         if faith:
-            result = self._abstain_faith("grounding:" + failure)
-        elif failure in DECLINED:
+            result = self._abstain_faith("grounding:" + failure, language)
+        elif failure in DECLINED and language == "en":
             result = self._chat(text, None)
         else:
-            result = self._abstain("grounding:" + failure)
+            result = self._abstain("grounding:" + failure, language)
         return replace(result, grounding=failure)
 
     def _chat(self, text: str, intent: str | None) -> AnswerResult:
@@ -275,28 +380,30 @@ class AnswerService:
             return self._chat_reply(intent, verdict, "chat_fallback:" + str(verdict.failure))
         return self._chat_reply(intent, verdict, "chat")
 
-    def _chat_reply(self, intent: str | None, verdict: chat.ChatVerdict | None, reason: str) -> AnswerResult:
+    def _chat_reply(self, intent: str | None, verdict: chat.ChatVerdict | None, reason: str,
+                    language: str = "en") -> AnswerResult:
         """A chat turn: the checked reply or reviewed fallback copy, now and then with an invitation (§7, §8)."""
         feeling = verdict.feeling if verdict is not None else intent == "feeling_negative"
+        fallbacks = FALLBACKS.get(language, FALLBACKS["en"])
         if reason == "chat":
-            reply = verdict.reply
+            text = verdict.reply
         else:
             # A difficult feeling the model reported always gets the calm line that points to a trusted
             # grown-up, even when the detector did not see it ("I'm scared of the dark").
             distress = verdict is not None and verdict.distress
             fallback = "feeling_negative" if distress else intent or "other"
-            reply = self.rng.choice(CHAT_FALLBACKS.get(fallback, CHAT_FALLBACKS["other"]))
+            text = self.rng.choice(fallbacks.get(fallback, fallbacks["other"]))
         if not feeling and intent not in NO_INVITATION and self.rng.random() < INVITATION_RATE:
-            reply = f"{reply} {self.rng.choice(INVITATIONS)}"
-        return self._result("chat", reply, reason)
+            text = f"{text} {self.rng.choice(INVITATIONS_BY_LANGUAGE.get(language, INVITATIONS_BY_LANGUAGE['en']))}"
+        return self._result("chat", text, reason)
 
     def _return_salam(self, text: str, result: AnswerResult) -> AnswerResult:
         """A child's salam is returned before a chat reply or an abstention that does not already return it (§7)."""
         if result.answer_type not in ("chat", "abstained") or not router.has_salam(text) \
                 or router.has_salam(result.text):
             return result
-        reply = f"{SALAM_RETURN} {result.text}"
-        return replace(result, text=reply, segments=(Segment(reply, ()),))
+        returned = f"{reply('salam_return', reply_language(text))} {result.text}"
+        return replace(result, text=returned, segments=(Segment(returned, ()),))
 
     def _log(self, result: AnswerResult, passages: int, started: float):
         fields = {
@@ -321,29 +428,17 @@ class AnswerService:
             fields["outcome"] = result.reason
         if result.grounding and result.grounding != "ok":
             fields["grounding"] = result.grounding
+        if result.checks:
+            fields["checks"] = checks.summary(result.checks)
+            fields["checks_version"] = self.provenance["checks"]
         logger.info("rag_answer %s", json.dumps(fields, sort_keys=True), extra={"rag": fields})
 
 
-def _unanswered_faith(question: str, answer: str, cited: list[Chunk]) -> str | None:
-    """Why a verified answer on a faith topic is not an answer from the corpus, or None (§2 step 3).
-
-    Found on the real model: "Hi Robert! What is Ramadan?" drew "I am a learning
-    companion ... so I cannot answer about what Ramadan is [1]", and "Tell me a
-    story about the prophets" drew "I am not an imam or a scholar, so for
-    questions about prophets, please ask a parent [4]". Both pass the lexical
-    support check, because every word is in passages about Robert. So a decline
-    is refused, and the answer and the passages it cites must both mention the
-    question's own faith terms (any faith term when the question has none of
-    its own, such as "What does alhamdulillah mean?").
-    """
-    if DECLINE.search(router.matchable(answer)):
-        return "declined"
-    wanted = router.faith_words(question)
-    for text in (answer, " ".join(chunk.text for chunk in cited)):
-        found = router.faith_words(text)
-        if not (found & wanted if wanted else found):
-            return "off_topic"
-    return None
+def _language_or_english(text: str) -> str:
+    try:
+        return reply_language(text)
+    except Exception:  # an error path must not raise again
+        return "en"
 
 
 def _faith_or_false(text: str) -> bool:
@@ -370,7 +465,7 @@ def assemble(settings, release_dir: str | Path, *, include_drafts: bool = False)
                                               settings.llm_timeout_seconds)
     except (RetrieverError, ValueError) as exception:
         raise RuntimeError(f"Grounded answers cannot start: {exception}") from None
-    return AnswerService(retriever, generator)
+    return AnswerService(retriever, generator, language=getattr(settings, "rag_language", "en"))
 
 
 def _record_provenance():
@@ -387,6 +482,8 @@ def _record_provenance():
 def build_answer_service(settings) -> AnswerService:
     """The API's answer service. Fails closed: any configuration problem stops startup."""
     settings.require_rag()
-    service = assemble(settings, settings.rag_release)
+    # Drafts reach the API only in the operator's corpus preview (§9.1); the bootstrap then says so,
+    # and an app built without that notice refuses the service.
+    service = assemble(settings, settings.rag_release, include_drafts=settings.rag_preview_drafts)
     _record_provenance()
     return service
