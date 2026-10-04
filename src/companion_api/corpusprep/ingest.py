@@ -33,6 +33,19 @@ COLLECTION_AR = {"bukhari": "صحيح البخاري", "muslim": "صحيح مس�
 COLLECTION_WORK = {"bukhari": "Sahih al-Bukhari", "muslim": "Sahih Muslim"}
 _BOUNDARY = re.compile(r"[.؟!:]\s+|[،,]\s+")
 _SENTENCE = re.compile(r"[.؟!:]\s+")
+# A translation's footnote markers («Lord[1] of», «Grace[4] , not», «error). [6], [7]»): the notes themselves are
+# a separate field, so in a unit the markers point at nothing. Bracketed words («[saying]») are translation text.
+_FOOTNOTE_MARKERS = re.compile(r"\s*\[\d{1,4}\](?:\s*,?\s*\[\d{1,4}\])*(?:\s+(?=[,.;:!?]))?")
+
+
+def strip_footnote_markers(text: str) -> str:
+    """`text` without numeric footnote markers; the canonical record keeps them (it stays verbatim)."""
+    def gap(match: re.Match) -> str:
+        before = match.string[match.start() - 1:match.start()]
+        after = match.string[match.end():match.end() + 1]
+        # «word[1]word» or «word [1]word»: keep the words apart; otherwise the surrounding spacing stays as it was
+        return " " if before and after and not before.isspace() and after.isalnum() else ""
+    return _FOOTNOTE_MARKERS.sub(gap, text).strip()
 
 
 @dataclass
@@ -157,7 +170,9 @@ def translation_documents(segments: list[Segment], records: dict[tuple[int, int]
     A translation of the meanings is not the Quran: tier 1 (an explanation), contentType `quran_translation`
     (al-Mukhtasar's English: `tafsir_translation`), and the header says it is a translation. An ayah whose
     record is labelled for another ayah (`label_mismatch`) is left out. One text for several consecutive ayat
-    is kept once and cites every ayah, as for al-Muyassar. The source is `candidate`: never in a release.
+    is kept once and cites every ayah, as for al-Muyassar. Numeric footnote markers are left out of the unit
+    text (`strip_footnote_markers`; the canonical record keeps them). The source is `candidate`: never in a
+    release.
     """
     built = Built()
     source = _translation_source(registry, translation.source_id, translation.translator)
@@ -174,12 +189,13 @@ def translation_documents(segments: list[Segment], records: dict[tuple[int, int]
                 built.skip(f"{translation.slug}_labelled_for_another_ayah")
                 continue
             ref = f"quran:{s}:{ayah}"
-            if record["text"] in seen:
-                seen[record["text"]]["sourceRefs"].append(ref)
+            text = strip_footnote_markers(record["text"])
+            if text in seen:
+                seen[text]["sourceRefs"].append(ref)
                 continue
-            unit = {"id": f"a{ayah}", "text": record["text"], "reference": ref, "section": item.id,
+            unit = {"id": f"a{ayah}", "text": text, "reference": ref, "section": item.id,
                     "keepWithNext": False, "sourceRefs": [ref], "parts": []}
-            seen[record["text"]] = unit
+            seen[text] = unit
             units.append(unit)
         if not units:
             continue
