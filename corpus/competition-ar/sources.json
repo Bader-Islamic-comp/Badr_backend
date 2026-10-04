@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "reference_document": {
+    "title": "المرجعية والحزمة العلمية والبيانات",
+    "date_hijri": "1448-03-20",
+    "sha256": "68d22af4d2499b7b0285f63cd080fd575bf3e5af6b72f0d792ef2eb8fb49600e",
+    "stored_in_repository": false
+  },
+  "policy": {
+    "language": "ar",
+    "market": "sa",
+    "age_bands": ["7-9", "10-11"],
+    "curriculum_scope": "الأساسيات المشتركة المسندة إلى المصادر المحددة؛ تُستبعد المسائل المختلف فيها من تعليم الطفل المباشر حتى تُضبط بصياغة معتمدة. لا يُستنتج مذهب الأسرة من بلدها أو اسمها.",
+    "allowed_domains": ["quranpedia.net", "dorar.net"],
+    "sacred_text": "لا يُنشأ نص القرآن أو الحديث من النموذج. نص المصحف محفوظ كما نزل من حزمة Quranpedia الرسمية، منفصلًا عن شرح الطفل، ولا يُعرض حتى الاعتماد البشري.",
+    "interpretation": "كل شرح للطفل مسودة مستقلة عن النص الأصلي، وتحتاج مراجعة بشرية قبل العرض.",
+    "out_of_scope": ["فتوى شخصية", "الحكم على إيمان الناس أو عباداتهم", "مقارنة مذهبية للأطفال", "رواية غير ثابتة", "تفاصيل قصصية مخترعة", "إجابة بلا مرجع"]
+  },
+  "sources": [
+    {
+      "id": "quranpedia-quran",
+      "type": "quran_reference",
+      "work": "القرآن الكريم",
+      "publisher": "موسوعة القرآن الكريم (Quranpedia)",
+      "edition": "مصحف حفص عن عاصم، موافق لطبعة مجمع الملك فهد وفق وصف الناشر",
+      "candidate_dump_version": "2026-10-03",
+      "candidate_dump_url": "https://quranpedia.net/dumps/mushafs-1.json.gz",
+      "candidate_dump_license": "https://quranpedia.net/dumps/LICENSE.md",
+      "license_file": "sources/quranpedia-LICENSE-2026-10-03.md",
+      "license_sha256": "c56adf4ad9f7844f75ae2c249f33fe7fb673c27bd2d883ab14a4c3df511d6692",
+      "candidate_dump_manifest": "https://quranpedia.net/dumps/manifest.json",
+      "manifest_generated_at": "2026-10-03T06:00:47+00:00",
+      "manifest_sha256": "738416b37ecb125cf2a9deeb737a206ae7aeaa11bebdf3ad3a783edc066e4a1e",
+      "candidate_dump_state": "downloaded_and_verified",
+      "source_file": "sources/quranpedia-mushafs-1-2026-10-03.json.gz",
+      "source_bytes": 403040,
+      "source_sha256": "4bd77b139076b487136e7deffda10edb1f4478b553511ddb14e0c9311c5802d3",
+      "license_observation": "يسمح باستعمال البيانات داخل التطبيقات؛ إعادة نشر مجموعة بيانات قابلة للتنزيل تتطلب ذكر Quranpedia.net ورابط الموقع وتاريخ النسخة، مع واجب متابعة التصحيحات.",
+      "translator": null,
+      "identifier_scheme": "quran:<surah>:<first_ayah>[-<last_ayah>]",
+      "reference_url": "https://quranpedia.net/",
+      "verse_url_pattern": "https://quranpedia.net/ayahs/{surah}/{first_ayah}/1",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "canonical Quran text and references, held from publication until review"
+    },
+    {
+      "id": "dorar-hadith",
+      "type": "hadith_verification",
+      "work": "الموسوعة الحديثية",
+      "publisher": "مؤسسة الدرر السنية",
+      "edition": "online; hadith collection and number stored per item",
+      "translator": null,
+      "identifier_scheme": "hadith:<collection>:<number>",
+      "reference_url": "https://dorar.net/hadith",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "short invocations and verification links; no bulk hadith text"
+    },
+    {
+      "id": "dorar-fiqh",
+      "type": "fiqh_reference",
+      "work": "الموسوعة الفقهية",
+      "publisher": "مؤسسة الدرر السنية",
+      "edition": "online; page URL stored in prayer_learning.evidence_urls or item evidence_url",
+      "translator": null,
+      "identifier_scheme": "fiqh:<topic>:<section>",
+      "reference_url": "https://dorar.net/feqhia",
+      "accessed_on": "2026-10-03",
+      "rights_status": "pending_legal",
+      "usage": "original teaching summaries only"
+    }
+  ],
+  "quran_verse_counts_used": {
+    "1": 7, "2": 286, "3": 200, "4": 176, "5": 120, "6": 165, "7": 206,
+    "9": 129, "14": 52, "17": 111, "19": 98, "20": 135, "21": 112,
+    "26": 227, "27": 93, "28": 88, "61": 14, "96": 19,
+    "112": 4, "113": 5, "114": 6
+  }
+}
