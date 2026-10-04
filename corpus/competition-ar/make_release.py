@@ -31,13 +31,17 @@ def main():
     if args.supersedes and not (releases / args.supersedes / "manifest.json").is_file():
         parser.error("superseded release not found")
     target.mkdir(parents=True)
+    # Third-party files stay out of the package: the release records the registry's pins for them instead.
+    sys.path.insert(0, str(HERE.parents[1] / "src"))
+    from companion_api.corpusprep import registry as registry_module
+    registry = registry_module.load(HERE.parents[1] / "corpus/sources/registry.yaml")
     source_list = json.loads((HERE / "sources.json").read_text(encoding="utf-8"))["sources"]
-    source_files = tuple(
-        source[key] for source in source_list for key in ("source_file", "license_file")
-        if source.get(key)
-    )
+    pinned = {
+        source[key]: registry.get(source[key])["sha256"] for source in source_list
+        for key in ("registry_source_id", "registry_license_source_id") if source.get(key)
+    }
     hashes = {}
-    for name in FILES + source_files:
+    for name in FILES:
         source = (HERE / name).resolve()
         if not source.is_relative_to(HERE):
             parser.error(f"source path escapes corpus directory: {name}")
@@ -50,6 +54,7 @@ def main():
         "created_at": datetime.now(timezone.utc).isoformat(),
         "supersedes": args.supersedes,
         "sha256": hashes,
+        "registry_sources_sha256": pinned,
     }
     (target / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

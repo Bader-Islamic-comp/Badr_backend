@@ -27,3 +27,5 @@ corpus/graph/
 # The words that differ between the Tanzil and King Fahd Complex Quran texts (third-party text);
 # regenerate with scripts/fetch_sources.py
 corpus/reports/quran_text_comparison_details.jsonl
+# The competition package cites the registry's pinned Quranpedia files; third-party dumps are never copied into it
+corpus/competition-ar/sources/
