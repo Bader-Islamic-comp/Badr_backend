@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_sha256": "57768433e3c8243b58df4349a684951ff26ab636583fc7eed2347dc2ed1992e3",
+  "registry_sha256": "4f27dae843f3f6abd58f4261abc96fead70ce092c5dc31e5030d5573f56f2971",
   "normalizer": "norm-v3",
   "sources": {
     "tanzil-quran-uthmani": "7f30c647331a61100ebf24a80507dc0fcdd9f2df97f1312b5b2dfcb982a7f326",
@@ -159,7 +159,8 @@
     "quranpedia-tafsir-sahih-masbur": "f06230977593e563927d00b6487b522d872de02bbe2456833eb01320d19c9a9a",
     "quranpedia-tafsir-mukhtasar": "18fee5e926e9e81c071d2485535793bca4e62dfa532414b6310dc1d9ec63a5c1",
     "quranpedia-tafsir-saadi": "2d76f729e3b0671aa9c11c25fb3880942941c4af70ab331dac16766591428c34",
-    "jamharah-dictionary-entries": "26a3db1a85db94a5fab870da3ee2392a80eebe28a96126d31cf965de72a6e633"
+    "jamharah-dictionary-entries": "26a3db1a85db94a5fab870da3ee2392a80eebe28a96126d31cf965de72a6e633",
+    "competition-ar-content": "ff46f6ba25404c72c1f714a4f97a5e345f6d2575595769ce6e2348a85baa01a2"
   },
   "files": {
     "hadith/adab_mufrad.jsonl": {

@@ -1,0 +1,178 @@
+# The release gate (doc/governance/release-gate.md), checked by `python scripts/check_release_gate.py`.
+#
+# Every item of a switch must be green before /v1/bootstrap may offer that switch to a child:
+#   generativeAnswers  model-written answers and chat outside the adult operators' development mode
+#   voice              push-to-talk
+# kind H = human: every decision item matching `decisions` has an applied, audited final decision
+#          (corpus/governance/decision_state.json and audit.jsonl, as scripts/progress_score.py counts it).
+#          A `policy-<name>` item exists once doc/governance/<name>.md is written.
+# kind M = automated: every `evidence` path exists and every command exits 0; `check` names a check built into
+#          the script.
+schema_version: 1
+switches: [generativeAnswers, voice]
+items:
+  # Gate 0: people and policies --------------------------------------------------------------------------------
+  - id: G01
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Scholarly review board appointed, with its terms of reference and named reviewers
+    owner: Mousa al-Rashdan
+    task: https://app.clickup.com/t/z8q7hbct35
+    decisions: [reviewers, policy-reviewer-policy]
+  - id: G02
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Safeguarding lead appointed and the escalation playbook approved
+    owner: safeguarding lead (not appointed)
+    task: https://app.clickup.com/t/z8q7hbct37
+    decisions: [policy-safeguarding-playbook]
+  - id: G03
+    kind: H
+    gates: [generativeAnswers]
+    text: "DPIA: AI chatbot for under-18s"
+    owner: privacy lead (not appointed)
+    task: https://app.clickup.com/t/z8q7hbct36
+    decisions: [policy-dpia-chatbot]
+  - id: G04
+    kind: H
+    gates: [voice]
+    text: "DPIA: child voice capture for dua practice"
+    owner: privacy lead (not appointed)
+    task: https://app.clickup.com/t/z8q7hbct3a
+    decisions: [policy-dpia-voice]
+  - id: G05
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Children's code and COPPA gap assessment closed
+    owner: legal advisor (not appointed)
+    task: https://app.clickup.com/t/z8q7hbct39
+    decisions: [policy-children-code]
+  - id: G06
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Guardian identity, consent and withdrawal designed and approved
+    owner: product owner
+    task: https://app.clickup.com/t/z8q7hbct3b
+    decisions: [policy-guardian-consent]
+  - id: G07
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Provider due diligence done and a data processing agreement signed (or the model stays self-hosted)
+    owner: legal advisor (not appointed)
+    task: https://app.clickup.com/t/z8q7hbct3c
+    decisions: [policy-provider-dpa]
+  - id: G08
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Retention and deletion policy for transcripts, audio, video and embeddings approved
+    owner: privacy lead (not appointed)
+    task: https://app.clickup.com/t/z8q7hbct3e
+    decisions: [policy-retention]
+  - id: G09
+    kind: H
+    gates: [generativeAnswers]
+    text: Legal review of source licensing; every registered source cleared or rejected
+    owner: Mousa al-Rashdan
+    task: https://app.clickup.com/t/z8q7hbct3f
+    decisions: ["source:*"]
+  - id: G10
+    kind: H
+    gates: [generativeAnswers]
+    text: The "must never" assertions approved (doc/governance/must-never.md)
+    owner: safeguarding lead and scholarly board
+    task: https://app.clickup.com/t/z8q7hbct3d
+    decisions: [policy-must-never]
+  - id: G11
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: This checklist approved (doc/governance/release-gate.md)
+    owner: Mousa al-Rashdan
+    task: https://app.clickup.com/t/z8q7hbct3g
+    decisions: [policy-release-gate]
+  - id: G12
+    kind: H
+    gates: [generativeAnswers, voice]
+    text: Roadmap §18 decisions recorded (age band, market, language, curriculum, madhhab scope, voice, business model, devices)
+    owner: product owner
+    decisions: ["section18:*"]
+  # Corpus and content ----------------------------------------------------------------------------------------
+  - id: G13
+    kind: H
+    gates: [generativeAnswers]
+    text: Corpus policies approved (scope, sources, rights, releases, review workflow, re-review)
+    owner: Mousa al-Rashdan
+    decisions: [policy-scope, policy-source-policy, policy-rights-clearance, policy-releases, policy-review-workflow,
+                policy-re-review-policy]
+  - id: G14
+    kind: H
+    gates: [generativeAnswers]
+    text: Every gold and harmful evaluation question approved or rejected
+    owner: Momen Alhamza (harmful safety items with the safeguarding lead)
+    decisions: ["adam-*", "nuh-*", "ibrahim-*", "yusuf-*", "musa-*", "hadith-*", "page6-*", "ruling_request-*",
+                "out_of_corpus_religious-*", "out_of_scope_general-*", "fabricated_hadith_request-*", "prophet_mixup-*",
+                "prompt_injection-*", "personal_data-*", "distress_disclosure-*", "ai_disclosure-*", "page6_*"]
+  - id: G15
+    kind: H
+    gates: [generativeAnswers]
+    text: Every age-band version written by a person and approved by a qualified reviewer
+    owner: writers and scholarly board
+    decisions: ["*@7-9", "*@10-11"]
+  - id: G16
+    kind: H
+    gates: [generativeAnswers]
+    text: The fixed replies and the prompts approved (rag/responses.py, rag/prompts.py, rag/chat.py)
+    owner: safeguarding lead and scholarly board
+    task: https://app.clickup.com/t/z8q7hbct41
+    decisions: ["copy:replies", "copy:prompts"]
+  # Automated -------------------------------------------------------------------------------------------------
+  - id: A01
+    kind: M
+    gates: [generativeAnswers, voice]
+    text: The server test suite passes
+    evidence: ["PYTHONPATH=src python3 -m pytest -q"]
+  - id: A02
+    kind: M
+    gates: [generativeAnswers]
+    text: The "must never" red-team cases pass and the reviewed copy keeps the rules
+    task: https://app.clickup.com/t/z8q7hbct3z
+    evidence: ["PYTHONPATH=src python3 -m pytest -q tests/test_never.py"]
+  - id: A03
+    kind: M
+    gates: [generativeAnswers]
+    text: Every harmful question ends where its set says, on the served release (no model)
+    task: https://app.clickup.com/t/z8q7hbct3z
+    evidence: ["PYTHONPATH=src python3 scripts/eval_serving.py releases/current_release --check"]
+  - id: A04
+    kind: M
+    gates: [generativeAnswers]
+    text: The served release is on the published channel (approved, non-synthetic content; cleared sources only)
+    check: published_release
+  - id: A05
+    kind: M
+    gates: [generativeAnswers]
+    text: No child content in the index
+    task: https://app.clickup.com/t/z8q7hbct4r
+    evidence: ["PYTHONPATH=src python3 -m pytest -q tests/test_no_child_content.py",
+               "PYTHONPATH=src python3 scripts/scan_index.py"]
+  - id: A06
+    kind: M
+    gates: [generativeAnswers, voice]
+    text: The audit trail verifies and every signed decision applies
+    evidence: ["python3 scripts/verify_audit.py", "python3 scripts/apply_decisions.py --check"]
+  - id: A07
+    kind: M
+    gates: [generativeAnswers]
+    text: The organizers' reference package check passes
+    evidence: ["python3 scripts/check_reference_package.py"]
+  - id: A08
+    kind: M
+    gates: [generativeAnswers, voice]
+    text: CI runs the server tests on every change
+    task: https://app.clickup.com/t/z8q7hbct40
+    evidence: [".github/workflows/*.yml"]
+  - id: A09
+    kind: M
+    gates: [voice]
+    text: "Voice privacy tests: audio in memory, push-to-talk, never persisted"
+    task: https://app.clickup.com/t/z8q7hbct5v
+    evidence: ["tests/test_voice_privacy.py"]

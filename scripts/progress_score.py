@@ -38,10 +38,42 @@ def _latest_methods() -> set[str]:
     return set(json.loads(lines[-1])["methods"]) if lines else set()
 
 
+def decision_state() -> dict:
+    path = ROOT / "corpus/governance/decision_state.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {"items": {}}
+
+
+def check_automated(item: dict, *, no_run: bool, ran: dict, methods: set = frozenset()) -> tuple[bool, str]:
+    """An M item: every evidence path exists and every command exits 0 (`ran` caches commands across items)."""
+    ok, reason = True, ""
+    for evidence in item.get("evidence", []):
+        if evidence.startswith(COMMAND_START):
+            if no_run:
+                continue
+            if evidence not in ran:
+                ran[evidence] = run(evidence, 600)
+            if not ran[evidence][0]:
+                ok, reason = False, f"command failed: {evidence}"
+        elif not glob.glob(str(ROOT / evidence)):
+            ok, reason = False, f"missing {evidence}"
+    lacking = [m for m in item.get("history_methods", []) if m not in methods]
+    if lacking:
+        ok, reason = False, f"not measured: {', '.join(lacking)}"
+    return ok, reason
+
+
+def check_human(item: dict, *, known, state: dict, audited: set) -> tuple[bool, str]:
+    """An H item: every decision item its patterns match has an applied final decision and an audit event."""
+    matched = [i for i in known if any(fnmatch.fnmatchcase(i, pattern) for pattern in item["decisions"])]
+    undecided = [i for i in matched if state["items"].get(i, {}).get("status") not in FINAL_STATES
+                 or i not in audited]
+    reason = f"{len(undecided)}/{len(matched)} items without an applied, audited decision"
+    return bool(matched) and not undecided, reason
+
+
 def score(no_run: bool = False) -> dict:
     config = yaml.safe_load((ROOT / "doc/progress_items.yaml").read_text(encoding="utf-8"))["tasks"]
-    state = json.loads((ROOT / "corpus/governance/decision_state.json").read_text(encoding="utf-8")) \
-        if (ROOT / "corpus/governance/decision_state.json").is_file() else {"items": {}}
+    state = decision_state()
     known = sorted(decisions.known_items(ROOT))
     audited, methods, ran = _audited_items(), _latest_methods(), {}
     rows, total_m, total_h, possible_m = [], 0.0, 0.0, 0.0
@@ -52,28 +84,11 @@ def score(no_run: bool = False) -> dict:
         m_done = h_done = 0.0
         missing = []
         for item in items:
-            ok, reason = True, ""
             if item["kind"] == "M":
                 possible_m += item["weight"] * share
-                for evidence in item.get("evidence", []):
-                    if evidence.startswith(COMMAND_START):
-                        if no_run:
-                            continue
-                        if evidence not in ran:
-                            ran[evidence] = run(evidence, 600)
-                        if not ran[evidence][0]:
-                            ok, reason = False, f"command failed: {evidence}"
-                    elif not glob.glob(str(ROOT / evidence)):
-                        ok, reason = False, f"missing {evidence}"
-                lacking = [m for m in item.get("history_methods", []) if m not in methods]
-                if lacking:
-                    ok, reason = False, f"not measured: {', '.join(lacking)}"
+                ok, reason = check_automated(item, no_run=no_run, ran=ran, methods=methods)
             else:
-                matched = [i for i in known if any(fnmatch.fnmatchcase(i, pattern) for pattern in item["decisions"])]
-                undecided = [i for i in matched if state["items"].get(i, {}).get("status") not in FINAL_STATES
-                             or i not in audited]
-                ok = bool(matched) and not undecided
-                reason = f"{len(undecided)}/{len(matched)} items without an applied, audited decision"
+                ok, reason = check_human(item, known=known, state=state, audited=audited)
             if ok:
                 if item["kind"] == "M":
                     m_done += item["weight"] * share

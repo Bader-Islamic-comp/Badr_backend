@@ -44,6 +44,8 @@ def test_a_question_for_words_on_an_occasion_or_a_prayer_lesson_names_its_topic(
     "ما فضل الصباح؟",                               # names an occasion, asks for no words
     "ماذا أقول في الصباح والمساء؟",                 # two occasions: left to retrieval
     "اذكر دعاءً محددًا لم يرد في المصادر المتاحة",  # asks for words, names no occasion
+    "كم عدد ركعات صلاة التراويح؟",                  # curated-v2: a prayer the counts lesson does not teach
+    "كيف أصلي صلاة العيد؟",                         # nor the steps lesson
 ])
 def test_other_questions_have_no_curated_topic(question):
     assert curated.topic(question) is None

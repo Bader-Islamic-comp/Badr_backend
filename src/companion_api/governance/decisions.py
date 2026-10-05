@@ -176,6 +176,9 @@ def _apply_one(entry: dict, item: str, paths: Paths, state: dict) -> None:
 
 def known_items(root: Path) -> frozenset:
     items = {"reviewers", "adr-0005"}
+    # The release gate (doc/governance/release-gate.md): the fixed replies (rag/responses.py) and the prompts
+    # (rag/prompts.py, rag/chat.py) are approved as a whole.
+    items |= {"copy:replies", "copy:prompts"}
     reg = registry_module.load(root / "corpus/sources/registry.yaml")
     items |= {f"source:{s['source_id']}" for s in reg.sources}
     items |= {f"policy-{p.stem}" for p in (root / "doc/governance").glob("*.md")}
