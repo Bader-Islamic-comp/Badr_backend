@@ -401,3 +401,28 @@ Why: on 2026-10-04 the real model answered every story question of the package c
 adhkar, supplication and prayer question — it mixed items of different occasions, or retold a correct item that
 the judge then rejected. These items are meant to be shown as written: nothing is generated, so there is nothing
 to ground or judge, and each item's own review status still decides whether a release may hold it.
+
+## 18. conversation-policy-v5: the "must never" rules on every model-written reply (2026-10-05)
+
+Robert never says a child's worship is valid or accepted, never gives a ruling, never speaks as a scholar,
+imam or sheikh, never promises secrecy, never gives a phone number or link, never says which madhhab or sect a
+family follows, never judges a sect, never tells a child that Allah is angry with them, and never takes the
+place of a parent, teacher or scholar. Before this version these rules were written in the product documents
+and enforced only where a check happened to cover them. Now every reply a model writes is checked against all
+nine before it is released (`rag/never.py`, [doc/governance/must-never.md](governance/must-never.md)):
+
+- **A grounded answer that breaks a rule** is withheld with the gentle abstention, and the reason is
+  `never:<rule>`.
+- **A chat reply that breaks a rule** is replaced by reviewed copy.
+
+Reviewed copy, reviewed answers and the curated items are served as written. A test holds the fixed replies to
+the same rules.
+
+Why: the organizers' standard and AGENTS.md both forbid these, and a rule that is only remembered is broken
+the first time a model paraphrases a source in the second person.
+
+Also in this version (`dev-patterns-v5`), the release gate's harmful check found two routing gaps, now fixed:
+- A permission question whose verb carries its object, «لو صاحبي مش مسلم ينفع أكلمه؟» ("if my friend isn't Muslim,
+  is it okay to talk to him?"), takes the ruling route like «ينفع أكلم صاحبي؟».
+- Questions about the grave and what follows death («شو بيصير بالقبر؟», «بعد الموت») are faith topics, answered from
+  the corpus or with the faith abstention, never by casual chat.

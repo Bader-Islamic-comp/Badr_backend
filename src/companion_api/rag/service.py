@@ -31,6 +31,13 @@ the exact ayah from the release (§14); Arabizi faith terms make a faith topic
 (§15); and an English question over English translations of the meanings gets
 the English faith prompt (rag-answer-v4).
 
+conversation-policy-v5 (Gate 0): every reply a model wrote is held to the "must
+never" rules (`never.py`: no verdict on worship, no ruling, no authority, no
+secrecy, no invented helpline, no madhhab inference, no sectarian framing, no
+divine threat, no taking a parent's place) before it is released. A grounded
+answer that breaks one is withheld as `never:<rule>`, before the checks and the
+judge; a chat reply that breaks one is replaced by reviewed copy.
+
 Provenance (release, model, prompt, retriever, verifier, embedder, chat prompt
 and chat checker versions) travels with every result and is logged once per
 answer on `companion_api.rag`. The question, the passages, the answer and the
@@ -44,7 +51,7 @@ import random
 from time import perf_counter
 from typing import NamedTuple
 
-from . import arabizi, chat, checks, curated, judge, normalize, router
+from . import arabizi, chat, checks, curated, judge, never, normalize, router
 from .ayahs import AyahIndex, surah_name
 from .checks import CheckResult
 from .embeddings import embedder_for
@@ -59,7 +66,7 @@ from .types import Chunk, Generator
 
 logger = logging.getLogger("companion_api.rag")
 
-POLICY_VERSION = "conversation-policy-v4"
+POLICY_VERSION = "conversation-policy-v5"
 INVITATION_RATE = 1 / 3  # conversation-policy §8: at most about one chat reply in three
 # A difficult feeling deserves kindness, not a nudge, and a goodbye is a goodbye.
 NO_INVITATION = frozenset({"feeling_negative", "goodbye"})
@@ -157,6 +164,7 @@ class AnswerService:
             "router": router.ROUTER_VERSION,
             "checks": checks.CHECKS_VERSION,
             "curated": curated.CURATED_VERSION,
+            "never": never.NEVER_VERSION,
         }
 
     def _result(self, answer_type: str, text: str, reason: str, segments: tuple[Segment, ...] | None = None,
@@ -321,6 +329,14 @@ class AnswerService:
         grounding = verify(output, passages)
         if grounding.ok:
             released = " ".join(segment.text for segment in grounding.segments)
+            # The "must never" rules before any check that costs a model call (never.py): a reply that breaks
+            # one is withheld whatever it cites.
+            broken = never.violations(released)
+            if broken:
+                code = "never:" + broken[0]
+                religious = faith or any(is_faith_passage(chunk) for chunk in passages)
+                result = self._abstain_faith(code, language) if religious else self._abstain(code, language)
+                return replace(result, grounding="ok")
             by_id = {chunk.id: chunk for chunk in passages}
             cited = [by_id[chunk_id] for chunk_id in
                      dict.fromkeys(chunk_id for segment in grounding.segments for chunk_id in segment.citations)]
@@ -378,6 +394,10 @@ class AnswerService:
             return self._chat_reply(intent, verdict, "chat_fallback:question")
         if not verdict.ok:
             return self._chat_reply(intent, verdict, "chat_fallback:" + str(verdict.failure))
+        broken = never.violations(verdict.reply)
+        if broken:
+            # Reviewed copy instead of the persona's words (never.py), as for any other failed chat check.
+            return self._chat_reply(intent, verdict, "chat_fallback:never:" + broken[0])
         return self._chat_reply(intent, verdict, "chat")
 
     def _chat_reply(self, intent: str | None, verdict: chat.ChatVerdict | None, reason: str,

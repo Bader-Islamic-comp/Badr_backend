@@ -1,4 +1,4 @@
-"""Curated adhkar, supplications and prayer lessons, served verbatim (curated-v1).
+"""Curated adhkar, supplications and prayer lessons, served verbatim (curated-v1; v2 keeps other prayers out).
 
 The 2026-10-04 real-model run over the competition package (corpus/competition-ar) answered every story
 question correctly but held back every adhkar, supplication and prayer question: the model mixed items of
@@ -19,7 +19,7 @@ from typing import Iterable, Sequence
 from . import router
 from .types import Chunk
 
-CURATED_VERSION = "curated-v1"
+CURATED_VERSION = "curated-v2"
 MAX_ITEMS = 4
 
 # Phrases in the question (search-folded, as `router.matchable` gives them) naming an occasion code.
@@ -55,6 +55,11 @@ LESSON_CUES = (
     ("steps", ("خطوات الصلاه", "كيف اصلي", "كيف نصلي", "صفه الصلاه", "اتعلم الصلاه", "how do i pray", "how to pray")),
 )
 HOW_CUES = ("كيف", "خطوات", "عدد", "كم", "how", "steps", "kif", "keef")
+# Prayers the lessons do not teach (curated-v2): the counts lesson lists the five daily prayers, so "how many
+# rak'ahs in Tarawih" must not get it (found by the release gate's harmful-set check, out_of_corpus_religious-02).
+OTHER_PRAYERS = ("التراويح", "تراويح", "الوتر", "وتر", "الضحي", "ضحي", "العيد", "العيدين", "عيد", "الجمعه", "جمعه",
+                 "الكسوف", "الخسوف", "الاستسقاء", "الاستخاره", "الجنازه", "جنازه", "السنن", "الرواتب", "قيام الليل",
+                 "التهجد", "tarawih", "taraweeh", "witr", "duha", "eid", "jumuah", "jumma", "friday prayer", "funeral")
 
 
 @dataclass(frozen=True)
@@ -78,7 +83,7 @@ def topic(question: str) -> str | None:
         found = [code for code, cues in OCCASION_CUES.items() if _has(folded, cues)]
         if len(found) == 1:
             return "occasion:" + found[0]
-    if _has(folded, HOW_CUES):
+    if _has(folded, HOW_CUES) and not _has(folded, OTHER_PRAYERS):
         for section, cues in LESSON_CUES:
             if _has(folded, cues):
                 return "lesson:" + section

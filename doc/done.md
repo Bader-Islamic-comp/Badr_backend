@@ -22,7 +22,7 @@
 | 6.3c | مسار المراجعة البشرية وسجل التدقيق بـ hash chain | architecture §6.3 | draft_ready | `scripts/review.py`, `src/companion_api/governance/audit.py`, `doc/governance/review-workflow.md`; `python3 scripts/verify_audit.py` | 6,7 | 2026-09-27 |
 | 6.4 | سياسة الاستعلام — تطويري، بدون reranker ولا pgvector | architecture §6.4 | in_progress | `src/companion_api/rag/retriever.py`, `src/companion_api/rag/grounding.py`, `src/companion_api/rag/router.py` | — | 2026-09-27 |
 | 6.5 | خلافات الاجتهاد — حقل `madhhabScope` موجود وفاضي عمداً | architecture §6.5 | not_started | `src/companion_api/rag/types.py` | 1 | 2026-09-27 |
-| 7 | الأمان والحماية — قواعد تطويرية، مش مصنّف معتمد | architecture §7 | in_progress | `src/companion_api/rag/router.py`, `src/companion_api/rag/responses.py` | — | 2026-09-27 |
+| 7 | الأمان والحماية — قواعد تطويرية، مش مصنّف معتمد؛ قواعد «ممنوع أبداً» التسعة على كل ردّ يكتبه الموديل (never-v1) | architecture §7 | in_progress | `src/companion_api/rag/router.py`, `src/companion_api/rag/responses.py`, `src/companion_api/rag/never.py`, `doc/governance/must-never.md`; `PYTHONPATH=src python3 -m pytest -q tests/test_never.py` | — | 2026-10-05 |
 | 8 | الخصوصية وضبط الأهل — خارج تاسكات الكوربس | architecture §8 | not_started | — | — | 2026-09-27 |
 | 9 | التحديات والمكافآت — خارج تاسكات الكوربس | architecture §9 | not_started | — | — | 2026-09-27 |
 | 10 | كيانات البيانات — لا بيانات أطفال بالـ vector store (بوابة الكاتب الوحيد + فحص) | architecture §10 | draft_ready | `src/companion_api/rag/release.py`, `scripts/scan_index.py`; `PYTHONPATH=src python3 -m pytest -q tests/test_no_child_content.py` | 15 | 2026-09-27 |
@@ -40,7 +40,7 @@
 | p2b | اختيار الـ embedding — 4 موديلات + reranker انقاسوا؛ ADR proposed بخيارين، القرار لـ Momen | plan مكوّن 2 | draft_ready | `doc/adr-0005-embedding-selection.md`, `reports/retrieval/history.jsonl` | 11 | 2026-09-28 |
 | p3 | الاسترجاع — hybrid RRF موجود، بدون إعادة صياغة ولا reranker | plan مكوّن 3 | in_progress | `src/companion_api/rag/retriever.py` | — | 2026-09-27 |
 | p4 | التوليد والتحقق — تطويري | plan مكوّن 4 | in_progress | `src/companion_api/rag/generator.py`, `src/companion_api/rag/grounding.py` | — | 2026-09-27 |
-| p5 | بوابة الأمان — خارج التاسكات الـ 15 | plan مكوّن 5 | not_started | — | — | 2026-09-27 |
+| p5 | بوابة الأمان — خارج التاسكات الـ 15؛ قائمة بوابة الإطلاق (Gate 0): 25 بند، اعتمدها Nasser Obeid 2026-10-05، والقرار الموقّع من Mousa al-Rashdan ناقص؛ البوابة حمراء (4 من 25) | plan مكوّن 5 | done_pending_approval | `corpus/governance/release_gate.yaml`, `scripts/check_release_gate.py`, `doc/governance/release-gate.md`; `PYTHONPATH=src python3 -m pytest -q tests/test_release_gate.py` | — | 2026-10-05 |
 | p6 | المنسّق والـ API — خارج التاسكات الـ 15 | plan مكوّن 6 | not_started | — | — | 2026-09-27 |
 | p7 | Flutter و Unity — خارج التاسكات الـ 15 | plan مكوّن 7 | not_started | — | — | 2026-09-27 |
 | p8 | البيانات والبنية التحتية (pgvector) — خارج النطاق | plan مكوّن 8 | blocked | `doc/rag-system.md` | — | 2026-09-27 |
