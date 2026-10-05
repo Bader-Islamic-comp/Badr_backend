@@ -27,6 +27,10 @@ DEFAULT_BASE_URL = "http://127.0.0.1:11434/v1"
 DEFAULT_MODEL = "qwen3.5:9b"
 # Exact names, plus Ollama tags of the same model ("qwen3.5:9b-q4_K_M").
 ALLOWED_MODELS = ("qwen3.5:9b", "qwen3.5:9b-*", "Qwen/Qwen3.5-9B")
+# The second faith judge (faith-judge-v2, judge.py): another model family, so the two judges do not share one
+# model's blind spots. Allowlisted apart from the answer models: it never writes what a child reads, it only
+# says no. Small enough to stay loaded beside Qwen3.5-9B on a 12 GB GPU.
+JUDGE_MODELS = ("gemma3:4b", "gemma3:4b-*")
 _TAG = re.compile(r"[A-Za-z0-9._-]+")
 _THINK_BLOCK = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
 
@@ -35,8 +39,8 @@ class GenerationError(RuntimeError):
     """Carries a status or an error type only, never request or response content."""
 
 
-def is_allowed_model(model: str) -> bool:
-    for allowed in ALLOWED_MODELS:
+def is_allowed_model(model: str, allowlist: Sequence[str] = ALLOWED_MODELS) -> bool:
+    for allowed in allowlist:
         if allowed.endswith("*"):
             prefix = allowed[:-1]
             if model.startswith(prefix) and _TAG.fullmatch(model[len(prefix):]):
@@ -64,9 +68,10 @@ def strip_reasoning(text: str) -> str:
 
 class OpenAICompatibleGenerator:
     def __init__(self, base_url: str = DEFAULT_BASE_URL, model: str = DEFAULT_MODEL, timeout: float = 60.0,
-                 client: httpx.Client | None = None, *, temperature: float = 0.3, top_p: float = 0.8):
-        if not is_allowed_model(model):
-            raise ValueError(f"model {model!r} is not allowlisted; expected one of {', '.join(ALLOWED_MODELS)}")
+                 client: httpx.Client | None = None, *, temperature: float = 0.3, top_p: float = 0.8,
+                 allowlist: Sequence[str] = ALLOWED_MODELS):
+        if not is_allowed_model(model, allowlist):
+            raise ValueError(f"model {model!r} is not allowlisted; expected one of {', '.join(allowlist)}")
         self.base_url = require_private_endpoint(base_url)
         self.model = model
         self.temperature, self.top_p = temperature, top_p

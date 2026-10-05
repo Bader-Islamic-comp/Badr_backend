@@ -133,6 +133,7 @@ downloads a model. Install Ollama for Windows from
 ```powershell
 ollama pull qwen3.5:9b            # generation, about 6.6 GB
 ollama pull qwen3-embedding:0.6b  # embeddings, about 0.6 GB
+ollama pull gemma3:4b             # optional second faith judge (COMPANION_JUDGE_MODEL), about 3.3 GB
 ```
 
 llama.cpp or vLLM serving the same models through an OpenAI-compatible API also

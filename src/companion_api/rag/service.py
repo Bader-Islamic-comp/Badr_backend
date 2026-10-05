@@ -55,7 +55,7 @@ from . import arabizi, chat, checks, curated, judge, never, normalize, router
 from .ayahs import AyahIndex, surah_name
 from .checks import CheckResult
 from .embeddings import embedder_for
-from .generator import OpenAICompatibleGenerator
+from .generator import JUDGE_MODELS, OpenAICompatibleGenerator
 from .grounding import MAX_CHARS, VERIFIER_VERSION, Segment, verify
 from .prompts import PROMPT_VERSION, build_messages, is_faith_passage
 from .release import ReleaseError, load_release
@@ -139,7 +139,8 @@ class Plan:
 class AnswerService:
     def __init__(self, retriever: HybridRetriever, generator: Generator, *, language: str = "en",
                  max_tokens: int = 320, age_band: str | None = None,
-                 classifiers: tuple[router.SafetyClassifier, ...] = (), rng: random.Random | None = None):
+                 classifiers: tuple[router.SafetyClassifier, ...] = (), rng: random.Random | None = None,
+                 second_judge: Generator | None = None):
         self.retriever, self.generator = retriever, generator
         self.language, self.max_tokens, self.age_band = language, max_tokens, age_band
         self.classifiers = classifiers
@@ -149,7 +150,7 @@ class AnswerService:
         # The release's ayahs one by one (a misquoted ayah, the scene check) and the episode map of the stories.
         self.ayahs = AyahIndex(chunk for chunk in retriever.release.chunks
                                if retriever.include_drafts or chunk.servable)
-        self.verifier = checks.Verifier(load_episodes(), self.ayahs)
+        self.verifier = checks.Verifier(load_episodes(), self.ayahs, second_judge)
         self.provenance = {
             "releaseId": retriever.release.manifest.release_id,
             "model": generator.model,
@@ -161,6 +162,7 @@ class AnswerService:
             "chatPromptVersion": chat.CHAT_PROMPT_VERSION,
             "chatChecker": chat.CHAT_CHECKER_VERSION,
             "judge": judge.JUDGE_VERSION,
+            "judge2": second_judge.model if second_judge is not None else "off",
             "router": router.ROUTER_VERSION,
             "checks": checks.CHECKS_VERSION,
             "curated": curated.CURATED_VERSION,
@@ -483,9 +485,13 @@ def assemble(settings, release_dir: str | Path, *, include_drafts: bool = False)
         retriever = HybridRetriever(loaded, embedder, include_drafts=include_drafts)
         generator = OpenAICompatibleGenerator(settings.llm_base_url, settings.llm_model,
                                               settings.llm_timeout_seconds)
+        judge_model = getattr(settings, "judge_model", "")
+        second_judge = OpenAICompatibleGenerator(settings.llm_base_url, judge_model, settings.llm_timeout_seconds,
+                                                 allowlist=JUDGE_MODELS) if judge_model else None
     except (RetrieverError, ValueError) as exception:
         raise RuntimeError(f"Grounded answers cannot start: {exception}") from None
-    return AnswerService(retriever, generator, language=getattr(settings, "rag_language", "en"))
+    return AnswerService(retriever, generator, language=getattr(settings, "rag_language", "en"),
+                         second_judge=second_judge)
 
 
 def _record_provenance():

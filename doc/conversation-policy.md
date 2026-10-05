@@ -426,3 +426,16 @@ Also in this version (`dev-patterns-v5`), the release gate's harmful check found
   is it okay to talk to him?"), takes the ruling route like «ينفع أكلم صاحبي؟».
 - Questions about the grave and what follows death («شو بيصير بالقبر؟», «بعد الموت») are faith topics, answered from
   the corpus or with the faith abstention, never by casual chat.
+
+## 19. Day 2: the Quranic supplications and the dialects (2026-10-05)
+
+- The package's Quranic supplications and the three morning and evening surahs are served verbatim like the other
+  items. Their Quran text is Quranpedia's (King Fahd Complex print), which the product owner confirmed as
+  scholarly reviewed.
+- Children ask in their own dialect: «شو أدعي لأهلي؟», «وش أقول الصبح؟», «ازاي أصلي؟». These name the occasion or
+  lesson as well as the formal wording does (`curated-v3`).
+- A child who asks about a supplication's merit or meaning («ما فضل الدعاء للوالدين؟») is not answered with the
+  supplication itself.
+- Supplicating as a verb is faith, so «شو أدعي؟» never reaches casual chat (`dev-patterns-v6`).
+- An answer over religious text may pass a second judge from another model family (`faith-judge-v2`), when the
+  operator configures one.

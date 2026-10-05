@@ -233,13 +233,14 @@
       ],
       "evidence_url": "https://dorar.net/h/xgBR2fIt",
       "grading": "حسن — الألباني، صحيح أبي داود 5082",
-      "child_note": "اقرأ السور الثلاث صباحًا ومساءً، ثلاث مرات لكل سورة. نص السور يُجلب من المصحف المعتمد.",
+      "child_note": "اقرأ السور الثلاث صباحًا ومساءً، ثلاث مرات لكل سورة.",
       "review_status": "draft",
       "needs_check": true,
       "change_note": "الدرجة «حسن بحسب المصدر» لا تسمّي من حسّنه؛ يلزم ذكر المحكِّم وموضع حكمه.",
       "evidence_status": "matches",
       "evidence_entry": "صحيح أبي داود 5082 (الألباني)",
-      "evidence_note": "checked on dorar.net 2026-10-04"
+      "evidence_note": "checked on dorar.net 2026-10-04",
+      "review_note": "ملاحظة تحرير نُقلت من نص الطفل: نص السور يُجلب من المصحف المعتمد."
     },
     {
       "id": "morning-by-god",
@@ -377,8 +378,9 @@
       "refs": [
         "quran:17:24"
       ],
-      "child_note": "أدعو لوالديّ بالرحمة. نص الآية يُعرض من المصحف المعتمد.",
-      "review_status": "draft"
+      "child_note": "أدعو لوالديّ بالرحمة.",
+      "review_status": "draft",
+      "review_note": "ملاحظة تحرير نُقلت من نص الطفل: نص الآية يُعرض من المصحف المعتمد."
     },
     {
       "id": "dua-knowledge",

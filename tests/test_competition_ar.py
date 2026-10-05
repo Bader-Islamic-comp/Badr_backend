@@ -303,3 +303,13 @@ def test_the_package_keeps_no_third_party_dump():
     assert (quran["registry_source_id"], quran["registry_license_source_id"]) == \
         ("quranpedia-mushaf-hafs", "quranpedia-license")
     assert not {"source_file", "license_file"} & set(quran)
+
+
+def test_the_scholarly_review_sheet_is_up_to_date():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("review_sheet", ROOT / "corpus/competition-ar/review_sheet.py")
+    sheet = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sheet)
+    assert sheet.main(["--check"]) == 0, "run python corpus/competition-ar/review_sheet.py"
+    content = json.loads((ROOT / "corpus/competition-ar/content.json").read_text(encoding="utf-8"))
+    assert all(item["id"] in sheet.QUESTIONS for _, item in sheet.flagged(content))

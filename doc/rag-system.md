@@ -976,8 +976,9 @@ out of the release as before. Provenance records `"curated": "curated-v1"`; the 
 On release `wave1-comp-3` the package's five adhkar, supplication and prayer evaluation questions (all withheld
 by the 2026-10-04 real-model run) get their items; the stories, the abstention cases and the ruling still take
 their earlier paths. Limits: one occasion per question; the cues are a fixed list a native-speaker reviewer
-should extend; the three Quranic morning/evening surahs and the other Quranic supplications stay out of the
-release while `quranpedia-mushaf-hafs` is a candidate source.
+should extend. The three Quranic morning/evening surahs and the other Quranic supplications were left out of
+the release while `quranpedia-mushaf-hafs` was a candidate source; since 2026-10-05 it is `pending_legal`
+(§20) and they are served.
 
 `curated-v2` (2026-10-05): a question that names a prayer the lessons do not teach (Tarawih, Witr, Duha, Eid,
 Friday, funeral and the other `OTHER_PRAYERS`) gets no lesson topic and goes on to retrieval. Found by the release
@@ -1008,3 +1009,50 @@ Arabic. `tests/test_never.py` runs them, holds every fixed reply to the same rul
 | Policy | `conversation-policy-v5` | the rules on grounded and chat replies |
 | Router | `dev-patterns-v5` | a permission verb with its object («ينفع أكلمه؟») is a ruling; the grave and what follows death are faith topics |
 | Prompt, verifier, judge, checks, retriever | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `checks-v3`, `hybrid-rrf-v3` | unchanged |
+
+## 20. Day 2: the Quranic supplications, a second judge, the dialects (2026-10-05)
+
+**The Quranic supplications.** The product owner confirmed that Quranpedia is an official, scholarly reviewed
+resource, safe to use. `quranpedia-mushaf-hafs` (and `-text`) moved from `candidate` to `pending_legal`, so the
+9 package documents that quote it enter development releases: `wave1-comp-5` holds 227 documents and excludes
+none (`wave1-comp-4` excluded 9). Asking for the morning adhkar, or what to say for parents, before an exam, for
+gratitude, for guidance or after a mistake, now returns those items verbatim. The published channel still needs
+`cleared`, which only the signed decision `source:quranpedia-mushaf-hafs` gives.
+
+**The second judge (`faith-judge-v2`).** With `COMPANION_JUDGE_MODEL=gemma3:4b` (allowlisted in
+`generator.JUDGE_MODELS`), every answer over religious text that the Qwen judge passes is read by a model of
+another family, and both must pass (`judge2:answers_question`, `judge2:supported`, or `judge2:error:*`, fail
+closed). The second judge first writes what the question asks, what the sources tell and what the answer says,
+then decides; it is not asked about the speaker, which made gemma3:4b take quoted words for the answer speaking.
+On the 26 answers Qwen released on 2026-10-02 (8 wrong by the developer's reading) it withholds the 2 non-answers
+and none of the 18 right answers, in about 2 s each. It does not catch errors of meaning (another visit's scene,
+a reversed meaning): those need a stronger judge or the scholarly sample. Provenance records `"judge2"` (the
+model, or `off`).
+
+**Dialects (`curated-v3`, `dev-patterns-v6`).**
+- Curated cues gain the Gulf, Levantine and Egyptian phrasings children use, for the occasions and the prayer
+  lessons: «شو أدعي»، «وش أقول الصبح»، «بعد ما أخلص صلاتي»، «للامتحان»، «أطلع من الجامع»، «ازاي أصلي»، «قديش ركعة»
+  and Arabizi.
+- A question about the words rather than for them (their merit, meaning or reason) is left to retrieval.
+- None of the 359 gold or 180 harmful questions takes a curated topic.
+- The router reads supplicating as a verb («شو أدعي؟») as a faith topic. On 2026-10-05 «شو أدعي لأهلي؟» reached
+  the chat copy.
+
+| Component | Version | Change |
+| --- | --- | --- |
+| Judge | `faith-judge-v2` | an optional second judge of another family |
+| Curated | `curated-v3` | dialect cues; questions about the words left out |
+| Router | `dev-patterns-v6` | «أدعي» and its forms are faith |
+| Prompt, verifier, checks, retriever, policy | `rag-answer-v4`, `grounding-v4`, `checks-v3`, `hybrid-rrf-v3`, `conversation-policy-v5` | unchanged |
+
+**Source labels in runs.**
+- A chunk's label named its first and last reference whatever their kinds, so the three-surahs item read
+  «أبو داود 5082 – 114:1–6» and named neither 112 nor 113.
+- Since 2026-10-05 `chunking.source_label` groups the references into runs of one kind, joined by `; `:
+  `abu_dawud:5082; quran:112:1-4–quran:114:1-6`. The app reads them as «أبو داود 5082، 112:1–114:6».
+- A chunk whose references are all of one kind keeps its label.
+
+**Editor's notes out of the child's text.**
+- Two child notes ended with a note to the editor: «نص السور يُجلب من المصحف المعتمد» on the three surahs and
+  «نص الآية يُعرض من المصحف المعتمد» on the supplication for parents. The emulator showed the first one to the child.
+- Both notes moved to `review_note`, and `competition-ar-content` was re-recorded. Release: `wave1-comp-6`.
