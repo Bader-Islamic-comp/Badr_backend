@@ -29,17 +29,30 @@ __all__ = ["VERSION", "DEFAULT_MAX_CHUNK_WORDS", "chunk_document", "chunk_docume
            "source_label"]
 
 
-def source_label(document: Document, references: tuple[str, ...]) -> str:
-    """The work, a middle dot, then the first reference and, when it differs, an en dash and the last (§4).
+def _kind(reference: str) -> str:
+    """`quran`, `bukhari`, `abu_dawud`…: what a reference points into ("" for a plain one such as "part 1")."""
+    return reference.split(":", 1)[0] if ":" in reference else ""
 
-    For example "Robert's guide · part 1" or "Robert's guide · part 1–part 3". The title stands in
-    for a missing `source.work`, which only synthetic documents may leave out.
+
+def source_label(document: Document, references: tuple[str, ...]) -> str:
+    """The work, a middle dot, then the references as runs of one kind (§4).
+
+    A run is its first reference and, when it differs, an en dash and its last; runs are joined by "; ".
+    For example "Robert's guide · part 1–part 3", or "… · abu_dawud:5082; quran:112:1-4–quran:114:1-6" for
+    an item citing a hadith and three surahs: before 2026-10-05 the span ran from the first reference to the
+    last whatever their kinds, and that item read "abu_dawud:5082–quran:114:1-6", naming none of 112 and 113.
+    The title stands in for a missing `source.work`, which only synthetic documents may leave out.
     """
     work = document.source.work or document.title
     if not references:
         return work
-    span = references[0] if len(references) == 1 else references[0] + _DASH + references[-1]
-    return work + _DOT + span
+    runs: list[list[str]] = []
+    for reference in references:
+        if runs and _kind(runs[-1][-1]) == _kind(reference):
+            runs[-1].append(reference)
+        else:
+            runs.append([reference])
+    return work + _DOT + "; ".join(run[0] if len(run) == 1 else run[0] + _DASH + run[-1] for run in runs)
 
 
 def _sections(units: Iterable[Unit]) -> list[list[Unit]]:

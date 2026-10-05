@@ -10,6 +10,48 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-05 (day2/competition-goals: the Day 2 goals)
+
+The goals sent to the organizers at the end of day 1.
+
+### Added
+
+- **The Quranic supplications in releases.** The product owner confirmed Quranpedia as an official, scholarly
+  reviewed resource. `quranpedia-mushaf-hafs` and `quranpedia-mushaf-hafs-text` moved from `candidate` to
+  `pending_legal` (registry notes record why). `wave1-comp-5` holds the 9 documents `wave1-comp-4` left out: the
+  three morning and evening surahs, and the supplications for parents, knowledge, the hereafter, forgiveness,
+  family, ease, gratitude and guidance. The published channel still needs the signed `source:` decision.
+- **A second faith judge** (`faith-judge-v2`, `COMPANION_JUDGE_MODEL=gemma3:4b`, allowlisted in
+  `generator.JUDGE_MODELS`).
+  - Another model family must also pass every answer over religious text, and it fails closed.
+  - On the 26 answers Qwen released on 2026-10-02 it withholds 2 of the 8 wrong ones (the non-answers) and none of
+    the 18 right ones.
+  - It does not catch errors of meaning.
+- **The scholarly review sheet** `doc/decisions/07-competition-review.md`, generated from `content.json` by
+  `corpus/competition-ar/review_sheet.py`.
+  - It covers the 10 flagged items, each with its wording, references, Dorar entry, grading, the one question the
+    reviewer decides, and room for the decision.
+  - A test keeps it current.
+
+### Changed
+
+- **`curated-v3`**: dialect phrasings for the occasions and prayer lessons (Gulf, Levantine, Egyptian, Arabizi). A
+  question about a supplication's merit or meaning is left to retrieval. No gold or harmful question takes a
+  curated topic.
+- **`dev-patterns-v6`**: «أدعي، ندعي، بدعي، يدعي» are faith terms. «شو أدعي لأهلي؟» had reached the chat copy.
+
+### Fixed (found on the emulator)
+
+- **A source citing several kinds of reference named only its first and last.** The three morning and evening
+  surahs read «أبو داود 5082 – 114:1–6».
+  - `chunking.source_label` now groups references into runs of one kind joined by `; `
+    (`abu_dawud:5082; quran:112:1-4–quran:114:1-6`).
+  - The app (comp-mobile `day2/competition-goals`) reads them as «أبو داود 5082، 112:1–114:6».
+  - Labels whose references are all of one kind are unchanged.
+- **Editor's notes shown to the child.** «نص السور يُجلب من المصحف المعتمد» (the three surahs) and «نص الآية يُعرض من
+  المصحف المعتمد» (the supplication for parents) moved from `child_note` to `review_note`.
+  `competition-ar-content` was re-recorded, and the review sheet was regenerated. Release `wave1-comp-6`.
+
 ## Unreleased — 2026-10-05 (gate0/never-and-release-gate: Gate 0's two code tasks)
 
 The ClickUp tasks "Turn the 'must never' rules into machine-checkable assertions" and "Define the release gate

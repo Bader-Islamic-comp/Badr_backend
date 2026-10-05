@@ -18,7 +18,7 @@ not exist. Today: 0 problems, 1 warning.
 
 | package rule | meaning | sources | registry status | acquisition |
 | --- | --- | ---: | --- | --- |
-| `listed` | the package names this source or its publisher | 10 | candidate 9, pending_legal 1 | authored 1, crawled 1, downloaded 8 |
+| `listed` | the package names this source or its publisher | 10 | candidate 7, pending_legal 3 | authored 1, crawled 1, downloaded 8 |
 | `in_rule` | the package's rule admits it (a tafsir of the first three Hijri centuries, the two Sahihs) | 12 | candidate 8, pending_legal 4 | downloaded 12 |
 | `conditional` | admitted per record once a condition holds (a hadith with an approved grading in the data) | 4 | candidate 3, pending_legal 1 | downloaded 4 |
 | `borderline` | needs the organizers' reading | 4 | candidate 4 | downloaded 4 |
@@ -38,8 +38,8 @@ scripts (blocked) follow in the next section.
 
 | source | title | status | acquisition | basis |
 | --- | --- | --- | --- | --- |
-| `quranpedia-mushaf-hafs` | Mushaf Hafs (Quranpedia) | candidate | downloaded | Reference package (20/3/1448), Quran: the King Fahd Complex print as on quranpedia.net (pages as printed; the dump's text field is in standard spelling, not the Uthmani rasm) |
-| `quranpedia-mushaf-hafs-text` | Mushaf Hafs, plain-text edition (Quranpedia) | candidate | downloaded | Reference package (20/3/1448), Quran: the Quranic text in its rasm (the King Fahd Complex's Uthmani Hafs text) as on quranpedia.net |
+| `quranpedia-mushaf-hafs` | Mushaf Hafs (Quranpedia) | pending_legal | downloaded | Reference package (20/3/1448), Quran: the King Fahd Complex print as on quranpedia.net (pages as printed; the dump's text field is in standard spelling, not the Uthmani rasm) |
+| `quranpedia-mushaf-hafs-text` | Mushaf Hafs, plain-text edition (Quranpedia) | pending_legal | downloaded | Reference package (20/3/1448), Quran: the Quranic text in its rasm (the King Fahd Complex's Uthmani Hafs text) as on quranpedia.net |
 | `quranpedia-surahs` | Surah information (114 surahs) | candidate | downloaded | Reference package (20/3/1448), Quran (quranpedia.net) |
 | `quranpedia-topics-index` | Quranic topics index | candidate | downloaded | Reference package (20/3/1448), Quran (quranpedia.net) |
 | `quranpedia-topics` | Topics of every ayah | candidate | downloaded | Reference package (20/3/1448), Quran (quranpedia.net) |

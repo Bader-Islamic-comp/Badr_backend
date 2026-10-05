@@ -184,6 +184,8 @@ FAITH_AR = (
     # Not "عمره" (also "his age"), "بعث" ("sent"), "ملاك" (also a girl's name), or أبو/أم + name (kunyas).
     f"|{_PREFIX}العمره"
     "|يصلي|نصلي|اصلي|يصوم|نصوم|اصوم|ذكر الله"
+    # dev-patterns-v6: supplicating as a verb («شو أدعي؟»), which reached the chat copy on 2026-10-05.
+    "|ادعي|ندعي|بدعي|يدعي"
 )
 
 # Faith in Arabizi (dev-patterns-v3, conversation-policy §15). Read only when the message is Arabizi

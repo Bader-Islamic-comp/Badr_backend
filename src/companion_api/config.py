@@ -14,7 +14,7 @@ from pathlib import Path
 from .rag.embeddings import DEFAULT_EMBEDDING_MODEL
 from .rag.endpoints import EndpointError, require_private_endpoint
 from .rag.release import ReleaseError, resolve as resolve_release
-from .rag.generator import ALLOWED_MODELS, DEFAULT_BASE_URL, DEFAULT_MODEL, is_allowed_model
+from .rag.generator import ALLOWED_MODELS, DEFAULT_BASE_URL, DEFAULT_MODEL, JUDGE_MODELS, is_allowed_model
 
 # The languages a corpus document may be written in (doc/rag-system.md §3.1).
 RAG_LANGUAGES = ("en", "ar")
@@ -45,6 +45,8 @@ class Settings:
     # whether unreviewed draft chunks are served. Both default to the child-safe development setting.
     rag_language: str = "en"
     rag_preview_drafts: bool = False
+    # The second faith judge (faith-judge-v2): empty means one judge. Served by the LLM endpoint.
+    judge_model: str = ""
 
     @classmethod
     def from_environment(cls):
@@ -61,6 +63,7 @@ class Settings:
             embedding_model=env.get("COMPANION_EMBEDDING_MODEL") or DEFAULT_EMBEDDING_MODEL,
             rag_language=env.get("COMPANION_RAG_LANGUAGE") or "en",
             rag_preview_drafts=env.get("COMPANION_RAG_PREVIEW_DRAFTS") == "true",
+            judge_model=env.get("COMPANION_JUDGE_MODEL", ""),
         )
 
     @property
@@ -96,6 +99,9 @@ class Settings:
         if not is_allowed_model(self.llm_model):
             problems.append(f"COMPANION_LLM_MODEL={self.llm_model!r} is not allowlisted "
                             f"(allowed: {', '.join(ALLOWED_MODELS)})")
+        if self.judge_model and not is_allowed_model(self.judge_model, JUDGE_MODELS):
+            problems.append(f"COMPANION_JUDGE_MODEL={self.judge_model!r} is not allowlisted "
+                            f"(allowed: {', '.join(JUDGE_MODELS)})")
         if not 1 <= self.llm_timeout_seconds <= 600:
             problems.append("COMPANION_LLM_TIMEOUT_SECONDS must be a number of seconds from 1 to 600")
         if not self.embedding_model.strip():

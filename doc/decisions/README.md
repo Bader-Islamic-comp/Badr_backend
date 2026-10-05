@@ -12,6 +12,7 @@
 | [04-content-review.md](04-content-review.md) — المحتوى الشرعي (fail ثم flag ثم pass). فيه نص الآيات والأحاديث منقول من canonical، فهو برا git: `python3 scripts/build_decision_packages.py` بيولّده | اللجنة الشرعية (مراجعون مؤهلون) | scholarly | 40 حديث + 59 نطاق |
 | [05-eval-review.md](05-eval-review.md) — أسئلة gold و harmful | Momen Alhamza (+ مسؤول الحماية لبنود الضيق) | pipeline | 310 + 151 |
 | [06-section18.md](06-section18.md) — قرارات §18 | Mousa al-Rashdan (مع المنتج) | governance | 8 قرارات |
+| [07-competition-review.md](07-competition-review.md) — عناصر حزمة المسابقة المعلَّمة (مولَّدة بـ `corpus/competition-ar/review_sheet.py`) | مراجع شرعي مؤهل | religious (`approvals.json`) | 10 بنود |
 | ADR 0005 (`doc/adr-0005-embedding-selection.md`) | Momen Alhamza | pipeline | 1 |
 
 ## مين بيقرر شو (بيفرضه `apply_decisions.py`)

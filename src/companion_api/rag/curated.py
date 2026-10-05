@@ -1,4 +1,5 @@
-"""Curated adhkar, supplications and prayer lessons, served verbatim (curated-v1; v2 keeps other prayers out).
+"""Curated adhkar, supplications and prayer lessons, served verbatim (curated-v1; v2 keeps other prayers out;
+v3 adds the dialect phrasings children use).
 
 The 2026-10-04 real-model run over the competition package (corpus/competition-ar) answered every story
 question correctly but held back every adhkar, supplication and prayer question: the model mixed items of
@@ -19,42 +20,64 @@ from typing import Iterable, Sequence
 from . import router
 from .types import Chunk
 
-CURATED_VERSION = "curated-v2"
+CURATED_VERSION = "curated-v3"
 MAX_ITEMS = 4
 
 # Phrases in the question (search-folded, as `router.matchable` gives them) naming an occasion code.
 OCCASION_CUES = {
-    "morning": ("الصباح", "صباحا", "الصبح", "اصبح", "sabah", "el sob7", "morning"),
-    "evening": ("المساء", "مساءا", "المسا", "امسي", "masa", "evening"),
-    "after_obligatory_prayer": ("بعد الصلاه", "بعد التسليم", "دبر الصلاه", "بعد ما اصلي", "بعد ما نصلي",
-                                "ba3d el salah", "ba3d el sala", "after prayer", "after the prayer", "after salah"),
-    "before_eating": ("قبل الطعام", "قبل الاكل", "قبل ما اكل", "قبل ما ناكل", "abl el akl", "before eating",
-                      "before i eat", "before food"),
-    "before_sleep": ("قبل النوم", "قبل ما انام", "عند النوم", "abl ma nam", "before sleep", "before bed"),
-    "after_waking": ("بعد الاستيقاظ", "اذا استيقظت", "لما اصحي", "لما اقوم من النوم", "when i wake", "after waking"),
-    "before_bathroom": ("الحمام", "الخلاء", "bathroom", "toilet"),
-    "entering_mosque": ("دخول المسجد", "ادخل المسجد", "دخلت المسجد", "entering the mosque", "enter the mosque"),
-    "leaving_mosque": ("الخروج من المسجد", "اخرج من المسجد", "خرجت من المسجد", "leaving the mosque"),
-    "after_sneezing": ("عطس", "العطاس", "اعطس", "sneez"),
-    "for_parents": ("للوالدين", "لوالدي", "لامي وابي", "لابي وامي", "for my parents"),
-    "learning": ("زياده العلم", "طلب العلم", "عند التعلم"),
-    "before_difficult_task": ("مهمه صعبه", "الامتحان", "الاختبار"),
-    "gratitude": ("الشكر", "اشكر الله"),
-    "seeking_guidance": ("الهدايه",),
-    "for_family": ("لاسرتي", "للاسره", "لعايلتي"),
-    "after_mistake": ("اذا اخطات", "بعد الخطا", "لما اغلط"),
+    "morning": ("الصباح", "صباحا", "الصبح", "اصبح", "الصباحيه", "صباحيه", "sabah", "el sob7", "es sob7", "sob7",
+                "morning"),
+    "evening": ("المساء", "مساءا", "المسا", "امسي", "المسائيه", "masa", "masaa", "el masa", "evening"),
+    "after_obligatory_prayer": ("بعد الصلاه", "بعد صلاه", "بعد التسليم", "دبر الصلاه", "بعد ما اصلي", "بعد ما نصلي",
+                                "بعد ما اخلص الصلاه", "بعد ما اخلص صلاتي", "بعد ما نخلص الصلاه", "بعد ما اسلم",
+                                "بعد الصلوات",
+                                "ba3d el salah", "ba3d el sala", "ba3d ma asalli", "after prayer", "after the prayer",
+                                "after salah", "after praying"),
+    "before_eating": ("قبل الطعام", "قبل الاكل", "قبل ما اكل", "قبل ما ناكل", "قبل الغدا", "قبل العشا", "قبل الفطور",
+                      "وقت الاكل", "abl el akl", "2abl el akl", "abl ma akol", "before eating", "before i eat",
+                      "before food"),
+    "before_sleep": ("قبل النوم", "قبل ما انام", "قبل ما ننام", "عند النوم", "وقت النوم", "لما انام", "abl ma nam",
+                     "2abl ma nam", "abl el nom", "before sleep", "before bed", "before sleeping", "bedtime"),
+    "after_waking": ("بعد الاستيقاظ", "اذا استيقظت", "لما اصحي", "لما نصحي", "بعد ما اصحي", "اذا صحيت", "لما افيق",
+                     "لما اقوم من النوم", "when i wake", "after waking", "when i get up", "waking up"),
+    "before_bathroom": ("الحمام", "الخلاء", "التواليت", "دوره المياه", "hammam", "7ammam", "bathroom", "toilet"),
+    "entering_mosque": ("دخول المسجد", "ادخل المسجد", "دخلت المسجد", "ندخل المسجد", "دخول الجامع", "ادخل الجامع",
+                        "entering the mosque", "enter the mosque"),
+    "leaving_mosque": ("الخروج من المسجد", "اخرج من المسجد", "خرجت من المسجد", "اطلع من المسجد", "اطلع من الجامع",
+                       "اخرج من الجامع", "الخروج من الجامع", "leaving the mosque", "leave the mosque"),
+    "after_sneezing": ("عطس", "العطاس", "اعطس", "عطست", "يعطس", "العطسه", "3atast", "3atas", "sneez"),
+    "for_parents": ("للوالدين", "لوالدي", "لامي وابي", "لابي وامي", "لامي وابوي", "لابوي وامي", "لماما وبابا",
+                    "لبابا وماما", "لامي", "لابوي", "لابي", "for my parents", "for my mom and dad"),
+    "learning": ("زياده العلم", "طلب العلم", "عند التعلم", "قبل الدراسه", "قبل ما ادرس", "قبل المذاكره",
+                 "قبل ما اذاكر", "عشان افهم", "for knowledge", "before studying"),
+    "before_difficult_task": ("مهمه صعبه", "الامتحان", "الاختبار", "امتحان", "اختبار", "امتحاني", "الامتحانات",
+                              "للامتحان", "للاختبار",
+                              "الاختبارات", "before an exam", "before a test", "exam"),
+    "gratitude": ("الشكر", "اشكر الله", "اشكر ربي", "احمد الله", "نشكر الله", "to thank allah"),
+    "seeking_guidance": ("الهدايه", "يهديني", "اهتدي"),
+    "for_family": ("لاسرتي", "للاسره", "لعايلتي", "لعيلتي", "لاهلي", "لاخواني", "لاخوتي", "for my family"),
+    "after_mistake": ("اذا اخطات", "بعد الخطا", "لما اغلط", "اذا غلطت", "لما اعمل غلط", "لما اعمل ذنب", "بعد الذنب",
+                      "when i make a mistake"),
 }
-# The question asks what to say: a dhikr, a supplication, the words for an occasion.
-SAY_CUES = ("ذكر", "اذكار", "الاذكار", "الذكر", "دعاء", "الدعاء", "ادعيه", "اقول", "نقول", "يقول", "بقول", "اقرا",
-            "shu b2ool", "shu ba2ool", "sh2ool", "what do i say", "what should i say", "dua", "dhikr", "adhkar")
+# The question asks what to say: a dhikr, a supplication, the words for an occasion. curated-v3 adds the dialect
+# verbs children use («شو أدعي؟», «وش أقول؟», «شو بنقول؟») and memorising or repeating words.
+SAY_CUES = ("ذكر", "اذكار", "الاذكار", "الذكر", "دعاء", "الدعاء", "ادعيه", "اقول", "نقول", "يقول", "بقول", "بنقول",
+            "اقرا", "نقرا", "ادعي", "ندعي", "بدعي", "احفظ", "اردد", "نردد",
+            "shu b2ool", "shu ba2ool", "sh2ool", "shu a2ool", "eish a2ool", "wesh agool", "shu bnoul",
+            "what do i say", "what should i say", "dua", "du3a", "do3a2", "doaa", "dhikr", "adhkar", "azkar", "athkar")
 # Prayer lessons: (section, phrases naming it). The question asks how, or for the steps or the count.
 LESSON_CUES = (
-    ("counts", ("عدد ركعات", "كم ركعه", "ركعات الصلوات", "ركعات الصلاه")),
-    ("wudu", ("الوضوء", "اتوضا", "نتوضا", "wudu")),
+    ("counts", ("عدد ركعات", "عدد الركعات", "كم ركعه", "قديش ركعه", "كام ركعه", "ركعات الصلوات", "ركعات الصلاه")),
+    ("wudu", ("الوضوء", "الوضو", "اتوضا", "اتوضي", "بتوضا", "نتوضا", "wudu", "wudhu", "wudoo")),
     ("preparation", ("الاستعداد للصلاه", "شروط الصلاه")),
-    ("steps", ("خطوات الصلاه", "كيف اصلي", "كيف نصلي", "صفه الصلاه", "اتعلم الصلاه", "how do i pray", "how to pray")),
+    ("steps", ("خطوات الصلاه", "كيف اصلي", "كيف بصلي", "كيف نصلي", "ازاي اصلي", "شلون اصلي", "صفه الصلاه",
+               "طريقه الصلاه", "كيفيه الصلاه", "اتعلم الصلاه", "علمني الصلاه", "علمني اصلي", "how do i pray",
+               "how to pray")),
 )
-HOW_CUES = ("كيف", "خطوات", "عدد", "كم", "how", "steps", "kif", "keef")
+# A question about the words rather than for them (their merit, meaning or reason) is left to retrieval (curated-v3).
+ABOUT_CUES = ("فضل", "معني", "شو يعني", "ماذا يعني", "ليش", "لماذا", "ليه", "why", "meaning", "virtue")
+HOW_CUES = ("كيف", "خطوات", "عدد", "كم", "قديش", "كام", "ازاي", "شلون", "كيفيه", "طريقه", "علمني", "how", "steps",
+            "kif", "keef")
 # Prayers the lessons do not teach (curated-v2): the counts lesson lists the five daily prayers, so "how many
 # rak'ahs in Tarawih" must not get it (found by the release gate's harmful-set check, out_of_corpus_religious-02).
 OTHER_PRAYERS = ("التراويح", "تراويح", "الوتر", "وتر", "الضحي", "ضحي", "العيد", "العيدين", "عيد", "الجمعه", "جمعه",
@@ -79,6 +102,8 @@ def _has(folded: str, cues: Iterable[str]) -> bool:
 def topic(question: str) -> str | None:
     """The curated topic a question asks for, or None."""
     folded = router.matchable(question)
+    if _has(folded, ABOUT_CUES):
+        return None
     if _has(folded, SAY_CUES):
         found = [code for code, cues in OCCASION_CUES.items() if _has(folded, cues)]
         if len(found) == 1:

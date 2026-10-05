@@ -2441,8 +2441,8 @@ sources:
   retrieved_at: '2026-10-02T07:58:33+00:00'
   sha256: b857c58206d219d1af333fc3eb8359c30e8b07c7386f88692efcb0744dd98fe8
   numbering_system: surah:ayah
-  status: candidate
-  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest's 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.
+  status: pending_legal
+  notes: '2026-10-05: the product owner (Nasser Obeid) confirmed that Quranpedia is an official resource whose Quran text is scholarly reviewed and verified, and safe to use; the organizers'' permission for the reference package''s sources stands. Status moved from candidate to pending_legal, so the Quranic supplications of corpus/competition-ar enter development releases. The published channel still needs `cleared`, which only Mousa al-Rashdan''s signed decision `source:quranpedia-mushaf-hafs` gives (doc/decisions/README.md). Earlier: Candidate data added on test/corpus-tasks from the challenge''s reference package. The organizers'' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest''s 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.'
   package_rule: listed
   package_basis: 'Reference package (20/3/1448), Quran: the King Fahd Complex print as on quranpedia.net (pages as printed; the dump''s text field is in standard spelling, not the Uthmani rasm)'
   acquisition: download
@@ -2460,8 +2460,8 @@ sources:
   retrieved_at: '2026-10-02T07:58:33+00:00'
   sha256: af546911a592c7b8a5a35b668c0f885d7b37b52536c5032bd6fb2b42c5819f33
   numbering_system: surah:ayah
-  status: candidate
-  notes: Candidate data added on test/corpus-tasks from the challenge's reference package. The organizers' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest's 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.
+  status: pending_legal
+  notes: '2026-10-05: the product owner (Nasser Obeid) confirmed that Quranpedia is an official resource whose Quran text is scholarly reviewed and verified, and safe to use; the organizers'' permission for the reference package''s sources stands. Status moved from candidate to pending_legal, so the Quranic supplications of corpus/competition-ar enter development releases. The published channel still needs `cleared`, which only Mousa al-Rashdan''s signed decision `source:quranpedia-mushaf-hafs-text` gives (doc/decisions/README.md). Earlier: Candidate data added on test/corpus-tasks from the challenge''s reference package. The organizers'' permission is reported but not yet recorded as a governance decision, and the content is unreviewed, so it stays out of every release until governance changes its status. The CDN serves the 2026-09-30 build of this file (same byte size as the manifest''s 2026-10-02 rebuild, different gzip digest); the digest recorded here is of the bytes served.'
   package_rule: listed
   package_basis: 'Reference package (20/3/1448), Quran: the Quranic text in its rasm (the King Fahd Complex''s Uthmani Hafs text) as on quranpedia.net'
   acquisition: download
@@ -2876,7 +2876,7 @@ sources:
   license_url: null
   terms_summary: 'Original child-facing retellings, lessons and prayer summaries written by the team, citing Quranpedia (Quran) and dorar.net (hadith, fiqh) by reference; short supplication wordings are quoted from the cited hadith. No third-party file is stored with it: ayat quoted in corpus documents come from quranpedia-mushaf-hafs at build time. The package''s own rights and review records are in corpus/competition-ar/approvals.json (owner sign-off pending).'
   retrieved_at: '2026-10-04T11:24:48+00:00'
-  sha256: ff46f6ba25404c72c1f714a4f97a5e345f6d2575595769ce6e2348a85baa01a2
+  sha256: 0860e34266d11ed6156726b4edef6e3596835cfede26aeab8e29009da1712a7c
   numbering_system: content.json item ids; refs quran:S:A[-B], hadith:<numbering>:N (numbering schemes declared in corpus/competition-ar/sources.json), fiqh:<topic>:<section>
   status: pending_legal
   notes: Merged from corpus-tasks-2 (m3alrashdan). Draft and unreviewed (every item review_status draft; 10 items carry needs_check for the reviewer). The sha256 is of content.json, so an edited package fails scripts/build_corpus.py until the reviewed file's digest is recorded here. companion_api.corpusprep.competition builds it into corpus/wave1 and corpus/layer0 (comp-* documents).

@@ -60,3 +60,35 @@ def test_the_items_of_the_topic_are_served_as_written_in_release_order():
 def test_a_topic_with_no_eligible_item_falls_through_to_retrieval():
     assert curated.select("ماذا أقول بعد الصلاة؟", ALL) is None
     assert curated.select("ماذا أقول قبل الطعام؟", (STORY,)) is None
+
+
+@pytest.mark.parametrize("question, wanted", [
+    # curated-v3: the dialect phrasings children use (Gulf, Levantine, Egyptian) and Arabizi.
+    ("شو أقول لما أدعي لأمي وأبوي؟", "occasion:for_parents"),
+    ("شو أدعي لأهلي؟", "occasion:for_family"),
+    ("وش أقول الصبح؟", "occasion:morning"),
+    ("شو بنقول بعد ما نخلص الصلاة؟", "occasion:after_obligatory_prayer"),
+    ("شو أقول بعد ما أخلص صلاتي؟", "occasion:after_obligatory_prayer"),
+    ("شو أدعي قبل الامتحان؟", "occasion:before_difficult_task"),
+    ("دعاء للامتحان", "occasion:before_difficult_task"),
+    ("شو أقول لما أطلع من الجامع؟", "occasion:leaving_mosque"),
+    ("شو بقول لما أعطس؟", "occasion:after_sneezing"),
+    ("وش أقول قبل الغدا؟", "occasion:before_eating"),
+    ("shu a2ool abl ma nam?", "occasion:before_sleep"),
+    ("ازاي أصلي؟", "lesson:steps"),
+    ("علمني الصلاة", "lesson:steps"),
+    ("قديش ركعة الظهر؟", "lesson:counts"),
+    ("كيف بتوضا؟", "lesson:wudu"),
+])
+def test_dialect_phrasings_name_their_topic(question, wanted):
+    assert curated.topic(question) == wanted
+
+
+@pytest.mark.parametrize("question", [
+    "ما فضل الدعاء للوالدين؟",          # its merit
+    "شو يعني أذكار الصباح؟",            # its meaning
+    "ليش نقول دعاء قبل النوم؟",          # its reason
+    "what is the meaning of the dua before eating?",
+])
+def test_a_question_about_the_words_is_not_a_request_for_them(question):
+    assert curated.topic(question) is None

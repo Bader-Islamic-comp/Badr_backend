@@ -11,7 +11,7 @@ import pytest
 from companion_api.rag import arabizi, normalize, responses, router
 from companion_api.rag.embeddings import HashingEmbedder
 from companion_api.rag.grounding import first_person, misquoted, support, verify
-from companion_api.rag.judge import read as read_verdict
+from companion_api.rag.judge import SECOND_SYSTEM, read as read_verdict
 from companion_api.rag.prompts import FAITH_SYSTEM, SYSTEM
 from companion_api.rag.release import load_release, write_release
 from companion_api.rag.retriever import HybridRetriever
@@ -189,7 +189,7 @@ def test_religious_passages_get_the_faith_prompt_and_the_judge(release):
     result = service(release, generator).answer("أين وصل القارب الكبير بعد المطر؟")
     assert result.answer_type == "grounded" and result.citations == ("story-boat#1",)
     assert generator.modes == ["text", "json"] and generator.systems[0] == FAITH_SYSTEM
-    assert result.provenance["judge"] == "faith-judge-v1" and result.provenance["promptVersion"] == "rag-answer-v4"
+    assert result.provenance["judge"] == "faith-judge-v2" and result.provenance["promptVersion"] == "rag-answer-v4"
 
 
 @pytest.mark.parametrize("verdict, error, reason", [
@@ -270,3 +270,69 @@ def test_the_query_aliases_file_is_up_to_date():
     spec.loader.exec_module(module)
     assert arabizi.ALIASES_FILE.read_text(encoding="utf-8") == module.render(module.build()), (
         "run python scripts/export_query_aliases.py")
+
+
+# faith-judge-v2: a second judge from another model family ------------------------------------------------------
+
+class SecondJudge:
+    """The second judge: JSON verdicts only. `model` is what provenance records."""
+    model = "gemma3:4b"
+
+    def __init__(self, verdict=OK_VERDICT, error=None):
+        self.verdict, self.error, self.calls = verdict, error, 0
+
+    def complete(self, messages, *, max_tokens, json_mode=False, temperature=None):
+        self.calls += 1
+        assert json_mode and messages[0]["content"] == SECOND_SYSTEM
+        if self.error is not None:
+            raise self.error
+        return self.verdict
+
+
+def _two_judges(release, first=OK_VERDICT, second=None):
+    retriever = HybridRetriever(release, HashingEmbedder(), include_drafts=True)
+    return AnswerService(retriever, Generator(answer=_boat_answer, verdict=first), language="ar", second_judge=second)
+
+
+def test_both_judges_must_pass_and_both_are_recorded(release):
+    second = SecondJudge()
+    result = _two_judges(release, second=second).answer("أين وصل القارب الكبير بعد المطر؟")
+    assert result.answer_type == "grounded" and second.calls == 1
+    assert [check.name for check in result.checks][-2:] == ["judge", "judge2"]
+    assert result.provenance["judge"] == "faith-judge-v2" and result.provenance["judge2"] == "gemma3:4b"
+
+
+@pytest.mark.parametrize("verdict, error, reason", [
+    ('{"answers_question": true, "supported": false, "speaker_ok": true}', None, "faith_abstain:judge2:supported"),
+    ("not json", None, "faith_abstain:judge2:invalid_verdict"),
+    (OK_VERDICT, TimeoutError(), "faith_abstain:judge2:error:TimeoutError"),
+])
+def test_the_second_judge_withholds_what_the_first_passed(release, verdict, error, reason):
+    result = _two_judges(release, second=SecondJudge(verdict, error)).answer("أين وصل القارب الكبير بعد المطر؟")
+    assert (result.answer_type, result.text, result.reason) == ("abstained", responses.ABSTAIN_FAITH_AR, reason)
+
+
+def test_the_second_judge_is_not_asked_when_the_first_says_no(release):
+    second = SecondJudge()
+    result = _two_judges(release, first='{"answers_question": false, "supported": true, "speaker_ok": true}',
+                         second=second).answer("أين وصل القارب الكبير بعد المطر؟")
+    assert result.reason == "faith_abstain:judge:answers_question" and second.calls == 0
+
+
+def test_only_an_allowlisted_second_judge_starts():
+    from companion_api.config import Settings
+    from companion_api.rag.generator import JUDGE_MODELS, OpenAICompatibleGenerator
+    assert OpenAICompatibleGenerator(model="gemma3:4b", allowlist=JUDGE_MODELS).model == "gemma3:4b"
+    with pytest.raises(ValueError):
+        OpenAICompatibleGenerator(model="gemma3:4b")                       # not an answer model
+    with pytest.raises(ValueError):
+        OpenAICompatibleGenerator(model="llama3:8b", allowlist=JUDGE_MODELS)
+    settings = Settings(rag_enabled=True, rag_release="releases/none", judge_model="llama3:8b")
+    with pytest.raises(RuntimeError, match="COMPANION_JUDGE_MODEL='llama3:8b' is not allowlisted"):
+        settings.require_rag()
+
+
+@pytest.mark.parametrize("message", ["شو أدعي؟", "وش ندعي ربنا؟", "بدعي كل يوم بس ما بعرف شو أقول"])
+def test_supplicating_is_a_faith_topic(message):
+    # dev-patterns-v6: «شو أدعي لأهلي؟» reached the chat copy on 2026-10-05.
+    assert router.is_faith_topic(message)

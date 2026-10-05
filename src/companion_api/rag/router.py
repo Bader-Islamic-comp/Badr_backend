@@ -35,7 +35,7 @@ from typing import Literal, Protocol, Sequence
 
 from . import arabic_rules, arabizi, normalize
 
-ROUTER_VERSION = "dev-patterns-v5"
+ROUTER_VERSION = "dev-patterns-v6"
 
 Category = Literal["safety", "personal_data", "ruling", "injection", "retrieve"]
 ORDER: tuple[Category, ...] = ("safety", "personal_data", "ruling", "injection")

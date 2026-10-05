@@ -23,6 +23,7 @@ existed before keep their old spelling (`grounding:first_person`, `declined`, `o
 | `scene` | answers citing Quran passages of a mapped story | they come from another episode (scene.py) |
 | `translation` | quotations of a translation of the meanings | the sentence does not present it as a named translation |
 | `judge` | answers citing religious text | the model judge says no (judge.py) |
+| `judge2` | the same, when a second judge is configured | the second judge (another model family) finds no answer or no support |
 
 Results reach provenance (`AnswerResult.checks`) and the log line as names and codes, never text.
 """
@@ -440,8 +441,9 @@ def check_translation(answer: Answer) -> CheckResult:
 class Verifier:
     """Runs the checks in order. The episode and ayah data come from the release and data/episodes.json."""
 
-    def __init__(self, episodes: Episodes | None = None, ayahs: AyahIndex | None = None):
-        self.episodes, self.ayahs = episodes, ayahs
+    def __init__(self, episodes: Episodes | None = None, ayahs: AyahIndex | None = None,
+                 second_judge: Generator | None = None):
+        self.episodes, self.ayahs, self.second_judge = episodes, ayahs, second_judge
 
     def check_scene(self, answer: Answer) -> CheckResult:
         finding = check_scene(answer.question, answer.question_terms, [segment.text for segment in answer.segments],
@@ -469,6 +471,12 @@ class Verifier:
                 verdict = faith_judge.judge(generator, answer.question, answer.text, list(answer.cited))
                 results.append(_failed("judge", verdict) if verdict else _passed("judge"))
                 failure = verdict
+                # faith-judge-v2: a second model family must agree; it runs only when the first passed.
+                if failure is None and self.second_judge is not None:
+                    verdict = faith_judge.judge(self.second_judge, answer.question, answer.text,
+                                                list(answer.cited), second=True)
+                    results.append(_failed("judge2", verdict) if verdict else _passed("judge2"))
+                    failure = verdict
         return tuple(results), failure
 
 

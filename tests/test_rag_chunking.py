@@ -82,6 +82,15 @@ def test_source_labels_name_the_work_and_the_reference_span():
     assert source_label(untitled, ("p1",)) == "Stars \u00b7 p1"
 
 
+def test_a_label_names_each_kind_of_reference_in_its_own_run():
+    # A hadith and three surahs: the hadith, then the surahs from the first to the last (not 114 alone).
+    item = document([unit("One.", reference="p1")], source={"work": "Package"})
+    assert source_label(item, ("abu_dawud:5082", "quran:112:1-4", "quran:113:1-5", "quran:114:1-6")) == \
+        "Package \u00b7 abu_dawud:5082; quran:112:1-4\u2013quran:114:1-6"
+    assert source_label(item, ("quran:12:87", "quran:12:93")) == "Package \u00b7 quran:12:87\u2013quran:12:93"
+    assert source_label(item, ("bukhari:757", "dorar_fiqh:234")) == "Package \u00b7 bukhari:757; dorar_fiqh:234"
+
+
 def test_answer_documents_become_exactly_one_chunk_with_questions():
     data = {"schemaVersion": 1, "id": "answer-stars", "kind": "answer", "title": "Earning stars", "language": "en",
             "ageBands": ["7-9", "10-11"], "contentType": "app_help", "curriculumPolicy": "dev-synthetic",
