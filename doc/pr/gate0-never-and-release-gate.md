@@ -30,6 +30,9 @@ Nasser Obeid (product owner) approved both documents on 2026-10-05. The signed d
 - **Smaller changes:**
   - Decision items `copy:replies` and `copy:prompts`.
   - `progress_score.py` shares its item checks with the gate (scores unchanged).
+  - `corpus/canonical/manifest.json` is resynced with the registry. On `main` it still named the registry from
+    before `competition-ar-content` was registered; the regenerated values match the current registry and
+    `content.json`.
 
 ## Results
 
