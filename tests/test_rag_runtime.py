@@ -479,7 +479,7 @@ def test_grounded_answer_cites_sources_in_order(retriever):
                                  "retriever": "hybrid-rrf-v3", "verifier": "grounding-v4",
                                  "embedder": "hashing/hashing-v1", "policy": "conversation-policy-v5",
                                  "chatPromptVersion": "chat-v2", "chatChecker": "chat-check-v1",
-                                 "judge": "faith-judge-v1", "router": "dev-patterns-v4", "checks": "checks-v3",
+                                 "judge": "faith-judge-v1", "router": "dev-patterns-v5", "checks": "checks-v3",
                                  "curated": "curated-v2", "never": "never-v1"}
     assert result.grounding == "ok"
 

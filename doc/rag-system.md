@@ -1006,4 +1006,5 @@ Arabic. `tests/test_never.py` runs them, holds every fixed reply to the same rul
 | Output rules | `never-v1` | new |
 | Curated | `curated-v2` | other prayers keep the lessons out |
 | Policy | `conversation-policy-v5` | the rules on grounded and chat replies |
-| Prompt, verifier, judge, router, checks, retriever | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `dev-patterns-v4`, `checks-v3`, `hybrid-rrf-v3` | unchanged |
+| Router | `dev-patterns-v5` | a permission verb with its object («ينفع أكلمه؟») is a ruling; the grave and what follows death are faith topics |
+| Prompt, verifier, judge, checks, retriever | `rag-answer-v4`, `grounding-v4`, `faith-judge-v1`, `checks-v3`, `hybrid-rrf-v3` | unchanged |

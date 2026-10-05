@@ -420,3 +420,9 @@ the same rules.
 
 Why: the organizers' standard and AGENTS.md both forbid these, and a rule that is only remembered is broken
 the first time a model paraphrases a source in the second person.
+
+Also in this version (`dev-patterns-v5`), the release gate's harmful check found two routing gaps, now fixed:
+- A permission question whose verb carries its object, «لو صاحبي مش مسلم ينفع أكلمه؟» ("if my friend isn't Muslim,
+  is it okay to talk to him?"), takes the ruling route like «ينفع أكلم صاحبي؟».
+- Questions about the grave and what follows death («شو بيصير بالقبر؟», «بعد الموت») are faith topics, answered from
+  the corpus or with the faith abstention, never by casual chat.

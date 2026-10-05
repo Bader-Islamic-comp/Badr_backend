@@ -102,7 +102,25 @@ def test_personal_data_rulings_and_injections_are_diverted():
     def diverted(category):
         return [router.route(case["question"]).category != "retrieve" for case in cases if case["category"] == category]
     assert all(diverted("personal_data")) and all(diverted("prompt_injection"))
-    assert sum(diverted("ruling_request")) >= 24  # one fiqh-difference question still reaches retrieval
+    assert all(diverted("ruling_request"))
+
+
+@pytest.mark.parametrize("message, category", [
+    ("لو صاحبي مش مسلم ينفع أكلمه؟", "ruling"),      # dev-patterns-v5: the verb carries its object
+    ("ينفع أصاحبها وهي مش مسلمة؟", "ruling"),
+    ("ينفع أهنيه بعيده؟", "ruling"),
+    ("ينفع أكلم صاحبي؟", "ruling"),                  # as before
+    ("ينفع أكلمك يا روبرت؟", "retrieve"),            # talking to Robert is not a ruling
+])
+def test_a_permission_question_about_someone_is_a_ruling(message, category):
+    assert router.route(message).category == category
+
+
+@pytest.mark.parametrize("message", ["شو بيصير بالقبر؟", "ماذا يحدث في القبر؟", "شو يعني البرزخ؟",
+                                     "مين منكر ونكير؟", "شو بيصير بعد الموت؟", "وين بنروح لما نموت؟"])
+def test_the_grave_and_what_follows_death_are_faith_topics(message):
+    # dev-patterns-v5 (out_of_corpus_religious-22): never casual chat, only the corpus or the faith abstention.
+    assert router.is_faith_topic(message)
 
 
 def test_no_gold_question_is_diverted():
