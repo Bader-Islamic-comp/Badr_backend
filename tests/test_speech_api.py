@@ -11,8 +11,8 @@ from companion_api.config import Settings
 from companion_api.main import create_app
 from companion_api.speech.client import SpeechClient
 from companion_api.store import DomainError, Grant
-from speech_fake import (DEMO_TOKEN, ROBERT_WAV, SPEECH_TOKEN, SPEECH_URL, EchoDiacritizer, FakeSpeech, abstained,
-                         scored, speech_app, speech_settings, wav)
+from speech_fake import (DEMO_TOKEN, ROBERT_WAV, SPEECH_TOKEN, SPEECH_URL, CuratedAnswers, EchoDiacritizer, FakeSpeech,
+                         abstained, curated_reply, scored, speech_app, speech_settings, wav)
 
 ONE_MIB = 1_048_576
 
@@ -654,6 +654,28 @@ def test_robert_speaks_every_answer_type_of_his_own(client, answer_type):
     _cid, tid = add_turn(client, "سؤال جميل، لنتعلم معًا.", answer_type=answer_type)
     speak(client, tid)
     assert settle(client, tid)["status"] == "ready"
+
+
+def test_a_curated_reply_is_never_spoken(fake):
+    # The curated route serves the package's duas as written (AnswerService._curated): not one word is read aloud.
+    reply = curated_reply("وش أقول قبل النوم؟")
+    with _client(speech_app(fake, answer_service=CuratedAnswers(reply))) as client:
+        cid = client.post("/v1/conversations", json={}, headers={"Idempotency-Key": key()}).json()["conversationId"]
+        tid = client.post(f"/v1/conversations/{cid}/turns", json={"text": "وش أقول قبل النوم؟"},
+                          headers={"Idempotency-Key": key()}).json()["turnId"]
+        turn = client.get(f"/v1/turns/{tid}").json()
+        assert (turn["answerType"], turn["text"]) == ("grounded", reply.text) and "verbatim" not in turn
+        assert speak(client, tid).json() == {"status": "unavailable", "parts": [], "reason": "verbatim_not_spoken"}
+    assert not fake.rendered
+
+
+def test_robert_never_speaks_the_words_of_a_dua(client, fake):
+    # Quoted or not: the guard in textprep is the first line, the speech service's own guard the second.
+    _cid, tid = add_turn(client, "أهلًا يا صديقي! قبل النوم نقول: باسمك اللهم أموت وأحيا. "
+                                 "وفي الصباح نقول الحمد لله. نتعلم معًا كل يوم.")
+    speak(client, tid)
+    assert settle(client, tid)["status"] == "ready"
+    assert [text.replace("\u064e", "") for text in fake.rendered] == ["أهلًا يا صديقي! نتعلم معًا كل يوم."]
 
 
 def test_a_pending_or_unknown_turn(client):

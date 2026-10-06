@@ -121,3 +121,8 @@ class DuaCatalogue:
 
     def get(self, dua_id: str) -> Dua | None:
         return self._load().get(dua_id)
+
+    def recited_texts(self) -> list[str]:
+        """Every hadith invocation's words and each of its clauses: what Robert's voice never says (textprep)."""
+        return [text for dua in self.items() if dua.kind == "hadith_invocation"
+                for text in (dua.text, *split_clauses(dua.text))]

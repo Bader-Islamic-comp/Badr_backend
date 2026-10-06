@@ -8,10 +8,18 @@ Only Robert's own Arabic sentences. Quran, hadith and duas are never generated a
   ("(البقرة: 255)"); a trailing sources list (a line opening with «المصادر», «المراجع», "Sources", "References")
   is cut with everything after it.
 - A sentence with a Latin letter is dropped (the voice is Arabic only), and so is one without an Arabic letter.
+- A sentence holding the words of a dua or dhikr the app teaches, quoted or not, is dropped whole, and so is one
+  that is part of such words (`recited`: the package's hadith duas, each of their clauses and the four adhkar,
+  every text of at least two words, compared folded by `rag.normalize.search_text`). The speech service's own
+  guard is the second line, not the only one.
 The rest is split into sentences, long ones at «،» «؛» or spaces, and merged in order into parts of at most
-`MAX_PART_CHARS` characters; at most `MAX_PARTS` parts are spoken.
+`MAX_PART_CHARS` characters; a merged part that holds recited words is dropped too. At most `MAX_PARTS` parts
+are spoken.
 """
 import re
+from collections.abc import Collection, Iterable
+
+from ..rag.normalize import search_text
 
 MAX_PART_CHARS = 140
 MAX_PARTS = 6
@@ -25,6 +33,7 @@ SENTENCE = re.compile(r"[^.!?؟…\n]+[.!?؟…]*")
 LATIN = re.compile("[A-Za-z]")
 ARABIC = re.compile("[\u0621-\u064a]")
 _BREAKS = re.compile(r"(?<=[،؛,;])\s+")
+MIN_RECITED_WORDS = 2
 _SPACE_BEFORE_PUNCTUATION = re.compile(r"\s+([.!?؟…،؛,;:])")
 
 
@@ -76,7 +85,21 @@ def _merge(pieces: list[str], limit: int) -> list[str]:
     return merged
 
 
-def speakable_parts(text: str, max_chars: int = MAX_PART_CHARS, max_parts: int = MAX_PARTS) -> list[str]:
-    """Robert's own Arabic sentences from `text`, as at most `max_parts` parts of at most `max_chars`."""
-    pieces = [piece for sentence in _sentences(text) for piece in _pieces(sentence, max_chars)]
-    return _merge(pieces, max_chars)[:max_parts]
+def recited_phrases(texts: Iterable[str]) -> frozenset[str]:
+    """The dua and dhikr texts of at least `MIN_RECITED_WORDS` words, folded, for `speakable_parts`."""
+    return frozenset(folded for folded in map(search_text, texts) if len(folded.split()) >= MIN_RECITED_WORDS)
+
+
+def recites(text: str, recited: Collection[str]) -> bool:
+    """Whether `text`, folded, holds one of the `recited` phrases or is part of one."""
+    folded = search_text(text)
+    return bool(folded) and any(phrase in folded or folded in phrase for phrase in recited)
+
+
+def speakable_parts(text: str, max_chars: int = MAX_PART_CHARS, max_parts: int = MAX_PARTS, *,
+                    recited: Collection[str] = ()) -> list[str]:
+    """Robert's own Arabic sentences from `text`, as at most `max_parts` parts of at most `max_chars`; nothing of
+    the `recited` phrases (`recited_phrases`)."""
+    pieces = [piece for sentence in _sentences(text) if not recites(sentence, recited)
+              for piece in _pieces(sentence, max_chars)]
+    return [part for part in _merge(pieces, max_chars) if not recites(part, recited)][:max_parts]

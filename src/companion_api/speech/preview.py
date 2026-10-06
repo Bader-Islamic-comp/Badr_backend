@@ -19,6 +19,7 @@ from .diacritize import Diacritizer, LlmDiacritizer
 from .duas import DuaCatalogue
 from .game import DhikrGame
 from .robert_voice import RobertVoice
+from .textprep import recited_phrases
 
 FEATURES = ("recitation", "voiceQuestions", "robertVoice")
 MAX_RECORDING_SECONDS = 15
@@ -60,7 +61,10 @@ class SpeechPreview:
             diacritizer = LlmDiacritizer(generator)
         self.voice = None
         if self.switches["robertVoice"] and diacritizer is not None:
-            self.voice = RobertVoice(self.client, diacritizer, settings.robert_voice_id, turn_exists=store.has_turn)
+            # Never spoken, quoted or not: the package's duas (and their clauses) and the four adhkar.
+            recited = recited_phrases([*self.catalogue.recited_texts(), *(entry["text"] for entry in adhkar.ADHKAR)])
+            self.voice = RobertVoice(self.client, diacritizer, settings.robert_voice_id, turn_exists=store.has_turn,
+                                     recited=recited)
         self.switches["robertVoice"] = self.voice is not None
         self._recorded: tuple[float, frozenset[str]] | None = None
 

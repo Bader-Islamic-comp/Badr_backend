@@ -12,7 +12,7 @@ from companion_api.speech import adhkar, arabic, child_copy, diacritize, duas, r
 from companion_api.speech.client import (SpeechBusy, SpeechClient, SpeechConflict, SpeechNotFound, SpeechRejected,
                                          SpeechTooLarge, SpeechUnavailable)
 from http_probe import recording_server, route_through
-from speech_fake import SPEECH_TOKEN, SPEECH_URL
+from speech_fake import SPEECH_TOKEN, SPEECH_URL, curated_reply
 
 FATHA, DAMMA, KASRA, SHADDA, SUKUN = "\u064e", "\u064f", "\u0650", "\u0651", "\u0652"
 FATHATAN, DAGGER_ALEF, TATWEEL = "\u064b", "\u0670", "\u0640"
@@ -108,6 +108,42 @@ def test_parts_are_merged_bounded_and_at_most_six():
     many = " ".join(f"هذه الجملة رقم {index} وهي طويلة بما يكفي لتملأ جزءًا كاملًا من الأجزاء المسموعة هنا "
                     "مع كلمات إضافية كثيرة." for index in "ابتثجحخد")
     assert len(textprep.speakable_parts(many)) == textprep.MAX_PARTS
+
+
+RECITED = textprep.recited_phrases([*duas.DuaCatalogue().recited_texts(), *(item["text"] for item in adhkar.ADHKAR)])
+
+
+def test_the_recited_phrases_are_the_duas_their_clauses_and_the_adhkar_of_two_words_or_more():
+    assert textprep.recited_phrases(["الله", "بِسْمِ اللَّهِ", "أستغفرُ الله"]) == {"بسم الله", "استغفر الله"}
+    for phrase in ("اللهم بك اصبحنا وبك امسينا وبك نحيا وبك نموت واليك النشور", "اللهم بك اصبحنا", "واليك النشور",
+                   "باسمك اللهم اموت واحيا", "الله اكبر", "سبحان الله", "الحمد لله", "استغفر الله", "بسم الله"):
+        assert phrase in RECITED, phrase
+
+
+@pytest.mark.parametrize("question, spoken", [
+    # Only the package's notes about each item are left: never the dua or dhikr itself.
+    ("ماذا أقول بعد الصلاة؟", [("أذكر الله بهذا الدعاء بعد الاستغفار. "
+                                "أتعلم هذا الذكر بعد الصلاة بالتدرج، مع مراعاة وجود صيغ ثابتة أخرى.")]),
+    ("ما أذكار الصباح المتاحة؟", ["أبدأ صباحي بذكر الله. يمكن تعلم هذا الذكر تدريجيًا، من غير ضغط أو شعور بالذنب."]),
+    ("وش أقول قبل النوم؟", ["أذكر الله قبل النوم."]),
+    ("ماذا أقول قبل الطعام؟", ["أسمّي الله قبل الطعام وآكل بأدب."]),
+    ("شو بقول لما أعطس؟", ["إذا عطست أحمد الله، وأتعلم أدب الرد على من يدعو لي."]),
+])
+def test_the_words_of_a_dua_are_never_spoken_even_unquoted(question, spoken):
+    # A real curated reply: the package's duas as written, with no quote marks around them.
+    reply = curated_reply(question).text
+    assert any(textprep.recites(part, RECITED) for part in textprep.speakable_parts(reply))  # quotes alone miss them
+    assert textprep.speakable_parts(reply, recited=RECITED) == spoken
+
+
+@pytest.mark.parametrize("text, spoken", [
+    ("أهلًا يا صديقي. قل باسمك اللهم أموت وأحيا قبل أن تنام. نتعلم معًا.", ["أهلًا يا صديقي. نتعلم معًا."]),
+    ("والحمدُ للهِ على كل حال. هذا جميل.", ["هذا جميل."]),                    # a clitic and marks change nothing
+    ("اللهم بك أصبحنا. وبك أمسينا. ثم نلعب.", ["ثم نلعب."]),                # a dua cut into sentences
+    ("الله يحب الصادقين. أنا روبرت.", ["الله يحب الصادقين. أنا روبرت."]),      # one word of a dua is not a dua
+])
+def test_a_sentence_that_holds_or_is_part_of_a_dua_is_dropped(text, spoken):
+    assert textprep.speakable_parts(text, recited=RECITED) == spoken
 
 
 # Copy -------------------------------------------------------------------------------------------------------

@@ -4,14 +4,21 @@ It answers through `httpx.MockTransport`, so the backend's real `SpeechClient` i
 records the shape of each request (method, path, query, body length), never the body itself.
 """
 from dataclasses import dataclass, field
+import functools
 import json
 import struct
+from types import SimpleNamespace
 from uuid import uuid4
 
 import httpx
 
 from companion_api.config import Settings
+from companion_api.corpusprep import competition
 from companion_api.main import create_app
+from companion_api.rag.chunking import chunk_documents
+from companion_api.rag.corpus import parse_document
+from companion_api.rag.service import AnswerService
+from companion_api.speech import duas
 from companion_api.speech.client import SpeechClient
 
 DEMO_TOKEN = "synthetic-operator-token-for-tests"
@@ -172,3 +179,29 @@ def speech_app(fake: FakeSpeech, *, diacritizer=None, settings: Settings | None 
     client = SpeechClient(SPEECH_URL, SPEECH_TOKEN, transport=fake.transport, backoff=(0, 0))
     return create_app(settings or speech_settings(), answer_service, speech_client=client,
                       diacritizer=diacritizer if diacritizer is not None else EchoDiacritizer())
+
+
+def curated_reply(question: str):
+    """The curated route's real reply (`AnswerService._curated`) over the competition package's hadith duas, built
+    into chunks as a release builds them. Quranic items are left out: they need the mushaf, and their ayat are
+    quoted in ﴿…﴾, which textprep drops anyway."""
+    content = json.loads(duas.CONTENT.read_text(encoding="utf-8"))
+    for group in duas.GROUPS:
+        content[group] = [item for item in content[group] if item.get("kind", "hadith_invocation") == "hadith_invocation"]
+    entry = {"publisher": "test publisher", "license": "test licence", "sha256": "a" * 64}
+    chunks = chunk_documents(parse_document(document, document["id"] + ".json")[0]
+                             for document in competition.documents(content, entry, {}))
+    service = SimpleNamespace(age_band="7-9", provenance={}, retriever=SimpleNamespace(eligible=lambda **_where: chunks))
+    service._result = functools.partial(AnswerService._result, service)
+    return AnswerService._curated(service, question, "ar")
+
+
+class CuratedAnswers:
+    """An answer service whose every reply is `result`, through the store's fixed-reply path (`route`)."""
+    retriever = SimpleNamespace(include_drafts=True)
+
+    def __init__(self, result):
+        self.result = result
+
+    def route(self, _text):
+        return self.result

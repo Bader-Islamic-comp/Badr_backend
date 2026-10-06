@@ -231,7 +231,10 @@ class DemoStore:
 
     @staticmethod
     def _answer_fields(result):
+        # `verbatim`: the curated route's items as written (AnswerService._curated), which Robert's voice never
+        # reads (ADR 0006). Internal: never in a turn the API returns.
         return {"status": "completed", "answerType": result.answer_type, "text": result.text,
+                "verbatim": getattr(result, "reason", "").startswith("curated_verbatim:"),
                 "citations": [source.id for source in result.sources],
                 "sources": [{"id": source.id, "title": source.title, "reference": source.reference}
                             for source in result.sources],
@@ -297,19 +300,22 @@ class DemoStore:
             turn = self.turns.get(identifier)
             if turn is None:
                 raise DomainError(404, "not_found")
-            return {key: deepcopy(value) for key, value in turn.items() if key not in {"conversationId", "segments"}}
+            return {key: deepcopy(value) for key, value in turn.items()
+                    if key not in {"conversationId", "segments", "verbatim"}}
 
     def has_turn(self, identifier) -> bool:
         with self.lock:
             return identifier in self.turns
 
     def spoken_turn(self, identifier):
-        """What Robert's voice reads of a turn (ADR 0006): its conversation, status, answer type and text."""
+        """What Robert's voice reads of a turn (ADR 0006): its conversation, status, answer type and text, and
+        whether it is the curated route's verbatim reply."""
         with self.lock:
             turn = self.turns.get(identifier)
             if turn is None:
                 raise DomainError(404, "not_found")
-            return {key: turn[key] for key in ("conversationId", "turnId", "status", "answerType", "text")}
+            return {**{key: turn[key] for key in ("conversationId", "turnId", "status", "answerType", "text")},
+                    "verbatim": turn.get("verbatim", False)}
 
     def turn_events(self, identifier):
         """The turn including its verified segments, for the event stream."""
@@ -317,7 +323,7 @@ class DemoStore:
             turn = self.turns.get(identifier)
             if turn is None:
                 raise DomainError(404, "not_found")
-            return {key: deepcopy(value) for key, value in turn.items() if key != "conversationId"}
+            return {key: deepcopy(value) for key, value in turn.items() if key not in {"conversationId", "verbatim"}}
 
     def delete_conversation(self, identifier):
         with self.lock:

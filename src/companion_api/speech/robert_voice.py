@@ -1,10 +1,13 @@
 """Robert's voice: an answer read aloud on request, part by part (ADR 0006, owner decision D-C).
 
-`start` takes a completed turn of a spoken answer type, prepares its parts (`textprep.speakable_parts`) and
-runs one asyncio task in the API process: for each part in order, the model adds tashkeel (`diacritize`), the
-part is kept only when no letter changed (`arabic.same_letters`), and the speech service renders it
+`start` takes a completed turn of a spoken answer type, prepares its parts (`textprep.speakable_parts`, which
+drops quotations and the words of the app's duas and adhkar) and runs one asyncio task in the API process: for
+each part in order, the model adds tashkeel (`diacritize`), the part is kept only when no letter changed
+(`arabic.same_letters`), and the speech service renders it
 (`/v1/tts/render`, category `persona`). A part the check or a speech guard refuses is dropped; the app plays the
 ready parts in index order as they arrive. One job renders at a time, because the speech service has one GPU.
+A curated reply is never spoken at all: it is the package's items as written, duas among them (`verbatim`, which
+the store sets for `AnswerService._curated`).
 
 Audio lives in this process's memory only: at most `MAX_TURNS` turns, each for `TTL_SECONDS`, dropped at once
 when its conversation is deleted. Every call checks that the turn still exists (`turn_exists`), so a deletion
@@ -12,9 +15,9 @@ that races a request never leaves audio reachable. Jobs are touched on the event
 logged; the sentence text is let go once its part is done.
 """
 import asyncio
+from collections.abc import Callable, Collection
 from dataclasses import dataclass, field
 import time
-from typing import Callable
 
 from ..store import DomainError
 from .arabic import same_letters
@@ -28,6 +31,7 @@ TTL_SECONDS = 15 * 60
 MAX_TURNS = 16
 # Why nothing will be spoken (`reason`, only with status `unavailable`).
 NOT_SPOKEN = "answer_type_not_spoken"
+VERBATIM_NOT_SPOKEN = "verbatim_not_spoken"
 NOTHING_TO_SPEAK = "nothing_to_speak"
 SPEECH_UNAVAILABLE = "speech_unavailable"
 NO_PART_READY = "no_part_ready"
@@ -63,10 +67,10 @@ class _Job:
 class RobertVoice:
     def __init__(self, client: SpeechClient, diacritizer: Diacritizer, voice_id: str, *,
                  clock: Callable[[], float] = time.monotonic, ttl: float = TTL_SECONDS, max_turns: int = MAX_TURNS,
-                 turn_exists: Callable[[str], bool] = lambda _turn_id: True):
+                 turn_exists: Callable[[str], bool] = lambda _turn_id: True, recited: Collection[str] = ()):
         self.client, self.diacritizer, self.voice_id = client, diacritizer, voice_id
         self._clock, self.ttl, self.max_turns = clock, ttl, max_turns
-        self._turn_exists = turn_exists
+        self._turn_exists, self.recited = turn_exists, recited
         self._jobs: dict[str, _Job] = {}
         self._render_lock: asyncio.Lock | None = None
 
@@ -104,12 +108,17 @@ class RobertVoice:
             raise DomainError(409, "turn_pending")
         self._drop(turn["turnId"])
         self._make_room()
-        texts = speakable_parts(turn["text"]) if turn["answerType"] in SPOKEN_TYPES else []
+        if turn["answerType"] not in SPOKEN_TYPES:
+            texts, reason = [], NOT_SPOKEN
+        elif turn.get("verbatim"):
+            texts, reason = [], VERBATIM_NOT_SPOKEN
+        else:
+            texts, reason = speakable_parts(turn["text"], recited=self.recited), NOTHING_TO_SPEAK
         job = _Job(turn["turnId"], turn["conversationId"], self._clock(),
                    [_Part(index, text) for index, text in enumerate(texts)])
         self._jobs[job.turn_id] = job
         if not texts:
-            job.done, job.reason = True, NOT_SPOKEN if turn["answerType"] not in SPOKEN_TYPES else NOTHING_TO_SPEAK
+            job.done, job.reason = True, reason
         else:
             job.task = asyncio.get_running_loop().create_task(self._run(job))
         return job.view()
