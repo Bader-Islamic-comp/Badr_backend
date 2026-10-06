@@ -71,7 +71,14 @@ class SpeechPreview:
     # Switches --------------------------------------------------------------------------------------------
 
     def features(self) -> dict:
-        return {"preview": self.enabled, **{name: self.switches[name] for name in FEATURES},
+        """The bootstrap's `features.speech`. It never waits on the speech service: voice questions also need the
+        service's transcription on, read from its cached capabilities when there are any (else the switch alone)."""
+        switches = dict(self.switches)
+        if switches["voiceQuestions"]:
+            capabilities = self.client.cached("/v1/capabilities")
+            if capabilities is not None:
+                switches["voiceQuestions"] = capabilities.get("transcribeEnabled") is True
+        return {"preview": self.enabled, **{name: switches[name] for name in FEATURES},
                 "maxRecordingSeconds": MAX_RECORDING_SECONDS}
 
     def require(self, feature: str | None = None):

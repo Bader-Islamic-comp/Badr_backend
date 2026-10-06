@@ -337,6 +337,43 @@ def test_the_client_sends_the_token_and_raw_audio_and_caches_lists_for_a_minute(
     assert all(entry[2] == SPEECH_TOKEN for entry in seen) and seen[-1][3] == "audio/wav"
 
 
+def test_a_failed_list_lookup_is_not_tried_again_for_fifteen_seconds():
+    calls, now, state = [], [0.0], {"down": True}
+
+    def handler(request):
+        calls.append(request.url.path)
+        if state["down"]:
+            raise httpx.ConnectTimeout("timed out")
+        if request.url.path == "/v1/feedback-copy":  # an older service without the route
+            return httpx.Response(404, json={"detail": "Not Found"})
+        return httpx.Response(200, json={"items": []})
+    client = _client(handler, clock=lambda: now[0])
+
+    async def run():
+        # A service that does not answer fails every list at once, for 15 seconds, after one try.
+        for lookup in (client.adhkar, client.capabilities, client.duas, client.adhkar):
+            with pytest.raises(SpeechUnavailable):
+                await lookup()
+        now[0] = 14.9
+        with pytest.raises(SpeechUnavailable):
+            await client.capabilities()
+        assert calls == ["/v1/adhkar"]
+        state["down"], now[0] = False, 15.0
+        assert await client.capabilities() == {"items": []} and await client.duas() == {"items": []}
+        # Any other failure holds back only its own list.
+        for _ in range(2):
+            with pytest.raises(SpeechNotFound):
+                await client.feedback_copy()
+        assert await client.adhkar() == {"items": []}
+        assert calls == ["/v1/adhkar", "/v1/capabilities", "/v1/duas", "/v1/feedback-copy", "/v1/adhkar"]
+        assert client.cached("/v1/capabilities") == {"items": []} and client.cached("/v1/feedback-copy") is None
+        now[0] = 75.0
+        assert client.cached("/v1/capabilities") is None  # stale: never a request from here
+        await client.aclose()
+    asyncio.run(run())
+    assert len(calls) == 5
+
+
 def test_an_unreachable_or_odd_service_is_unavailable():
     def down(request):
         raise httpx.ConnectTimeout("timed out")

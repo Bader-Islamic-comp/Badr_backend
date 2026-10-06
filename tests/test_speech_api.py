@@ -238,6 +238,33 @@ def test_learn_content_degrades_gracefully_without_the_service(client, fake):
     assert not fake.calls("GET", "/v1/audio/recorded/dua-sleep")  # no probe per dua while the service is down
 
 
+def test_an_unreachable_service_is_asked_once_per_fifteen_seconds(client, fake):
+    fake.down = True
+    for path in ("/v1/adhkar", "/v1/duas", "/v1/games/dhikr", "/v1/adhkar"):
+        assert client.get(path).status_code == 200, path
+    assert [request[1] for request in fake.requests] == ["/v1/adhkar"]
+
+
+def test_bootstrap_voice_questions_follow_the_service_s_transcription_switch(fake):
+    fake.transcribe = False
+    with _client(speech_app(fake)) as client:
+        def voice_questions():
+            return client.get("/v1/bootstrap").json()["features"]["speech"]["voiceQuestions"]
+        # The bootstrap never waits on the speech service: with nothing cached, the switch alone.
+        assert voice_questions() is True and fake.requests == []
+        client.get("/v1/adhkar")  # reads the capabilities, which say transcription is off
+        assert voice_questions() is False
+        assert send(client, "/v1/speech/transcriptions", idempotency=False).json() == {
+            "error": {"code": "speech_unavailable"}}
+        fake.transcribe = True
+        client.app.state.speech.client.forget("/v1/capabilities")
+        client.get("/v1/adhkar")
+        assert voice_questions() is True
+    with _client(speech_app(fake, settings=speech_settings(speech_voice_questions=False))) as client:
+        client.get("/v1/adhkar")
+        assert client.get("/v1/bootstrap").json()["features"]["speech"]["voiceQuestions"] is False
+
+
 def test_practice_needs_stt_and_audio_needs_the_same_words(client, fake):
     fake.stt = False
     fake.adhkar_text["tahmeed"] = "الْحَمْدُ لِلَّهِ رَبِّ"

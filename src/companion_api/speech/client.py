@@ -7,9 +7,11 @@ name, a profile, a conversation or the child's typed text.
 
 Nothing here logs or keeps a request or response body. Audio passes through and is dropped with the request;
 the small JSON lists (capabilities, duas, adhkar, feedback copy) are cached for at most 60 seconds because
-they hold no child data. Every failure is a `SpeechError` with a fixed code, never content: a service that
-cannot be reached, answers 5xx, 401 or something unexpected is `SpeechUnavailable`; a full queue is retried
-twice after a short wait and then is `SpeechBusy`.
+they hold no child data. A failed list lookup is not tried again for 15 seconds, and a service that cannot be
+reached at all fails every list for that long, so a Learn page answers at once instead of waiting on each list
+in turn. Every failure is a `SpeechError` with a fixed code, never content: a service that cannot be reached,
+answers 5xx, 401 or something unexpected is `SpeechUnavailable`; a full queue is retried twice after a short wait
+and then is `SpeechBusy`.
 """
 import asyncio
 import json
@@ -23,6 +25,8 @@ from ..rag.endpoints import require_private_endpoint
 
 AUDIO_TYPE = "audio/wav"
 CACHE_SECONDS = 60.0
+NEGATIVE_CACHE_SECONDS = 15.0      # a failed list lookup is not tried again sooner
+_UNREACHABLE = "*"                 # the negative-cache key for a service that does not answer at all
 LIST_TIMEOUT = 10.0                # the lists and the recording probe: Learn pages degrade fast without the service
 BUSY_BACKOFF = (0.3, 0.6)          # two retries after a full queue, then speech_busy
 MAX_JSON_BYTES = 256 * 1024
@@ -88,7 +92,8 @@ class SpeechClient:
     def __init__(self, base_url: str, token: str, *, timeout: float = 30.0, tts_timeout: float = 240.0,
                  transport: httpx.AsyncBaseTransport | None = None, cache_seconds: float = CACHE_SECONDS,
                  clock: Callable[[], float] = time.monotonic, backoff: tuple[float, ...] = BUSY_BACKOFF,
-                 sleep: Callable[[float], Awaitable[None]] = asyncio.sleep):
+                 sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
+                 negative_seconds: float = NEGATIVE_CACHE_SECONDS):
         self.base_url = require_private_endpoint(base_url)
         self._token = token
         self.timeout, self.tts_timeout = timeout, tts_timeout
@@ -98,6 +103,8 @@ class SpeechClient:
         self._backoff, self._sleep = backoff, sleep
         self._http: httpx.AsyncClient | None = None
         self._cache: dict[str, tuple[float, Any]] = {}
+        self._negative_seconds = negative_seconds
+        self._failed: dict[str, tuple[float, SpeechError]] = {}
 
     def __repr__(self):
         return f"SpeechClient({self.base_url!r})"
@@ -167,13 +174,30 @@ class SpeechClient:
         hit = self._cache.get(path)
         if hit is not None and now - hit[0] < self._cache_seconds:
             return hit[1]
-        data = await self._json("GET", path, timeout=self.list_timeout)
+        for key in (path, _UNREACHABLE):
+            failed = self._failed.get(key)
+            if failed is not None and now - failed[0] < self._negative_seconds:
+                raise type(failed[1])(failed[1].code)
+        try:
+            data = await self._json("GET", path, timeout=self.list_timeout)
+        except SpeechError as error:
+            # No answer at all fails every list for a while; any other failure (an older service's 404) only this one.
+            self._failed[_UNREACHABLE if error.code.startswith("unreachable_") else path] = (self._clock(), error)
+            raise
+        self._failed.pop(path, None)
+        self._failed.pop(_UNREACHABLE, None)
         self._cache[path] = (now, data)
         return data
+
+    def cached(self, path: str) -> dict | None:
+        """A list's cached answer while it is fresh, else None. Never a request: for the bootstrap."""
+        hit = self._cache.get(path)
+        return hit[1] if hit is not None and self._clock() - hit[0] < self._cache_seconds else None
 
     def forget(self, path: str):
         """Drops one cached list, e.g. `/v1/duas` after a version conflict."""
         self._cache.pop(path, None)
+        self._failed.pop(path, None)
 
     # The lists: no child data, cached ---------------------------------------------------------------------
 

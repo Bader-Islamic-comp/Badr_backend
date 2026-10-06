@@ -66,6 +66,7 @@ class FakeSpeech:
                                                       "abstainReason": None, "language": "ar"})
     stt: bool = True
     tts: bool = True
+    transcribe: bool = True              # DUA_SPEECH_TRANSCRIBE_ENABLED: /v1/transcribe answers 404 without it
     version: str = "1"
     stale_versions: int = 0              # how many 409 dua_version_mismatch answers to give first
     reject: tuple = ()                   # rendered texts containing one of these are refused by a guard
@@ -96,7 +97,7 @@ class FakeSpeech:
             return httpx.Response(200, json={"profile": "dev", "device": "cpu", "sttEnabled": self.stt,
                                              "sttAvailable": self.stt, "ttsEnabled": self.tts,
                                              "ttsAvailable": self.tts, "ttsDirectEnabled": self.tts,
-                                             "ttsLicenseRecorded": False, "transcribeEnabled": True,
+                                             "ttsLicenseRecorded": False, "transcribeEnabled": self.transcribe,
                                              "adhkarTtsStatus": "draft"})
         if route == ("GET", "/v1/duas"):
             counts = {**DUA_COUNTS, **{f"dhikr-{key}": [2] for key in ADHKAR_TEXT}}
@@ -119,6 +120,8 @@ class FakeSpeech:
                 return self._error(404, "audio_not_found")
             body, status = self.audio[(kind, audio_id)]
             return httpx.Response(200, content=body, headers={"Content-Type": "audio/wav", "X-Audio-Status": status})
+        if route == ("POST", "/v1/transcribe") and not self.transcribe:
+            return httpx.Response(404, json={"detail": "Not Found"})
         if route in {("POST", "/v1/dua-attempts"), ("POST", "/v1/transcribe")}:
             if request.headers.get("content-type") != "audio/wav":
                 return self._error(415, "unsupported_content_type")
