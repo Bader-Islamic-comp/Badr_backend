@@ -164,10 +164,13 @@ def register(router: APIRouter, preview: SpeechPreview, store: DemoStore):
         if reservation.result is not None:
             return reservation.result
         try:
-            dhikr_id, number = preview.game.next_attempt(rid)
-            with speech_errors():
-                result, attempt_body = await preview.recite(adhkar.dua_id(dhikr_id), 0, number, audio)
-            game_round = preview.game.record(rid, result)
+            dhikr_id, number = preview.game.next_attempt(rid)  # holds the round: one attempt at a time
+            try:
+                with speech_errors():
+                    result, attempt_body = await preview.recite(adhkar.dua_id(dhikr_id), 0, number, audio)
+                game_round = preview.game.record(rid, result)
+            finally:
+                preview.game.release(rid)
             body = {"attempt": attempt_body, "round": game_round, "balance": store.balance}
         except BaseException:
             store.abandon(reservation)

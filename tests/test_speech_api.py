@@ -440,6 +440,38 @@ def test_the_game_attempt_number_follows_the_round(client, fake):
     assert [call[2]["attempt"] for call in fake.calls("POST", "/v1/dua-attempts")] == ["1", "2", "3"]
 
 
+def test_only_counted_attempts_advance_the_number_the_service_sees(client, fake):
+    # Three poor recordings do not count; the next scored try is the round's first counted attempt, so the
+    # service still shows its words (attempt 1), not the "try another dua" line it gives after a third attempt.
+    fake.attempts = [abstained("audio_quality", "abstain_quality")] * 3 + [
+        scored("try_again", "clear", copy_id="mostly_clear")]
+    rid = new_round(client)["roundId"]
+    bodies = [play(client, rid).json() for _ in range(5)]
+    assert [call[2]["attempt"] for call in fake.calls("POST", "/v1/dua-attempts")] == ["1", "1", "1", "1", "2"]
+    assert bodies[3]["attempt"]["showWords"] is True and bodies[3]["round"]["countedAttempts"] == 1
+    assert bodies[4]["round"] == {**bodies[4]["round"], "attempts": 5, "countedAttempts": 2, "complete": False}
+
+
+def test_one_attempt_at_a_time_per_round(client, fake):
+    game = client.app.state.speech.game
+    rid = new_round(client)["roundId"]
+    game.next_attempt(rid)  # an attempt on this round is still waiting on the speech service
+    busy = play(client, rid, **{"Idempotency-Key": "round-attempt-busy"})
+    assert (busy.status_code, busy.json()) == (409, {"error": {"code": "request_in_progress"}})
+    assert not fake.calls("POST", "/v1/dua-attempts")
+    other = new_round(client)["roundId"]
+    assert play(client, other).status_code == 200  # other rounds are not held
+    game.release(rid)
+    # The refusal was not cached: the same key runs once the round is free, and a failure frees it too.
+    assert play(client, rid, **{"Idempotency-Key": "round-attempt-busy"}).json()["round"]["attempts"] == 1
+    fake.down = True
+    fake.attempts = [scored("try_again", "try_again", copy_id="mostly_clear")]
+    rid = new_round(client)["roundId"]
+    assert play(client, rid).json() == {"error": {"code": "speech_unavailable"}}
+    fake.down = False
+    assert play(client, rid).json()["round"]["attempts"] == 1
+
+
 def test_stars_stop_at_the_daily_cap_and_rounds_still_complete(client):
     game = client.app.state.speech.game
     today = datetime(2026, 10, 6, 23, 0, tzinfo=timezone.utc)

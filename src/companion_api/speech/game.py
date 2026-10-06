@@ -5,6 +5,10 @@ after three counted attempts (`Recitation.counts`), so a child who keeps trying 
 appended to the store's append-only ledger once per round (`dhikr-game:<roundId>`), and no more than
 `DAILY_STAR_CAP` per UTC day: past the cap a round still completes, just without a star (the app's copy calls it
 a lovely practice; nothing is lost). Rounds hold ids and counts only, never audio.
+
+The speech service is told the counted attempts plus one: an attempt that did not count (poor audio, off-script)
+must not push the number past three, where the service stops showing words and suggests another dua while the
+round is still open. One attempt runs per round at a time; a second is 409 `request_in_progress`.
 """
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -44,6 +48,7 @@ class DhikrGame:
         self.store, self._now, self.max_rounds = store, now, max_rounds
         self._rounds: OrderedDict[str, _Round] = OrderedDict()
         self._awarded: dict[str, date] = {}   # roundId -> the UTC day its star was granted
+        self._busy: set[str] = set()          # rounds with an attempt waiting on the speech service
 
     def _today(self) -> date:
         return self._now().astimezone(timezone.utc).date()
@@ -77,10 +82,18 @@ class DhikrGame:
         return game_round
 
     def next_attempt(self, round_id: str) -> tuple[str, int]:
-        """The round's dhikr and the number of the attempt about to be made."""
+        """Holds the round for one attempt until `release`: its dhikr and the attempt number for the speech
+        service, which is the counted attempts plus one. A round already held is 409 `request_in_progress`."""
         with self.store.lock:
             game_round = self._open(round_id)
-            return game_round.dhikr_id, game_round.attempts + 1
+            if round_id in self._busy:
+                raise DomainError(409, "request_in_progress")
+            self._busy.add(round_id)
+            return game_round.dhikr_id, game_round.counted + 1
+
+    def release(self, round_id: str):
+        with self.store.lock:
+            self._busy.discard(round_id)
 
     def record(self, round_id: str, recitation: Recitation) -> dict:
         with self.store.lock:
