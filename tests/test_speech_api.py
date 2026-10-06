@@ -664,6 +664,34 @@ def test_a_speech_outage_is_unavailable_and_a_new_request_retries(client, fake):
     assert settle(client, tid)["status"] == "ready"
 
 
+class FlakyDiacritizer(EchoDiacritizer):
+    """The tashkeel model while it is down: None (LlmDiacritizer on a GenerationError), or an exception."""
+
+    def __init__(self, failure):
+        super().__init__()
+        self.failure = failure
+
+    def diacritize(self, text):
+        if self.failure == "none":
+            return None
+        if self.failure == "raise":
+            raise ConnectionError("model endpoint down")
+        return super().diacritize(text)
+
+
+@pytest.mark.parametrize("failure", ["none", "raise"])
+def test_a_tashkeel_model_outage_is_unavailable_and_a_new_request_retries(fake, failure):
+    model = FlakyDiacritizer(failure)
+    with _client(speech_app(fake, diacritizer=model)) as client:
+        _cid, tid = add_turn(client)
+        speak(client, tid)
+        assert settle(client, tid) == {"status": "unavailable", "parts": [], "reason": "speech_unavailable"}
+        model.failure = None
+        speak(client, tid)
+        assert settle(client, tid)["status"] == "ready"
+    assert len(fake.rendered) == 1
+
+
 def test_deleting_the_conversation_drops_robert_s_voice(client):
     cid, tid = add_turn(client)
     speak(client, tid)

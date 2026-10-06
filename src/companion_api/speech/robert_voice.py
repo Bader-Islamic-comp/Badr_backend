@@ -169,14 +169,18 @@ class RobertVoice:
             job.done = True
 
     async def _render(self, part: _Part) -> bool:
-        """Renders one part, or drops it. False when the speech service itself is unavailable."""
+        """Renders one part, or drops it. False when the tashkeel model or the speech service is unavailable: the
+        job then ends `speech_unavailable`, and a repeated request starts it again."""
         text, part.text = part.text, None
         try:
             diacritized = await asyncio.to_thread(self.diacritizer.diacritize, text)
-        except Exception:  # an adapter that raises instead of returning None: this part is dropped
+        except Exception:  # an adapter that raises instead of returning None: the model is out all the same
             diacritized = None
-        if not diacritized or not same_letters(text, diacritized):
+        if diacritized is None:
             part.dropped = True
+            return False
+        if not same_letters(text, diacritized):
+            part.dropped = True  # the model changed a letter (or said nothing): skip this part
             return True
         try:
             part.audio = await self.client.render(diacritized, self.voice_id)
