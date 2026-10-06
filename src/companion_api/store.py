@@ -5,6 +5,10 @@ thread (one GPU) with a bounded queue (doc/rag-system.md §6.5). The question
 text is passed to that job and nowhere else: turns store only the finished
 answer, replays only keyed fingerprints. A job whose conversation was deleted
 while it ran finds no turn to write to, so its answer is dropped.
+
+Speech writes (ADR 0006) wait on the speech service, so they cannot hold the
+lock the way `execute` does: `begin` replays or reserves a key, `finish` keeps
+the result (never audio or a transcript) and `abandon` releases a failed one.
 """
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
@@ -43,6 +47,14 @@ class Replay:
     conversation_id: str | None
 
 
+@dataclass(frozen=True)
+class Reservation:
+    """A write key held while its request waits on another service; `result` is set when it is a replay."""
+    key_digest: bytes
+    fingerprint: bytes
+    result: dict | None = None
+
+
 class DemoStore:
     def __init__(self, answers=None, max_pending: int = 8):
         self.lock = RLock()
@@ -58,6 +70,7 @@ class DemoStore:
         self.conversations: set[str] = set()
         self.turns: dict[str, dict] = {}
         self.replays: dict[bytes, Replay] = {}
+        self._inflight: set[bytes] = set()
         self._ledger: list[Grant] = []
         # Ownership and equipment live here, not on the device: a look is worn
         # only after this process has recorded that it was earned.
@@ -79,12 +92,17 @@ class DemoStore:
     def _digest(self, value):
         return hmac.new(self._fingerprint_secret, value.encode("utf-8"), sha256).digest()
 
+    def _fingerprint(self, operation, payload):
+        return self._digest(json.dumps([operation, payload], sort_keys=True, separators=(",", ":")))
+
     def execute(self, key, operation, payload, callback, conversation_id=None, deleting_id=None):
         # Keyed digests prevent retaining text, arbitrary header values or
         # guessable unkeyed fingerprints. Secret lives only in this process.
         key_digest = self._digest(key)
-        fingerprint = self._digest(json.dumps([operation, payload], sort_keys=True, separators=(",", ":")))
+        fingerprint = self._fingerprint(operation, payload)
         with self.lock:
+            if key_digest in self._inflight:
+                raise DomainError(409, "request_in_progress")
             existing = self.replays.get(key_digest)
             if existing:
                 if not hmac.compare_digest(existing.fingerprint, fingerprint):
@@ -99,6 +117,40 @@ class DemoStore:
             reference = conversation_id or result.get("conversationId")
             self.replays[key_digest] = Replay(fingerprint, deepcopy(result), reference)
             return result
+
+    def begin(self, key, operation, payload) -> Reservation:
+        """Replays a finished write, or reserves its key until `finish` or `abandon`."""
+        key_digest, fingerprint = self._digest(key), self._fingerprint(operation, payload)
+        with self.lock:
+            existing = self.replays.get(key_digest)
+            if existing:
+                if not hmac.compare_digest(existing.fingerprint, fingerprint):
+                    raise DomainError(409, "idempotency_conflict")
+                return Reservation(key_digest, fingerprint, deepcopy(existing.result))
+            if key_digest in self._inflight:
+                raise DomainError(409, "request_in_progress")
+            if len(self.replays) >= self.max_replays:
+                raise DomainError(503, "demo_capacity_reached")
+            self._inflight.add(key_digest)
+            return Reservation(key_digest, fingerprint)
+
+    def finish(self, reservation: Reservation, result: dict):
+        with self.lock:
+            self._inflight.discard(reservation.key_digest)
+            self.replays[reservation.key_digest] = Replay(reservation.fingerprint, deepcopy(result), None)
+
+    def abandon(self, reservation: Reservation):
+        """A failed write is not cached, so a retry under the same key runs again."""
+        with self.lock:
+            self._inflight.discard(reservation.key_digest)
+
+    def grant_once(self, source: str, amount: int) -> bool:
+        """Appends a grant unless the ledger already holds one from `source`."""
+        with self.lock:
+            if any(grant.source == source for grant in self._ledger):
+                return False
+            self._ledger.append(Grant(source, amount))
+            return True
 
     def complete_lesson(self):
         with self.lock:
@@ -227,6 +279,14 @@ class DemoStore:
             if turn is None:
                 raise DomainError(404, "not_found")
             return {key: deepcopy(value) for key, value in turn.items() if key not in {"conversationId", "segments"}}
+
+    def spoken_turn(self, identifier):
+        """What Robert's voice reads of a turn (ADR 0006): its conversation, status, answer type and text."""
+        with self.lock:
+            turn = self.turns.get(identifier)
+            if turn is None:
+                raise DomainError(404, "not_found")
+            return {key: turn[key] for key in ("conversationId", "turnId", "status", "answerType", "text")}
 
     def turn_events(self, identifier):
         """The turn including its verified segments, for the event stream."""

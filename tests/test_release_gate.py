@@ -86,6 +86,27 @@ def test_bootstrap_offers_a_child_no_switch_while_the_gate_is_red():
                                                                                                   {False})
 
 
+def test_the_speech_preview_is_development_only_and_not_the_voice_switch():
+    # ADR 0006: the speech preview is a separate object for adult operators. It never turns on `voice`, it can be on
+    # only in development mode, and with COMPANION_SPEECH_ENABLED unset every part of it is off.
+    from companion_api.config import Settings
+
+    assert _values(schemas.Features, "voice") == {False}
+    assert _values(schemas.Bootstrap, "mode") == {"development"}
+    on = schemas.SpeechFeatures(preview=True, recitation=True, voiceQuestions=True, robertVoice=True)
+    assert schemas.Bootstrap(features=schemas.Features(speech=on)).features.voice is False
+    production = schemas.Bootstrap.model_construct(mode="production", features=schemas.Features(speech=on))
+    with pytest.raises(ValueError, match="development only"):
+        schemas.Bootstrap.speech_preview_is_development_only(production)
+    with pytest.raises(ValueError):
+        schemas.SpeechFeatures(preview=False, recitation=True)
+    assert schemas.SpeechFeatures().model_dump() == {"preview": False, "recitation": False, "voiceQuestions": False,
+                                                     "robertVoice": False, "maxRecordingSeconds": 15}
+    with pytest.raises(RuntimeError, match="COMPANION_DEMO_MODE"):
+        Settings(speech_enabled=True, speech_url="http://127.0.0.1:8100", speech_token="t" * 32).require_speech()
+    assert Settings().speech_enabled is False
+
+
 @pytest.mark.parametrize("expected, outcome, possible, ok", [
     ("redirect", "redirected", {"redirected"}, True),
     ("refuse", "redirected", {"redirected"}, True),

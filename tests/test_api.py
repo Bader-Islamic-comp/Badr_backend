@@ -38,7 +38,9 @@ def test_demo_requires_operator_token(client):
     assert client.get("/health/live").json() == {"status": "ok"}
     assert client.get("/v1/bootstrap", headers={"X-Demo-Token": "wrong"}).status_code == 401
     data = client.get("/v1/bootstrap").json()
-    assert data["features"] == {"voice": False, "generativeAnswers": False, "unity": False}
+    assert data["features"] == {"voice": False, "generativeAnswers": False, "unity": False,
+                                "speech": {"preview": False, "recitation": False, "voiceQuestions": False,
+                                           "robertVoice": False, "maxRecordingSeconds": 15}}
     assert data["contentStatus"] == "awaiting_review"
 
 

@@ -14,18 +14,34 @@ from starlette.exceptions import HTTPException
 from . import content, schemas as s
 from .config import Settings
 from .rag.service import AnswerService, build_answer_service
+from .schemas import WriteKey
+from .speech import routes as speech_routes
+from .speech.client import SpeechClient
+from .speech.diacritize import Diacritizer
+from .speech.preview import SpeechPreview
 from .store import DemoStore, DomainError
 
-WriteKey = Annotated[str, Header(alias="Idempotency-Key", min_length=8, max_length=128, pattern=r"^[\x21-\x7e]+$")]
 EVENT_CURSOR = re.compile(r"^(0|[1-9][0-9]{0,3})$")
+BODY_LIMIT = 8192
+# Push-to-talk recordings (ADR 0006): one raw audio/wav body on the three upload routes, up to 1 MiB.
+AUDIO_ROUTE = re.compile(speech_routes.AUDIO_ROUTES)
 
 
 def error(status, code):
     return JSONResponse({"error": {"code": code}}, status_code=status)
 
 
+def body_limit(scope) -> int:
+    """8 KiB for every request, except a raw `audio/wav` POST to an audio upload route: 1 MiB."""
+    if scope["method"] == "POST" and AUDIO_ROUTE.fullmatch(scope["path"]):
+        content_type = dict(scope["headers"]).get(b"content-type", b"").decode("latin-1")
+        if speech_routes.media_type(content_type) == speech_routes.AUDIO_TYPE:
+            return speech_routes.MAX_AUDIO_BYTES
+    return BODY_LIMIT
+
+
 class RequestBoundary:
-    """Bound actual bytes, including chunked bodies, before JSON parsing."""
+    """Bound actual bytes, including chunked bodies, before JSON parsing. Bodies are held in memory only."""
     def __init__(self, app):
         self.app = app
 
@@ -39,13 +55,17 @@ class RequestBoundary:
                 message["headers"] += [(b"x-correlation-id", correlation_id), (b"cache-control", b"no-store")]
             await send(message)
 
+        limit = body_limit(scope)
+        declared = dict(scope["headers"]).get(b"content-length", b"")
+        if declared.isdigit() and int(declared) > limit:
+            return await error(413, "request_too_large")(scope, receive, guarded_send)
         body = bytearray()
         while True:
             message = await receive()
             if message["type"] == "http.disconnect":
                 return
             body.extend(message.get("body", b""))
-            if len(body) > 8192:
+            if len(body) > limit:
                 return await error(413, "request_too_large")(scope, receive, guarded_send)
             if not message.get("more_body", False):
                 break
@@ -59,18 +79,26 @@ class RequestBoundary:
         await self.app(scope, buffered_receive, guarded_send)
 
 
-def create_app(settings: Settings | None = None, answer_service: AnswerService | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, answer_service: AnswerService | None = None, *,
+               speech_client: SpeechClient | None = None, diacritizer: Diacritizer | None = None) -> FastAPI:
     """The API. Grounded answers run only with an injected service or `COMPANION_RAG_ENABLED=true`.
 
     Enabled answers fail closed at startup: a missing or altered release, a
     public endpoint, an unlisted model or a mismatched embedder stops the app
-    here rather than degrading at request time.
+    here rather than degrading at request time. So does an enabled speech
+    preview (`COMPANION_SPEECH_ENABLED=true`, ADR 0006) with a public address,
+    no token or a malformed switch; its client and tashkeel model may be
+    injected for tests.
     """
     settings = settings or Settings.from_environment()
     settings.require_demo()
+    if settings.speech_enabled:
+        settings.require_speech()
     if answer_service is None and settings.rag_enabled:
         answer_service = build_answer_service(settings)
     store = DemoStore(answer_service)
+    speech = SpeechPreview(settings, store, client=speech_client, diacritizer=diacritizer,
+                           generator=getattr(answer_service, "generator", None))
 
     @asynccontextmanager
     async def lifespan(_app):
@@ -78,11 +106,13 @@ def create_app(settings: Settings | None = None, answer_service: AnswerService |
             yield
         finally:
             store.close()
+            await speech.aclose()
 
     app = FastAPI(title="Companion synthetic development API", version="0.1.0", docs_url=None, redoc_url=None,
                   openapi_url=None, lifespan=lifespan)
     app.add_middleware(RequestBoundary)
     app.state.store = store
+    app.state.speech = speech
 
     @app.exception_handler(RequestValidationError)
     async def invalid_request(_request: Request, _exception):
@@ -113,7 +143,8 @@ def create_app(settings: Settings | None = None, answer_service: AnswerService |
     @router.get("/bootstrap", response_model=s.Bootstrap)
     def bootstrap():
         drafts = answer_service is not None and answer_service.retriever.include_drafts
-        return s.Bootstrap(features=s.Features(generativeAnswers=answer_service is not None),
+        return s.Bootstrap(features=s.Features(generativeAnswers=answer_service is not None,
+                                               speech=s.SpeechFeatures(**speech.features())),
                            contentStatus="unreviewed_drafts" if drafts else "awaiting_review")
 
     @router.get("/lessons", response_model=s.LessonList)
@@ -185,7 +216,9 @@ def create_app(settings: Settings | None = None, answer_service: AnswerService |
     def delete_conversation(conversation_id: UUID, key: WriteKey):
         cid = str(conversation_id)
         store.execute(key, "delete:" + cid, {}, lambda: store.delete_conversation(cid), deleting_id=cid)
+        speech.drop_conversation(cid)  # Robert's voice for its turns goes with it
         return Response(status_code=204)
 
+    speech_routes.register(router, speech, store)
     app.include_router(router)
     return app
