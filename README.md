@@ -4,7 +4,7 @@
 
 The primary client is the separate Android-first Flutter phone app. User chat travels from Flutter to this backend; the backend owns all AI inference, agent orchestration, reviewed-content retrieval, input safety, grounding and output validation. Flutter receives validated replies and maps allowlisted presentation cues to Unity. Unity never calls this API or model providers directly.
 
-No model inference or provider credentials belong on the phone. This deployment split does not remove the backend's authority over consent, progress, rewards or inventory. These are target responsibilities. Grounded answers are off by default, and the synthetic demo then returns fixed unavailable responses. Development-only grounded answers from a self-hosted model over a synthetic app-help corpus can be enabled by an operator (see [Grounded answers (RAG) — development](#grounded-answers-rag--development)). No speech provider exists. Provider and safeguarding reviews remain prerequisites.
+No model inference or provider credentials belong on the phone. This deployment split does not remove the backend's authority over consent, progress, rewards or inventory. These are target responsibilities. Grounded answers are off by default, and the synthetic demo then returns fixed unavailable responses. Development-only grounded answers from a self-hosted model over a synthetic app-help corpus can be enabled by an operator (see [Grounded answers (RAG) — development](#grounded-answers-rag--development)). A speech preview on the team's own speech service can be enabled the same way, for adult operators only (see [Speech preview — development](#speech-preview--development)); the release gate's `voice` switch stays off. Provider and safeguarding reviews remain prerequisites.
 
 This is an **adult-operated local development demo using synthetic data only**.
 It is not ready for children, a pilot, or deployment. No guardian authentication,
@@ -229,6 +229,73 @@ and questions that need the model abstain until one is running.
 on. To turn them off, set `$env:COMPANION_RAG_ENABLED = 'false'` (or remove it)
 and restart.
 
+## Speech preview — development
+
+Recitation practice, a dhikr game, voice questions and Robert's voice, on the team's own speech service
+(Dua-a_stt), within the boundary of [ADR 0006](doc/adr-0006-speech-preview-development.md): **adult operators in
+development mode only**. `features.voice` stays `false`; the preview is `features.speech` in `/v1/bootstrap`.
+
+Run the speech service first, on this machine or a private address. In the Dua-a_stt repository:
+
+```bash
+export DUA_SPEECH_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+export DUA_SPEECH_STT_ENABLED=true            # practice and voice questions
+export DUA_SPEECH_TRANSCRIBE_ENABLED=true     # voice questions (/v1/transcribe, dev only)
+export DUA_SPEECH_TTS_ENABLED=true            # Robert's voice
+export DUA_SPEECH_TTS_DIRECT_ENABLED=true     # Robert's voice (/v1/tts/render, dev only)
+bash scripts/run_service.sh                   # 127.0.0.1:8100
+```
+
+Then start this server with the same token:
+
+```powershell
+$env:COMPANION_SPEECH_ENABLED = 'true'
+$env:COMPANION_SPEECH_URL = 'http://127.0.0.1:8100'
+$env:COMPANION_SPEECH_TOKEN = '<the DUA_SPEECH_TOKEN above>'
+```
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `COMPANION_SPEECH_ENABLED` | off | The master kill switch. Anything but `true` turns the whole preview off. |
+| `COMPANION_SPEECH_URL` | none | The speech service: `localhost` or a private IP address, no credentials or query. |
+| `COMPANION_SPEECH_TOKEN` | none | The speech service's `DUA_SPEECH_TOKEN` (24+ printable ASCII characters). |
+| `COMPANION_SPEECH_RECITATION` | `true` | Practice and the dhikr game; `false` turns them off. |
+| `COMPANION_SPEECH_VOICE_QUESTIONS` | `true` | Push-to-talk questions; `false` turns them off. |
+| `COMPANION_SPEECH_ROBERT_VOICE` | `true` | Robert's voice; `false` turns it off. It also needs grounded answers on, whose model adds the tashkeel. |
+| `COMPANION_ROBERT_VOICE_ID` | `momen-dev` | The speech service's voice for Robert. |
+| `COMPANION_SPEECH_TIMEOUT_SECONDS` | `30` | Practice attempts and transcriptions. |
+| `COMPANION_SPEECH_TTS_TIMEOUT_SECONDS` | `240` | One rendered part (20 to 55 s on a GTX 1650). |
+
+With the preview on, the server refuses to start on a public address, a missing token or a switch that is neither
+`true` nor `false`, naming every problem. While a switch is off its routes answer 404 `speech_disabled`.
+
+Routes (all under `/v1`, with `X-Demo-Token`):
+
+- `GET /adhkar`: the four adhkar (`takbeer`, `tasbeeh`, `tahmeed`, `istighfar`) with names, transliteration, the
+  voweled text, and whether a recording (`audio`) and practice (`practice`) are available. `reviewStatus: "draft"`.
+- `GET /duas`: the `adhkar` and `daily_duas` items of `corpus/competition-ar/content.json`, with `audio:
+  "recorded"` when a human recording exists, and practice `segments` only for a hadith invocation whose split
+  matches the speech service's word counts. Quranic items never have segments here.
+- `GET /audio/adhkar/{id}`, `GET /audio/duas/{id}`, `GET /audio/feedback/{copyId}`: WAV from the speech service,
+  with `X-Audio-Status: draft | approved`; 404 `audio_not_found`.
+- `POST /recitations/attempts?itemId=&segment=&attempt=`: one raw `audio/wav` body and an `Idempotency-Key`.
+  Returns `{"outcome": "clear" | "try_again" | "unsure", "words": [...], "showWords", "feedback": {"copyId", "text",
+  "audio"}}`. Practice, never a verdict.
+- `GET /games/dhikr`, `POST /games/dhikr/rounds` (`{"dhikrId"}`), `POST /games/dhikr/rounds/{roundId}/attempts`
+  (raw `audio/wav`): a round completes on `clear` or after three counted attempts and earns one learning star, at
+  most 10 a day (UTC). Stars are spent with `/v1/cosmetics/claim`. A finished round answers 409 `round_complete`.
+- `POST /speech/transcriptions?language=ar|en`: one raw `audio/wav` body; returns `{"status": "transcribed" |
+  "unsure", "text"}` for the composer. It is never replayed from a cache and never kept.
+- `POST /turns/{turnId}/speech` (202), `GET /turns/{turnId}/speech`: Robert's voice for a completed answer,
+  `{"status": "pending" | "ready" | "unavailable", "parts": [{"index", "ready"}], "reason"}`; play
+  `GET /turns/{turnId}/speech/parts/{index}` in index order. A part that is dropped leaves the list.
+
+Recordings are one raw `audio/wav` body of at most 1 MiB (413 `request_too_large` above, 415
+`unsupported_media_type` for another type). They are read into memory, passed on and dropped: never written,
+logged or cached. A speech service that cannot be reached answers 503 `speech_unavailable`; a full speech queue is
+retried twice, then 503 `speech_busy`. Robert's rendered audio stays in memory for 15 minutes (16 turns at most)
+and goes when its conversation is deleted.
+
 ## API behavior
 
 - `GET /health/live` is the only unauthenticated endpoint.
@@ -299,8 +366,8 @@ a different operation or payload returns 409. Failed validation/domain requests
 are not cached. Deletion retains only a keyed fingerprint and empty result for
 its own retry; no deleted conversation ID or text is retained in that record.
 
-Bodies are bounded to 8 KiB before JSON parsing; text is 1–2000 characters and
-must not be blank. Unknown body fields are rejected. Errors use
+Bodies are bounded to 8 KiB before JSON parsing (the speech preview's raw
+`audio/wav` uploads to 1 MiB); text is 1–2000 characters and must not be blank. Unknown body fields are rejected. Errors use
 `{"error":{"code":"..."}}` without echoing input. The original text exists only
 transiently while the request is processed. The store retains keyed HMAC
 fingerprints of write payloads for conflict detection, never raw user input.

@@ -10,6 +10,60 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-06 (claude/pensive-bell-p273y2: the speech preview)
+
+A speech preview for adult operators on the team's own speech service (Dua-a_stt), within
+[ADR 0006](doc/adr-0006-speech-preview-development.md) (proposed). It follows the product owner's decisions of
+2026-10-06. The release gate's `voice` switch stays `false`, and no child may use any of it. The client side is
+the Android app's change. The speech service's routes are in Dua-a_stt (its ADR 0006 and 0007).
+
+### Added
+
+- **`features.speech` in `/v1/bootstrap`** (`preview`, `recitation`, `voiceQuestions`, `robertVoice`,
+  `maxRecordingSeconds: 15`).
+  - All false unless `COMPANION_SPEECH_ENABLED=true`, and `preview` only in development mode.
+  - Each feature has its own kill switch. With the preview on, startup fails closed on a public speech address, a
+    missing token or a malformed switch, naming every problem.
+- **Learn content.**
+  - `GET /v1/adhkar`: the four adhkar, with draft names and transliterations.
+  - `GET /v1/duas`: the competition package's adhkar and daily duas. Practice segments are split exactly as
+    Dua-a_stt's export does and verified against its word counts. Quranic items carry none.
+  - WAV proxies at `/v1/audio/adhkar|duas|feedback/{id}`.
+  - Without the speech service the lists still load, with no audio, practice or segments.
+- **Pronunciation practice**, `POST /v1/recitations/attempts` (raw `audio/wav`, at most 1 MiB).
+  - Outcomes are `clear`, `try_again` or `unsure`, never a verdict. Words are shown on the first three attempts
+    only.
+  - A feedback line is shown only when it passes the banned-word list and the must-never rules.
+- **The dhikr game**, `/v1/games/dhikr` and its rounds.
+  - A round completes on `clear` or after three counted attempts, and earns one learning star on the append-only
+    ledger, at most 10 per UTC day.
+  - Past the cap a round still completes. Stars buy looks through `/v1/cosmetics/claim`.
+- **Voice questions**, `POST /v1/speech/transcriptions`: a transcript for the composer. It is never cached, logged
+  or kept.
+- **Robert's voice**, `POST|GET /v1/turns/{id}/speech` and its parts.
+  - Robert's own Arabic sentences only: quotations, citations and Latin text are never spoken.
+  - The answer model adds tashkeel (`diacritize-v1`, temperature 0). A part is kept only when no letter changed.
+  - Audio stays in memory for 15 minutes and 16 turns at most, and is dropped with its conversation.
+- **`tests/test_voice_privacy.py`**, the release gate's A09 evidence.
+  - Audio is never written to disk or logged, and a transcript is never kept, even in the replay cache.
+  - Push-to-talk is one bounded request.
+  - A09 is now green; the gate stands at 5 of 25.
+
+### Changed
+
+- `RequestBoundary` allows 1 MiB for a raw `audio/wav` POST to the three upload routes. Every other request keeps
+  the 8 KiB bound.
+- The store's speech writes reserve their idempotency key while they wait on the speech service (`begin`,
+  `finish`, `abandon`). A failed write is not cached.
+- `tools/export_contracts.py` writes LF, as `.gitattributes` stores `contracts/*.json`.
+- `contracts/openapi-v1.json` regenerated. Existing routes are unchanged; `Features` gains `speech`.
+
+### Not done
+
+- No child use until the voice DPIA (G04), a retention owner and the gate's voice items are green. The speech
+  service's ADR 0006 and 0007 also need the committee's sign-off, and the F5-TTS licence is non-commercial.
+- `after-prayer-tasbih` has no practice segments: the speech service counts "33" as two words.
+
 ## Unreleased — 2026-10-06 (feature/cv-prayer-classifier: the prayer-movement helper)
 
 Documentation only. The product owner approved the app's prayer-movement helper on 2026-10-06 (comp-mobile
