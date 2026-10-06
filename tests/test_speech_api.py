@@ -1,4 +1,5 @@
 """The speech preview's routes (ADR 0006) against a stand-in speech service (tests/speech_fake.py)."""
+import asyncio
 from datetime import datetime, timedelta, timezone
 import math
 from uuid import uuid4
@@ -9,7 +10,7 @@ from fastapi.testclient import TestClient
 from companion_api.config import Settings
 from companion_api.main import create_app
 from companion_api.speech.client import SpeechClient
-from companion_api.store import Grant
+from companion_api.store import DomainError, Grant
 from speech_fake import (DEMO_TOKEN, ROBERT_WAV, SPEECH_TOKEN, SPEECH_URL, EchoDiacritizer, FakeSpeech, abstained,
                          scored, speech_app, speech_settings, wav)
 
@@ -671,6 +672,45 @@ def test_deleting_the_conversation_drops_robert_s_voice(client):
     assert client.get(f"/v1/turns/{tid}/speech").json() == {"error": {"code": "not_found"}}
     assert client.get(f"/v1/turns/{tid}/speech/parts/0").json() == {"error": {"code": "not_found"}}
     assert client.app.state.speech.voice._jobs == {}
+
+
+def test_the_delete_drops_robert_s_voice_on_the_event_loop(client, monkeypatch):
+    # Jobs and their asyncio tasks belong to the event loop: dropping them from a worker thread is not safe.
+    voice, on_loop = client.app.state.speech.voice, []
+    real = voice.drop_conversation
+
+    def spy(conversation_id):
+        try:
+            asyncio.get_running_loop()
+            on_loop.append(True)
+        except RuntimeError:
+            on_loop.append(False)
+        real(conversation_id)
+    monkeypatch.setattr(voice, "drop_conversation", spy)
+    cid, tid = add_turn(client)
+    speak(client, tid)
+    settle(client, tid)
+    assert client.delete(f"/v1/conversations/{cid}", headers={"Idempotency-Key": key()}).status_code == 204
+    assert on_loop == [True] and voice._jobs == {}
+
+
+def test_robert_s_voice_is_unreachable_once_its_turn_is_gone(client):
+    # A deletion that races a request (the turns are gone, the voice not yet dropped) leaves nothing reachable.
+    store, voice = client.app.state.store, client.app.state.speech.voice
+    cid, tid = add_turn(client)
+    speak(client, tid)
+    assert settle(client, tid)["status"] == "ready"
+    store.delete_conversation(cid)
+    part = client.get(f"/v1/turns/{tid}/speech/parts/0")
+    assert part.status_code == 404 and part.json() == {"error": {"code": "not_found"}}
+    assert client.get(f"/v1/turns/{tid}/speech").json() == {"error": {"code": "not_found"}}
+    assert tid not in voice._jobs
+    cid, tid = add_turn(client)
+    stale = store.spoken_turn(tid)
+    store.delete_conversation(cid)
+    with pytest.raises(DomainError) as raised:
+        client.portal.call(voice.start, stale)
+    assert raised.value.code == "not_found" and tid not in voice._jobs
 
 
 def test_robert_s_voice_expires_and_is_bounded(client):

@@ -280,6 +280,10 @@ class DemoStore:
                 raise DomainError(404, "not_found")
             return {key: deepcopy(value) for key, value in turn.items() if key not in {"conversationId", "segments"}}
 
+    def has_turn(self, identifier) -> bool:
+        with self.lock:
+            return identifier in self.turns
+
     def spoken_turn(self, identifier):
         """What Robert's voice reads of a turn (ADR 0006): its conversation, status, answer type and text."""
         with self.lock:

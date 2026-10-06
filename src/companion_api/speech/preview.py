@@ -60,7 +60,7 @@ class SpeechPreview:
             diacritizer = LlmDiacritizer(generator)
         self.voice = None
         if self.switches["robertVoice"] and diacritizer is not None:
-            self.voice = RobertVoice(self.client, diacritizer, settings.robert_voice_id)
+            self.voice = RobertVoice(self.client, diacritizer, settings.robert_voice_id, turn_exists=store.has_turn)
         self.switches["robertVoice"] = self.voice is not None
         self._recorded: tuple[float, frozenset[str]] | None = None
 

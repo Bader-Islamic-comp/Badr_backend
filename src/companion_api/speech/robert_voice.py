@@ -7,7 +7,9 @@ part is kept only when no letter changed (`arabic.same_letters`), and the speech
 ready parts in index order as they arrive. One job renders at a time, because the speech service has one GPU.
 
 Audio lives in this process's memory only: at most `MAX_TURNS` turns, each for `TTL_SECONDS`, dropped at once
-when its conversation is deleted. Nothing here is logged; the sentence text is let go once its part is done.
+when its conversation is deleted. Every call checks that the turn still exists (`turn_exists`), so a deletion
+that races a request never leaves audio reachable. Jobs are touched on the event loop only. Nothing here is
+logged; the sentence text is let go once its part is done.
 """
 import asyncio
 from dataclasses import dataclass, field
@@ -60,9 +62,11 @@ class _Job:
 
 class RobertVoice:
     def __init__(self, client: SpeechClient, diacritizer: Diacritizer, voice_id: str, *,
-                 clock: Callable[[], float] = time.monotonic, ttl: float = TTL_SECONDS, max_turns: int = MAX_TURNS):
+                 clock: Callable[[], float] = time.monotonic, ttl: float = TTL_SECONDS, max_turns: int = MAX_TURNS,
+                 turn_exists: Callable[[str], bool] = lambda _turn_id: True):
         self.client, self.diacritizer, self.voice_id = client, diacritizer, voice_id
         self._clock, self.ttl, self.max_turns = clock, ttl, max_turns
+        self._turn_exists = turn_exists
         self._jobs: dict[str, _Job] = {}
         self._render_lock: asyncio.Lock | None = None
 
@@ -83,10 +87,17 @@ class RobertVoice:
                 raise DomainError(503, "speech_busy")
             self._drop(finished)
 
+    def _job(self, turn_id: str) -> _Job | None:
+        """The turn's job; none once it expired or its turn is gone (the job is then dropped at once)."""
+        self._purge()
+        if not self._turn_exists(turn_id):
+            self._drop(turn_id)
+            raise DomainError(404, "not_found")
+        return self._jobs.get(turn_id)
+
     def start(self, turn: dict) -> dict:
         """Starts reading `turn` aloud, or reports the job already running for it. Needs a running loop."""
-        self._purge()
-        existing = self._jobs.get(turn["turnId"])
+        existing = self._job(turn["turnId"])
         if existing is not None and not (existing.done and existing.reason == SPEECH_UNAVAILABLE):
             return existing.view()
         if turn["status"] != "completed":
@@ -104,15 +115,13 @@ class RobertVoice:
         return job.view()
 
     def status(self, turn_id: str) -> dict:
-        self._purge()
-        job = self._jobs.get(turn_id)
+        job = self._job(turn_id)
         if job is None:
             raise DomainError(404, "not_found")
         return job.view()
 
     def part(self, turn_id: str, index: int) -> bytes:
-        self._purge()
-        job = self._jobs.get(turn_id)
+        job = self._job(turn_id)
         if job is None:
             raise DomainError(404, "not_found")
         audio = next((part.audio for part in job.parts if part.index == index and part.audio is not None), None)

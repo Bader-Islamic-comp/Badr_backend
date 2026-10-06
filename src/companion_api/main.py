@@ -10,6 +10,7 @@ import re
 from fastapi import APIRouter, Depends, FastAPI, Header, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 from starlette.exceptions import HTTPException
 
 from . import content, schemas as s
@@ -239,10 +240,13 @@ def create_app(settings: Settings | None = None, answer_service: AnswerService |
         return Response(data, media_type="text/event-stream", headers=headers)
 
     @router.delete("/conversations/{conversation_id}", status_code=204)
-    def delete_conversation(conversation_id: UUID, key: WriteKey):
+    async def delete_conversation(conversation_id: UUID, key: WriteKey):
         cid = str(conversation_id)
-        store.execute(key, "delete:" + cid, {}, lambda: store.delete_conversation(cid), deleting_id=cid)
-        speech.drop_conversation(cid)  # Robert's voice for its turns goes with it
+        # The store may wait on its lock, so it runs on a worker thread. Robert's voice for the turns goes with
+        # them, dropped here on the event loop that owns its jobs and tasks (neither is thread-safe).
+        await run_in_threadpool(store.execute, key, "delete:" + cid, {}, lambda: store.delete_conversation(cid),
+                                deleting_id=cid)
+        speech.drop_conversation(cid)
         return Response(status_code=204)
 
     speech_routes.register(router, speech, store)
