@@ -164,17 +164,45 @@ def test_audio_routes_take_one_raw_wav_of_at_most_one_mib(client, fake):
     over = attempt(client, audio=exactly + b"\x00")
     assert (over.status_code, over.json()) == (413, {"error": {"code": "request_too_large"}})
     assert send(client, "/v1/speech/transcriptions", exactly + b"\x00", idempotency=False).status_code == 413
-    # Anything but audio/wav keeps the 8 KiB bound, and a small one is refused by type.
-    assert attempt(client, audio=b"x" * 9000, **{"Content-Type": "audio/flac"}).status_code == 413
+    # Anything but audio/wav is refused by its type, whatever its size, and is never read past 8 KiB.
+    unsupported = {"error": {"code": "unsupported_media_type"}}
+    for size in (9000, ONE_MIB + 1):
+        flac = attempt(client, audio=b"x" * size, **{"Content-Type": "audio/flac"})
+        assert (flac.status_code, flac.json()) == (415, unsupported), size
+        assert send(client, "/v1/speech/transcriptions", b"x" * size, content_type="text/plain",
+                    idempotency=False).json() == unsupported, size
     small = send(client, "/v1/recitations/attempts", b"{}", content_type="application/json",
                  params={"itemId": "takbeer", "segment": 0, "attempt": 1})
-    assert (small.status_code, small.json()) == (415, {"error": {"code": "unsupported_media_type"}})
+    assert (small.status_code, small.json()) == (415, unsupported)
     # The 1 MiB bound is for the audio routes only.
     assert client.post("/v1/conversations", content=wav(frames=5000),
                        headers={"Content-Type": "audio/wav", "Idempotency-Key": key()}).status_code == 413
     assert attempt(client, audio=b"RIFF" + b"\x00" * 60).json() == {"error": {"code": "invalid_request"}}
     assert attempt(client, audio=b"").status_code == 422
     assert len(fake.calls("POST", "/v1/dua-attempts")) == 1  # only the valid one reached the service
+
+
+def test_the_one_mib_bound_needs_the_feature_on_and_the_right_demo_token(fake):
+    # A large body is read only for a request that may use it: nothing is buffered past 8 KiB before the
+    # demo token is checked or while the feature is off.
+    big, too_large = wav(frames=400_000), {"error": {"code": "request_too_large"}}
+    with _client(create_app(Settings(demo_mode=True, demo_token=DEMO_TOKEN))) as client:  # the preview is off
+        refused = attempt(client, audio=big)
+        assert (refused.status_code, refused.json()) == (413, too_large)
+        assert attempt(client).json() == {"error": {"code": "speech_disabled"}}
+    with _client(speech_app(fake, settings=speech_settings(speech_recitation=False))) as client:
+        assert attempt(client, audio=big).json() == too_large
+        assert send(client, f"/v1/games/dhikr/rounds/{uuid4()}/attempts", big).json() == too_large
+        assert send(client, "/v1/speech/transcriptions", big, idempotency=False).status_code == 200
+    with _client(speech_app(fake, settings=speech_settings(speech_voice_questions=False))) as client:
+        assert send(client, "/v1/speech/transcriptions", big, idempotency=False).json() == too_large
+        assert attempt(client, audio=big).status_code == 200
+    with _client(speech_app(fake)) as client:
+        for token in ("", "x" * len(DEMO_TOKEN), DEMO_TOKEN[:-1], DEMO_TOKEN + "x"):
+            refused = attempt(client, audio=big, **{"X-Demo-Token": token})
+            assert (refused.status_code, refused.json()) == (413, too_large), token
+        assert attempt(client, **{"X-Demo-Token": "wrong"}).json() == {"error": {"code": "unauthorized"}}
+        assert attempt(client, audio=big).status_code == 200
 
 
 def test_a_chunked_recording_is_bounded_by_its_actual_bytes(client):

@@ -1,4 +1,5 @@
 """Local demo API factory. Run with one Uvicorn worker and access logs disabled."""
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 from typing import Annotated
 from uuid import UUID, uuid4
@@ -23,27 +24,46 @@ from .store import DemoStore, DomainError
 
 EVENT_CURSOR = re.compile(r"^(0|[1-9][0-9]{0,3})$")
 BODY_LIMIT = 8192
-# Push-to-talk recordings (ADR 0006): one raw audio/wav body on the three upload routes, up to 1 MiB.
-AUDIO_ROUTE = re.compile(speech_routes.AUDIO_ROUTES)
 
 
 def error(status, code):
     return JSONResponse({"error": {"code": code}}, status_code=status)
 
 
-def body_limit(scope) -> int:
-    """8 KiB for every request, except a raw `audio/wav` POST to an audio upload route: 1 MiB."""
-    if scope["method"] == "POST" and AUDIO_ROUTE.fullmatch(scope["path"]):
-        content_type = dict(scope["headers"]).get(b"content-type", b"").decode("latin-1")
-        if speech_routes.media_type(content_type) == speech_routes.AUDIO_TYPE:
-            return speech_routes.MAX_AUDIO_BYTES
+def _audio_upload(scope) -> tuple[str | None, bool]:
+    """(the speech switch the route needs, whether the body is declared `audio/wav`) for a POST; else (None, …)."""
+    feature = speech_routes.audio_feature(scope["path"]) if scope["method"] == "POST" else None
+    content_type = dict(scope["headers"]).get(b"content-type", b"").decode("latin-1")
+    return feature, speech_routes.media_type(content_type) == speech_routes.AUDIO_TYPE
+
+
+def body_limit(scope, audio_allowed: Callable[[dict, str], bool] | None = None) -> int:
+    """8 KiB for every request, except a raw `audio/wav` POST to an audio upload route: 1 MiB, and only when
+    `audio_allowed(scope, feature)` holds (the feature is on and the demo token is right), so nothing is
+    buffered past 8 KiB before authentication."""
+    feature, wav = _audio_upload(scope)
+    if feature and wav and audio_allowed is not None and audio_allowed(scope, feature):
+        return speech_routes.MAX_AUDIO_BYTES
     return BODY_LIMIT
 
 
+def oversize(scope) -> JSONResponse:
+    """413, except on an audio upload route sent anything but `audio/wav`: its type is refused first, 415."""
+    feature, wav = _audio_upload(scope)
+    if feature and not wav:
+        return error(415, "unsupported_media_type")
+    return error(413, "request_too_large")
+
+
 class RequestBoundary:
-    """Bound actual bytes, including chunked bodies, before JSON parsing. Bodies are held in memory only."""
-    def __init__(self, app):
+    """Bound actual bytes, including chunked bodies, before JSON parsing. Bodies are held in memory only.
+
+    Push-to-talk recordings (ADR 0006) may be one raw `audio/wav` body of up to 1 MiB on the three audio upload
+    routes, when `audio_allowed` says the request may be read (`body_limit`); everything else keeps 8 KiB.
+    """
+    def __init__(self, app, audio_allowed: Callable[[dict, str], bool] | None = None):
         self.app = app
+        self.audio_allowed = audio_allowed
 
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
@@ -55,10 +75,10 @@ class RequestBoundary:
                 message["headers"] += [(b"x-correlation-id", correlation_id), (b"cache-control", b"no-store")]
             await send(message)
 
-        limit = body_limit(scope)
+        limit = body_limit(scope, self.audio_allowed)
         declared = dict(scope["headers"]).get(b"content-length", b"")
         if declared.isdigit() and int(declared) > limit:
-            return await error(413, "request_too_large")(scope, receive, guarded_send)
+            return await oversize(scope)(scope, receive, guarded_send)
         body = bytearray()
         while True:
             message = await receive()
@@ -66,7 +86,7 @@ class RequestBoundary:
                 return
             body.extend(message.get("body", b""))
             if len(body) > limit:
-                return await error(413, "request_too_large")(scope, receive, guarded_send)
+                return await oversize(scope)(scope, receive, guarded_send)
             if not message.get("more_body", False):
                 break
 
@@ -108,9 +128,15 @@ def create_app(settings: Settings | None = None, answer_service: AnswerService |
             store.close()
             await speech.aclose()
 
+    def audio_allowed(scope, feature: str) -> bool:
+        """A recording may be read past 8 KiB only with its speech switch on and the right demo token, compared
+        in constant time as `authenticate` does."""
+        token = dict(scope["headers"]).get(b"x-demo-token", b"")
+        return speech.switches.get(feature) is True and hmac.compare_digest(token, settings.demo_token.encode())
+
     app = FastAPI(title="Companion synthetic development API", version="0.1.0", docs_url=None, redoc_url=None,
                   openapi_url=None, lifespan=lifespan)
-    app.add_middleware(RequestBoundary)
+    app.add_middleware(RequestBoundary, audio_allowed=audio_allowed)
     app.state.store = store
     app.state.speech = speech
 

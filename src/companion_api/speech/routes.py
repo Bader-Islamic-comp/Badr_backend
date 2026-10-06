@@ -6,6 +6,7 @@ the request: never written, logged or cached. Writes that carry a recording keep
 which holds no audio and no transcript; a transcription keeps nothing at all.
 """
 from contextlib import contextmanager
+import re
 from typing import Annotated, Literal
 from uuid import UUID
 
@@ -20,7 +21,9 @@ from .preview import SpeechPreview, audio_digest
 AUDIO_TYPE = "audio/wav"
 MAX_AUDIO_BYTES = 1_048_576
 MAX_TRANSCRIPT_CHARS = 1000
-AUDIO_ROUTES = r"/v1/(?:recitations/attempts|speech/transcriptions|games/dhikr/rounds/[^/]+/attempts)"
+# The audio upload routes and the switch each needs (`RequestBoundary` allows 1 MiB only while it is on).
+AUDIO_ROUTES = re.compile(r"/v1/(?:(?P<recitation>recitations/attempts|games/dhikr/rounds/[^/]+/attempts)"
+                          r"|(?P<voiceQuestions>speech/transcriptions))")
 _WAV = {"type": "string", "format": "binary"}
 AUDIO_BODY = {"requestBody": {"required": True, "content": {AUDIO_TYPE: {"schema": _WAV}}}}
 AUDIO_ERRORS = {415: {"model": ErrorEnvelope}}
@@ -30,6 +33,12 @@ ItemId = Annotated[str, Query(alias="itemId", pattern=r"^[a-z0-9][a-z0-9-]{0,63}
 
 def media_type(value: str | None) -> str:
     return (value or "").split(";", 1)[0].strip().lower()
+
+
+def audio_feature(path: str) -> str | None:
+    """The speech switch (`recitation` or `voiceQuestions`) an audio upload route needs; None for other paths."""
+    match = AUDIO_ROUTES.fullmatch(path)
+    return match.lastgroup if match else None
 
 
 @contextmanager
