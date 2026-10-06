@@ -280,21 +280,28 @@ Routes (all under `/v1`, with `X-Demo-Token`):
   with `X-Audio-Status: draft | approved`; 404 `audio_not_found`.
 - `POST /recitations/attempts?itemId=&segment=&attempt=`: one raw `audio/wav` body and an `Idempotency-Key`.
   Returns `{"outcome": "clear" | "try_again" | "unsure", "words": [...], "showWords", "feedback": {"copyId", "text",
-  "audio"}}`. Practice, never a verdict.
+  "audio"}}`. Practice, never a verdict: `try_again` needs a word to try again, and any doubt is `unsure`.
 - `GET /games/dhikr`, `POST /games/dhikr/rounds` (`{"dhikrId"}`), `POST /games/dhikr/rounds/{roundId}/attempts`
   (raw `audio/wav`): a round completes on `clear` or after three counted attempts and earns one learning star, at
-  most 10 a day (UTC). Stars are spent with `/v1/cosmetics/claim`. A finished round answers 409 `round_complete`.
+  most 10 a day (UTC). Stars are spent with `/v1/cosmetics/claim`. A finished round answers 409 `round_complete`;
+  a second attempt while one is still being scored, 409 `request_in_progress`.
 - `POST /speech/transcriptions?language=ar|en`: one raw `audio/wav` body; returns `{"status": "transcribed" |
   "unsure", "text"}` for the composer. It is never replayed from a cache and never kept.
 - `POST /turns/{turnId}/speech` (202), `GET /turns/{turnId}/speech`: Robert's voice for a completed answer,
   `{"status": "pending" | "ready" | "unavailable", "parts": [{"index", "ready"}], "reason"}`; play
-  `GET /turns/{turnId}/speech/parts/{index}` in index order. A part that is dropped leaves the list.
+  `GET /turns/{turnId}/speech/parts/{index}` in index order. A part that is dropped leaves the list. The words of a
+  dua or dhikr are never spoken, quoted or not, and a curated reply (the package's items as written) not at all
+  (`unavailable`, reason `verbatim_not_spoken`).
 
 Recordings are one raw `audio/wav` body of at most 1 MiB (413 `request_too_large` above, 415
-`unsupported_media_type` for another type). They are read into memory, passed on and dropped: never written,
-logged or cached. A speech service that cannot be reached answers 503 `speech_unavailable`; a full speech queue is
-retried twice, then 503 `speech_busy`. Robert's rendered audio stays in memory for 15 minutes (16 turns at most)
-and goes when its conversation is deleted.
+`unsupported_media_type` for another type, whatever its size). A body is read past 8 KiB only when its feature is
+on and the `X-Demo-Token` is right. Recordings are read into memory, passed on and dropped: never written, logged or
+cached. A speech service that cannot be reached answers 503 `speech_unavailable` (the Learn lists are asked again
+only after 15 seconds); a full speech queue is retried twice, then 503 `speech_busy`. The service is always called
+directly, never through `HTTP_PROXY`. Practice and game replays have their own cache (512, oldest first out).
+Robert's rendered audio stays in memory for 15 minutes (16 turns at most) and goes when its conversation is
+deleted. `features.speech.voiceQuestions` is also false when the service's cached capabilities say transcription is
+off; the bootstrap never waits on the service.
 
 ## API behavior
 
@@ -367,7 +374,7 @@ are not cached. Deletion retains only a keyed fingerprint and empty result for
 its own retry; no deleted conversation ID or text is retained in that record.
 
 Bodies are bounded to 8 KiB before JSON parsing (the speech preview's raw
-`audio/wav` uploads to 1 MiB); text is 1–2000 characters and must not be blank. Unknown body fields are rejected. Errors use
+`audio/wav` uploads to 1 MiB, with the feature on and a valid token); text is 1–2000 characters and must not be blank. Unknown body fields are rejected. Errors use
 `{"error":{"code":"..."}}` without echoing input. The original text exists only
 transiently while the request is processed. The store retains keyed HMAC
 fingerprints of write payloads for conflict detection, never raw user input.
@@ -381,6 +388,10 @@ rewards, conversations, and retry state disappear on process restart. Do not
 interpret restart behavior as durable idempotency or financial correctness.
 
 Capacity is 128 conversations, 512 turns, and 1024 successful write replays.
+The speech preview's practice and game writes keep their replays apart: at most
+512, the oldest let go first, so they never use up the 1024. Letting one go
+cannot grant twice: a round's star is granted once per round on the ledger, and
+an attempt on a finished round is 409.
 Requests exceeding capacity receive 503; existing retries remain available.
 Deleting an existing conversation remains possible at capacity and frees its
 associated entries. Replays are not silently evicted to allow duplicate grants.

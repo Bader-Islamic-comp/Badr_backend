@@ -52,8 +52,10 @@ seconds for a three-second sentence. Pre-rendered audio is preferred wherever it
    naming every problem: demo mode off, a missing or public speech address, a missing token, a switch that is
    neither `true` nor `false`, a malformed voice id or an out-of-range timeout.
 3. **Provider.** Only the team's Dua-a_stt service, on `localhost` or a private IP address
-   (`require_private_endpoint`, the same rule as the model endpoints), with its token in `X-Speech-Token`. Its
-   models are its own decision: any change there needs its own ADR and evaluation.
+   (`require_private_endpoint`, the same rule as the model endpoints), with its token in `X-Speech-Token`. It is
+   called directly: `HTTP_PROXY` and the like are ignored (`trust_env` off, as for the model and embedding
+   endpoints), so no proxy sees the token or a recording. Its models are its own decision: any change there needs
+   its own ADR and evaluation.
 4. **What reaches the speech service, and what comes back.**
 
    | Feature | Sent | Returned |
@@ -71,29 +73,41 @@ seconds for a three-second sentence. Pre-rendered audio is preferred wherever it
      idempotency replay cache, and nothing logs it.
    - Practice and game writes need an `Idempotency-Key`. Their replay keeps a keyed fingerprint (an HMAC over the
      request and a SHA-256 of the recording, as for text turns) and the result (outcome, word states, feedback copy,
-     round counts). It never keeps the audio or a transcript.
+     round counts). It never keeps the audio or a transcript. These replays have a cache of their own, at most 512,
+     oldest first out, so practice never fills the one chat turns and rewards use; an evicted key runs again.
+   - A recording is read past 8 KiB only when its feature is on and the `X-Demo-Token` is right (compared in
+     constant time before the body is buffered); anything else keeps the 8 KiB bound.
    - Robert's rendered audio lives in the API process's memory for at most 15 minutes and 16 turns, and is dropped
      at once when its conversation is deleted.
    - Logs carry no audio, transcript or sentence. `tests/test_voice_privacy.py` holds all of this (release gate
      item A09).
-6. **Practice, never a verdict.** An abstention is `unsure`; a scored attempt is `clear` when every word is clear,
-   else `try_again`. Word states are shown only on the first three attempts and never with an abstention. A feedback
-   line from the speech service is shown only when it has none of the banned words (غلط، خطأ، فشلت، ما قُبل، باطل،
-   لا يصح، ما بتنحسب، مرفوض، wrong, failed, invalid, rejected, incorrect, mistake) and breaks no must-never rule
-   (`worship_verdict` among them); otherwise the backend's own gentle line for the outcome is used.
+6. **Practice, never a verdict.** A scored attempt is `clear` when every word is clear and `try_again` when at least
+   one word is to try again. Everything else is `unsure`: an abstention, or words that are clear or unsure with none
+   to try again, because any doubt is a gentle abstention (Dua-a_stt principle 4: the worst error is telling a child
+   who said it right to try again). Word states are shown only on the first three attempts and never with `unsure`.
+   A feedback line from the speech service is shown only when it has none of the banned words (غلط، خطأ، فشلت،
+   ما قُبل، باطل، لا يصح، ما بتنحسب، مرفوض، wrong, failed, invalid, rejected, incorrect, mistake) and breaks no
+   must-never rule (`worship_verdict` among them); otherwise the backend's own gentle line for the outcome is used.
 7. **Stars for practice.** A dhikr-game round completes on a `clear` attempt or after three counted attempts. An
-   attempt counts when it is scored, or when the service was unsure of a child who spoke (`low_confidence`); an
-   off-script, poor-audio, too-long or unavailable attempt does not. A completed round appends one learning star to
+   attempt counts when it is scored (an `unsure` one too), or when the service was unsure of a child who spoke
+   (`low_confidence`); an off-script, poor-audio, too-long or unavailable attempt does not. The speech service is
+   sent the counted attempts plus one, so attempts that did not count never hide the words, and one attempt runs per
+   round at a time (a second is 409 `request_in_progress`). A completed round appends one learning star to
    the existing append-only ledger, once per round, and at most 10 per UTC day. Past the cap a round still
    completes; nothing is taken away, and the app calls it a lovely practice. Stars are spent on looks through the
    existing `/v1/cosmetics/claim`.
 8. **Robert's voice.** Only answer types that are Robert's own words are spoken (`chat`, `grounded`,
    `reviewed_answer`, `abstained`, `redirected`), never `safety` or `unavailable`. A sentence holding a quotation
-   is dropped whole, as are citation markers, references, sources lists and sentences with Latin letters. The rest
-   becomes at most six parts of at most 140 characters. The answer model adds tashkeel (prompt `diacritize-v1`,
-   temperature 0), and a part is kept only when removing harakat, tanween, shadda, sukun, the dagger alef and
-   tatweel gives back its exact letters. A part the speech service's guards refuse is dropped. One render runs at
-   a time.
+   is dropped whole, as are citation markers, references, sources lists and sentences with Latin letters. So is a
+   sentence that holds, or is part of, the words of a dua or dhikr the app teaches (the package's hadith duas, their
+   clauses and the four adhkar, two words or more, compared without marks or letter variants), quoted or not; the
+   speech service's own guard is the second line. A curated reply, the package's items served verbatim, is never
+   spoken at all (`verbatim_not_spoken`). The rest becomes at most six parts of at most 140 characters. The answer
+   model adds tashkeel (prompt `diacritize-v1`, temperature 0), and a part is kept only when removing harakat,
+   tanween, shadda, sukun, the dagger alef and tatweel gives back its exact letters. A part the speech service's
+   guards refuse is dropped. When the speech service or the tashkeel model is unavailable the job ends
+   `speech_unavailable` and a new request starts it again. One render runs at a time. Deleting a conversation drops
+   its voice at once, and every request checks that its turn still exists.
 
 ## What still gates any child use
 
@@ -115,13 +129,17 @@ Nothing in this ADR approves speech for children. Before any child use, includin
 ## Consequences
 
 - The API gains the routes in [`README.md`](../README.md) and `contracts/openapi-v1.json`. The app must handle
-  404 `speech_disabled`, 415 `unsupported_media_type`, 503 `speech_unavailable` and 503 `speech_busy` (a full
-  speech queue, retried twice by the backend first).
+  404 `speech_disabled`, 415 `unsupported_media_type` (any type but `audio/wav`, whatever its size), 409
+  `request_in_progress`, 503 `speech_unavailable` and 503 `speech_busy` (a full speech queue, retried twice by the
+  backend first).
 - Learn content degrades rather than fails: without the speech service the adhkar and duas are still listed, with no
-  audio, no practice and no segments.
-- Practice segments are offered only where the backend's split of `content.json` (the speech service's export
-  rule) gives the speech service's own word counts. `after-prayer-tasbih` has none today, because the service
-  spells "33" as two words.
+  audio, no practice and no segments. A service that does not answer is asked again only after 15 seconds, so the
+  pages answer at once meanwhile. The bootstrap never calls the speech service: `voiceQuestions` also needs the
+  service's `transcribeEnabled` when its capabilities are cached, else it is the switch alone.
+- Practice segments are offered only where the backend's split of `content.json` (the speech service's clause
+  breaks) gives the speech service's own word counts. `after-prayer-tasbih` has none, and that is the safe answer:
+  the service's text for it includes "33 مرة" (spelled out), which says how often to repeat the dhikr and is not
+  something a child recites.
 - Rendering competes for the one GPU: while Robert's voice renders, a practice attempt waits behind it and may time
   out (`COMPANION_SPEECH_TIMEOUT_SECONDS`, default 30; renders have `COMPANION_SPEECH_TTS_TIMEOUT_SECONDS`, default
   240).
