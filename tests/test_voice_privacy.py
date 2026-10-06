@@ -132,10 +132,11 @@ def _holds(value, needle_text: str, needle_bytes: bytes, seen: set) -> bool:
 
 def test_no_audio_or_transcript_is_kept_anywhere_in_the_process_state(client):
     store = client.app.state.store
-    replays = len(store.replays)
+    replays, speech_replays = len(store.replays), len(store.speech_replays)
     _exercise_every_audio_route(client)
-    # The three scored attempts and the round keep a replay each (outcome and counts only); the transcript none.
-    assert len(store.replays) == replays + 4
+    # The three scored attempts and the round keep a replay each (outcome and counts only), in the speech replay
+    # cache; the transcript none.
+    assert (len(store.replays), len(store.speech_replays)) == (replays, speech_replays + 4)
     for state in (store, client.app.state.speech):
         assert not _holds(state, TRANSCRIPT_MARKER, AUDIO_MARKER, set())
         # Nor the recording decoded to text, nor the transcript encoded to bytes.
@@ -149,7 +150,8 @@ def test_a_transcription_is_not_replayed_from_any_cache(client, fake):
                                headers={"Content-Type": "audio/wav", **key})
         assert response.json()["text"] == TRANSCRIPT_MARKER
     assert len(fake.calls("POST", "/v1/transcribe")) == 2
-    assert not _holds(client.app.state.store.replays, TRANSCRIPT_MARKER, b"\x00never", set())
+    store = client.app.state.store
+    assert not _holds((store.replays, store.speech_replays), TRANSCRIPT_MARKER, b"\x00never", set())
 
 
 def _routes(routes):

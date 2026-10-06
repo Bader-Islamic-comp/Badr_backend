@@ -356,6 +356,34 @@ def test_a_practice_retry_replays_without_the_recording_reaching_the_service_aga
     assert other.json() == {"error": {"code": "idempotency_conflict"}}
 
 
+def test_speech_writes_have_their_own_bounded_replay_cache(client, fake):
+    # Practice and the game must never fill the replay cache chat turns and rewards need (503 for every write).
+    store = client.app.state.store
+    store.max_replays, store.max_speech_replays = 3, 2
+    conversation = {"Idempotency-Key": "shared-key"}
+    assert client.post("/v1/conversations", json={}, headers=conversation).status_code == 200
+    for number in range(4):
+        assert attempt(client, **{"Idempotency-Key": f"practice-{number}"}).status_code == 200
+    rid = new_round(client, idempotency_key="round-key")["roundId"]
+    assert play(client, rid, **{"Idempotency-Key": "play-key"}).status_code == 200
+    assert (len(store.replays), len(store.speech_replays)) == (1, 2)
+    for _ in range(2):
+        assert client.post("/v1/conversations", json={}, headers={"Idempotency-Key": key()}).status_code == 200
+    # The other cache keeps its own bound.
+    assert client.post("/v1/conversations", json={}, headers={"Idempotency-Key": key()}).json() == {
+        "error": {"code": "demo_capacity_reached"}}
+    # The newest speech writes replay without reaching the service; the oldest was let go and runs again.
+    calls = len(fake.calls("POST", "/v1/dua-attempts"))
+    assert play(client, rid, **{"Idempotency-Key": "play-key"}).json()["round"]["complete"] is True
+    assert len(fake.calls("POST", "/v1/dua-attempts")) == calls
+    assert attempt(client, **{"Idempotency-Key": "practice-0"}).status_code == 200
+    assert len(fake.calls("POST", "/v1/dua-attempts")) == calls + 1
+    # A key is still one request, whichever cache holds it.
+    conflict = {"error": {"code": "idempotency_conflict"}}
+    assert attempt(client, **conversation).json() == conflict
+    assert client.post("/v1/conversations", json={}, headers={"Idempotency-Key": "practice-0"}).json() == conflict
+
+
 def test_a_full_queue_is_retried_twice_then_busy(client, fake):
     fake.queue_full = 2
     assert attempt(client).status_code == 200

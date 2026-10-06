@@ -9,7 +9,11 @@ while it ran finds no turn to write to, so its answer is dropped.
 Speech writes (ADR 0006) wait on the speech service, so they cannot hold the
 lock the way `execute` does: `begin` replays or reserves a key, `finish` keeps
 the result (never audio or a transcript) and `abandon` releases a failed one.
+Their replays (practice attempts, game rounds and attempts) live in a cache of
+their own, bounded and oldest first out, so practice can never fill the cache
+that chat turns and rewards need. A key is still one request across both.
 """
+from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 from dataclasses import dataclass
@@ -61,6 +65,7 @@ class DemoStore:
         self.max_conversations = 128
         self.max_turns = 512
         self.max_replays = 1024
+        self.max_speech_replays = 512
         # An AnswerService, or None while grounded answers are off.
         self.answers = answers
         self.max_pending = max_pending
@@ -70,6 +75,7 @@ class DemoStore:
         self.conversations: set[str] = set()
         self.turns: dict[str, dict] = {}
         self.replays: dict[bytes, Replay] = {}
+        self.speech_replays: OrderedDict[bytes, Replay] = OrderedDict()
         self._inflight: set[bytes] = set()
         self._ledger: list[Grant] = []
         # Ownership and equipment live here, not on the device: a look is worn
@@ -95,7 +101,22 @@ class DemoStore:
     def _fingerprint(self, operation, payload):
         return self._digest(json.dumps([operation, payload], sort_keys=True, separators=(",", ":")))
 
-    def execute(self, key, operation, payload, callback, conversation_id=None, deleting_id=None):
+    def _replayed(self, key_digest, fingerprint):
+        """The result kept under this key in either replay cache, or None; another request under it is 409."""
+        existing = self.replays.get(key_digest) or self.speech_replays.get(key_digest)
+        if existing is None:
+            return None
+        if not hmac.compare_digest(existing.fingerprint, fingerprint):
+            raise DomainError(409, "idempotency_conflict")
+        return deepcopy(existing.result)
+
+    def _keep_speech(self, key_digest, fingerprint, result):
+        """Keeps a speech write's replay; past the bound the oldest goes, and its key would run again."""
+        self.speech_replays[key_digest] = Replay(fingerprint, deepcopy(result), None)
+        while len(self.speech_replays) > self.max_speech_replays:
+            self.speech_replays.popitem(last=False)
+
+    def execute(self, key, operation, payload, callback, conversation_id=None, deleting_id=None, speech=False):
         # Keyed digests prevent retaining text, arbitrary header values or
         # guessable unkeyed fingerprints. Secret lives only in this process.
         key_digest = self._digest(key)
@@ -103,11 +124,13 @@ class DemoStore:
         with self.lock:
             if key_digest in self._inflight:
                 raise DomainError(409, "request_in_progress")
-            existing = self.replays.get(key_digest)
-            if existing:
-                if not hmac.compare_digest(existing.fingerprint, fingerprint):
-                    raise DomainError(409, "idempotency_conflict")
-                return deepcopy(existing.result)
+            existing = self._replayed(key_digest, fingerprint)
+            if existing is not None:
+                return existing
+            if speech:  # a speech write (ADR 0006): its own cache, never full
+                result = callback()
+                self._keep_speech(key_digest, fingerprint, result)
+                return result
             releases_slot = deleting_id is not None and any(
                 replay.conversation_id == deleting_id for replay in self.replays.values()
             )
@@ -119,25 +142,21 @@ class DemoStore:
             return result
 
     def begin(self, key, operation, payload) -> Reservation:
-        """Replays a finished write, or reserves its key until `finish` or `abandon`."""
+        """Replays a finished write, or reserves its key until `finish` or `abandon`. Speech writes only."""
         key_digest, fingerprint = self._digest(key), self._fingerprint(operation, payload)
         with self.lock:
-            existing = self.replays.get(key_digest)
-            if existing:
-                if not hmac.compare_digest(existing.fingerprint, fingerprint):
-                    raise DomainError(409, "idempotency_conflict")
-                return Reservation(key_digest, fingerprint, deepcopy(existing.result))
+            existing = self._replayed(key_digest, fingerprint)
+            if existing is not None:
+                return Reservation(key_digest, fingerprint, existing)
             if key_digest in self._inflight:
                 raise DomainError(409, "request_in_progress")
-            if len(self.replays) >= self.max_replays:
-                raise DomainError(503, "demo_capacity_reached")
             self._inflight.add(key_digest)
             return Reservation(key_digest, fingerprint)
 
     def finish(self, reservation: Reservation, result: dict):
         with self.lock:
             self._inflight.discard(reservation.key_digest)
-            self.replays[reservation.key_digest] = Replay(reservation.fingerprint, deepcopy(result), None)
+            self._keep_speech(reservation.key_digest, reservation.fingerprint, result)
 
     def abandon(self, reservation: Reservation):
         """A failed write is not cached, so a retry under the same key runs again."""

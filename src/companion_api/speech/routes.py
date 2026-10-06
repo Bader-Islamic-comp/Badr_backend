@@ -2,8 +2,9 @@
 
 Every route answers 404 `speech_disabled` while its switch is off. Recordings arrive as one raw `audio/wav`
 body of at most 1 MiB (`RequestBoundary`), are read into memory, passed to the speech service and dropped with
-the request: never written, logged or cached. Writes that carry a recording keep a replay of their result,
-which holds no audio and no transcript; a transcription keeps nothing at all.
+the request: never written, logged or cached. Writes that carry a recording, and new game rounds, keep a replay of
+their result in the store's speech replay cache (bounded, oldest first out), which holds no audio and no
+transcript; a transcription keeps nothing at all.
 """
 from contextlib import contextmanager
 import re
@@ -152,7 +153,8 @@ def register(router: APIRouter, preview: SpeechPreview, store: DemoStore):
     @router.post("/games/dhikr/rounds", response_model=ss.Round)
     def new_round(body: ss.RoundRequest, key: WriteKey):
         preview.require("recitation")
-        return store.execute(key, "dhikr-round", body.model_dump(), lambda: preview.game.create(body.dhikrId))
+        return store.execute(key, "dhikr-round", body.model_dump(), lambda: preview.game.create(body.dhikrId),
+                             speech=True)
 
     @router.post("/games/dhikr/rounds/{round_id}/attempts", response_model=ss.RoundAttempt,
                  openapi_extra=AUDIO_BODY, responses=AUDIO_ERRORS)
