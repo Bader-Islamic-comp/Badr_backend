@@ -30,7 +30,7 @@ def wav(payload: bytes = b"", frames: int = 1600) -> bytes:
 ROBERT_WAV = wav(b"robert-rendered-part")
 ADHKAR_TEXT = {"takbeer": "اللَّهُ أَكْبَرُ", "tasbeeh": "سُبْحَانَ اللَّهِ", "tahmeed": "الْحَمْدُ لِلَّهِ",
                "istighfar": "أَسْتَغْفِرُ اللَّهَ"}
-# Word counts per segment as the service's export script makes them (numbers spelled out: "33" is two words).
+# Word counts per segment as the service's export script makes them (it spells numbers out: "33" is two words).
 DUA_COUNTS = {"morning-by-god": [11], "evening-by-god": [9], "morning-evening-tasbih": [3],
               "after-prayer-istighfar": [2], "after-prayer-salam": [9], "after-prayer-tasbih": [10, 5, 8, 9],
               "dua-sleep": [4], "dua-wake": [8], "dua-before-food": [2], "dua-bathroom": [7],

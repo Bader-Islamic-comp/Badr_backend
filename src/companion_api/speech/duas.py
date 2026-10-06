@@ -1,9 +1,13 @@
 """The duas of the Learn page: the `adhkar` and `daily_duas` items of `corpus/competition-ar/content.json`.
 
 Every item is a draft (the package's own `review_status`). Practice segments are offered only for a
-`hadith_invocation` item, and only when they are the very segments the speech service scores: they are split
-exactly as Dua-a_stt's `scripts/export_duas_from_backend.py` splits them (`_split_clauses` on «،» «؛» and «ثم:»,
-then clauses merged in order up to 12 words), and their word counts must equal the service's `/v1/duas`.
+`hadith_invocation` item, and only when their word counts equal the service's `/v1/duas`, segment by segment.
+They are cut at the same clause breaks as Dua-a_stt's `scripts/export_duas_from_backend.py` (`_split_clauses` on
+«،» «؛» and «ثم:») and merged in order up to 12 words, but the two splits are not the same: the export counts words
+after its `text_imlai`, which also spells numbers out ("33" becomes «ثلاث وثلاثون»), while this module counts the
+display text. Where they differ the item has no segments, and that is the safe answer, not a gap to close:
+`after-prayer-tasbih` reads «سبحان الله 33 مرة، …», and "33 مرة" is how many times to say it, not words a child
+recites, so a segment holding it would score the child on words they should not say.
 Anything else, including every Quranic item, has no segments: its text is not served here.
 
 The file is read directly as JSON (no corpus pipeline import: this module is on the child's request path).
@@ -16,10 +20,12 @@ import unicodedata
 
 CONTENT = Path(__file__).resolve().parents[3] / "corpus" / "competition-ar" / "content.json"
 GROUPS = ("adhkar", "daily_duas")
-# Dua-a_stt scripts/export_duas_from_backend.py: `_split_clauses` and `_split_and_normalize(max_words=12)`.
+# Dua-a_stt scripts/export_duas_from_backend.py: the clause breaks of `_split_clauses` and the merge limit of
+# `_split_and_normalize(max_words=12)`, which the export applies to its normalized words (see the docstring).
 CLAUSE_BREAK = re.compile(r"[،؛]\s*|(?:ثم:\s*)")
 MAX_WORDS = 12
-# The speech service counts words after removing marks and splitting on anything that is not a word character.
+# Words of the display text: marks removed, split on anything that is not a word character. Digits stay one word
+# here, where the speech service's export spells them out.
 _MARKS = re.compile("[\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06ed\u0640]")
 _NON_WORD = re.compile(r"[^\w]+")
 
@@ -80,7 +86,7 @@ class Dua:
     text: str            # the display text, which is the invocation itself for a hadith_invocation item
 
     def verified_segments(self, counts: list[int] | None) -> list[str]:
-        """The practice segments, when they match the speech service's word counts exactly; else none."""
+        """The practice segments, when their word counts are the speech service's exactly; else none (fail safe)."""
         if self.kind != "hadith_invocation" or not counts:
             return []
         found = segments(self.text)

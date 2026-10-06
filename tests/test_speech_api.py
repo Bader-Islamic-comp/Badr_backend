@@ -259,7 +259,7 @@ def test_duas_list_content_with_only_verified_segments(client, fake):
     assert morning["segments"] == [
         {"index": 0, "text": "اللهم بك أصبحنا، وبك أمسينا، وبك نحيا، وبك نموت، وإليك النشور"}]
     assert morning["childNote"] == "أبدأ صباحي بذكر الله."
-    # "33" is two words to the speech service, so these segments are not the ones it scores: none offered.
+    # The service scores "33 مرة" spelled out, which a child does not recite: no segments, failing safe.
     assert items["after-prayer-tasbih"]["segments"] == []
     # Quranic items never carry their text or segments here, even when the service has segments for them.
     assert items["dua-parents"]["kind"] == "quran_recitation" and items["dua-parents"]["segments"] == []

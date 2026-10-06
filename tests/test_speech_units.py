@@ -237,6 +237,18 @@ def test_only_hadith_invocations_with_matching_counts_get_segments():
     assert catalogue.status == "draft" and len(catalogue.items()) == 22
 
 
+def test_after_prayer_tasbih_gets_no_segments_and_that_is_the_safe_answer():
+    # The speech service's registry spells "33" out («ثلاث وثلاثون») and keeps «مرة» in the words it scores, so its
+    # segments (word counts 10, 5, 8, 9) are not the backend's (12, 8, 9). No segments is right: "33 مرة" says how
+    # often to repeat the dhikr, it is not something a child recites, so no segment should score it.
+    tasbih = duas.DuaCatalogue().get("after-prayer-tasbih")
+    found = duas.segments(tasbih.text)
+    assert [words for _text, words in found] == [12, 8, 9]
+    assert "33 مرة" in found[0][0]
+    assert tasbih.verified_segments([10, 5, 8, 9]) == []
+    assert "exactly as" not in duas.__doc__ and "33 مرة" in duas.__doc__
+
+
 # The client -------------------------------------------------------------------------------------------------------
 
 def _client(handler, **options):
