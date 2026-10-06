@@ -9,6 +9,7 @@ from companion_api.rag.embeddings import EmbeddingError, HashingEmbedder, OpenAI
 from companion_api.rag.endpoints import EndpointError, require_private_endpoint
 from companion_api.rag.release import ReleaseError, load_release, write_release
 from companion_api.rag.types import Chunk, EmbedderIdentity, ReleaseManifest
+from http_probe import recording_server, route_through
 
 
 def chunk(document_id="app-help-stars", number=1, **overrides):
@@ -82,6 +83,21 @@ def test_openai_compatible_embedder_errors_never_echo_input():
     with pytest.raises(EmbeddingError) as error:
         embedder.embed_query("SYNTHETIC_SECRET_QUESTION")
     assert "SYNTHETIC_SECRET_QUESTION" not in str(error.value)
+
+
+def test_model_and_embedding_endpoints_never_go_through_a_proxy(monkeypatch):
+    # They take only private addresses (require_private_endpoint); HTTP_PROXY must not send the prompt or the
+    # question to a proxy instead.
+    from companion_api.rag.generator import OpenAICompatibleGenerator
+    answer = {"choices": [{"message": {"content": "ok"}}],
+              "data": [{"index": 0, "embedding": [3.0, 4.0]}]}
+    with recording_server(answer) as (endpoint, reached), recording_server(answer) as (proxy, proxied):
+        route_through(monkeypatch, proxy)
+        assert OpenAICompatibleGenerator(endpoint + "/v1", timeout=5).complete(
+            [{"role": "user", "content": "hi"}], max_tokens=5) == "ok"
+        assert OpenAICompatibleEmbedder(endpoint + "/v1", dimensions=2, timeout=5).embed_query("stars?") == [0.6, 0.8]
+    assert proxied == []
+    assert reached == [("POST", "/v1/chat/completions"), ("POST", "/v1/embeddings")]
 
 
 def test_release_round_trip_and_immutability(tmp_path):

@@ -31,8 +31,8 @@ def contract() -> str:
 
 
 def write(path: Path, text: str) -> bool:
-    # CRLF, matching how the checked-in copies are stored.
-    data = text.replace("\n", "\r\n").encode("utf-8")
+    # LF, as .gitattributes stores every *.json (and as the checked-in copies are).
+    data = text.encode("utf-8")
     if path.exists() and path.read_bytes() == data:
         return False
     path.write_bytes(data)

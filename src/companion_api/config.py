@@ -5,11 +5,17 @@ Grounded answers (doc/rag-system.md §9) are a separate kill switch, off unless
 would send a question somewhere unreviewed: a public endpoint, a model off the
 allowlist, or a missing release. The release's checksums and its embedder are
 checked when the answer service is built.
+
+The speech preview (ADR 0006, adult operators only) is another kill switch, off
+unless `COMPANION_SPEECH_ENABLED=true`. When on, `require_speech` refuses a
+public or malformed speech-service address, a missing token and any switch that
+is neither `true` nor `false`, naming every problem at once.
 """
 from dataclasses import dataclass, field
 import math
 import os
 from pathlib import Path
+import re
 
 from .rag.embeddings import DEFAULT_EMBEDDING_MODEL
 from .rag.endpoints import EndpointError, require_private_endpoint
@@ -18,6 +24,9 @@ from .rag.generator import ALLOWED_MODELS, DEFAULT_BASE_URL, DEFAULT_MODEL, JUDG
 
 # The languages a corpus document may be written in (doc/rag-system.md §3.1).
 RAG_LANGUAGES = ("en", "ar")
+# A voice id of the speech service (Dua-a_stt voices/<id>), and its development default.
+VOICE_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{0,63}$")
+DEFAULT_ROBERT_VOICE = "momen-dev"
 
 
 def _seconds(value: str | None, default: float) -> float:
@@ -27,6 +36,13 @@ def _seconds(value: str | None, default: float) -> float:
         return float(value)
     except ValueError:
         return math.nan  # refused by require_rag, and harmless while answers are off
+
+
+def _switch(value: str | None) -> bool | None:
+    """A per-feature speech switch: on unless exactly `false`; None marks anything else (refused at startup)."""
+    if value is None or value == "" or value == "true":
+        return True
+    return False if value == "false" else None
 
 
 @dataclass(frozen=True)
@@ -47,6 +63,18 @@ class Settings:
     rag_preview_drafts: bool = False
     # The second faith judge (faith-judge-v2): empty means one judge. Served by the LLM endpoint.
     judge_model: str = ""
+    # The speech preview (ADR 0006): the master switch, the team's speech service on a private address
+    # and its token, then one switch per feature (each on while the master is on, unless `false`).
+    speech_enabled: bool = False
+    speech_url: str = ""
+    speech_token: str = field(default="", repr=False)
+    speech_recitation: bool | None = True
+    speech_voice_questions: bool | None = True
+    speech_robert_voice: bool | None = True
+    robert_voice_id: str = DEFAULT_ROBERT_VOICE
+    # Attempts and transcriptions; a TTS render takes 20-55 s per sentence on the development GPU.
+    speech_timeout_seconds: float = 30.0
+    speech_tts_timeout_seconds: float = 240.0
 
     @classmethod
     def from_environment(cls):
@@ -64,6 +92,15 @@ class Settings:
             rag_language=env.get("COMPANION_RAG_LANGUAGE") or "en",
             rag_preview_drafts=env.get("COMPANION_RAG_PREVIEW_DRAFTS") == "true",
             judge_model=env.get("COMPANION_JUDGE_MODEL", ""),
+            speech_enabled=env.get("COMPANION_SPEECH_ENABLED") == "true",
+            speech_url=env.get("COMPANION_SPEECH_URL", ""),
+            speech_token=env.get("COMPANION_SPEECH_TOKEN", ""),
+            speech_recitation=_switch(env.get("COMPANION_SPEECH_RECITATION")),
+            speech_voice_questions=_switch(env.get("COMPANION_SPEECH_VOICE_QUESTIONS")),
+            speech_robert_voice=_switch(env.get("COMPANION_SPEECH_ROBERT_VOICE")),
+            robert_voice_id=env.get("COMPANION_ROBERT_VOICE_ID") or DEFAULT_ROBERT_VOICE,
+            speech_timeout_seconds=_seconds(env.get("COMPANION_SPEECH_TIMEOUT_SECONDS"), 30.0),
+            speech_tts_timeout_seconds=_seconds(env.get("COMPANION_SPEECH_TTS_TIMEOUT_SECONDS"), 240.0),
         )
 
     @property
@@ -110,3 +147,37 @@ class Settings:
             problems.append(f"COMPANION_RAG_LANGUAGE must be one of {', '.join(RAG_LANGUAGES)}")
         if problems:
             raise RuntimeError("Grounded answers cannot start: " + "; ".join(problems) + ".")
+
+    def require_speech(self):
+        """Validates the speech-preview settings (ADR 0006), naming every problem at once."""
+        if not self.speech_enabled:
+            raise RuntimeError("The speech preview is off; set COMPANION_SPEECH_ENABLED=true to enable it.")
+        problems = []
+        if not self.demo_mode:
+            problems.append("COMPANION_SPEECH_ENABLED needs COMPANION_DEMO_MODE=true: the speech preview is for adult "
+                            "operators in development mode only")
+        if not self.speech_url:
+            problems.append("COMPANION_SPEECH_URL must name the speech service (for example http://127.0.0.1:8100)")
+        else:
+            try:
+                require_private_endpoint(self.speech_url)
+            except EndpointError as exception:
+                problems.append(f"COMPANION_SPEECH_URL: {exception}")
+        token = self.speech_token
+        if len(token) < 24 or not token.isascii() or not token.isprintable() or " " in token:
+            problems.append("COMPANION_SPEECH_TOKEN must be the speech service's token (DUA_SPEECH_TOKEN): at least "
+                            "24 printable ASCII characters without spaces")
+        for name, value in (("COMPANION_SPEECH_RECITATION", self.speech_recitation),
+                            ("COMPANION_SPEECH_VOICE_QUESTIONS", self.speech_voice_questions),
+                            ("COMPANION_SPEECH_ROBERT_VOICE", self.speech_robert_voice)):
+            if value is None:
+                problems.append(f"{name} must be true or false (unset means true)")
+        if not VOICE_ID.fullmatch(self.robert_voice_id):
+            problems.append("COMPANION_ROBERT_VOICE_ID must be a speech-service voice id (lowercase letters, digits, "
+                            "- and _)")
+        if not 1 <= self.speech_timeout_seconds <= 600:
+            problems.append("COMPANION_SPEECH_TIMEOUT_SECONDS must be a number of seconds from 1 to 600")
+        if not 1 <= self.speech_tts_timeout_seconds <= 900:
+            problems.append("COMPANION_SPEECH_TTS_TIMEOUT_SECONDS must be a number of seconds from 1 to 900")
+        if problems:
+            raise RuntimeError("The speech preview cannot start: " + "; ".join(problems) + ".")

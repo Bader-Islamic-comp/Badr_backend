@@ -1,5 +1,10 @@
-from typing import Literal
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from typing import Annotated, Literal
+
+from fastapi import Header
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+# Every client write carries one (README "API behavior").
+WriteKey = Annotated[str, Header(alias="Idempotency-Key", min_length=8, max_length=128, pattern=r"^[\x21-\x7e]+$")]
 
 # doc/rag-system.md §7. `unavailable` is the only type while grounded answers are off. `chat` is
 # Robert's checked casual reply, with no citations or sources (doc/conversation-policy.md §9).
@@ -33,11 +38,32 @@ class CosmeticRequest(EmptyRequest):
     cosmeticId: str = Field(min_length=1, max_length=64)
 
 
+class SpeechFeatures(BaseModel):
+    """The speech preview for adult operators (ADR 0006): never the release gate's `voice` switch.
+
+    `preview` is the master switch and is true only in development mode; each feature is true only with it.
+    """
+    preview: bool = False
+    recitation: bool = False
+    voiceQuestions: bool = False
+    robertVoice: bool = False
+    # The app's push-to-talk bound; the server also bounds every recording to 1 MiB.
+    maxRecordingSeconds: Literal[15] = 15
+
+    @model_validator(mode="after")
+    def features_need_the_preview(self):
+        if not self.preview and (self.recitation or self.voiceQuestions or self.robertVoice):
+            raise ValueError("a speech feature is on without the preview")
+        return self
+
+
 class Features(BaseModel):
+    # The release gate's switch (doc/governance/release-gate.md): push-to-talk for children. Stays false.
     voice: Literal[False] = False
     # True only when this process started with a verified release and model.
     generativeAnswers: bool = False
     unity: Literal[False] = False
+    speech: SpeechFeatures = Field(default_factory=SpeechFeatures)
 
 
 class Bootstrap(BaseModel):
@@ -48,6 +74,13 @@ class Bootstrap(BaseModel):
     # "unreviewed_drafts": an adult operator's corpus preview serves draft religious content
     # (doc/rag-system.md §9.1). Never a child-facing setting.
     contentStatus: Literal["awaiting_review", "unreviewed_drafts"] = "awaiting_review"
+
+    @model_validator(mode="after")
+    def speech_preview_is_development_only(self):
+        # ADR 0006: the preview serves adult operators in development mode, never a child-facing mode.
+        if self.features.speech.preview and self.mode != "development":
+            raise ValueError("the speech preview is development only")
+        return self
 
 
 class Lesson(BaseModel):

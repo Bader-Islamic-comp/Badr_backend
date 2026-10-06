@@ -86,7 +86,8 @@ class OpenAICompatibleEmbedder:
         self.base_url = require_private_endpoint(base_url)
         self.batch_size = batch_size
         self._identity = EmbedderIdentity("openai-compatible", model, dimensions, query_instruction)
-        self._client = client or httpx.Client(timeout=timeout, follow_redirects=False)
+        # trust_env=False: the private endpoint is called directly, never through HTTP_PROXY and the like.
+        self._client = client or httpx.Client(timeout=timeout, follow_redirects=False, trust_env=False)
 
     @property
     def identity(self) -> EmbedderIdentity:

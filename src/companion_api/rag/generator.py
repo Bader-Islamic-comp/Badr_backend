@@ -75,7 +75,8 @@ class OpenAICompatibleGenerator:
         self.base_url = require_private_endpoint(base_url)
         self.model = model
         self.temperature, self.top_p = temperature, top_p
-        self._client = client or httpx.Client(timeout=timeout, follow_redirects=False)
+        # trust_env=False: the private endpoint is called directly, never through HTTP_PROXY and the like.
+        self._client = client or httpx.Client(timeout=timeout, follow_redirects=False, trust_env=False)
 
     def payload(self, messages: Sequence[dict], max_tokens: int, *, json_mode: bool = False,
                 temperature: float | None = None) -> dict:

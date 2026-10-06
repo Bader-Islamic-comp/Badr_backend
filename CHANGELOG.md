@@ -10,6 +10,98 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-06 (claude/pensive-bell-p273y2: the speech preview)
+
+A speech preview for adult operators on the team's own speech service (Dua-a_stt), within
+[ADR 0006](doc/adr-0006-speech-preview-development.md) (proposed). It follows the product owner's decisions of
+2026-10-06. The release gate's `voice` switch stays `false`, and no child may use any of it. The client side is
+the Android app's change. The speech service's routes are in Dua-a_stt (its ADR 0006 and 0007).
+
+### Added
+
+- **`features.speech` in `/v1/bootstrap`** (`preview`, `recitation`, `voiceQuestions`, `robertVoice`,
+  `maxRecordingSeconds: 15`).
+  - All false unless `COMPANION_SPEECH_ENABLED=true`, and `preview` only in development mode.
+  - Each feature has its own kill switch. With the preview on, startup fails closed on a public speech address, a
+    missing token or a malformed switch, naming every problem.
+- **Learn content.**
+  - `GET /v1/adhkar`: the four adhkar, with draft names and transliterations.
+  - `GET /v1/duas`: the competition package's adhkar and daily duas. Practice segments use Dua-a_stt's clause
+    breaks and are offered only where they match its word counts. Quranic items carry none.
+  - WAV proxies at `/v1/audio/adhkar|duas|feedback/{id}`.
+  - Without the speech service the lists still load, with no audio, practice or segments.
+- **Pronunciation practice**, `POST /v1/recitations/attempts` (raw `audio/wav`, at most 1 MiB).
+  - Outcomes are `clear`, `try_again` or `unsure`, never a verdict. `try_again` needs a word to try again; any
+    doubt is `unsure`. Words are shown on the first three attempts only.
+  - A feedback line is shown only when it passes the banned-word list and the must-never rules.
+- **The dhikr game**, `/v1/games/dhikr` and its rounds.
+  - A round completes on `clear` or after three counted attempts, and earns one learning star on the append-only
+    ledger, at most 10 per UTC day.
+  - Past the cap a round still completes. Stars buy looks through `/v1/cosmetics/claim`.
+- **Voice questions**, `POST /v1/speech/transcriptions`: a transcript for the composer. It is never cached, logged
+  or kept.
+- **Robert's voice**, `POST|GET /v1/turns/{id}/speech` and its parts.
+  - Robert's own Arabic sentences only: quotations, citations, Latin text and the words of a dua or dhikr are
+    never spoken, and a curated reply not at all.
+  - The answer model adds tashkeel (`diacritize-v1`, temperature 0). A part is kept only when no letter changed.
+  - Audio stays in memory for 15 minutes and 16 turns at most, and is dropped with its conversation.
+- **`tests/test_voice_privacy.py`**, the release gate's A09 evidence.
+  - Audio is never written to disk or logged, and a transcript is never kept, even in the replay cache.
+  - Push-to-talk is one bounded request.
+  - A09 is now green; the gate stands at 5 of 25.
+
+### Changed
+
+- `RequestBoundary` allows 1 MiB for a raw `audio/wav` POST to the three upload routes, only with the route's
+  feature on and the right `X-Demo-Token`. Every other request keeps the 8 KiB bound, and another type on those
+  routes is 415 whatever its size.
+- The store's speech writes reserve their idempotency key while they wait on the speech service (`begin`,
+  `finish`, `abandon`). A failed write is not cached. Their replays have their own cache (512, oldest first out).
+- The speech, model and embedding clients ignore `HTTP_PROXY` and the like (`trust_env=False`).
+- `tools/export_contracts.py` writes LF, as `.gitattributes` stores `contracts/*.json`.
+- `contracts/openapi-v1.json` regenerated. Existing routes are unchanged; `Features` gains `speech`.
+
+### Not done
+
+- No child use until the voice DPIA (G04), a retention owner and the gate's voice items are green. The speech
+  service's ADR 0006 and 0007 also need the committee's sign-off, and the F5-TTS licence is non-commercial.
+- `after-prayer-tasbih` has no practice segments, on purpose: the speech service's text for it includes
+  "33 مرة", which a child does not recite. The registry text is to be raised with the owner.
+
+### Fixed after review
+
+- The speech client, and the model and embedding clients, honoured `HTTP_PROXY`, which could send the token, a
+  recording or a prompt to a proxy. They now always call the private address directly.
+- An unauthenticated or switched-off request could make the API buffer 1 MiB; a large non-WAV upload was 413.
+- The dhikr game sent the service every attempt's number, so three poor recordings hid the words of the next
+  counted try; it now sends the counted attempts plus one, one attempt per round at a time.
+- Deleting a conversation dropped Robert's voice from a worker thread; it now runs on the event loop, and every
+  voice request checks that its turn still exists.
+- A tashkeel model outage ended Robert's voice as `no_part_ready` for 15 minutes; it is now `speech_unavailable`
+  and a new request retries.
+- A few hundred speech writes filled the 1024-entry replay cache and made every write 503.
+- Scored words that were unsure with none to try again came out `try_again`; they are `unsure` now (counted in
+  the game).
+- Curated replies (the package's duas, unquoted) could be read aloud; the backend now drops dua text itself and
+  never speaks a curated reply.
+- Learn pages waited for each list in turn when the speech service did not answer; failures are cached for 15
+  seconds. `features.speech.voiceQuestions` follows the service's transcription switch when its capabilities are
+  cached.
+
+## Unreleased — 2026-10-06 (feature/cv-prayer-classifier: the prayer-movement helper)
+
+Documentation only. The product owner approved the app's prayer-movement helper on 2026-10-06 (comp-mobile
+`doc/prayer-movement-helper.md`). This service is unchanged: no endpoint, no model, and nothing here receives
+camera frames. The paired client change is in `comp-mobile/CHANGELOG.md`.
+
+### Changed
+
+- **`AGENTS.md`, `doc/architecture.md` and `doc/product-architecture-roadmap.md` name the helper as the one
+  exception** to "no on-device inference" and "no camera verification".
+  - Its posture classifier runs on the phone, so camera frames never leave it. It is practice feedback that proves
+    nothing, it is off until a parent turns it on, and nothing it sees reaches this service.
+  - Every other camera or body-motion feature still needs its own approval.
+
 ## Unreleased — 2026-10-05 (day2/competition-goals: the Day 2 goals)
 
 The goals sent to the organizers at the end of day 1.

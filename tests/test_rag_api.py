@@ -246,8 +246,10 @@ def test_a_full_answer_queue_refuses_new_questions_but_not_fixed_replies(release
 
 def test_bootstrap_reports_whether_grounded_answers_are_on(release_path):
     with client_for(service_for(release_path, ScriptedGenerator())) as client:
-        assert client.get("/v1/bootstrap").json()["features"] == {"voice": False, "generativeAnswers": True,
-                                                                  "unity": False}
+        features = client.get("/v1/bootstrap").json()["features"]
+        assert {key: features[key] for key in ("voice", "generativeAnswers", "unity")} == {
+            "voice": False, "generativeAnswers": True, "unity": False}
+        assert features["speech"]["preview"] is False
     with client_for(None) as client:
         assert client.get("/v1/bootstrap").json()["features"]["generativeAnswers"] is False
 

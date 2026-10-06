@@ -13,7 +13,12 @@ SRC = Path(__file__).resolve().parents[1] / "src" / "companion_api"
 # Everything that handles a child's turn: routing, chat, generation, verification, the API and storage.
 CONVERSATION_MODULES = ["rag/chat.py", "rag/service.py", "rag/router.py", "rag/generator.py", "rag/grounding.py",
                         "rag/responses.py", "rag/prompts.py", "rag/retriever.py", "rag/ask.py", "main.py",
-                        "store.py", "schemas.py", "safety.py", "worker.py", "content.py"]
+                        "store.py", "schemas.py", "safety.py", "worker.py", "content.py",
+                        # The speech preview (ADR 0006): recordings, transcripts and Robert's voice.
+                        "speech/__init__.py", "speech/adhkar.py", "speech/arabic.py", "speech/child_copy.py",
+                        "speech/client.py", "speech/diacritize.py", "speech/duas.py", "speech/game.py",
+                        "speech/preview.py", "speech/recitation.py", "speech/robert_voice.py", "speech/routes.py",
+                        "speech/schemas.py", "speech/textprep.py"]
 FORBIDDEN_MODULES = ("pipeline", "corpusprep", "governance", "chunking")
 FORBIDDEN_NAMES = ("write_release", "admission_problems", "embed_documents", "chunk_documents", "chunk_document")
 SOURCES = {"good-source": "pending_legal", "unclear-source": "candidate"}
@@ -92,6 +97,10 @@ def _imports(path: Path) -> tuple[set[str], set[str]]:
         elif isinstance(node, ast.Name):
             names.add(node.id)
     return modules, names
+
+
+def test_every_speech_module_is_held_to_the_conversation_rules():
+    assert {f"speech/{path.name}" for path in (SRC / "speech").glob("*.py")} <= set(CONVERSATION_MODULES)
 
 
 @pytest.mark.parametrize("module", CONVERSATION_MODULES)
