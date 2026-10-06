@@ -1,0 +1,25 @@
+# Reviewer demo: one synthetic API container. Start it with
+# deploy/start-demo.sh (Linux/macOS) or deploy/start-demo.ps1 (Windows), which
+# write deploy/demo.env and print what to type into the phone app.
+# Full instructions: deploy/README.md.
+services:
+  api:
+    build: .
+    image: badr-companion-api:demo
+    env_file: deploy/demo.env
+    environment:
+      COMPANION_DEMO_MODE: "true"
+      COMPANION_RAG_ENABLED: "false"
+    ports:
+      # DEMO_BIND is this computer's Wi-Fi/LAN address so a phone on the same
+      # private network can connect; 127.0.0.1 (the default) is this computer only.
+      - "${DEMO_BIND:-127.0.0.1}:${DEMO_PORT:-8000}:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    # The synthetic state is in memory and resets on restart, so nothing is mounted.
+    restart: unless-stopped

@@ -20,6 +20,14 @@ Run commands from this server repository's root (`comp-server`). Python 3.10+
 is required. The current source implements the versioned API in the development
 plan; Flutter is a separate repository and is its only intended client.
 
+## Reviewer demo with Docker
+
+To let reviewers run this API on their own computer and connect the Android app
+on their phone over the same Wi-Fi, use `deploy/start-demo.sh` or
+`deploy/start-demo.ps1`; see [deploy/README.md](deploy/README.md). The container
+publishes its port only on the computer's private LAN address (or loopback with
+`--local`), never on all interfaces.
+
 ## Setup and run (PowerShell)
 
 ```powershell
