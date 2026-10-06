@@ -27,6 +27,8 @@ Every other workstream waits on this gate.
 - **The switch** is the schema:
   - `schemas.Bootstrap.mode` allows only `"development"`, and `schemas.Features.voice` allows only `false`.
   - Today `generativeAnswers` is `true` only in development mode, for adult operators (ADR 0003).
+  - The speech preview (`features.speech`, [ADR 0006](../adr-0006-speech-preview-development.md)) is not the `voice`
+    switch: it can be on only in development mode, for adult operators, and `tests/test_release_gate.py` holds that.
   - To offer a child either switch, someone has to change the schema. `tests/test_release_gate.py` fails that
     change unless every human item of the switch is green.
   - The automated items are run by the script, which CI must run before a release (item A08).
@@ -69,8 +71,10 @@ The gate is **red**.
 `safeguarding-playbook`, `dpia-chatbot`, `dpia-voice`, `children-code`, `guardian-consent`, `provider-dpa` and
 `retention`.
 
-**A01, A02, A06, A07:** these pass when the script runs its commands, so the gate stands at 4 of 25 green.
-They count as red under `--no-run`.
+**A01, A02, A06, A07:** these pass when the script runs its commands. They count as red under `--no-run`.
+
+**A09 (voice privacy):** green since 2026-10-06. `tests/test_voice_privacy.py` exists (ADR 0006) and runs in A01.
+With A01, A02, A06 and A07, the gate stands at 5 of 25 green.
 
 **A05 (no child content in the index):** its tests pass, but its index scan needs `releases/current_release`.
 
@@ -89,10 +93,13 @@ It first found three more, now fixed:
 - **`out_of_corpus_religious-22` («شو بيصير بالقبر؟»):** was not read as a faith question, so it could reach
   casual chat. Fixed in dev-patterns-v5, which adds the grave and what follows death.
 
-**A04, A08, A09:**
+**A04, A08:**
 - There is no `releases/current_release`, and the releases so far are on the development channel.
 - The repository has no CI workflow.
-- Voice is not built.
+
+**Voice:** a speech preview exists for adult operators in development mode (ADR 0006): pronunciation practice, a
+dhikr game, voice questions and Robert's voice, on the team's own speech service. The `voice` switch is still false.
+Its human items, the voice DPIA (G04) first, are all red, and no child may use the preview.
 
 ## Open questions
 

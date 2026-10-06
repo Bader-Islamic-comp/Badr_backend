@@ -2,6 +2,8 @@
 
 Superseded in part by ADR 0003 (`comp-server/doc/adr-0003-grounded-answers-development.md`) for grounded answers.
 
+Superseded in part by ADR 0006 (`comp-server/doc/adr-0006-speech-preview-development.md`) for a speech preview: recitation practice, a dhikr game, voice questions and Robert's voice on the team's own speech service, for adult operators in development mode only. The release gate's voice switch stays off; voice for children remains unavailable.
+
 Status: accepted engineering boundary; launch decisions pending.
 
 The supplied roadmap has no named scholarly approvers, licensed reviewed corpus, jurisdiction-specific safeguarding playbook, consent design approval or finalized launch market/curriculum. This increment supports adult-operated synthetic development only. It must not be distributed as a child product.
