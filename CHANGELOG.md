@@ -10,6 +10,20 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-06 (feature/cv-prayer-classifier: the prayer-movement helper)
+
+Documentation only. The product owner approved the app's prayer-movement helper on 2026-10-06 (comp-mobile
+`doc/prayer-movement-helper.md`). This service is unchanged: no endpoint, no model, and nothing here receives
+camera frames. The paired client change is in `comp-mobile/CHANGELOG.md`.
+
+### Changed
+
+- **`AGENTS.md`, `doc/architecture.md` and `doc/product-architecture-roadmap.md` name the helper as the one
+  exception** to "no on-device inference" and "no camera verification".
+  - Its posture classifier runs on the phone, so camera frames never leave it. It is practice feedback that proves
+    nothing, it is off until a parent turns it on, and nothing it sees reaches this service.
+  - Every other camera or body-motion feature still needs its own approval.
+
 ## Unreleased — 2026-10-05 (day2/competition-goals: the Day 2 goals)
 
 The goals sent to the organizers at the end of day 1.
