@@ -10,6 +10,23 @@ are still open.
 Paired client changes are in `comp-mobile/CHANGELOG.md`; the shared files under
 `contracts/` must stay byte-identical between the two repositories.
 
+## Unreleased — 2026-10-06 (reviewer demo in Docker)
+
+### Added
+
+- **`Dockerfile`, `docker-compose.yml` and `deploy/`** so reviewers can run the synthetic demo API on their own
+  computer and connect the Android app from a phone on the same Wi-Fi. `deploy/start-demo.sh` / `.ps1` create a
+  token in the git-ignored `deploy/demo.env`, publish the port only on the computer's private LAN address (or
+  loopback with `--local`), wait for health and print the address and token for the app's parent area.
+- The container runs unprivileged, read-only, with all capabilities dropped, one worker and no access log.
+  Demo mode is on and grounded answers are off in the compose file; no corpus, model or token is in the image.
+
+### Verified
+
+- Built and started in Docker 29.8.2 (Linux): `/health/live` ok; `/v1/bootstrap` with the token returns the
+  development profile with `voice: false`; a wrong token gets 401; the process is uid 10001; `/app` is
+  read-only; in LAN mode the port is bound only to the chosen address. The Windows script was not run.
+
 ## Unreleased — 2026-10-05 (day2/competition-goals: the Day 2 goals)
 
 The goals sent to the organizers at the end of day 1.

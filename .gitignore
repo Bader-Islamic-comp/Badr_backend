@@ -29,3 +29,6 @@ corpus/graph/
 corpus/reports/quran_text_comparison_details.jsonl
 # The competition package cites the registry's pinned Quranpedia files; third-party dumps are never copied into it
 corpus/competition-ar/sources/
+
+# Reviewer demo token written by deploy/start-demo.*
+deploy/demo.env
