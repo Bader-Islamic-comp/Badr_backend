@@ -11,6 +11,7 @@ from companion_api.rag.generator import GenerationError
 from companion_api.speech import adhkar, arabic, child_copy, diacritize, duas, recitation, textprep
 from companion_api.speech.client import (SpeechBusy, SpeechClient, SpeechConflict, SpeechNotFound, SpeechRejected,
                                          SpeechTooLarge, SpeechUnavailable)
+from http_probe import recording_server, route_through
 from speech_fake import SPEECH_TOKEN, SPEECH_URL
 
 FATHA, DAMMA, KASRA, SHADDA, SUKUN = "\u064e", "\u064f", "\u0650", "\u0651", "\u0652"
@@ -304,3 +305,20 @@ def test_the_client_refuses_a_public_address():
     with pytest.raises(ValueError):
         SpeechClient("http://8.8.8.8:8100", SPEECH_TOKEN)
     assert SPEECH_TOKEN not in repr(SpeechClient(SPEECH_URL, SPEECH_TOKEN))
+
+
+def test_the_client_never_goes_through_a_proxy(monkeypatch):
+    # HTTP_PROXY would hand the token and the child's recording to whatever the proxy is, defeating
+    # require_private_endpoint: the speech service is always called directly.
+    with recording_server({"sttEnabled": True}) as (service, reached), \
+            recording_server({"sttEnabled": True}) as (proxy, proxied):
+        route_through(monkeypatch, proxy)
+        client = SpeechClient(service, SPEECH_TOKEN)
+
+        async def run():
+            await client.capabilities()
+            await client.transcribe(b"RIFF....WAVE", "ar")
+            await client.aclose()
+        asyncio.run(run())
+    assert proxied == []
+    assert reached == [("GET", "/v1/capabilities"), ("POST", "/v1/transcribe?language=ar")]

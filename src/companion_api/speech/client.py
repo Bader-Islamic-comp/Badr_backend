@@ -104,8 +104,11 @@ class SpeechClient:
 
     def _client(self) -> httpx.AsyncClient:
         if self._http is None:
+            # trust_env=False: HTTP_PROXY and the like must never route the token or a recording through a
+            # proxy; the service is called directly at the private address `require_private_endpoint` checked.
             self._http = httpx.AsyncClient(base_url=self.base_url, timeout=self.timeout, transport=self._transport,
-                                           follow_redirects=False, headers={"X-Speech-Token": self._token})
+                                           follow_redirects=False, trust_env=False,
+                                           headers={"X-Speech-Token": self._token})
         return self._http
 
     async def aclose(self):
