@@ -415,6 +415,18 @@ def test_speech_writes_have_their_own_bounded_replay_cache(client, fake):
     assert client.post("/v1/conversations", json={}, headers={"Idempotency-Key": "practice-0"}).json() == conflict
 
 
+def test_an_evicted_game_replay_never_grants_twice(client):
+    store = client.app.state.store
+    store.max_speech_replays = 1
+    rid = new_round(client)["roundId"]
+    first = play(client, rid, **{"Idempotency-Key": "winning-attempt"}).json()
+    assert first["round"]["starAwarded"] is True and first["balance"] == 1
+    new_round(client)  # lets the attempt's replay go
+    again = play(client, rid, **{"Idempotency-Key": "winning-attempt"})
+    assert (again.status_code, again.json()) == (409, {"error": {"code": "round_complete"}})
+    assert store.ledger == (Grant(f"dhikr-game:{rid}", 1),)
+
+
 def test_a_full_queue_is_retried_twice_then_busy(client, fake):
     fake.queue_full = 2
     assert attempt(client).status_code == 200
