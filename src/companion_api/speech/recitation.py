@@ -1,9 +1,12 @@
 """Pronunciation practice: the speech service's attempt result as the app shows it (ADR 0006).
 
 Practice, never a verdict (Dua-a_stt ADR 0001; must-never `worship_verdict`). The service either abstains or
-scores each word `clear`, `try_again` or `unsure`; the outcome is `unsure` when it abstained, `clear` when
-every word is clear, else `try_again`. Word states are shown only on the first three attempts and never with
-an abstention (ADR 0001 rule 5). The service sends no transcript here, and none is kept.
+scores each word `clear`, `try_again` or `unsure`; the outcome is `clear` when every word is clear, `try_again`
+when at least one word is to try again, and `unsure` otherwise: an abstention, or scored words that are clear
+or unsure with none to try again. Any doubt is a gentle abstention (Dua-a_stt principle 4: the worst error is
+telling a child who said it right to try again), and the dhikr game counts that doubt as an attempt, as it counts
+`low_confidence`. Word states are shown only on the first three attempts and never with `unsure` (ADR 0001
+rule 5). The service sends no transcript here, and none is kept.
 """
 from dataclasses import dataclass
 
@@ -45,11 +48,13 @@ def read_attempt(data: dict) -> Recitation:
         return Recitation("unsure", (), reason, copy_id)
     if status != "scored" or any(state not in WORD_STATES for _index, state in words):
         raise SpeechUnavailable("bad_response")
-    if not words:
-        # Scored with nothing to show is not a result: any doubt is a gentle abstention.
-        return Recitation("unsure", (), "low_confidence", None)
-    outcome = "clear" if all(state == "clear" for _index, state in words) else "try_again"
-    return Recitation(outcome, words, None, copy_id)
+    if words and all(state == "clear" for _index, state in words):
+        return Recitation("clear", words, None, copy_id)
+    if any(state == "try_again" for _index, state in words):
+        return Recitation("try_again", words, None, copy_id)
+    # Scored with nothing to show, or unsure of some words and sure of no mistake: not a result to act on. Any
+    # doubt is a gentle abstention, counted like low_confidence; the service's "try these words" line is not used.
+    return Recitation("unsure", (), "low_confidence", None)
 
 
 def response(recitation: Recitation, attempt: int, feedback: dict) -> dict:

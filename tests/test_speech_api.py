@@ -295,21 +295,25 @@ def test_audio_is_proxied_from_the_service(client, fake):
 
 # Recitation practice -----------------------------------------------------------------------------------------
 
-@pytest.mark.parametrize("result, number, outcome, words, show", [
-    (scored("clear", "clear"), 1, "clear", [{"index": 0, "state": "clear"}, {"index": 1, "state": "clear"}], True),
+@pytest.mark.parametrize("result, number, outcome, words, show, copy", [
+    (scored("clear", "clear"), 1, "clear", [{"index": 0, "state": "clear"}, {"index": 1, "state": "clear"}], True,
+     "all_clear_1"),
     (scored("clear", "try_again", copy_id="mostly_clear"), 2, "try_again",
-     [{"index": 0, "state": "clear"}, {"index": 1, "state": "try_again"}], True),
-    (scored("unsure", "unsure", copy_id="mostly_clear"), 1, "try_again",
-     [{"index": 0, "state": "unsure"}, {"index": 1, "state": "unsure"}], True),
-    (scored("clear", "try_again", copy_id="mostly_clear"), 4, "try_again", [], False),   # after three attempts
-    (abstained("audio_quality", "abstain_quality"), 1, "unsure", [], False),
-    (abstained("low_confidence"), 2, "unsure", [], False),
+     [{"index": 0, "state": "clear"}, {"index": 1, "state": "try_again"}], True, "mostly_clear"),
+    (scored("unsure", "try_again", copy_id="mostly_clear"), 1, "try_again",
+     [{"index": 0, "state": "unsure"}, {"index": 1, "state": "try_again"}], True, "mostly_clear"),
+    # Unsure of some words and sure of no mistake: never "try again" to a child who may have said it right.
+    (scored("unsure", "unsure", copy_id="some_unclear"), 1, "unsure", [], False, "abstain_generic"),
+    (scored("clear", "unsure", copy_id="mostly_clear"), 1, "unsure", [], False, "abstain_generic"),
+    (scored("clear", "try_again", copy_id="mostly_clear"), 4, "try_again", [], False, "mostly_clear"),  # 4th try
+    (abstained("audio_quality", "abstain_quality"), 1, "unsure", [], False, "abstain_quality"),
+    (abstained("low_confidence"), 2, "unsure", [], False, "abstain_generic"),
 ])
-def test_practice_outcomes(client, fake, result, number, outcome, words, show):
+def test_practice_outcomes(client, fake, result, number, outcome, words, show, copy):
     fake.attempts = [result]
     data = attempt(client, number=number).json()
     assert (data["outcome"], data["words"], data["showWords"]) == (outcome, words, show)
-    assert data["feedback"]["copyId"] == result["feedbackCopyId"]
+    assert data["feedback"]["copyId"] == copy
     assert fake.calls("POST", "/v1/dua-attempts")[0][2] == {"duaId": "dhikr-takbeer", "version": "1", "segment": "0",
                                                            "attempt": str(number)}
 
@@ -450,11 +454,14 @@ def test_a_clear_attempt_completes_the_round_with_one_star(client, fake):
 
 
 def test_a_round_completes_after_three_counted_attempts(client, fake):
+    # The last is scored but unsure of a word: `unsure`, counted as the benefit of the doubt.
     fake.attempts = [scored("try_again", "clear", copy_id="mostly_clear"), abstained("audio_quality"),
                      abstained("off_script"), abstained("too_long"), abstained("service_unavailable"),
                      abstained("low_confidence"), scored("unsure", "clear", copy_id="mostly_clear")]
     rid = new_round(client)["roundId"]
-    rounds = [play(client, rid).json()["round"] for _ in range(7)]
+    bodies = [play(client, rid).json() for _ in range(7)]
+    assert bodies[-1]["attempt"]["outcome"] == "unsure"
+    rounds = [body["round"] for body in bodies]
     assert [entry["countedAttempts"] for entry in rounds] == [1, 1, 1, 1, 1, 2, 3]
     assert [entry["complete"] for entry in rounds] == [False] * 6 + [True]
     assert rounds[-1]["attempts"] == 7 and rounds[-1]["starAwarded"] is True

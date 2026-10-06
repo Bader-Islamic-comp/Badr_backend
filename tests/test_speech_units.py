@@ -180,7 +180,9 @@ def _scored(*states):
 @pytest.mark.parametrize("data, outcome, counts", [
     (_scored("clear"), "clear", True),
     (_scored("clear", "try_again"), "try_again", True),
-    (_scored("unsure"), "try_again", True),
+    (_scored("unsure", "try_again"), "try_again", True),
+    (_scored("unsure"), "unsure", True),                             # unsure, no word to try again: any doubt
+    (_scored("clear", "unsure", "clear"), "unsure", True),           # abstains, and the game counts it
     (_scored(), "unsure", True),                                     # scored with nothing: any doubt abstains
     ({"status": "abstained", "abstainReason": "low_confidence", "words": []}, "unsure", True),
     ({"status": "abstained", "abstainReason": "off_script", "words": []}, "unsure", False),
